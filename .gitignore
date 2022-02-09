@@ -1,4 +1,5 @@
 config*.json
+.env
 # OSX
 #
 .DS_Store

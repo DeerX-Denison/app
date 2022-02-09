@@ -5,14 +5,13 @@ import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import messaging from '@react-native-firebase/messaging';
 import cloudStorage from '@react-native-firebase/storage';
-import config from './config.json';
 
-if (config.env === 'development') {
+if (process.env.NODE_ENV === 'development') {
 	console.log('connecting to emulators');
-	firestore().useEmulator(config.localIp, 8080);
-	cloudStorage().useEmulator(config.localIp, 9199);
-	// authentication().useEmulator(`http://${config.localIp}:9099`);
-	functions().useFunctionsEmulator(`http://${config.localIp}:5001`);
+	firestore().useEmulator('localhost', 8080);
+	cloudStorage().useEmulator('localhost', 9199);
+	// authentication().useEmulator(`http://localhost:9099`);
+	functions().useFunctionsEmulator(`http://localhost:5001`);
 }
 
 const svTime = firestore.FieldValue.serverTimestamp;

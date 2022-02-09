@@ -1,6 +1,7 @@
 {
 	"main": "index.js",
 	"name": "deerx",
+	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
 		"ios": "react-native run-ios",
@@ -8,7 +9,7 @@
 		"start": "react-native start",
 		"test": "jest --detectOpenHandles",
 		"test:watch": "jest --watch-all --detectOpenHandles",
-		"lint": "eslint \"src/**/*.tsx\"",
+		"lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",
 		"format": "yarn prettier --write \"src/**/*.tsx\" \"src/**/*.ts\""
 	},
 	"dependencies": {
@@ -37,6 +38,7 @@
 		"expo-image-picker": "~10.2.2",
 		"expo-splash-screen": "~0.11.2",
 		"expo-updates": "~0.8.2",
+		"pre-commit": "^1.2.2",
 		"prettier": "^2.4.1",
 		"react": "^17.0.2",
 		"react-dom": "16.13.1",
@@ -57,6 +59,7 @@
 		"react-native-unimodules": "^0.14.8",
 		"react-native-vector-icons": "^9.0.0",
 		"react-native-web": "~0.13.12",
+		"remove": "^0.1.5",
 		"tailwind-react-native-classnames": "^1.5.1",
 		"tslib": "^2.3.1",
 		"uuid": "^8.3.2"
@@ -68,6 +71,8 @@
 		"@types/react-native": "~0.63.2",
 		"@types/react-native-snap-carousel": "^3.8.5",
 		"@types/react-native-vector-icons": "^6.4.10",
+		"@typescript-eslint/eslint-plugin": "^5.11.0",
+		"@typescript-eslint/parser": "^5.11.0",
 		"babel-preset-expo": "8.3.0",
 		"identity-obj-proxy": "^3.0.0",
 		"jest-expo": "^42.0.0",
@@ -80,5 +85,16 @@
 			".ts"
 		]
 	},
-	"private": true
+	"pre-commit": [
+		"lint",
+		"format",
+		"test"
+	],
+	"prettier": {
+		"trailingComma": "es5",
+		"tabWidth": 2,
+		"useTabs": true,
+		"semi": true,
+		"singleQuote": true
+	}
 }

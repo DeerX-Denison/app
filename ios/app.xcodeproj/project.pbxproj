@@ -161,6 +161,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = SP47CPYW52;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -371,7 +372,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = SP47CPYW52;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -390,6 +393,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denison.deerx.app;
 				PRODUCT_NAME = DeerX;
+				PROVISIONING_PROFILE_SPECIFIER = "match Development denison.deerx.app";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VALIDATE_WORKSPACE = YES;
@@ -405,7 +409,9 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
-				CURRENT_PROJECT_VERSION = 2;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = SP47CPYW52;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = app/Info.plist;
@@ -419,6 +425,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denison.deerx.app;
 				PRODUCT_NAME = DeerX;
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore denison.deerx.app";
 				SWIFT_VERSION = 5.0;
 				VALIDATE_WORKSPACE = YES;
 				VERSIONING_SYSTEM = "apple-generic";

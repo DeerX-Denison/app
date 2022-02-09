@@ -24,21 +24,3 @@ jobs:
         run: yarn test
       - name: Deploy
         run: cd ios && bundle exec fastlane beta
-  deploy_app:
-    runs-on: macOS-latest
-    defaults:
-      run:
-        shell: sh
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 14
-      - name: Install Dependencies
-        run: yarn install
-      - name: Compile Native Dependencies
-        run: cd app/ios && pod install
-      - name: Decrypt Secrets
-        run: yarn decrypt:ci
-      - name: Run Fastlane
-        run: yarn fastlane:test_flight

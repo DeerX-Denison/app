@@ -1,4 +1,4 @@
-git_url("https://github.com/DeerX-Denison/app")
+git_url("https://github.com/DeerX-Denison/xcode-cert")
 
 storage_mode("git")
 

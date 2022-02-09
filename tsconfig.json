@@ -1,0 +1,23 @@
+{
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"strict": true,
+		"baseUrl": ".",
+		"resolveJsonModule": true,
+		"paths": {
+			"@Components/Buttons": ["./src/Components/Buttons/index"],
+			"@Components/Carousel": ["./src/Components/Carousel/index"],
+			"@Components/Inputs": ["./src/Components/Inputs/index"],
+			"@Components/Payments": ["./src/Components/Payments/index"],
+			"@Components/Auth": ["./src/Components/Auth/index"],
+			"@Contexts": ["./src/Contexts/index"],
+			"@Hooks": ["./src/Hooks/index"],
+			"@Constants": ["./src/Constants/index"],
+			"@Tabs": ["./src/Tabs/index"],
+			"@tw": ["./src/tw"],
+			"@firebase.config": ["./src/firebase.config"],
+			"@logger": ["./src/logger"],
+			"types": ["./src/types"]
+		}
+	}
+}

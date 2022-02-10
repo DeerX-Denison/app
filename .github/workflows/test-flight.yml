@@ -9,6 +9,7 @@ env:
   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD}}
   MATCH_PASSWORD: ${{secrets.MATCH_PASSWORD}}
   GIT_AUTH_TOKEN: ${{secrets.GIT_AUTH_TOKEN}}
+  FASTLANE_SESSION: ${{secrets.FASTLANE_SESSION}}
 jobs:
   deploy_to_testflight:
     runs-on: macOS-latest

@@ -19,6 +19,11 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     setup_ci if ENV['CI']
+    app_store_connect_api_key(
+			key_id: ENV['APPSTORE_KEY_ID'],
+			issuer_id: ENV['APPSTORE_ISSUER_ID'],
+			key_content: ENV['APPSTORE_KEY_CONTENT']
+		)
     match(
       type: 'appstore',
       git_basic_authorization: ENV["GIT_AUTH_TOKEN"]

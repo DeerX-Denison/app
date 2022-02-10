@@ -7,7 +7,7 @@ on:
 env:
   NODE_ENV: staging
   FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD}}
-  GIT_PRIVATE_KEY: ${{secrets.GIT_PRIVATE_KEY}}
+  GIT_AUTH_TOKEN: ${{secrets.GIT_AUTH_TOKEN}}
 jobs:
   deploy_to_testflight:
     runs-on: macOS-latest

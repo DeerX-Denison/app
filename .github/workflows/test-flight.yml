@@ -12,6 +12,7 @@ env:
   APPSTORE_KEY_ID: ${{secrets.APPSTORE_KEY_ID}}
   APPSTORE_ISSUER_ID: ${{secrets.APPSTORE_ISSUER_ID}}
   APPSTORE_KEY_CONTENT: ${{secrets.APPSTORE_KEY_CONTENT}}
+  BUNDLE_GEMFILE: ${{github.workspace}}/ios/Gemfile
 
 jobs:
   deploy_to_testflight:
@@ -24,8 +25,11 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6
+          bundler-cache: true
       - name: Install Dependencies
-        run: yarn install
+        run: |
+
+          yarn install
       - name: Run Test
         run: yarn test
       - name: Build And Deploy

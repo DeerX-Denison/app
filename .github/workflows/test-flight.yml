@@ -23,9 +23,7 @@ jobs:
           node-version: 14
       - name: Install Dependencies
         run: yarn install
-      - name: Compile Native Dependencies
-        run: cd ios && pod install
       - name: Run Test
         run: yarn test
-      - name: Deploy
+      - name: Build And Deploy
         run: cd ios && fastlane beta

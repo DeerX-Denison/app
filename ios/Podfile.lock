@@ -794,7 +794,7 @@ PODS:
     - Firebase/Auth (= 8.10.0)
     - React-Core
     - RNFBApp
-  - RNFBCrashlytics (14.3.0):
+  - RNFBCrashlytics (14.2.2):
     - Firebase/Crashlytics (= 8.10.0)
     - React-Core
     - RNFBApp
@@ -1181,7 +1181,7 @@ SPEC CHECKSUMS:
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNFBApp: 78d0446e8b28dc30616c134a9e4d8d4b01f9f966
   RNFBAuth: ac807e2ed1c08f1157bd866ede64faa706eab303
-  RNFBCrashlytics: f3055e06c69e5f5d7ca3d7e62f0c34e1c2dd88ce
+  RNFBCrashlytics: 01b813547d6bd905563f6ba5bc706b01aa2466fe
   RNFBDynamicLinks: 8ab778e082c207f566fb005b937fce46430f8c6a
   RNFBFirestore: 0b11664ee7aef061378ad3a3acc48d0bc31d821a
   RNFBFunctions: 781443dff0fba04ffe2c33b69a93c3c7d0ea665a

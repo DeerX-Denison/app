@@ -4,10 +4,6 @@
 	"private": true,
 	"scripts": {
 		"install": "cd ios && (bundle install & pod install --repo-update)",
-		"android": "react-native run-android",
-		"ios": "react-native run-ios",
-		"web": "expo start --web",
-		"start": "react-native start",
 		"dev:ios": "./bin/setup_dev.sh && react-native run-ios --scheme \"deerx-app-development\" --simulator \"iPhone 12\"",
 		"stage:ios": "./bin/setup_stage.sh && react-native run-ios --scheme \"deerx-app-staging\" --simulator \"iPhone 12\"",
 		"prod:ios": "./bin/setup_prod.sh && react-native run-ios --scheme \"deerx-app-production\" --simulator \"iPhone 12\"",

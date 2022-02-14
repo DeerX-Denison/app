@@ -1,21 +1,16 @@
 # DeerX Application
 
-# Table Of Content
-
 # Package Script
 
 ```
-# Run android development
-yarn android
+# Run development ios (conenct to emulators backend)
+yarn dev:ios
 
-# Run ios development
-yarn ios
+# Run staging ios (connect to staging cloud backend)
+yarn stage:ios
 
-# Run web development
-yarn web
-
-# Run all
-yarn start
+# Run production ios (connect to production cloud backend)
+yarn prod:ios
 
 # Run test once
 yarn test
@@ -32,9 +27,20 @@ yarn format
 
 # CI/CD
 
+On push to branch "dev", build and distribute ios apps to testflight
+
 # Get Started
 
 ```
+# This project requries homebrew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install ruby
+brew install ruby
+
+# Install cocoapds
+brew install cocoapods
+
 # Install React Native dependencies, Ruby depencies, compile native dependencies.
 yarn install
 ```

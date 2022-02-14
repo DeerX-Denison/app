@@ -19,6 +19,5 @@ target 'app' do
   #     flipper_post_install(installer)
   #   end
   # end
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
 end

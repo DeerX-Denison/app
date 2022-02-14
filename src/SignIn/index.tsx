@@ -11,9 +11,9 @@ import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Bar, CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
+import config from '../config.json';
 import Message from './Message';
 import useEmailLinkEffect from './useEmailLinkEffect';
-
 /**
  * utility hook to parse email from big red id
  */
@@ -309,6 +309,9 @@ const SignIn: FC = () => {
 					)}
 				</>
 			)}
+			<View style={tw('items-center p-8')}>
+				<Text>{config.firebase_env} version</Text>
+			</View>
 		</>
 	);
 };

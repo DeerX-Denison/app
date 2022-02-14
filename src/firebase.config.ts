@@ -5,9 +5,11 @@ import firestore from '@react-native-firebase/firestore';
 import functions from '@react-native-firebase/functions';
 import messaging from '@react-native-firebase/messaging';
 import cloudStorage from '@react-native-firebase/storage';
+import config from './config.json';
 
-if (process.env.NODE_ENV === 'development') {
-	console.log('connecting to emulators');
+console.log(`Launching ${config.firebase_env.toUpperCase()} version`);
+
+if (config.firebase_env === 'development') {
 	firestore().useEmulator('localhost', 8080);
 	cloudStorage().useEmulator('localhost', 9199);
 	// authentication().useEmulator(`http://localhost:9099`);

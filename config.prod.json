@@ -1,3 +1,4 @@
 {
-	"firebase_env": "production"
+	"firebase_env": "production",
+	"dynamicLinkDomain": "deerx.page.link"
 }

@@ -106,7 +106,7 @@ const SignIn: FC = () => {
 						iOS: {
 							bundleId: 'denison.deerx.app',
 						},
-						dynamicLinkDomain: 'deerxdev.page.link',
+						dynamicLinkDomain: config.dynamicLinkDomain,
 					};
 					try {
 						setSending(true);

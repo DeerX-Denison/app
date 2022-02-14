@@ -1,3 +1,4 @@
 {
-	"firebase_env": "development"
+	"firebase_env": "development",
+	"dynamicLinkDomain": "deerxdev.page.link"
 }

@@ -7,6 +7,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:deerxdev.page.link/SignIn</string>
+		<string>applinks:deerx.page.link/SignIn</string>
 	</array>
 </dict>
 </plist>

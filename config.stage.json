@@ -1,3 +1,4 @@
 {
-	"firebase_env": "staging"
+	"firebase_env": "staging",
+	"dynamicLinkDomain": "deerxdev.page.link"
 }

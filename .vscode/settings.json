@@ -1,0 +1,11 @@
+{
+	"prettier.configPath": ".prettierrc.js",
+	"tailwindCSS.experimental.classRegex": [
+		"tw\\([\"']([^\"'\\)]*)",
+		"style=[\"']([^\"']*)"
+	],
+	"editor.suggest.showSnippets": true,
+	"editor.snippetSuggestions": "top",
+	"editor.tabCompletion": "on",
+	"editor.tabSize": 2
+}

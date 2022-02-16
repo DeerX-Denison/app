@@ -2,7 +2,7 @@ name: Staging deployment
 on:
   push:
     branches:
-      - dev
+      - staging
 
 env:
   NODE_ENV: staging
@@ -31,4 +31,4 @@ jobs:
       - name: Run Test
         run: yarn test
       - name: Build And Deploy
-        run: cd ios && bundle exec fastlane staging
+        run: cd ios && bundle exec fastlane build_ci

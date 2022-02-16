@@ -26,6 +26,17 @@ yarn lint
 
 # Format code
 yarn format
+
+# Build app and distribute to test flight
+yarn build:ios
+
+# Build app and bump patch version, then distribute to test flight
+
+# Build app and bump minor version, then distribute to test flight
+yarn minor:ios
+
+# Build app and bump major version, then distribute to test flight
+yarn major:ios
 ```
 
 # CI/CD

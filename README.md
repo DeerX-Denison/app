@@ -3,6 +3,9 @@
 # Package Script
 
 ```
+# If you are using M1 Macbooks for development, make sure to prepend the below code for every package scripts. This will run script under rosetta simulation
+arch -x86_64 [package_script]
+
 # Run development ios (conenct to emulators backend)
 yarn dev:ios
 

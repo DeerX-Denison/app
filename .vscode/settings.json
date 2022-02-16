@@ -1,5 +1,5 @@
 {
-	"prettier.configPath": ".prettierrc.js",
+	"prettier.configPath": "package.json",
 	"tailwindCSS.experimental.classRegex": [
 		"tw\\([\"']([^\"'\\)]*)",
 		"style=[\"']([^\"']*)"

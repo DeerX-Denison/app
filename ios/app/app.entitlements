@@ -8,6 +8,7 @@
 	<array>
 		<string>applinks:deerxdev.page.link/SignIn</string>
 		<string>applinks:deerx.page.link/SignIn</string>
+		<string>applinks:deerxprod.page.link/SignIn</string>
 	</array>
 </dict>
 </plist>

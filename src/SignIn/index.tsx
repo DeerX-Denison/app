@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message';
 import config from '../config.json';
 import Message from './Message';
 import useEmailLinkEffect from './useEmailLinkEffect';
+
 /**
  * utility hook to parse email from big red id
  */
@@ -42,6 +43,7 @@ const useTesterEmail = () => {
 		setTesterEmailError,
 	};
 };
+
 /**
  * SignIn component, check if user is signed in, if yes, move on to main, else render the form
  */
@@ -102,7 +104,7 @@ const SignIn: FC = () => {
 					const actionCodeSettings: FirebaseAuthTypes.ActionCodeSettings = {
 						handleCodeInApp: true,
 						// URL must be whitelisted in the Firebase logger.
-						url: `https://deerx-dev.web.app/passwordless-auth`,
+						url: config.authURL,
 						iOS: {
 							bundleId: 'denison.deerx.app',
 						},

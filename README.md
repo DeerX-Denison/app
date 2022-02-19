@@ -27,21 +27,32 @@ yarn lint
 # Format code
 yarn format
 
-# Build app and distribute to test flight
+# Build staging app and distribute to test flight
 yarn build:ios
 
-# Build app and bump patch version, then distribute to test flight
+# Build staging app and bump patch version, then distribute to test flight
 
-# Build app and bump minor version, then distribute to test flight
+# Build staging app and bump minor version, then distribute to test flight
 yarn minor:ios
 
-# Build app and bump major version, then distribute to test flight
+# Build staging app and bump major version, then distribute to test flight
 yarn major:ios
+
+# Build production app and distribute to app store
+yarn release:ios
 ```
 
 # CI/CD
 
-On push to branch "dev", build and distribute ios apps to testflight
+On push to branch "staging", build and distribute ios apps to testflight
+
+# Setup Environment Variables
+
+fastlane environemnt variables:
+
+- navigate to ios/fastlane/example.env
+- fill out environment variables given by admin
+- IMPORTANT: rename "example.env" to ".env" before commiting - git only ignores ".env" file, not "example.env"
 
 # Get Started
 
@@ -57,4 +68,7 @@ brew install cocoapods
 
 # Install React Native dependencies, Ruby depencies, compile native dependencies.
 yarn install
+
+# Run development suites
+yarn dev:ios
 ```

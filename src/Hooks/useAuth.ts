@@ -1,5 +1,6 @@
 import { TIME_TO_RECREATE_USER } from '@Constants';
 import { auth, db, fn } from '@firebase.config';
+import logger from '@logger';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useEffect, useState } from 'react';
 import { UserInfo } from 'types';
@@ -61,6 +62,8 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 						}
 					}
 				} catch (error) {
+					console.log('errorrrrrrrrrr here');
+					logger.log(error);
 					setUserStatus('error');
 				}
 			})();

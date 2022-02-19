@@ -1,4 +1,8 @@
+# environment vars and files
 .env
+GoogleService-Info.plist
+config.json
+
 # OSX
 #
 .DS_Store

@@ -1,5 +1,0 @@
-{
-	"firebase_env": "production",
-	"dynamicLinkDomain": "deerx.page.link",
-	"authURL": "https://deerx-prod.web.app/passwordless-auth"
-}

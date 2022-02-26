@@ -153,7 +153,10 @@ const SignIn: FC = () => {
 			{loading ? (
 				// if is loading, render deer loading screen
 				<>
-					<View style={tw('flex flex-col flex-1 justify-center items-center')}>
+					<View
+						testID="loading"
+						style={tw('flex flex-col flex-1 justify-center items-center')}
+					>
 						<FastImage source={require('./320.png')} />
 						<Bar width={200} indeterminate={true} />
 					</View>
@@ -165,6 +168,7 @@ const SignIn: FC = () => {
 						// render tester login
 						<>
 							<KeyboardAwareScrollView
+								testID="tester-login"
 								contentContainerStyle={tw(
 									'flex-1 flex-col justify-start items-center'
 								)}
@@ -244,6 +248,7 @@ const SignIn: FC = () => {
 						// render normal user login
 						<>
 							<KeyboardAwareScrollView
+								testID="user-login"
 								contentContainerStyle={tw(
 									'flex-1 flex-col justify-start items-center'
 								)}

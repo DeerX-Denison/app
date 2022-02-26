@@ -30,18 +30,13 @@ describe('Listing tabs - Main stack', () => {
 		cleanup();
 	});
 
-	it('renders', () => {
-		mockUseListings.mockReturnValue({ listings: undefined });
-		const { queryByTestId } = render(<MockMain />);
-		expect(queryByTestId('loading')).toBeTruthy();
-		expect(queryByTestId('create')).toBeTruthy();
-		expect(queryByTestId('myListings')).toBeTruthy();
-	});
 	it('listings === undefined', () => {
 		mockUseListings.mockReturnValue({ listings: undefined });
 		const { queryByTestId } = render(<MockMain />);
 		expect(queryByTestId('loading')).toBeTruthy();
 		expect(queryByTestId('empty')).not.toBeTruthy();
+		expect(queryByTestId('create')).toBeTruthy();
+		expect(queryByTestId('myListings')).toBeTruthy();
 	});
 
 	it('listings === []', () => {

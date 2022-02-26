@@ -4,6 +4,9 @@ import dynamicLinks from '@react-native-firebase/dynamic-links';
 import { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 
+/**
+ * utility hook to analyze direct links to parse user intent to login
+ */
 const useEmailLinkEffect: () => {
 	error: Error | null;
 	loading: boolean;

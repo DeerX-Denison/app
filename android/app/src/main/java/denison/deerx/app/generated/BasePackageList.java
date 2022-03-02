@@ -1,4 +1,4 @@
-package com.app.generated;
+package denison.deerx.app.generated;
 
 import java.util.Arrays;
 import java.util.List;

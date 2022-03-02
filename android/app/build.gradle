@@ -135,7 +135,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.app"
+        applicationId "denison.deerx.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

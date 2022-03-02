@@ -868,12 +868,23 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Stripe (21.6.0):
-    - Stripe/Stripe3DS2 (= 21.6.0)
-  - stripe-react-native (0.1.4):
-    - React
-    - Stripe (~> 21.6.0)
-  - Stripe/Stripe3DS2 (21.6.0)
+  - Stripe (21.12.0):
+    - Stripe/Stripe3DS2 (= 21.12.0)
+    - StripeApplePay (= 21.12.0)
+    - StripeCore (= 21.12.0)
+    - StripeUICore (= 21.12.0)
+  - stripe-react-native (0.3.0):
+    - React-Core
+    - Stripe (~> 21.12.0)
+  - Stripe/Stripe3DS2 (21.12.0):
+    - StripeApplePay (= 21.12.0)
+    - StripeCore (= 21.12.0)
+    - StripeUICore (= 21.12.0)
+  - StripeApplePay (21.12.0):
+    - StripeCore (= 21.12.0)
+  - StripeCore (21.12.0)
+  - StripeUICore (21.12.0):
+    - StripeCore (= 21.12.0)
   - UMAppLoader (2.2.0)
   - UMCore (7.1.2)
   - UMReactNativeAdapter (6.3.9):
@@ -980,6 +991,9 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeUICore
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -1195,8 +1209,11 @@ SPEC CHECKSUMS:
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  Stripe: 6cc7bb348f4b1fad111129f6ee40eb6682deaefb
-  stripe-react-native: 86469904cad7d2a2e07f38f5d10c003048d5d6fc
+  Stripe: c3692f360abcdfeef9751e3c240e7efbc68b921f
+  stripe-react-native: a8e376386d39d8668c399eec23ca9fee3f23f97f
+  StripeApplePay: 14db90fdf89abb2809ce41fc68bc6b1a86221408
+  StripeCore: 5e38cdea3dc176a32d8797ef312fe1ab41571272
+  StripeUICore: c28e371b385f968388ae38bedb93a2723c078442
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
   UMCore: ce3a4faa010239063b8343895b29a6d97b01069d
   UMReactNativeAdapter: d03cefd0e4e4179ab8c490408589f1c8a6c8b785

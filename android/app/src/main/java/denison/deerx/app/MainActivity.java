@@ -1,4 +1,4 @@
-package com.app;
+package denison.deerx.app;
 
 import android.os.Bundle;
 

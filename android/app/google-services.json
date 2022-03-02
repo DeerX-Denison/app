@@ -1,0 +1,47 @@
+{
+	"project_info": {
+		"project_number": "674052514669",
+		"project_id": "deerx-dev",
+		"storage_bucket": "deerx-dev.appspot.com"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:674052514669:android:008d34ed926a7667423064",
+				"android_client_info": {
+					"package_name": "denison.deerx.app"
+				}
+			},
+			"oauth_client": [
+				{
+					"client_id": "674052514669-g0kvjj37aq0c46jefis94amkcrrsceom.apps.googleusercontent.com",
+					"client_type": 3
+				}
+			],
+			"api_key": [
+				{
+					"current_key": "AIzaSyBLuxUfZcd9FvVYE1C1S3RTNZNurPovMjI"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": [
+						{
+							"client_id": "674052514669-g0kvjj37aq0c46jefis94amkcrrsceom.apps.googleusercontent.com",
+							"client_type": 3
+						},
+						{
+							"client_id": "674052514669-14d6707l9a961c0mp4ig7h9j9rnm2nj8.apps.googleusercontent.com",
+							"client_type": 2,
+							"ios_info": {
+								"bundle_id": "denison.deerx.app",
+								"app_store_id": "123123123"
+							}
+						}
+					]
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
+}

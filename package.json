@@ -7,6 +7,7 @@
 		"dev:ios": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
 		"stage:ios": "./bin/setup_stage.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
 		"prod:ios": "./bin/setup_prod.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
+		"dev:android": "./bin/setup_dev.sh && react-native run-android",
 		"test": "jest --detectOpenHandles",
 		"test:watch": "jest --watch-all --detectOpenHandles",
 		"lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",

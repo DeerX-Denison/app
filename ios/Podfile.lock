@@ -779,7 +779,7 @@ PODS:
     - React-Core (= 0.63.4)
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
-  - RNCAsyncStorage (1.15.17):
+  - RNCAsyncStorage (1.16.1):
     - React-Core
   - RNCPicker (2.2.1):
     - React-Core
@@ -1190,7 +1190,7 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  RNCAsyncStorage: 6bd5a7ba3dde1c3facba418aa273f449bdc5437a
+  RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
   RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNFBApp: 16bdf8b75b84631513da3d5f5e2520a436ec9b29

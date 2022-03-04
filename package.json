@@ -74,6 +74,7 @@
 	"devDependencies": {
 		"@babel/core": "~7.9.0",
 		"@prettier/plugin-ruby": "^2.0.0",
+		"@prettier/plugin-xml": "^1.2.0",
 		"@testing-library/react-native": "^8.0.0",
 		"@types/react": "^17.0.37",
 		"@types/react-native": "~0.63.2",

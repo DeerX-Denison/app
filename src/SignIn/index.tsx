@@ -108,6 +108,7 @@ const SignIn: FC = () => {
 						iOS: {
 							bundleId: 'denison.deerx.app',
 						},
+						android: { packageName: 'denison.deerx.app' },
 						dynamicLinkDomain: config.dynamicLinkDomain,
 					};
 					try {

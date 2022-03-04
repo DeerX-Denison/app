@@ -1,5 +1,7 @@
 package denison.deerx.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -13,10 +15,14 @@ import expo.modules.splashscreen.SplashScreenImageResizeMode;
 public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(null);
-    // SplashScreen.show(...) has to be called after super.onCreate(...)
-    // Below line is handled by '@expo/configure-splash-screen' command and it's discouraged to modify it manually
-    SplashScreen.show(this, SplashScreenImageResizeMode.CONTAIN, ReactRootView.class, false);
+      super.onCreate(null);
+      // SplashScreen.show(...) has to be called after super.onCreate(...)
+      // Below line is handled by '@expo/configure-splash-screen' command and it's discouraged to modify it manually
+      SplashScreen.show(this, SplashScreenImageResizeMode.CONTAIN, ReactRootView.class, false);
+      // ATTENTION: This was auto-generated to handle app links.
+      Intent appLinkIntent = getIntent();
+      String appLinkAction = appLinkIntent.getAction();
+      Uri appLinkData = appLinkIntent.getData();
   }
 
 

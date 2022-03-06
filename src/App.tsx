@@ -2,7 +2,7 @@ import { UserContext } from '@Contexts';
 import { useAnalytics, useAuth, useFCMToken, useNotification } from '@Hooks';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { Listings, Menu, Message, Wishlist } from '@Tabs';
+import { Listings, Menu, Message, Sell, Wishlist } from '@Tabs';
 import React, { FC } from 'react';
 import Toast from 'react-native-toast-message';
 import { TabsParamList } from 'types';
@@ -26,15 +26,18 @@ const App: FC<Props> = () => {
 						<NavigationContainer>
 							<Tab.Navigator
 								screenOptions={{ headerTitle: 'DeerX' }}
-								initialRouteName="Listings"
+								initialRouteName="Home"
 							>
-								<Tab.Screen name="Listings">
+								<Tab.Screen name="Home">
 									{(props) => <Listings {...props} />}
 								</Tab.Screen>
-								<Tab.Screen name="Message">
+								<Tab.Screen name="Inbox">
 									{(props) => <Message {...props} />}
 								</Tab.Screen>
-								<Tab.Screen name="Wishlist">
+								<Tab.Screen name="Sell">
+									{(props) => <Sell {...props} />}
+								</Tab.Screen>
+								<Tab.Screen name="Liked">
 									{(props) => <Wishlist {...props} />}
 								</Tab.Screen>
 								<Tab.Screen name="Menu">

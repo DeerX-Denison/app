@@ -10,10 +10,11 @@ export type UserInfo = {
 
 // Params/Props types list for tabs and stacks
 export type TabsParamList = {
-	Listings: undefined;
-	Message: { directThreadMembers: UserInfo[] | undefined };
-	Wishlist: undefined;
+	Home: undefined;
+	Inbox: { directThreadMembers: UserInfo[] | undefined };
+	Liked: undefined;
 	Menu: undefined;
+	Sell: undefined;
 };
 
 export type ListingsStackParamList = {
@@ -22,6 +23,10 @@ export type ListingsStackParamList = {
 	Edit: { listingId: ListingId };
 	MyListing: undefined;
 	Item: { listingId: ListingId };
+};
+
+export type SellStackParamList = {
+	Main: undefined;
 };
 
 export type MessageStackParamList = {

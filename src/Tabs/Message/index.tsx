@@ -5,13 +5,13 @@ import { MessageStackParamList, TabsParamList, UserInfo } from 'types';
 import { Messages, Threads } from './Stacks';
 
 interface Props {
-	route: RouteProp<TabsParamList, 'Message'>;
+	route: RouteProp<TabsParamList, 'Inbox'>;
 }
 
 /**
  * custom hook to parase direct thread member from route.params. returns {undefined} if not present
  */
-const useDirectThreadMember = (route: RouteProp<TabsParamList, 'Message'>) => {
+const useDirectThreadMember = (route: RouteProp<TabsParamList, 'Inbox'>) => {
 	const [directThreadMembers, setDirectThreadMembers] = useState<
 		UserInfo[] | undefined
 	>();

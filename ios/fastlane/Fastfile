@@ -83,14 +83,14 @@ platform :ios do
 		upload_to_testflight
 	end
 
-	lane :major do
-		app_store_connect_api_key(
-			key_id: ENV['APPSTORE_KEY_ID'],
-			issuer_id: ENV['APPSTORE_ISSUER_ID'],
-			key_content: ENV['APPSTORE_KEY_CONTENT'],
-		)
-		match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
-		build_app(workspace: 'app.xcworkspace', scheme: 'app')
-		# upload_to_testflight
-	end
+	# lane :release do
+	# 	app_store_connect_api_key(
+	# 		key_id: ENV['APPSTORE_KEY_ID'],
+	# 		issuer_id: ENV['APPSTORE_ISSUER_ID'],
+	# 		key_content: ENV['APPSTORE_KEY_CONTENT'],
+	# 	)
+	# 	match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
+	# 	build_app(workspace: 'app.xcworkspace', scheme: 'app')
+	# upload_to_testflight
+	# end
 end

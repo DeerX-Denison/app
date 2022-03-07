@@ -35,15 +35,8 @@ interface Props {
  */
 const Messages: FC<Props> = ({ route }) => {
 	const user = useContext(UserContext);
-	const {
-		threadData,
-		isNewThread,
-		setIsNewThread,
-		fetchMessages,
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		resetMessages,
-		fetchedAll,
-	} = useThreadData(route.params.members);
+	const { threadData, isNewThread, setIsNewThread, fetchMessages } =
+		useThreadData(route.params.members);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const {
 		inputHeight,
@@ -117,13 +110,6 @@ const Messages: FC<Props> = ({ route }) => {
 	);
 	return (
 		<>
-			{/* {fetchedAll && (
-				<Text>
-					Fetched all messages. Temporary implementation. Will implement a more
-					user friendly message.
-				</Text>
-			)} */}
-
 			{/* THREAD TITLE CONTAINER*/}
 			<View
 				style={tw('w-full bg-gray-300 flex justify-center items-center h-14')}
@@ -156,12 +142,12 @@ const Messages: FC<Props> = ({ route }) => {
 					...tw('flex flex-col-reverse pt-14'),
 					height: a,
 				}}
-				onKeyboardWillShow={(frame) =>
-					setA(a - frame.startCoordinates.height - 24)
-				}
-				onKeyboardWillHide={() =>
-					setA(windowHeight - tabsHeight - headerHeight - 54)
-				}
+				onKeyboardWillShow={(frame: any) => {
+					setA(a - frame.startCoordinates.height - 24);
+				}}
+				onKeyboardWillHide={() => {
+					setA(windowHeight - tabsHeight - headerHeight - 54);
+				}}
 			>
 				{/* TEXT MESSAGE INPUT */}
 				<View
@@ -194,9 +180,6 @@ const Messages: FC<Props> = ({ route }) => {
 				{/* MESSAGES CONTAINER */}
 				<View>
 					<ScrollView
-						contentContainerStyle={{
-							backgroundColor: 'pink',
-						}}
 						ref={scrollViewRef as any}
 						onScrollEndDrag={onScrollEndDrag}
 					>

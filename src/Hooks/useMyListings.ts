@@ -12,31 +12,22 @@ const useMyListings = () => {
 	const user = useContext(UserContext);
 	const [myListings, setMyListings] = useState<ListingData[] | undefined>();
 	useEffect(() => {
-		let isSubscribe = true;
-		(async () => {
-			try {
-				const docSnap = await db
-					.collection('listings')
-					.where('seller.uid', '==', user?.uid)
-					.get();
-				const myListings = docSnap.docs.map((doc) => doc.data() as ListingData);
-				if (isSubscribe) setMyListings(myListings);
-			} catch (error) {
-				if (error instanceof Error) {
+		const unsubscribe = db
+			.collection('listings')
+			.where('seller.uid', '==', user?.uid)
+			.onSnapshot(
+				(docSnaps) => {
+					const myListings = docSnaps.docs.map(
+						(doc) => doc.data() as ListingData
+					);
+					setMyListings(myListings);
+				},
+				(error) => {
 					logger.log(error);
 					Toast.show({ type: 'error', text1: error.message });
-				} else {
-					logger.log(error);
-					Toast.show({
-						type: 'error',
-						text1: 'An unexpected error occured. Please try again later',
-					});
 				}
-			}
-		})();
-		return () => {
-			isSubscribe = false;
-		};
+			);
+		return () => unsubscribe();
 	}, []);
 	return { myListings };
 };

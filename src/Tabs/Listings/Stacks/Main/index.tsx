@@ -42,7 +42,7 @@ const Main: FC<Props> = ({ navigation }) => {
 			<ScrollView
 				ref={scrollViewRef as any}
 				onScrollEndDrag={onScrollEndDrag}
-				contentContainerStyle={tw('flex flex-row flex-wrap')}
+				contentContainerStyle={tw('flex flex-1 flex-row flex-wrap items-start')}
 			>
 				{listings ? (
 					// listing is fetched
@@ -62,7 +62,10 @@ const Main: FC<Props> = ({ navigation }) => {
 						) : (
 							// fetch listing length is 0, display message saying empty
 							<>
-								<View testID="empty" style={tw('')}>
+								<View
+									testID="empty"
+									style={tw('flex flex-col flex-1 justify-center items-center')}
+								>
 									<Text>No item in listing right now</Text>
 								</View>
 							</>

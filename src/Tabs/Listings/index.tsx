@@ -4,7 +4,7 @@ import {
 } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { ListingsStackParamList, TabsParamList } from 'types';
-import { Create, Edit, Item, Main, MyListing } from './Stacks';
+import { Item, Main } from './Stacks';
 
 interface Props {
 	navigation: NativeStackNavigationProp<TabsParamList>;
@@ -21,13 +21,6 @@ const Listings: FC<Props> = ({ navigation }) => {
 			screenOptions={{ headerShown: false }}
 		>
 			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
-			<Stack.Screen name="Create">
-				{(props) => <Create {...props} />}
-			</Stack.Screen>
-			<Stack.Screen name="Edit">{(props) => <Edit {...props} />}</Stack.Screen>
-			<Stack.Screen name="MyListing">
-				{(props) => <MyListing {...props} />}
-			</Stack.Screen>
 			<Stack.Screen name="Item">
 				{(props) => <Item {...props} tabNavigation={navigation} />}
 			</Stack.Screen>

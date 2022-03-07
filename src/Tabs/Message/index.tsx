@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC, useEffect, useState } from 'react';
 import { MessageStackParamList, TabsParamList, UserInfo } from 'types';
 import { Messages, Threads } from './Stacks';
-
 interface Props {
 	route: RouteProp<TabsParamList, 'Inbox'>;
 }

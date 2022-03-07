@@ -42,14 +42,14 @@ const Main: FC<Props> = ({ navigation }) => {
 			<ScrollView
 				ref={scrollViewRef as any}
 				onScrollEndDrag={onScrollEndDrag}
-				contentContainerStyle={tw('flex flex-1 flex-row flex-wrap items-start')}
+				contentContainerStyle={tw('flex flex-1')}
 			>
 				{listings ? (
 					// listing is fetched
 					<>
 						{listings.length !== 0 ? (
 							// fetched listings length is > 0, render all Listing
-							<>
+							<View style={tw('flex flex-1 flex-row flex-wrap items-start')}>
 								{listings.map((listing) => (
 									<Listing
 										key={listing.id}
@@ -58,7 +58,7 @@ const Main: FC<Props> = ({ navigation }) => {
 										onPress={() => itemHandler(listing.id)}
 									/>
 								))}
-							</>
+							</View>
 						) : (
 							// fetch listing length is 0, display message saying empty
 							<>

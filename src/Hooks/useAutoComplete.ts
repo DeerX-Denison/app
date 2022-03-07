@@ -23,18 +23,21 @@ const queryAutoComplete: (query: string) => Promise<UserInfo[]> = async (
  */
 const useAutoComplete = () => {
 	const [query, setQuery] = useState<string>('');
-	const [suggestions, setSuggestions] = useState<UserInfo[]>([]);
+	const [suggestions, setSuggestions] = useState<UserInfo[] | undefined | null>(
+		undefined
+	);
 	const debouncedQueryAutoComplete = useDebounce(queryAutoComplete, 300);
 	// fetch suggestion from query
 	useEffect(() => {
 		let isSubscribed = true;
 		if (query.length >= 1) {
+			isSubscribed && setSuggestions(null);
 			(async () => {
 				const userSuggestions = await debouncedQueryAutoComplete(query);
 				isSubscribed && setSuggestions(userSuggestions);
 			})();
 		} else {
-			isSubscribed && setSuggestions([]);
+			isSubscribed && setSuggestions(undefined);
 		}
 		return () => {
 			isSubscribed = false;

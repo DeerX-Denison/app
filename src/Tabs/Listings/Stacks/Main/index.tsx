@@ -3,7 +3,6 @@ import tw from '@tw';
 import React, { FC, useRef } from 'react';
 import {
 	ActivityIndicator,
-	Button,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
@@ -25,12 +24,7 @@ const Main: FC<Props> = ({ navigation }) => {
 	// fetch listings
 	const { listings, fetchListings, resetListings, fetchedAll } = useListings();
 	const scrollViewRef = useRef<ScrollView | undefined>();
-	const createHandler = () => {
-		navigation.navigate('Create');
-	};
-	const myListingHandler = () => {
-		navigation.navigate('MyListing');
-	};
+
 	const itemHandler = (listingId: ListingId) => {
 		navigation.navigate('Item', { listingId });
 	};
@@ -45,14 +39,6 @@ const Main: FC<Props> = ({ navigation }) => {
 	};
 	return (
 		<View style={tw('flex flex-1 bg-gray-50')}>
-			<View style={tw('flex flex-row justify-evenly')}>
-				<Button title="to Create" onPress={createHandler} testID="create" />
-				<Button
-					title="to MyListing"
-					onPress={myListingHandler}
-					testID="myListings"
-				/>
-			</View>
 			<ScrollView
 				ref={scrollViewRef as any}
 				onScrollEndDrag={onScrollEndDrag}

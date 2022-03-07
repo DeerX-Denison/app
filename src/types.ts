@@ -19,14 +19,13 @@ export type TabsParamList = {
 
 export type ListingsStackParamList = {
 	Main: undefined;
-	Create: undefined;
-	Edit: { listingId: ListingId };
-	MyListing: undefined;
 	Item: { listingId: ListingId };
 };
 
 export type SellStackParamList = {
-	Main: undefined;
+	Create: undefined;
+	Edit: { listingId: ListingId };
+	MyListing: undefined;
 };
 
 export type MessageStackParamList = {

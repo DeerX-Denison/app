@@ -4,23 +4,29 @@ import {
 } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { SellStackParamList, TabsParamList } from 'types';
-import { Main } from './Stacks';
+import { Create, Edit, Main } from './Stacks';
 
 interface Props {
-	navigation: NativeStackNavigationProp<TabsParamList>;
+	navigation: NativeStackNavigationProp<TabsParamList, 'Sell'>;
 }
 
 /**
- * Listing components, part of the 4 tabs of the app
+ * Sell components, part of the 5 tabs of the app
  */
 const Sell: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<SellStackParamList>();
 	return (
 		<Stack.Navigator
-			initialRouteName="Main"
+			initialRouteName="MyListing"
 			screenOptions={{ headerShown: false }}
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
+			<Stack.Screen name="MyListing">
+				{(props) => <Main {...props} />}
+			</Stack.Screen>
+			<Stack.Screen name="Create">
+				{(props) => <Create {...props} />}
+			</Stack.Screen>
+			<Stack.Screen name="Edit">{(props) => <Edit {...props} />}</Stack.Screen>
 		</Stack.Navigator>
 	);
 };

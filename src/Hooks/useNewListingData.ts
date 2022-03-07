@@ -9,7 +9,9 @@ import { v4 as uuidv4 } from 'uuid';
  */
 const useNewListingData = () => {
 	const user = useContext(UserContext);
-	const [listingData, setListingData] = useState<ListingData | undefined>();
+	const [listingData, setListingData] = useState<
+		ListingData | null | undefined
+	>();
 
 	useEffect(() => {
 		user &&

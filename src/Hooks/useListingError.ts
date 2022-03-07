@@ -4,7 +4,7 @@ import { ListingData } from 'types';
 /**
  * custom hook to set user input errors. if undefined, no error, else, the string value is the error message
  */
-const useListingError = (listingData: ListingData | undefined) => {
+const useListingError = (listingData: ListingData | null | undefined) => {
 	const [imageError, setImageError] = useState<string>('');
 	const [nameError, setNameError] = useState<string>('');
 	const [priceError, setPriceError] = useState<string>('');

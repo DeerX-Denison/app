@@ -1,4 +1,3 @@
-import * as Buttons from '@Components/Buttons';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -12,10 +11,10 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
-import { ListingId, ListingsStackParamList } from 'types';
+import { ListingId, SellStackParamList } from 'types';
 
 interface Props {
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	navigation: NativeStackNavigationProp<SellStackParamList>;
 }
 /**
  * MyListing components, a list of all items that is created and put on sale by the user
@@ -25,15 +24,11 @@ const MyListing: FC<Props> = ({ navigation }) => {
 	const createHandler = () => {
 		navigation.navigate('Create');
 	};
-	const itemHandler = (listingId: ListingId) => {
-		navigation.navigate('Item', { listingId });
-	};
 	const editHandler = (listingId: ListingId) => {
 		navigation.navigate('Edit', { listingId });
 	};
 	return (
 		<View style={tw('flex flex-1')}>
-			<Text>My Listing</Text>
 			<Button title="Create" onPress={createHandler} />
 			{myListings ? (
 				// myListings is fetched, render scroll view
@@ -50,7 +45,7 @@ const MyListing: FC<Props> = ({ navigation }) => {
 									<TouchableWithoutFeedback
 										key={listing.id}
 										style={tw('w-full')}
-										onPress={() => itemHandler(listing.id)}
+										onPress={() => editHandler(listing.id)}
 									>
 										<View
 											style={tw(
@@ -64,11 +59,6 @@ const MyListing: FC<Props> = ({ navigation }) => {
 											<Text style={tw('text-lg font-bold')}>
 												{listing.name}
 											</Text>
-											<Buttons.Primary
-												title="Edit"
-												onPress={() => editHandler(listing.id)}
-												size="sm"
-											/>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

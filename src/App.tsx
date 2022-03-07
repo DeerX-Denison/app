@@ -24,10 +24,7 @@ const App: FC<Props> = () => {
 				<>
 					<UserContext.Provider value={user}>
 						<NavigationContainer>
-							<Tab.Navigator
-								screenOptions={{ headerTitle: 'DeerX' }}
-								initialRouteName="Home"
-							>
+							<Tab.Navigator initialRouteName="Home">
 								<Tab.Screen name="Home">
 									{(props) => <Listings {...props} />}
 								</Tab.Screen>

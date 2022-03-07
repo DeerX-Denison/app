@@ -1,25 +1,29 @@
 import * as Buttons from '@Components/Buttons';
-import * as Inputs from '@Components/Inputs';
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn, svTime } from '@firebase.config';
-import { useHeights, useParseMessage, useThreadData } from '@Hooks';
+import {
+	useHeights,
+	useKeyboard,
+	useParseMessage,
+	useThreadData,
+} from '@Hooks';
 import logger from '@logger';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	Image,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
 	Text,
+	TextInput,
 	View,
 } from 'react-native';
 import 'react-native-get-random-values';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Toast from 'react-native-toast-message';
 import { MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
@@ -38,16 +42,19 @@ const Messages: FC<Props> = ({ route }) => {
 	const { threadData, isNewThread, setIsNewThread, fetchMessages } =
 		useThreadData(route.params.members);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
-	const {
-		inputHeight,
-		setInputHeight,
-		tabsHeight,
-		windowHeight,
-		headerHeight,
-	} = useHeights();
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
 	const scrollViewRef = useRef<ScrollView | undefined>();
+	const textInputScrollViewRef = useRef<ScrollView | undefined>();
+	const { willShow, didShow, keyboardHeight } = useKeyboard();
+	const { tabsHeight } = useHeights();
+
+	// effect to scroll to latest message when focus on keyboard
+	useEffect(() => {
+		if (didShow) {
+			scrollViewRef.current?.scrollToEnd();
+		}
+	}, [didShow]);
 
 	const sendHandler = async () => {
 		setDisableSend(true);
@@ -94,7 +101,7 @@ const Messages: FC<Props> = ({ route }) => {
 		} else {
 			// error handling
 		}
-		scrollViewRef.current?.scrollToEnd({ animated: true });
+		scrollViewRef.current?.scrollToEnd();
 		setDisableSend(false);
 	};
 
@@ -105,9 +112,6 @@ const Messages: FC<Props> = ({ route }) => {
 		}
 	};
 
-	const [a, setA] = useState<number>(
-		windowHeight - tabsHeight - headerHeight - 54
-	);
 	return (
 		<>
 			{/* THREAD TITLE CONTAINER*/}
@@ -129,35 +133,28 @@ const Messages: FC<Props> = ({ route }) => {
 			</View>
 
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
-			<KeyboardAwareScrollView
+			<ScrollView
+				contentContainerStyle={{
+					...tw('flex flex-col-reverse flex-1'),
+					paddingBottom: willShow ? keyboardHeight - tabsHeight : 0,
+				}}
 				scrollEnabled={false}
 				nestedScrollEnabled={true}
-				alwaysBounceVertical={false}
-				showsVerticalScrollIndicator={false}
-				viewIsInsideTabBar={true}
-				extraHeight={tabsHeight + inputHeight + headerHeight}
-				keyboardOpeningTime={250}
 				keyboardShouldPersistTaps="always"
-				contentContainerStyle={{
-					...tw('flex flex-col-reverse pt-14'),
-					height: a,
-				}}
-				onKeyboardWillShow={(frame: any) => {
-					setA(a - frame.startCoordinates.height - 24);
-				}}
-				onKeyboardWillHide={() => {
-					setA(windowHeight - tabsHeight - headerHeight - 54);
-				}}
 			>
 				{/* TEXT MESSAGE INPUT */}
 				<View
-					onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
 					style={tw(
 						'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
 					)}
 				>
-					<ScrollView indicatorStyle="black" style={tw('max-h-32')}>
-						<Inputs.Text
+					<ScrollView
+						indicatorStyle="black"
+						style={tw('max-h-32')}
+						ref={textInputScrollViewRef as any}
+					>
+						<TextInput
+							onLayout={() => textInputScrollViewRef.current?.scrollToEnd()}
 							value={inputMessage}
 							placeholder="Enter a message"
 							style={tw('flex-1 mx-4 text-s-lg py-2')}
@@ -178,10 +175,11 @@ const Messages: FC<Props> = ({ route }) => {
 				</View>
 
 				{/* MESSAGES CONTAINER */}
-				<View>
+				<View style={tw('mt-14')}>
 					<ScrollView
 						ref={scrollViewRef as any}
 						onScrollEndDrag={onScrollEndDrag}
+						onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
 					>
 						{parsedMessages ? (
 							// parsedMessages defined
@@ -205,7 +203,7 @@ const Messages: FC<Props> = ({ route }) => {
 						)}
 					</ScrollView>
 				</View>
-			</KeyboardAwareScrollView>
+			</ScrollView>
 		</>
 	);
 };

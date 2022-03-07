@@ -45,7 +45,13 @@ const Messages: FC<Props> = ({ route }) => {
 		fetchedAll,
 	} = useThreadData(route.params.members);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
-	const { inputHeight, setInputHeight, tabsHeight } = useHeights();
+	const {
+		inputHeight,
+		setInputHeight,
+		tabsHeight,
+		windowHeight,
+		headerHeight,
+	} = useHeights();
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
 	const scrollViewRef = useRef<ScrollView | undefined>();
@@ -106,89 +112,118 @@ const Messages: FC<Props> = ({ route }) => {
 		}
 	};
 
+	const [a, setA] = useState<number>(
+		windowHeight - tabsHeight - headerHeight - 54
+	);
 	return (
-		<KeyboardAwareScrollView
-			scrollEnabled={false}
-			nestedScrollEnabled={true}
-			contentContainerStyle={tw('flex-col justify-end flex-1')}
-			alwaysBounceVertical={false}
-			showsVerticalScrollIndicator={false}
-			viewIsInsideTabBar={true}
-			extraHeight={tabsHeight + inputHeight}
-			keyboardOpeningTime={0}
-			keyboardShouldPersistTaps="always"
-		>
-			{fetchedAll && (
+		<>
+			{/* {fetchedAll && (
 				<Text>
 					Fetched all messages. Temporary implementation. Will implement a more
 					user friendly message.
 				</Text>
-			)}
-			<ScrollView ref={scrollViewRef as any} onScrollEndDrag={onScrollEndDrag}>
+			)} */}
+
+			{/* THREAD TITLE CONTAINER*/}
+			<View
+				style={tw('w-full bg-gray-300 flex justify-center items-center h-14')}
+			>
+				<Image
+					source={{
+						uri: user?.photoURL ? user.photoURL : DEFAULT_MESSAGE_THUMBNAIL,
+					}}
+				/>
+				{threadData && user ? (
+					<Text style={tw('text-s-xl font-medium')}>
+						{threadData.name[user.uid]}
+					</Text>
+				) : (
+					<Text>Loading...</Text>
+				)}
+			</View>
+
+			{/* MESSAGES AND TEXT INPUT CONTAINER */}
+			<KeyboardAwareScrollView
+				scrollEnabled={false}
+				nestedScrollEnabled={true}
+				alwaysBounceVertical={false}
+				showsVerticalScrollIndicator={false}
+				viewIsInsideTabBar={true}
+				extraHeight={tabsHeight + inputHeight + headerHeight}
+				keyboardOpeningTime={250}
+				keyboardShouldPersistTaps="always"
+				contentContainerStyle={{
+					...tw('flex flex-col-reverse pt-14'),
+					height: a,
+				}}
+				onKeyboardWillShow={(frame) =>
+					setA(a - frame.startCoordinates.height - 24)
+				}
+				onKeyboardWillHide={() =>
+					setA(windowHeight - tabsHeight - headerHeight - 54)
+				}
+			>
+				{/* TEXT MESSAGE INPUT */}
 				<View
-					style={tw('w-full bg-gray-300 flex justify-center items-center p-4')}
-				>
-					<Image
-						source={{
-							uri: user?.photoURL ? user.photoURL : DEFAULT_MESSAGE_THUMBNAIL,
-						}}
-					/>
-					{threadData && user ? (
-						<Text style={tw('text-s-xl font-medium')}>
-							{threadData.name[user.uid]}
-						</Text>
-					) : (
-						<Text>Loading...</Text>
+					onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
+					style={tw(
+						'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
 					)}
+				>
+					<ScrollView indicatorStyle="black" style={tw('max-h-32')}>
+						<Inputs.Text
+							value={inputMessage}
+							placeholder="Enter a message"
+							style={tw('flex-1 mx-4 text-s-lg py-2')}
+							multiline={true}
+							onChangeText={setInputMessage}
+						/>
+					</ScrollView>
+					<View style={tw('flex-col justify-end')}>
+						<View style={tw('pr-4')}>
+							<Buttons.Primary
+								title="Send"
+								onPress={sendHandler}
+								size="md"
+								disabled={disableSend}
+							/>
+						</View>
+					</View>
 				</View>
-				{parsedMessages ? (
-					// parsedMessages defined
-					<>
-						{parsedMessages.length > 0 ? (
+
+				{/* MESSAGES CONTAINER */}
+				<View>
+					<ScrollView
+						contentContainerStyle={{
+							backgroundColor: 'pink',
+						}}
+						ref={scrollViewRef as any}
+						onScrollEndDrag={onScrollEndDrag}
+					>
+						{parsedMessages ? (
+							// parsedMessages defined
 							<>
-								{parsedMessages.map((message) => (
-									<Message key={message.id} message={message} />
-								))}
+								{parsedMessages.length > 0 ? (
+									<>
+										{parsedMessages.map((message) => (
+											<Message key={message.id} message={message} />
+										))}
+									</>
+								) : (
+									<>
+										<Text>Send your first message</Text>
+									</>
+								)}
 							</>
 						) : (
 							<>
-								<Text>Send your first message</Text>
+								<Text>Loading...</Text>
 							</>
 						)}
-					</>
-				) : (
-					<>
-						<Text>Loading...</Text>
-					</>
-				)}
-			</ScrollView>
-
-			{/* TODO: implement sending, sent, seen */}
-			<View
-				onLayout={(e) => setInputHeight(e.nativeEvent.layout.height)}
-				style={tw('py-2 flex-row border-t border-gray-400 bg-gray-300')}
-			>
-				<ScrollView indicatorStyle="black" style={tw('max-h-32')}>
-					<Inputs.Text
-						value={inputMessage}
-						placeholder="Enter a message"
-						style={tw('flex-1 mx-4 text-s-lg py-2')}
-						multiline={true}
-						onChangeText={setInputMessage}
-					/>
-				</ScrollView>
-				<View style={tw('flex-col justify-end')}>
-					<View style={tw('pr-4')}>
-						<Buttons.Primary
-							title="Send"
-							onPress={sendHandler}
-							size="md"
-							disabled={disableSend}
-						/>
-					</View>
+					</ScrollView>
 				</View>
-			</View>
-		</KeyboardAwareScrollView>
+			</KeyboardAwareScrollView>
+		</>
 	);
 };
 export default Messages;

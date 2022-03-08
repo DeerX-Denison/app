@@ -6,7 +6,7 @@ import {
 	requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
 import React, { FC, useEffect, useState } from 'react';
-import { Platform, View } from 'react-native';
+import { Platform, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
 import { CarouselData, ListingData } from 'types';
@@ -31,6 +31,7 @@ const CarouselItem: FC<Props> = ({
 	setListingData,
 }) => {
 	const [isViewing, setIsViewing] = useState<boolean>(false);
+	const { width } = useWindowDimensions();
 	const removeHandler = () => {
 		const images = listingData ? listingData.images.map((x) => x) : [];
 		images.splice(index, 1);
@@ -64,7 +65,7 @@ const CarouselItem: FC<Props> = ({
 	}, []);
 	return (
 		<>
-			<View key={index} style={tw('w-full h-80')}>
+			<View key={index} style={{ width, height: width }}>
 				<View
 					style={tw(
 						'absolute flex flex-row justify-end items-end z-10 top-0 w-full'

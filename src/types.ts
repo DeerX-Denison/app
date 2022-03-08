@@ -104,18 +104,12 @@ export type ListingData = {
 	images: ListingImageURL[];
 	name: ListingName;
 	price: ListingPrice;
-	category: ListingCategory;
+	category: ListingCategory[];
 	seller: ListingSeller;
 	condition: ListingCondition;
 	description: ListingDescription;
-	readonly createdAt:
-		| FirebaseFirestoreTypes.Timestamp
-		| FirebaseFirestoreTypes.FieldValue
-		| undefined;
-	readonly updatedAt:
-		| FirebaseFirestoreTypes.Timestamp
-		| FirebaseFirestoreTypes.FieldValue
-		| undefined;
+	readonly createdAt: FirebaseFirestoreTypes.Timestamp | undefined;
+	readonly updatedAt: FirebaseFirestoreTypes.Timestamp | undefined;
 	savedBy: ListingSavedBy;
 	status: ListingStatus;
 };

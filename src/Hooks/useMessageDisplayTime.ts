@@ -53,7 +53,7 @@ const useMessageDisplayTime = (oldTime: Date | undefined, curTime: Date) => {
 									`${curTime.getMinutes() - oldTime.getMinutes()} min ago`
 								);
 							} else {
-								// same year, month, date, hour, >= 5 minutes apart
+								// same year, month, date, hour, >= 20 minutes apart
 								setDisplayTime(`Today, ${hour_minute_ampm}`);
 							}
 						} else {

@@ -3,7 +3,13 @@ import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
-import { useIsInWishlist, useIsSeller, useListingData } from '@Hooks';
+import {
+	useCurrentTime,
+	useIsInWishlist,
+	useIsSeller,
+	useItemDisplayTime,
+	useListingData,
+} from '@Hooks';
 import logger from '@logger';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -45,7 +51,11 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	const { listingData, setListingData } = useListingData(listingId);
 	const { isInWishlist, setIsInWishlist } = useIsInWishlist(listingData?.id);
 	const { isSeller } = useIsSeller(listingData);
-
+	const { curTime } = useCurrentTime();
+	const { displayTime } = useItemDisplayTime(
+		listingData?.updatedAt?.toDate(),
+		curTime
+	);
 	/**
 	 * effect to check if listingData exists
 	 */
@@ -82,6 +92,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			try {
 				await fn.httpsCallable('deleteWishlist')(listingData.id);
 				setIsInWishlist(false);
+				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
 			} catch (error) {
 				logger.log(error);
 				Toast.show({
@@ -103,6 +114,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				};
 				await fn.httpsCallable('createWishlist')(wishlistData);
 				setIsInWishlist(true);
+				setListingData({ ...listingData, savedBy: listingData.savedBy + 1 });
 			} catch (error) {
 				logger.log(error);
 				Toast.show({
@@ -135,98 +147,101 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				// listing data fetched, render scroll view with data
 				<>
 					<ScrollView>
+						<View style={tw('mx-4 my-2')}>
+							<View style={tw('flex flex-row justify-start items-center')}>
+								<FastImage
+									source={{
+										uri: listingData.seller.photoURL
+											? listingData.seller.photoURL
+											: DEFAULT_USER_PHOTO_URL,
+									}}
+									style={tw('h-10 w-10 rounded-full')}
+								/>
+								{/* TODO: try to implement fetch displayName from email */}
+								<Text style={tw('text-base font-medium ml-4')}>
+									{listingData.seller.displayName
+										? listingData.seller.displayName
+										: DEFAULT_USER_DISPLAY_NAME}
+								</Text>
+							</View>
+						</View>
 						<Carousel
 							listingData={listingData}
 							setListingData={setListingData}
 							editMode={false}
 						/>
+
 						<View style={tw('w-full')}>
-							<View style={tw('mx-4 my-2')}>
+							<View style={tw('mx-4 my-1')}>
+								<View style={tw('flex flex-1 flex-row')}>
+									<View>
+										{isInWishlist ? (
+											<Buttons.Primary
+												size="sm"
+												title="Liked"
+												onPress={removeWishlistHandler}
+											/>
+										) : (
+											<Buttons.Primary
+												size="sm"
+												title="Like"
+												onPress={addWishlistHandler}
+											/>
+										)}
+									</View>
+									<View style={tw('ml-2')}>
+										<Buttons.Primary
+											size="sm"
+											title="Chat"
+											onPress={messageHandler}
+										/>
+									</View>
+									<View style={tw('ml-2')}>
+										{isSeller && (
+											<Buttons.Primary
+												title="Edit"
+												onPress={editHandler}
+												size="md"
+											/>
+										)}
+									</View>
+								</View>
+							</View>
+							<View style={tw('mx-4 my-1')}>
+								<Text style={tw('text-base font-medium')}>
+									{listingData.savedBy} likes
+								</Text>
+							</View>
+							<View style={tw('mx-4 my-1')}>
 								<View style={tw('flex flex-row justify-between')}>
 									<Text style={tw('text-2xl font-bold')}>
 										{listingData.name}
 									</Text>
-									{isSeller && (
-										<Buttons.Secondary
-											title="edit"
-											onPress={editHandler}
-											size="md"
-										/>
-									)}
 								</View>
-							</View>
-
-							<View style={tw('mx-4 my-2')}>
-								<Text style={tw('text-xl font-semibold')}>
-									{`$ ${listingData.price.toString()}`}
-								</Text>
-							</View>
-
-							<View style={tw('mx-4 my-2')}>
-								<Text style={tw('text-base font-medium')}>
-									Saved by: {listingData.savedBy}
-								</Text>
-							</View>
-
-							{!isSeller && (
-								// if not the seller, render wishlist, buy now, send message button
-								<View style={tw('border-t border-b')}>
-									<View style={tw('mx-4 my-2')}>
-										<View
-											style={tw('flex flex-row justify-between items-center')}
-										>
-											<Button title="send message" onPress={messageHandler} />
-											{isInWishlist ? (
-												<Button
-													title="remove from wishlist"
-													onPress={removeWishlistHandler}
-												/>
-											) : (
-												<Button
-													title="add to wishlist"
-													onPress={addWishlistHandler}
-												/>
-											)}
-										</View>
-									</View>
-								</View>
-							)}
-
-							<View style={tw('mx-4 my-2')}>
-								<View style={tw('flex flex-row justify-start items-center')}>
-									<Text style={tw('text-base font-medium')}>Seller info:</Text>
-									<FastImage
-										source={{
-											uri: listingData.seller.photoURL
-												? listingData.seller.photoURL
-												: DEFAULT_USER_PHOTO_URL,
-										}}
-										style={tw('h-10 w-10 mx-4 rounded-full')}
-									/>
-									{/* TODO: try to implement fetch displayName from email */}
-									<Text style={tw('text-base font-medium')}>
-										{listingData.seller.displayName
-											? listingData.seller.displayName
-											: DEFAULT_USER_DISPLAY_NAME}
+								<View style={tw('mt-1')}>
+									<Text style={tw('text-lg font-semibold')}>
+										{`$ ${listingData.price.toString()}`}
 									</Text>
 								</View>
 							</View>
-
+							<View style={tw('mx-4 my-1')}>
+								<Text style={tw('text-base font-normal')}>
+									{listingData.description}
+								</Text>
+							</View>
+							<View style={tw('mx-4 my-1 h-8 border-b')}>
+								<Text style={tw('text-s-md')}>
+									{displayTime ? displayTime : '...'}
+								</Text>
+							</View>
 							<View style={tw('mx-4 my-2')}>
 								<Text style={tw('text-base font-medium')}>
 									Category: {listingData.category}
 								</Text>
 							</View>
-
 							<View style={tw('mx-4 my-2')}>
 								<Text style={tw('text-base font-medium')}>
 									Condition: {listingData.condition}
-								</Text>
-							</View>
-
-							<View style={tw('mx-4 my-2')}>
-								<Text style={tw('text-base font-normal')}>
-									{listingData.description}
 								</Text>
 							</View>
 						</View>

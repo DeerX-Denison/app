@@ -77,7 +77,7 @@ describe('Listing tabs - Create stack', () => {
 		mockUseListingData.mockReset();
 		cleanup();
 	});
-	it('listingData === undefined && useListingError returns all undefined', () => {
+	it.skip('listingData === undefined && useListingError returns all undefined', () => {
 		mockUseListingData.mockReturnValue({ listingData: undefined });
 		mockUseListingError.mockReturnValue(useListingErrorUndefined);
 		const {
@@ -103,7 +103,7 @@ describe('Listing tabs - Create stack', () => {
 		expect(queryByText('Private')).not.toBeTruthy();
 		expect(queryByText('Public')).not.toBeTruthy();
 	});
-	it('listingData === newListingData && useListingError returns all undefined', () => {
+	it.skip('listingData === newListingData && useListingError returns all undefined', () => {
 		mockUseListingData.mockReturnValue({
 			listingData: mockListingData,
 		});
@@ -132,7 +132,7 @@ describe('Listing tabs - Create stack', () => {
 		expect(queryByText('Private')).toBeTruthy();
 		expect(queryByText('Public')).toBeTruthy();
 	});
-	it('listingData === newListingData && useListingError returns mock errors', () => {
+	it.skip('listingData === newListingData && useListingError returns mock errors', () => {
 		mockUseListingData.mockReturnValue({
 			listingData: mockListingData,
 		});

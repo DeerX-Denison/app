@@ -40,10 +40,25 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 };
 
 /**
+ * render post button on screen header
+ */
+const derenderPostButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerRight: () => <></>,
+			});
+		}
+	});
+};
+
+/**
  * MyListing components, a list of all items that is created and put on sale by the user
  */
 const MyListing: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
+	derenderPostButton(navigation);
 	const { myListings } = useMyListings();
 	const createHandler = () => {
 		navigation.navigate('Create');

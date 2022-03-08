@@ -20,7 +20,7 @@ const useNewListingData = () => {
 				images: [],
 				name: '',
 				price: '',
-				category: undefined,
+				category: [],
 				seller: {
 					email: userInfo.email,
 					displayName: userInfo.displayName,

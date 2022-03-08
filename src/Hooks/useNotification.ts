@@ -1,17 +1,15 @@
 import { msg } from '@firebase.config';
 import notifee from '@notifee/react-native';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 import { useEffect } from 'react';
+import { UserInfo } from 'types';
 
 /**
  * custom hook to activate listenting for notification in foreground (when the app is running) and display them appropriately
  */
-const useForegroundNotification = (
-	user: FirebaseAuthTypes.User | null | undefined
-) => {
+const useForegroundNotification = (userInfo: UserInfo | null | undefined) => {
 	useEffect(() => {
-		if (user) {
+		if (userInfo) {
 			const unsubscribe = msg.onMessage(
 				(payload: FirebaseMessagingTypes.RemoteMessage) => {
 					notifee.displayNotification({
@@ -30,16 +28,14 @@ const useForegroundNotification = (
 			);
 			return () => unsubscribe();
 		}
-	}, [user]);
+	}, [userInfo]);
 };
 
 /**
  * custom hook to activate listenting for notification in background (when the app is not running) and display then appropriately
  */
-const useBackgroundNotification = (
-	user: FirebaseAuthTypes.User | null | undefined
-) => {
-	if (user) {
+const useBackgroundNotification = (userInfo: UserInfo | null | undefined) => {
+	if (userInfo) {
 		msg.setBackgroundMessageHandler(
 			async (payload: FirebaseMessagingTypes.RemoteMessage) => {
 				if (payload.data) {
@@ -56,9 +52,9 @@ const useBackgroundNotification = (
 /**
  * custom hook to activate listening for notification and display them appropriately
  */
-const useNotification = (user: FirebaseAuthTypes.User | null | undefined) => {
-	useForegroundNotification(user);
-	useBackgroundNotification(user);
+const useNotification = (userInfo: UserInfo | null | undefined) => {
+	useForegroundNotification(userInfo);
+	useBackgroundNotification(userInfo);
 };
 
 export default useNotification;

@@ -175,7 +175,7 @@ const Messages: FC<Props> = ({ route }) => {
 				</View>
 
 				{/* MESSAGES CONTAINER */}
-				<View style={tw('mt-14')}>
+				<View style={tw('mt-14 bg-pink-200')}>
 					<ScrollView
 						ref={scrollViewRef as any}
 						onScrollEndDrag={onScrollEndDrag}

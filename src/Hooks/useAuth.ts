@@ -111,8 +111,18 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
  */
 const useAuth = () => {
 	const { user } = useAuthState();
+	let userInfo: UserInfo | undefined | null = undefined;
+	if (user) {
+		userInfo = {
+			email: user.email,
+			displayName: user.displayName,
+			photoURL: user.photoURL,
+			uid: user.uid,
+		};
+	}
 	useSaveUser(user);
-	return user;
+
+	return { user, userInfo };
 };
 
 export default useAuth;

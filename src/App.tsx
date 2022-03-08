@@ -10,18 +10,18 @@ import SignIn from './SignIn';
 interface Props {}
 
 const App: FC<Props> = () => {
-	const user = useAuth();
+	const { user, userInfo } = useAuth();
 	const Tab = createBottomTabNavigator<TabsParamList>();
-	useFCMToken(user);
-	useNotification(user);
-	useAnalytics(user);
+	useFCMToken(userInfo);
+	useNotification(userInfo);
+	useAnalytics(userInfo);
 
 	return (
 		<>
 			{user ? (
 				// if user is logged in, display tabs
 				<>
-					<UserContext.Provider value={user}>
+					<UserContext.Provider value={userInfo}>
 						<NavigationContainer>
 							<Tab.Navigator initialRouteName="Home">
 								<Tab.Screen name="Home">

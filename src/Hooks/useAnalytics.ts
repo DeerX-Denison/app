@@ -1,14 +1,14 @@
 import { crash } from '@firebase.config';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useEffect } from 'react';
+import { UserInfo } from 'types';
 
-const useAnalytics = (user: FirebaseAuthTypes.User | null | undefined) => {
+const useAnalytics = (userinfo: UserInfo | null | undefined) => {
 	useEffect(() => {
 		crash.log('App mounted');
-		if (user) {
+		if (userinfo) {
 			crash.log('User logged in');
-			crash.setUserId(user.uid);
+			crash.setUserId(userinfo.uid);
 		}
-	}, [user]);
+	}, [userinfo]);
 };
 export default useAnalytics;

@@ -2,9 +2,9 @@ import { FCM_TOKEN_UPDATE_DAY } from '@Constants';
 import { fn, msg } from '@firebase.config';
 import logger from '@logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useEffect, useState } from 'react';
 import 'react-native-get-random-values';
+import { UserInfo } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 
 type MessagingStatus =
@@ -74,14 +74,14 @@ const lastTokenUpdateWasMoreThanOneWeek = async () => {
 /**
  * custom hook to keep fcm token up to date
  */
-const useFCMToken = (user: FirebaseAuthTypes.User | null | undefined) => {
+const useFCMToken = (userInfo: UserInfo | null | undefined) => {
 	const { status } = useMessagingStatus();
 
 	/**
 	 * handle token when the user variable changes
 	 */
 	useEffect(() => {
-		if (user) {
+		if (userInfo) {
 			// user just logged in
 			if (status === 'authorized' || status === 'provisional') {
 				(async () => {
@@ -90,7 +90,7 @@ const useFCMToken = (user: FirebaseAuthTypes.User | null | undefined) => {
 						// new device, or user just deleted app
 						const newDeviceId = uuidv4();
 						const newToken = await msg.getToken();
-						await AsyncStorage.setItem('uid', user.uid);
+						await AsyncStorage.setItem('uid', userInfo.uid);
 						await AsyncStorage.setItem('deviceId', newDeviceId);
 						await AsyncStorage.setItem('fcm_token', newToken);
 						await AsyncStorage.setItem('fcm_token_time', Date.now().toString());
@@ -115,7 +115,7 @@ const useFCMToken = (user: FirebaseAuthTypes.User | null | undefined) => {
 					}
 				})();
 			}
-		} else if (user === null) {
+		} else if (userInfo === null) {
 			// user just logged out
 			(async () => {
 				const deviceId = await AsyncStorage.getItem('deviceId');
@@ -132,19 +132,19 @@ const useFCMToken = (user: FirebaseAuthTypes.User | null | undefined) => {
 			// user === undefined, meaning not user is not processed yet
 			// do nothing
 		}
-	}, [user, status]);
+	}, [userInfo, status]);
 
 	/**
 	 * listen for token refreshes
 	 */
 	useEffect(() => {
-		if (user) {
+		if (userInfo) {
 			const unsubscribe = msg.onTokenRefresh(async (newToken) => {
 				const deviceId = await AsyncStorage.getItem('deviceId');
 				if (!deviceId) {
 					// new device, or user just deleted app
 					const newDeviceId = uuidv4();
-					await AsyncStorage.setItem('uid', user.uid);
+					await AsyncStorage.setItem('uid', userInfo.uid);
 					await AsyncStorage.setItem('deviceId', newDeviceId);
 					await AsyncStorage.setItem('fcm_token', newToken);
 					await AsyncStorage.setItem('fcm_token_time', Date.now().toString());
@@ -164,7 +164,7 @@ const useFCMToken = (user: FirebaseAuthTypes.User | null | undefined) => {
 			});
 			return () => unsubscribe();
 		}
-	}, [user]);
+	}, [userInfo]);
 };
 
 export default useFCMToken;

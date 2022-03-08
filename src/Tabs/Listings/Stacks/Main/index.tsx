@@ -42,7 +42,7 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 const Main: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
 	// fetch listings
-	const { listings, fetchListings, resetListings, fetchedAll } = useListings();
+	const { listings, fetchListings, resetListings } = useListings();
 	const scrollViewRef = useRef<ScrollView | undefined>();
 
 	const itemHandler = (listingId: ListingId) => {
@@ -107,14 +107,14 @@ const Main: FC<Props> = ({ navigation }) => {
 					</>
 				)}
 			</ScrollView>
-			{fetchedAll && (
+			{/* {fetchedAll && (
 				<View style={tw('w-full')}>
 					<Text>
 						End of listings. Temporary implementation. Will disable scroll to
 						fetch when end of listings.
 					</Text>
 				</View>
-			)}
+			)} */}
 		</View>
 	);
 };

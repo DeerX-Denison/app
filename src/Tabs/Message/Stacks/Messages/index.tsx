@@ -193,34 +193,35 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				</View>
 
 				{/* MESSAGES CONTAINER */}
-				<View style={tw('mt-14 bg-pink-200')}>
-					<ScrollView
-						ref={scrollViewRef as any}
-						onScrollEndDrag={onScrollEndDrag}
-						onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
-					>
-						{parsedMessages ? (
-							// parsedMessages defined
-							<>
-								{parsedMessages.length > 0 ? (
-									<>
-										{parsedMessages.map((message) => (
-											<Message key={message.id} message={message} />
-										))}
-									</>
-								) : (
-									<>
-										<Text>Send your first message</Text>
-									</>
-								)}
-							</>
-						) : (
-							<>
-								<Text>Loading...</Text>
-							</>
-						)}
-					</ScrollView>
-				</View>
+				<ScrollView
+					ref={scrollViewRef as any}
+					onScrollEndDrag={onScrollEndDrag}
+					onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
+					contentContainerStyle={tw('flex flex-col h-full justify-end')}
+				>
+					{parsedMessages ? (
+						// parsedMessages defined
+						<>
+							{parsedMessages.length > 0 ? (
+								<>
+									{parsedMessages.map((message) => (
+										<Message key={message.id} message={message} />
+									))}
+								</>
+							) : (
+								<>
+									<View style={tw('flex flex-1 justify-center items-center')}>
+										<Text style={tw('text-s-lg')}>Send your first message</Text>
+									</View>
+								</>
+							)}
+						</>
+					) : (
+						<>
+							<Text>Loading...</Text>
+						</>
+					)}
+				</ScrollView>
 			</ScrollView>
 		</>
 	);

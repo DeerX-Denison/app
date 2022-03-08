@@ -17,12 +17,10 @@ import Listing from './Listing';
 interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
 }
-
 /**
- * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
+ * derenders button at header
  */
-const Main: FC<Props> = ({ navigation }) => {
-	// de-renders back button on navigation header
+const derenderBackButton = (navigation: Props['navigation']) => {
 	useEffect(() => {
 		const parentNavigation = navigation.getParent();
 		if (parentNavigation) {
@@ -37,7 +35,12 @@ const Main: FC<Props> = ({ navigation }) => {
 			});
 		}
 	});
-
+};
+/**
+ * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
+ */
+const Main: FC<Props> = ({ navigation }) => {
+	derenderBackButton(navigation);
 	// fetch listings
 	const { listings, fetchListings, resetListings, fetchedAll } = useListings();
 	const scrollViewRef = useRef<ScrollView | undefined>();

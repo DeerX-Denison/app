@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
+	Button,
 	Image,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
@@ -33,11 +34,26 @@ interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
 }
-
+/**
+ * renders button at header that goes back
+ */
+const renderBackButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => (
+					<Button title="back" onPress={() => navigation.goBack()} />
+				),
+			});
+		}
+	});
+};
 /**
  * Messages component, Threads contains Thread contains Messages contains Message
  */
-const Messages: FC<Props> = ({ route }) => {
+const Messages: FC<Props> = ({ route, navigation }) => {
+	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const { threadData, isNewThread, setIsNewThread, fetchMessages } =
 		useThreadData(route.params.members);

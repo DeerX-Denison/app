@@ -20,10 +20,9 @@ interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
 }
 /**
- * Item components, when user want to view an item in details
+ * renders button at header that goes back
  */
-const Item: FC<Props> = ({ route, navigation }) => {
-	// renders back button on navigation header
+const renderBackButton = (navigation: Props['navigation']) => {
 	useEffect(() => {
 		const parentNavigation = navigation.getParent();
 		if (parentNavigation) {
@@ -34,7 +33,13 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			});
 		}
 	});
+};
 
+/**
+ * Item components, when user want to view an item in details
+ */
+const Item: FC<Props> = ({ route, navigation }) => {
+	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);

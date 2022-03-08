@@ -14,8 +14,16 @@ import {
 	MediaTypeOptions,
 	requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
-import React, { FC, useContext, useState } from 'react';
-import { Alert, Linking, Platform, Switch, Text, View } from 'react-native';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import {
+	Alert,
+	Button,
+	Linking,
+	Platform,
+	Switch,
+	Text,
+	View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -25,14 +33,14 @@ import {
 	ListingCategory,
 	ListingCondition,
 	ListingData,
-	ListingsStackParamList,
+	SellStackParamList,
 } from 'types';
 import uploadImagesAsync from '../uploadImageAsync';
 import validListingData from '../validListingData';
 
 interface Props {
-	route: RouteProp<ListingsStackParamList, 'Create'>;
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	route: RouteProp<SellStackParamList, 'Create'>;
+	navigation: NativeStackNavigationProp<SellStackParamList>;
 }
 
 const categories: Item[] = [
@@ -53,11 +61,26 @@ const conditions: Item[] = [
 	{ label: 'Useable', value: 'USEABLE' },
 	{ label: 'Barely Functional', value: 'BARELY FUNCTIONAL' },
 ];
-
+/**
+ * renders button at header that goes back
+ */
+const renderBackButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => (
+					<Button title="back" onPress={() => navigation.goBack()} />
+				),
+			});
+		}
+	});
+};
 /**`
  * Create components, when user want to create an item
  */
 const Create: FC<Props> = ({ navigation }) => {
+	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const { listingData, setListingData } = useNewListingData();
 	const [progress, setProgress] = useState<number>(0);

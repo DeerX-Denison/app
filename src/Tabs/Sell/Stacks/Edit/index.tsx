@@ -14,8 +14,16 @@ import {
 	MediaTypeOptions,
 	requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
-import React, { FC, useContext, useState } from 'react';
-import { Alert, Linking, Platform, Switch, Text, View } from 'react-native';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import {
+	Alert,
+	Button,
+	Linking,
+	Platform,
+	Switch,
+	Text,
+	View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -53,11 +61,26 @@ const conditions: Item[] = [
 	{ label: 'Useable', value: 'USEABLE' },
 	{ label: 'Barely Functional', value: 'BARELY FUNCTIONAL' },
 ];
-
+/**
+ * renders button at header that goes back
+ */
+const renderBackButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => (
+					<Button title="back" onPress={() => navigation.goBack()} />
+				),
+			});
+		}
+	});
+};
 /**
  * Edit components, when user want to edit an item that has already been put on sale
  */
 const Edit: FC<Props> = ({ route, navigation }) => {
+	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);

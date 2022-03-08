@@ -1,9 +1,10 @@
 import * as Inputs from '@Components/Inputs';
 import { UserContext } from '@Contexts';
 import { useThreads } from '@Hooks';
+import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	NativeScrollEvent,
 	NativeSyntheticEvent,
@@ -13,6 +14,7 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
+import Toast from 'react-native-toast-message';
 import { MessageStackParamList, UserInfo } from 'types';
 import useAutoComplete from '../../../../Hooks/useAutoComplete';
 import ThreadPreview from './ThreadPreview';
@@ -23,9 +25,30 @@ interface Props {
 }
 
 /**
+ * derenders button at header
+ */
+const derenderBackButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => null,
+			});
+		} else {
+			logger.error(`Parent navigation is undefined for Listings/Main`);
+			Toast.show({
+				type: 'error',
+				text1: 'Unexpected error occured',
+			});
+		}
+	});
+};
+
+/**
  * Threads components, Threads contains Thread contains Messages contains Message
  */
 const Threads: FC<Props> = ({ navigation }) => {
+	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const { threads, fetchThreads, resetThreads } = useThreads();
 	const [searching, setSearching] = useState<boolean>(false);

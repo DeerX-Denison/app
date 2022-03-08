@@ -1,7 +1,8 @@
 import { useMyListings } from '@Hooks';
+import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
 	Button,
 	Image,
@@ -11,6 +12,7 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
+import Toast from 'react-native-toast-message';
 import { ListingId, SellStackParamList } from 'types';
 
 interface Props {
@@ -18,9 +20,30 @@ interface Props {
 }
 
 /**
+ * derenders button at header
+ */
+const derenderBackButton = (navigation: Props['navigation']) => {
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => null,
+			});
+		} else {
+			logger.error(`Parent navigation is undefined for Listings/Main`);
+			Toast.show({
+				type: 'error',
+				text1: 'Unexpected error occured',
+			});
+		}
+	});
+};
+
+/**
  * MyListing components, a list of all items that is created and put on sale by the user
  */
 const MyListing: FC<Props> = ({ navigation }) => {
+	derenderBackButton(navigation);
 	const { myListings } = useMyListings();
 	const createHandler = () => {
 		navigation.navigate('Create');

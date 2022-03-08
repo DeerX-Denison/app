@@ -8,7 +8,7 @@ interface Props {
 }
 
 /**
- * custom hook to parase direct thread member from route.params. returns {undefined} if not present
+ * custom hook to parse direct thread member from route.params. returns {undefined} if not present
  */
 const useDirectThreadMember = (route: RouteProp<TabsParamList, 'Inbox'>) => {
 	const [directThreadMembers, setDirectThreadMembers] = useState<

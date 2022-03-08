@@ -7,7 +7,6 @@ import React, { FC } from 'react';
 import Toast from 'react-native-toast-message';
 import { TabsParamList } from 'types';
 import SignIn from './SignIn';
-
 interface Props {}
 
 const App: FC<Props> = () => {

@@ -11,10 +11,16 @@ export type UserInfo = {
 // Params/Props types list for tabs and stacks
 export type TabsParamList = {
 	Home: undefined;
-	Inbox: { directThreadMembers: UserInfo[] | undefined };
+	Inbox: {
+		screen: 'Messages';
+		params: MessageStackParamList['Messages'];
+	};
 	Liked: undefined;
 	Menu: undefined;
-	Sell: undefined;
+	Sell: {
+		screen: 'Edit';
+		params: SellStackParamList['Edit'];
+	};
 };
 
 export type ListingsStackParamList = {
@@ -81,12 +87,7 @@ export type ListingCategory =
 	| 'JEWELRIES'
 	| 'ELECTRONIC'
 	| 'INSTRUMENT';
-export type ListingSeller = {
-	email: string | null;
-	displayName: string | null;
-	photoURL: string | null;
-	uid: string;
-};
+export type ListingSeller = UserInfo;
 export type ListingCondition =
 	| undefined
 	| 'BRAND NEW'

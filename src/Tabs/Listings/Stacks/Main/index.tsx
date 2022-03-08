@@ -1,6 +1,6 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import {
 	ActivityIndicator,
 	NativeScrollEvent,
@@ -9,18 +9,25 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { ListingId, ListingsStackParamList } from 'types';
+import { ListingId, ListingsStackParamList, TabsParamList } from 'types';
 import useListings from '../../../../Hooks/useListings';
 import Listing from './Listing';
-
 interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	tabNavigation: NativeStackNavigationProp<TabsParamList>;
 }
 
 /**
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
-const Main: FC<Props> = ({ navigation }) => {
+const Main: FC<Props> = ({ navigation, tabNavigation }) => {
+	// de-renders back button on navigation header
+	useEffect(() => {
+		tabNavigation.setOptions({
+			headerLeft: () => null,
+		});
+	});
+
 	// fetch listings
 	const { listings, fetchListings, resetListings, fetchedAll } = useListings();
 	const scrollViewRef = useRef<ScrollView | undefined>();

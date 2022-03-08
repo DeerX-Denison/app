@@ -5,7 +5,7 @@ import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
 import { useIsInWishlist, useIsSeller, useListingData } from '@Hooks';
 import logger from '@logger';
-import { RouteProp } from '@react-navigation/native';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect } from 'react';
@@ -18,12 +18,23 @@ import { ListingsStackParamList, TabsParamList, WishlistDataCL } from 'types';
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
-	tabNavigation: NativeStackNavigationProp<TabsParamList>;
 }
 /**
  * Item components, when user want to view an item in details
  */
-const Item: FC<Props> = ({ route, navigation, tabNavigation }) => {
+const Item: FC<Props> = ({ route, navigation }) => {
+	// renders back button on navigation header
+	useEffect(() => {
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => (
+					<Button title="back" onPress={() => navigation.goBack()} />
+				),
+			});
+		}
+	});
+
 	const user = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
@@ -44,12 +55,20 @@ const Item: FC<Props> = ({ route, navigation, tabNavigation }) => {
 	}, [listingData]);
 
 	const messageHandler = () => {
-		if (listingData) {
-			tabNavigation.navigate('Message', {
-				directThreadMembers: [listingData.seller],
-			});
-		} else {
-			// TODO: implement this case, for now do nothing
+		if (listingData && user) {
+			const parentNav = navigation.getParent<NavigationProp<TabsParamList>>();
+			if (parentNav) {
+				parentNav.navigate('Inbox', {
+					screen: 'Messages',
+					params: { members: [user, listingData.seller] },
+				});
+			} else {
+				logger.error(`Parent navigation is undefined for ${listingId}`);
+				Toast.show({
+					type: 'error',
+					text1: 'Unexpected error occured',
+				});
+			}
 		}
 	};
 
@@ -88,8 +107,21 @@ const Item: FC<Props> = ({ route, navigation, tabNavigation }) => {
 			}
 		}
 	};
+
 	const editHandler = () => {
-		navigation.navigate('Edit', { listingId });
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.navigate('Sell', {
+				screen: 'Edit',
+				params: { listingId },
+			});
+		} else {
+			logger.error(`Parent navigation is undefined for ${listingId}`);
+			Toast.show({
+				type: 'error',
+				text1: 'Unexpected error occured',
+			});
+		}
 	};
 
 	return (

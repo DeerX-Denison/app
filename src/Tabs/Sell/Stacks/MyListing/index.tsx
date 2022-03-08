@@ -16,6 +16,7 @@ import { ListingId, SellStackParamList } from 'types';
 interface Props {
 	navigation: NativeStackNavigationProp<SellStackParamList>;
 }
+
 /**
  * MyListing components, a list of all items that is created and put on sale by the user
  */

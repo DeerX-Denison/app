@@ -102,7 +102,7 @@ const Threads: FC<Props> = ({ navigation, directThreadMembers }) => {
 			keyboardShouldPersistTaps="handled"
 		>
 			<Inputs.Text
-				placeholder="Big Red ID"
+				placeholder="Find Friends"
 				placeholderTextColor={'gray'}
 				value={query}
 				onChangeText={setQuery}

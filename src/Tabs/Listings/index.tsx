@@ -5,7 +5,6 @@ import {
 import React, { FC } from 'react';
 import { ListingsStackParamList, TabsParamList } from 'types';
 import { Item, Main } from './Stacks';
-
 interface Props {
 	navigation: NativeStackNavigationProp<TabsParamList>;
 }
@@ -20,7 +19,9 @@ const Listings: FC<Props> = ({ navigation }) => {
 			initialRouteName="Main"
 			screenOptions={{ headerShown: false }}
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
+			<Stack.Screen name="Main">
+				{(props) => <Main {...props} tabNavigation={navigation} />}
+			</Stack.Screen>
 			<Stack.Screen name="Item">
 				{(props) => <Item {...props} tabNavigation={navigation} />}
 			</Stack.Screen>

@@ -1,3 +1,4 @@
+import { RouteProp } from '@react-navigation/native';
 import {
 	createNativeStackNavigator,
 	NativeStackNavigationProp,
@@ -7,6 +8,7 @@ import { SellStackParamList, TabsParamList } from 'types';
 import { Create, Edit, Main } from './Stacks';
 
 interface Props {
+	route: RouteProp<TabsParamList, 'Sell'>;
 	navigation: NativeStackNavigationProp<TabsParamList, 'Sell'>;
 }
 
@@ -15,6 +17,7 @@ interface Props {
  */
 const Sell: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<SellStackParamList>();
+
 	return (
 		<Stack.Navigator
 			initialRouteName="MyListing"

@@ -21,7 +21,7 @@ const App: FC<Props> = () => {
 			{user ? (
 				// if user is logged in, display tabs
 				<>
-					<UserContext.Provider value={userInfo}>
+					<UserContext.Provider value={{ user, userInfo }}>
 						<NavigationContainer>
 							<Tab.Navigator initialRouteName="Home">
 								<Tab.Screen name="Home">

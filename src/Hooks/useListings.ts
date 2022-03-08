@@ -11,7 +11,7 @@ import { ListingData } from 'types';
  * custom hook to fetches listing from db in general
  */
 const useListings = () => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 
 	// final listing data to be return from this custom hook and render
 	// sorted in order such that .createdAt closest to current time starts at 0
@@ -33,7 +33,7 @@ const useListings = () => {
 	 * listen for new listings
 	 */
 	useEffect(() => {
-		if (user) {
+		if (userInfo) {
 			const unsubscribe = db
 				.collection('listings')
 				.where('status', '==', 'posted')
@@ -73,13 +73,13 @@ const useListings = () => {
 				);
 			return () => unsubscribe();
 		}
-	}, [user, trigger]);
+	}, [userInfo, trigger]);
 
 	/**
 	 * query more listings and append to listings
 	 */
 	const fetchListings = async () => {
-		if (user && !fetchedAll) {
+		if (userInfo && !fetchedAll) {
 			const querySnapshot = await db
 				.collection('listings')
 				.where('status', '==', 'posted')
@@ -105,7 +105,7 @@ const useListings = () => {
 	 * clear listings and fetch first page by retrigger new listings listener
 	 */
 	const resetListings = async () => {
-		if (user) {
+		if (userInfo) {
 			setFetchedAll(false);
 			setListings([]);
 			setLastDoc(undefined);

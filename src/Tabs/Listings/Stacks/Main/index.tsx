@@ -1,3 +1,4 @@
+import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useEffect, useRef } from 'react';
@@ -9,23 +10,32 @@ import {
 	Text,
 	View,
 } from 'react-native';
-import { ListingId, ListingsStackParamList, TabsParamList } from 'types';
+import Toast from 'react-native-toast-message';
+import { ListingId, ListingsStackParamList } from 'types';
 import useListings from '../../../../Hooks/useListings';
 import Listing from './Listing';
 interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
-	tabNavigation: NativeStackNavigationProp<TabsParamList>;
 }
 
 /**
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
-const Main: FC<Props> = ({ navigation, tabNavigation }) => {
+const Main: FC<Props> = ({ navigation }) => {
 	// de-renders back button on navigation header
 	useEffect(() => {
-		tabNavigation.setOptions({
-			headerLeft: () => null,
-		});
+		const parentNavigation = navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.setOptions({
+				headerLeft: () => null,
+			});
+		} else {
+			logger.error(`Parent navigation is undefined for Listings/Main`);
+			Toast.show({
+				type: 'error',
+				text1: 'Unexpected error occured',
+			});
+		}
 	});
 
 	// fetch listings

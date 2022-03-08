@@ -8,13 +8,13 @@ import { v4 as uuidv4 } from 'uuid';
  * custom hook to create a temporary, default new listing data
  */
 const useNewListingData = () => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const [listingData, setListingData] = useState<
 		ListingData | null | undefined
 	>();
 
 	useEffect(() => {
-		user &&
+		userInfo &&
 			setListingData({
 				id: uuidv4(),
 				images: [],
@@ -22,10 +22,10 @@ const useNewListingData = () => {
 				price: '',
 				category: undefined,
 				seller: {
-					email: user.email,
-					displayName: user.displayName,
-					photoURL: user.photoURL,
-					uid: user.uid,
+					email: userInfo.email,
+					displayName: userInfo.displayName,
+					photoURL: userInfo.photoURL,
+					uid: userInfo.uid,
 				},
 				condition: undefined,
 				description: '',
@@ -34,7 +34,7 @@ const useNewListingData = () => {
 				updatedAt: undefined,
 				status: 'saved',
 			});
-	}, [user]);
+	}, [userInfo]);
 	return { listingData, setListingData };
 };
 

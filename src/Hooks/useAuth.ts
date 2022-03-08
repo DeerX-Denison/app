@@ -111,15 +111,20 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
  */
 const useAuth = () => {
 	const { user } = useAuthState();
-	let userInfo: UserInfo | undefined | null = undefined;
-	if (user) {
-		userInfo = {
-			email: user.email,
-			displayName: user.displayName,
-			photoURL: user.photoURL,
-			uid: user.uid,
-		};
-	}
+	const [userInfo, setUserInfo] = useState<UserInfo | undefined | null>();
+	useEffect(() => {
+		if (user) {
+			setUserInfo({
+				email: user.email,
+				displayName: user.displayName,
+				photoURL: user.photoURL,
+				uid: user.uid,
+			});
+		} else {
+			setUserInfo(user);
+		}
+	}, [user]);
+
 	useSaveUser(user);
 
 	return { user, userInfo };

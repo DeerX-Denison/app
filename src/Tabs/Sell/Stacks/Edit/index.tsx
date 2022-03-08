@@ -25,14 +25,14 @@ import {
 	ListingCategory,
 	ListingCondition,
 	ListingData,
-	ListingsStackParamList,
+	SellStackParamList,
 } from 'types';
 import uploadImagesAsync from '../uploadImageAsync';
 import validListingData from '../validListingData';
 
 interface Props {
-	route: RouteProp<ListingsStackParamList, 'Edit'>;
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	route: RouteProp<SellStackParamList, 'Edit'>;
+	navigation: NativeStackNavigationProp<SellStackParamList>;
 }
 
 const categories: Item[] = [
@@ -58,7 +58,7 @@ const conditions: Item[] = [
  * Edit components, when user want to edit an item that has already been put on sale
  */
 const Edit: FC<Props> = ({ route, navigation }) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
 	const [progress, setProgress] = useState<number>(0);
@@ -95,7 +95,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 				});
 			}
 		} finally {
-			navigation.navigate('Main');
+			navigation.goBack();
 		}
 	};
 
@@ -110,7 +110,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 	 * save current listingData
 	 */
 	const saveHandler = async () => {
-		if (!listingData || !user) {
+		if (!listingData || !userInfo) {
 			return Toast.show({
 				type: 'error',
 				text1: 'Invalid inputs, please check your input again',
@@ -156,7 +156,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		} catch (error) {
 			logger.log(error);
 		} finally {
-			navigation.navigate('Main');
+			navigation.goBack();
 		}
 	};
 

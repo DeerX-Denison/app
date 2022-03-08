@@ -9,7 +9,7 @@ import { WishlistDataCL } from 'types';
  * query user's wishlist
  */
 const useWishlist = () => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 
 	// final wishlist data to be return from this custom hook and render
 	// sorted in order such that .addedAt closest to current time starts at 0
@@ -32,10 +32,10 @@ const useWishlist = () => {
 	 * listen for new wishlist
 	 */
 	useEffect(() => {
-		if (!user) return;
+		if (!userInfo) return;
 		const unsubscribe = db
 			.collection('users')
-			.doc(user.uid)
+			.doc(userInfo.uid)
 			.collection('wishlist')
 			.orderBy('addedAt', 'asc')
 			// .startAfter(lastDoc ? lastDoc : [])
@@ -54,16 +54,16 @@ const useWishlist = () => {
 				setWishlist([...oldWl, ...uniqueExtraWl]);
 			});
 		return () => unsubscribe();
-	}, [user, trigger]);
+	}, [userInfo, trigger]);
 
 	/**
 	 * query more listings and append to listings
 	 */
 	const fetchWishlist = async () => {
-		if (!user) return;
+		if (!userInfo) return;
 		const querySnapshot = await db
 			.collection('users')
-			.doc(user.uid)
+			.doc(userInfo.uid)
 			.collection('wishlist')
 			.orderBy('addedAt', 'asc')
 			.startAfter(lastDoc ? lastDoc : [])
@@ -84,7 +84,7 @@ const useWishlist = () => {
 	 * clear listings and fetch first page by retrigger new listings listener
 	 */
 	const resetWishlist = async () => {
-		if (user) {
+		if (userInfo) {
 			setFetchedAll(false);
 			setWishlist([]);
 			setLastDoc(undefined);

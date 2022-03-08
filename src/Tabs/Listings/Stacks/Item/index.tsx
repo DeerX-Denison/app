@@ -35,7 +35,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		}
 	});
 
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
 	const { isInWishlist, setIsInWishlist } = useIsInWishlist(listingData?.id);
@@ -55,12 +55,12 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	}, [listingData]);
 
 	const messageHandler = () => {
-		if (listingData && user) {
+		if (listingData && userInfo) {
 			const parentNav = navigation.getParent<NavigationProp<TabsParamList>>();
 			if (parentNav) {
 				parentNav.navigate('Inbox', {
 					screen: 'Messages',
-					params: { members: [user, listingData.seller] },
+					params: { members: [userInfo, listingData.seller] },
 				});
 			} else {
 				logger.error(`Parent navigation is undefined for ${listingId}`);
@@ -73,7 +73,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	};
 
 	const removeWishlistHandler = async () => {
-		if (user && listingData && isInWishlist) {
+		if (userInfo && listingData && isInWishlist) {
 			try {
 				await fn.httpsCallable('deleteWishlist')(listingData.id);
 				setIsInWishlist(false);
@@ -87,7 +87,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		}
 	};
 	const addWishlistHandler = async () => {
-		if (user && listingData && !isInWishlist) {
+		if (userInfo && listingData && !isInWishlist) {
 			try {
 				const wishlistData: WishlistDataCL = {
 					id: listingData.id,

@@ -58,7 +58,7 @@ const conditions: Item[] = [
  * Create components, when user want to create an item
  */
 const Create: FC<Props> = ({ navigation }) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const { listingData, setListingData } = useNewListingData();
 	const [progress, setProgress] = useState<number>(0);
 	const {
@@ -93,7 +93,7 @@ const Create: FC<Props> = ({ navigation }) => {
 	 * upload listingData to database
 	 */
 	const createListingHandler = async () => {
-		if (!listingData || !user) {
+		if (!listingData || !userInfo) {
 			return Toast.show({
 				type: 'error',
 				text1: 'Invalid inputs, please check your input again',

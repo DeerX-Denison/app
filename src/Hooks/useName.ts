@@ -6,7 +6,7 @@ import { ThreadName, UserInfo } from 'types';
 /**
  * custom hook to set name of new thread for useThreadData
  */
-const useName = (members: UserInfo[], user: UserInfo | null) => {
+const useName = (members: UserInfo[], user: UserInfo | undefined | null) => {
 	const [name, setName] = useState<ThreadName>({});
 	useEffect(() => {
 		if (user) {

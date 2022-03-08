@@ -58,16 +58,16 @@ const useThreads = () => {
 	// dummy state to trigger listening for new messages again
 	const [trigger, setTrigger] = useState<boolean>(false);
 
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 
 	/**
 	 * listen for new threads
 	 */
 	useEffect(() => {
-		if (user) {
+		if (userInfo) {
 			const unsubscribe = db
 				.collection('threads')
-				.where('membersUid', 'array-contains', user.uid)
+				.where('membersUid', 'array-contains', userInfo.uid)
 				.orderBy('latestTime', 'desc')
 				.limit(THREADS_PER_PAGE)
 				.onSnapshot(
@@ -95,7 +95,7 @@ const useThreads = () => {
 				);
 			return () => unsubscribe();
 		}
-	}, [user, trigger]);
+	}, [userInfo, trigger]);
 
 	/**
 	 * parse updThrs to threads
@@ -122,10 +122,10 @@ const useThreads = () => {
 	 * query more threads and append to threads
 	 */
 	const fetchThreads = async () => {
-		if (user && !fetchedAll) {
+		if (userInfo && !fetchedAll) {
 			const querySnapshot = await db
 				.collection('threads')
-				.where('membersUid', 'array-contains', user.uid)
+				.where('membersUid', 'array-contains', userInfo.uid)
 				.orderBy('latestTime', 'desc')
 				.startAfter(lastDoc ? lastDoc : [])
 				.limit(THREADS_PER_PAGE)
@@ -148,7 +148,7 @@ const useThreads = () => {
 	 * clear threads and fetch first page by retrigger new threads listener
 	 */
 	const resetThreads = async () => {
-		if (user) {
+		if (userInfo) {
 			setFetchedAll(false);
 			setThreads([]);
 			setLastDoc(undefined);

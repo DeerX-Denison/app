@@ -5,7 +5,10 @@ import { ThreadThumbnail, UserInfo } from 'types';
 /**
  * custom hook to set thumbnail state for useThreadData
  */
-const useThumbnail = (members: UserInfo[], user: UserInfo | null) => {
+const useThumbnail = (
+	members: UserInfo[],
+	user: UserInfo | undefined | null
+) => {
 	const [thumbnail, setThumbnail] = useState<ThreadThumbnail | undefined>();
 	useEffect(() => {
 		if (user) {

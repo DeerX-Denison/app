@@ -38,7 +38,7 @@ interface Props {
  * Messages component, Threads contains Thread contains Messages contains Message
  */
 const Messages: FC<Props> = ({ route }) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const { threadData, isNewThread, setIsNewThread, fetchMessages } =
 		useThreadData(route.params.members);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
@@ -58,7 +58,7 @@ const Messages: FC<Props> = ({ route }) => {
 
 	const sendHandler = async () => {
 		setDisableSend(true);
-		if (threadData && user) {
+		if (threadData && userInfo) {
 			if (inputMessage !== '') {
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -74,9 +74,9 @@ const Messages: FC<Props> = ({ route }) => {
 					const newMessage: MessageData = {
 						id: uuidv4(),
 						sender: {
-							uid: user.uid,
-							photoURL: user.photoURL,
-							displayName: user.displayName,
+							uid: userInfo.uid,
+							photoURL: userInfo.photoURL,
+							displayName: userInfo.displayName,
 						},
 						membersUid: threadData.membersUid,
 						content: inputMessage,
@@ -120,12 +120,14 @@ const Messages: FC<Props> = ({ route }) => {
 			>
 				<Image
 					source={{
-						uri: user?.photoURL ? user.photoURL : DEFAULT_MESSAGE_THUMBNAIL,
+						uri: userInfo?.photoURL
+							? userInfo.photoURL
+							: DEFAULT_MESSAGE_THUMBNAIL,
 					}}
 				/>
-				{threadData && user ? (
+				{threadData && userInfo ? (
 					<Text style={tw('text-s-xl font-medium')}>
-						{threadData.name[user.uid]}
+						{threadData.name[userInfo.uid]}
 					</Text>
 				) : (
 					<Text>Loading...</Text>

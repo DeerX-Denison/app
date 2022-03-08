@@ -3,7 +3,7 @@ import { UserContext } from '@Contexts';
 import { useThreads } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useRef, useState } from 'react';
 import {
 	NativeScrollEvent,
 	NativeSyntheticEvent,
@@ -23,56 +23,24 @@ interface Props {
 }
 
 /**
- * custom hook to redirect to a thread when directThreadMember is defined
- */
-const useDirectThread = (
-	user: UserInfo | null,
-	directThreadMembers: UserInfo[] | undefined,
-	navigation: NativeStackNavigationProp<MessageStackParamList>
-) => {
-	useEffect(() => {
-		if (user && directThreadMembers) {
-			const directThreadMember = directThreadMembers[0];
-			navigation.navigate('Messages', {
-				members: [
-					{
-						uid: user.uid,
-						email: user.email,
-						displayName: user.displayName,
-						photoURL: user.photoURL,
-					},
-					{
-						uid: directThreadMember.uid,
-						email: directThreadMember.email,
-						displayName: directThreadMember.displayName,
-						photoURL: directThreadMember.photoURL,
-					},
-				],
-			});
-		}
-	}, [directThreadMembers]);
-};
-
-/**
  * Threads components, Threads contains Thread contains Messages contains Message
  */
-const Threads: FC<Props> = ({ navigation, directThreadMembers }) => {
-	const user = useContext(UserContext);
-	useDirectThread(user, directThreadMembers, navigation);
-	const { threads, fetchThreads, resetThreads, fetchedAll } = useThreads();
+const Threads: FC<Props> = ({ navigation }) => {
+	const { userInfo } = useContext(UserContext);
+	const { threads, fetchThreads, resetThreads } = useThreads();
 	const [searching, setSearching] = useState<boolean>(false);
 	const { query, setQuery, suggestions } = useAutoComplete();
 	const scrollViewRef = useRef<ScrollView | undefined>();
 
 	const suggestionHandler = (suggestion: UserInfo) => {
-		if (user) {
+		if (userInfo) {
 			navigation.navigate('Messages', {
 				members: [
 					{
-						uid: user.uid,
-						email: user.email,
-						displayName: user.displayName,
-						photoURL: user.photoURL,
+						uid: userInfo.uid,
+						email: userInfo.email,
+						displayName: userInfo.displayName,
+						photoURL: userInfo.photoURL,
 					},
 					{
 						uid: suggestion.uid,

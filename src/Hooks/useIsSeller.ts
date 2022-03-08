@@ -7,9 +7,9 @@ import { ListingData } from 'types';
  */
 const useIsSeller = (listingData: ListingData | null | undefined) => {
 	const [isSeller, setIsSeller] = useState<boolean | undefined>(undefined);
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	useEffect(() => {
-		if (listingData?.seller.uid === user?.uid) {
+		if (listingData?.seller.uid === userInfo?.uid) {
 			setIsSeller(true);
 		} else {
 			setIsSeller(false);

@@ -6,15 +6,15 @@ import { useContext, useEffect, useState } from 'react';
  * custom hook to determind if input listingId is saved by current user
  */
 const useIsInWishlist = (listingId: string | undefined) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const [isInWishlist, setIsInWishlist] = useState<boolean | undefined>();
 	useEffect(() => {
-		if (user && listingId) {
+		if (userInfo && listingId) {
 			let isSubscribed = true;
 			(async () => {
 				const docSnap = await db
 					.collection('users')
-					.doc(user.uid)
+					.doc(userInfo.uid)
 					.collection('wishlist')
 					.doc(listingId)
 					.get();

@@ -15,12 +15,12 @@ import useThumbnail from './useThumbnail';
  * query threadData from input initMembers
  */
 const useThreadData = (initMembers: UserInfo[]) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const [threadData, setThreadData] = useState<ThreadData | undefined>();
 	const { members } = useMembers(initMembers);
-	const { membersUid } = useMembersUid(members, user);
-	const { thumbnail } = useThumbnail(members, user);
-	const { name } = useName(members, user);
+	const { membersUid } = useMembersUid(members, userInfo);
+	const { thumbnail } = useThumbnail(members, userInfo);
+	const { name } = useName(members, userInfo);
 	const { threadId } = useThreadId(membersUid);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);

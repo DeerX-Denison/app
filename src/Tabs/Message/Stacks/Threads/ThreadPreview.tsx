@@ -20,8 +20,8 @@ interface Prop {
  * Thread component, Threads contains Thread contains Messages contains Message
  */
 const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
-	const user = useContext(UserContext);
-	if (!user) {
+	const { userInfo } = useContext(UserContext);
+	if (!userInfo) {
 		navigation.navigate('Threads');
 		throw 'User unauthenticated';
 	}
@@ -56,7 +56,7 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 					>
 						<FastImage
 							source={{
-								uri: threadPreviewData.thumbnail[user.uid],
+								uri: threadPreviewData.thumbnail[userInfo.uid],
 							}}
 							style={tw('h-full w-full rounded-full')}
 						/>
@@ -68,7 +68,7 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{threadPreviewData.name[user.uid]}
+								{threadPreviewData.name[userInfo.uid]}
 							</Text>
 						</View>
 						<View style={tw('flex justify-center h-8')}>

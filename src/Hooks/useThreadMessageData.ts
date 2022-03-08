@@ -14,7 +14,7 @@ const useThreadMessagesData = (
 	isNewThread: boolean | undefined,
 	threadId: string | undefined
 ) => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 
 	// final message data to return from this custom hook
 	// sorted in order such that .time furthest from current time starts at 0
@@ -39,12 +39,12 @@ const useThreadMessagesData = (
 	 * listen for new messages and update threadMessageData
 	 */
 	useEffect(() => {
-		if (user && isNewThread === false) {
+		if (userInfo && isNewThread === false) {
 			const unsubscribe = db
 				.collection('threads')
 				.doc(threadId)
 				.collection('messages')
-				.where('membersUid', 'array-contains', user.uid)
+				.where('membersUid', 'array-contains', userInfo.uid)
 				.orderBy('time', 'desc')
 				.limit(MESSAGE_PER_PAGE)
 				.onSnapshot(
@@ -86,18 +86,18 @@ const useThreadMessagesData = (
 				);
 			return () => unsubscribe();
 		}
-	}, [user, isNewThread, trigger]);
+	}, [userInfo, isNewThread, trigger]);
 
 	/**
 	 * query more messages and prepend to threadMessagesData
 	 */
 	const fetchMessages = async () => {
-		if (user && !fetchedAll) {
+		if (userInfo && !fetchedAll) {
 			const querySnapshot = await db
 				.collection('threads')
 				.doc(threadId)
 				.collection('messages')
-				.where('membersUid', 'array-contains', user.uid)
+				.where('membersUid', 'array-contains', userInfo.uid)
 				.orderBy('time', 'desc')
 				.startAfter(lastDoc ? lastDoc : [])
 				.limit(MESSAGE_PER_PAGE)
@@ -121,7 +121,7 @@ const useThreadMessagesData = (
 	 * clear threadMessagesData and fetch first page by retrigger new messages listener
 	 */
 	const resetMessages = () => {
-		if (user) {
+		if (userInfo) {
 			setFetchedAll(false);
 			setThreadMessagesData([]);
 			setLastDoc(undefined);

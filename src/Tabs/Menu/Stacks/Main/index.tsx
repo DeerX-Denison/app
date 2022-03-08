@@ -12,12 +12,12 @@ interface Props {
 }
 
 const Main: FC<Props> = () => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	return (
 		<View style={tw('flex flex-1 justify-center items-center')}>
 			<Text style={tw('text-s-md font-bold uppercase')}>Menu</Text>
-			{user && (
-				<Text style={tw('pt-6 font-normal text-s-md')}>{user.email}</Text>
+			{userInfo && (
+				<Text style={tw('pt-6 font-normal text-s-md')}>{userInfo.email}</Text>
 			)}
 			<View style={tw('pt-6')} />
 			<Buttons.Primary

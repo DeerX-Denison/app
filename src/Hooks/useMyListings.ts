@@ -9,12 +9,12 @@ import { ListingData } from 'types';
  * Fetches myListings from database
  */
 const useMyListings = () => {
-	const user = useContext(UserContext);
+	const { userInfo } = useContext(UserContext);
 	const [myListings, setMyListings] = useState<ListingData[] | undefined>();
 	useEffect(() => {
 		const unsubscribe = db
 			.collection('listings')
-			.where('seller.uid', '==', user?.uid)
+			.where('seller.uid', '==', userInfo?.uid)
 			.onSnapshot(
 				(docSnaps) => {
 					const myListings = docSnaps.docs.map(

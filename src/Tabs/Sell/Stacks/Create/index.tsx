@@ -1,3 +1,4 @@
+import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
 import { CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12 } from '@Constants';
@@ -14,16 +15,8 @@ import {
 	requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import {
-	Alert,
-	Button,
-	Linking,
-	Platform,
-	Switch,
-	Text,
-	View,
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Alert, Button, Linking, Platform, Text, View } from 'react-native';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -84,7 +77,11 @@ const renderBackButton = (
 const renderPostButton = (
 	navigation: Props['navigation'],
 	createListingHandler: () => Promise<void>,
-	categorizing: boolean
+	categorizing: boolean,
+	listingData: ListingData | null | undefined,
+	setListingData: React.Dispatch<
+		React.SetStateAction<ListingData | null | undefined>
+	>
 ) => {
 	useEffect(() => {
 		const parentNavigation = navigation.getParent();
@@ -95,7 +92,24 @@ const renderPostButton = (
 						<></>
 					) : (
 						<>
-							<Button title="post" onPress={() => createListingHandler()} />
+							<Button
+								title="post"
+								onPress={() => {
+									if (listingData) {
+										setListingData({ ...listingData, status: 'posted' });
+										createListingHandler();
+									} else {
+										logger.error(
+											'listing data is null when user click post button'
+										);
+										Toast.show({
+											type: 'error',
+											text1: 'Unexpected error occured',
+										});
+										navigation.goBack();
+									}
+								}}
+							/>
 						</>
 					),
 			});
@@ -176,7 +190,7 @@ const Create: FC<Props> = ({ navigation }) => {
 		}
 
 		try {
-			const newListingData = {
+			const newListingData: ListingData = {
 				...listingData,
 				price: parseFloat(listingData.price).toString(),
 				images,
@@ -189,7 +203,13 @@ const Create: FC<Props> = ({ navigation }) => {
 		}
 	};
 
-	renderPostButton(navigation, createListingHandler, categorizing);
+	renderPostButton(
+		navigation,
+		createListingHandler,
+		categorizing,
+		listingData,
+		setListingData
+	);
 
 	/**
 	 * handle user add image from local device
@@ -280,12 +300,12 @@ const Create: FC<Props> = ({ navigation }) => {
 										) : (
 											// else render add button and error if there is error
 											<>
-												<TouchableOpacity onPress={() => addImageHandler()}>
-													<View
-														style={tw(
-															'h-20 mx-4 my-2 border rounded-lg flex flex-col flex-1 justify-center items-center'
-														)}
-													>
+												<View
+													style={tw(
+														'h-20 mx-4 my-2 border rounded-lg flex flex-col flex-1 justify-center items-center'
+													)}
+												>
+													<TouchableOpacity onPress={() => addImageHandler()}>
 														<Text style={tw('text-s-xl font-semibold')}>
 															Add Photos
 														</Text>
@@ -294,8 +314,8 @@ const Create: FC<Props> = ({ navigation }) => {
 																{imageError}
 															</Text>
 														)}
-													</View>
-												</TouchableOpacity>
+													</TouchableOpacity>
+												</View>
 											</>
 										)}
 
@@ -345,57 +365,64 @@ const Create: FC<Props> = ({ navigation }) => {
 										</View>
 
 										<View style={tw('mx-4 my-2')}>
-											<Text style={tw('text-s-xl font-semibold mb-2')}>
-												Category
-											</Text>
-											<View
-												style={tw('flex flex-row flex-1 border rounded-lg p-2')}
-											>
-												{listingData.category.map((category) => (
-													<View
-														key={category}
-														style={tw(
-															'flex-row border mx-2 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
-														)}
-													>
-														<TouchableOpacity
-															onPress={() => removeCategoryHandler(category)}
-														>
-															<Icon name="times" size={16} style={tw('m-1')} />
-														</TouchableOpacity>
-														<Text style={tw('capitalize')}>{category}</Text>
-													</View>
-												))}
-												<TouchableOpacity
-													onPress={() => setCategorizing(true)}
+											<ScrollView>
+												<View
 													style={tw(
-														'border mx-2 items-center py-0.5 px-1 rounded-full text-xs font-medium bg-yellow-100 flex justify-center items-center'
+														'flex flex-row flex-wrap flex-1 border rounded-lg p-2'
 													)}
 												>
-													<Icon name="plus" size={16} style={tw('m-1')} />
-												</TouchableOpacity>
-											</View>
-											{categoryError !== '' && (
-												<Text style={tw('text-red-400 text-s-md p-2')}>
-													{categoryError}
-												</Text>
-											)}
+													{listingData.category.map((category) => (
+														<View
+															key={category}
+															style={tw(
+																'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
+															)}
+														>
+															<TouchableOpacity
+																onPress={() => removeCategoryHandler(category)}
+															>
+																<Icon
+																	name="times"
+																	size={16}
+																	style={tw('m-1')}
+																/>
+															</TouchableOpacity>
+															<Text style={tw('capitalize')}>{category}</Text>
+														</View>
+													))}
+													<TouchableOpacity
+														onPress={() => setCategorizing(true)}
+													>
+														<View
+															style={tw(
+																'flex-row border mr-2 my-1 items-center py-0.5 px-1 rounded-full text-xs font-medium bg-yellow-100 flex justify-center items-center'
+															)}
+														>
+															<Icon name="plus" size={16} style={tw('m-1')} />
+															<Text style={tw('capitalize text-s-md pr-2')}>
+																Category
+															</Text>
+														</View>
+													</TouchableOpacity>
+													{categoryError !== '' && (
+														<Text style={tw('text-red-400 text-s-md p-2')}>
+															{categoryError}
+														</Text>
+													)}
+												</View>
+											</ScrollView>
 										</View>
 
 										<View style={tw('mx-4 my-2')}>
-											<View style={tw('flex flex-row')}>
-												<Text style={tw('text-base font-medium')}>
-													Condition:
-												</Text>
+											<View style={tw('flex flex-row justify-center h-14')}>
 												<Inputs.Select
 													style={{
 														viewContainer: tw(
-															'border flex justify-center items-center px-2 mx-1 rounded-lg'
+															'border flex flex-1 flex-row items-center px-2 rounded-lg'
 														),
-														iconContainer: tw(
-															'h-full flex justify-center items-center'
-														),
-														inputIOS: tw('text-s-md font-medium pr-4'),
+														iconContainer: tw('h-full flex justify-center'),
+														inputIOSContainer: tw('flex flex-1 flex-row'),
+														inputIOS: tw('text-s-xl font-semibold w-full'),
 													}}
 													items={conditions}
 													value={
@@ -410,7 +437,7 @@ const Create: FC<Props> = ({ navigation }) => {
 														} as ListingData);
 														setHasEditCondition(true);
 													}}
-													Icon={() => <Icon name="chevron-down" />}
+													Icon={() => <Icon name="chevron-down" size={16} />}
 													placeholder={
 														{
 															label: 'Select a condition...',
@@ -431,7 +458,7 @@ const Create: FC<Props> = ({ navigation }) => {
 												placeholder="Item Description"
 												placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
 												style={tw(
-													'text-s-md font-normal border rounded-lg p-2'
+													'text-s-lg font-semibold border rounded-lg p-2'
 												)}
 												value={
 													listingData.description ? listingData.description : ''
@@ -457,20 +484,14 @@ const Create: FC<Props> = ({ navigation }) => {
 												'my-2 w-full flex flex-row justify-center items-center'
 											)}
 										>
-											<Text style={tw('text-s-md p-2')}>Private</Text>
-											<Switch
-												onValueChange={() =>
-													setListingData({
-														...listingData,
-														status:
-															listingData.status === 'posted'
-																? 'saved'
-																: 'posted',
-													})
-												}
-												value={listingData.status === 'posted' ? true : false}
+											<Buttons.Primary
+												size="md"
+												title="Save as draft"
+												onPress={() => {
+													setListingData({ ...listingData, status: 'saved' });
+													createListingHandler();
+												}}
 											/>
-											<Text style={tw('text-s-md p-2')}>Public</Text>
 										</View>
 									</>
 								) : (

@@ -52,7 +52,7 @@ const Category: FC<Props> = ({
 		if (listingData) {
 			setListingData({
 				...listingData,
-				category: [...listingData.category, category],
+				category: [...new Set([...listingData.category, category])],
 			});
 			setCategorizing(false);
 			setQuery('');
@@ -70,7 +70,9 @@ const Category: FC<Props> = ({
 				/>
 			</View>
 			<ScrollView
-				contentContainerStyle={tw('flex flex-col flex-1 bg-pink-500')}
+				keyboardDismissMode="on-drag"
+				keyboardShouldPersistTaps="always"
+				style={tw('flex flex-col flex-1 bg-pink-500')}
 			>
 				{suggestions !== undefined ? (
 					// suggestions has started querying
@@ -81,7 +83,7 @@ const Category: FC<Props> = ({
 								{suggestions.length > 0 ? (
 									// suggestions is not empty
 									<>
-										<View style={tw('flex flex-row bg-pink-600')}>
+										<View style={tw('flex flex-row flex-wrap')}>
 											{suggestions.map((suggestion) => (
 												<TouchableOpacity
 													key={suggestion}
@@ -89,11 +91,13 @@ const Category: FC<Props> = ({
 												>
 													<View
 														style={tw(
-															'flex-row border mx-2 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
+															'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
 														)}
 													>
 														<Icon name="plus" size={16} style={tw('m-1')} />
-														<Text style={tw('capitalize')}>{suggestion}</Text>
+														<Text style={tw('capitalize text-s-md pr-2')}>
+															{suggestion}
+														</Text>
 													</View>
 												</TouchableOpacity>
 											))}

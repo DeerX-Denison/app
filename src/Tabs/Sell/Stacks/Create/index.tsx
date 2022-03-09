@@ -18,10 +18,10 @@ import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
-import addImage from './addImage';
-import Category from './Category';
+import addImage from '../addImage';
+import Category from '../Category';
+import removeCategory from '../removeCategory';
 import createListing from './createListing';
-import removeCategoryHandler from './removeCategory';
 import renderBackButton from './renderBackButton';
 import renderPostButton from './renderPostButton';
 
@@ -190,7 +190,7 @@ const Create: FC<Props> = ({ navigation }) => {
 														>
 															<TouchableOpacity
 																onPress={() =>
-																	removeCategoryHandler(
+																	removeCategory(
 																		category,
 																		listingErrors,
 																		listingData,

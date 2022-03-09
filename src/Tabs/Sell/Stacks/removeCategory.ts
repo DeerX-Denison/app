@@ -13,7 +13,7 @@ export type RemoveCategoryFn = (
 /**
  * handles when user removes a category tag
  */
-const removeCategoryHandler: RemoveCategoryFn = (
+const removeCategory: RemoveCategoryFn = (
 	category,
 	listingErrors,
 	listingData,
@@ -28,4 +28,4 @@ const removeCategoryHandler: RemoveCategoryFn = (
 		setHasEditCategory(true);
 	}
 };
-export default removeCategoryHandler;
+export default removeCategory;

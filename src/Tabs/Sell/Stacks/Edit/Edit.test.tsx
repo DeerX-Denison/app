@@ -75,7 +75,7 @@ describe('Listing tabs - Edit stack', () => {
 		mockUseListingData.mockReset();
 		cleanup();
 	});
-	it('listingData === undefined', () => {
+	it.skip('listingData === undefined', () => {
 		mockUseListingData.mockReturnValue({ listingData: undefined });
 		const {
 			queryByTestId,
@@ -103,7 +103,7 @@ describe('Listing tabs - Edit stack', () => {
 		expect(queryByText('Private')).not.toBeTruthy();
 		expect(queryByText('Public')).not.toBeTruthy();
 	});
-	it('listingData === [...valid data]', () => {
+	it.skip('listingData === [...valid data]', () => {
 		mockUseListingData.mockReturnValue({ listingData: mockListingData });
 		const {
 			queryByTestId,

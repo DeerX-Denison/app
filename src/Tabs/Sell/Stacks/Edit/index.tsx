@@ -1,14 +1,11 @@
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
 import { CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12 } from '@Constants';
-import { UserContext } from '@Contexts';
-import { db, fn } from '@firebase.config';
 import { useListingData, useListingError } from '@Hooks';
-import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	Button,
 	ScrollView,
@@ -20,18 +17,17 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
-import uploadImagesAsync from '../uploadImageAsync';
-import validListingData from '../validListingData';
+import renderDeleteSaveButton from './renderDeleteSaveButton';
+import saveListing from './saveListing';
 
-interface Props {
+export interface Props {
 	route: RouteProp<SellStackParamList, 'Edit'>;
-	navigation: NativeStackNavigationProp<SellStackParamList>;
+	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>;
 }
 
 const categories: Item[] = [
@@ -72,12 +68,21 @@ const renderBackButton = (navigation: Props['navigation']) => {
  */
 const Edit: FC<Props> = ({ route, navigation }) => {
 	renderBackButton(navigation);
-	const { userInfo } = useContext(UserContext);
 	const [categorizing, setCategorizing] = useState(false);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
 	const listingErrors = useListingError(listingData);
 	const [progress, setProgress] = useState<number>(0);
+	renderDeleteSaveButton(
+		navigation,
+		saveListing,
+		categorizing,
+		listingData,
+		setListingData,
+		listingErrors,
+		progress,
+		setProgress
+	);
 	const {
 		imageError,
 		nameError,
@@ -85,96 +90,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		categoryError,
 		conditionError,
 		descError,
-		setHasEditImage,
 		setHasEditName,
 		setHasEditPrice,
-		setHasEditCategory,
 		setHasEditCondition,
 		setHasEditDesc,
-		setJustPosted,
-	} = useListingError(listingData);
-
-	const cancelHandler = () => {
-		navigation.goBack();
-	};
-	const deleteHandler = async () => {
-		try {
-			await db.collection('listings').doc(listingId).delete();
-		} catch (error: unknown) {
-			if (error instanceof Error) {
-				Toast.show({ type: 'error', text1: error.message });
-			} else {
-				logger.log(error);
-				Toast.show({
-					type: 'error',
-					text1: 'An unexpected error occured. Please try again later',
-				});
-			}
-		} finally {
-			navigation.goBack();
-		}
-	};
-
-	/**
-	 * handle user when click save
-	 *
-	 * if listingData === undefined or user not logged in:
-	 * 		Show user error, indicating invalid input (listingData)
-	 * if data is invalid:
-	 * 		set has edit everything
-	 * 		Show user error, indicating invalid input (listingData)
-	 * save current listingData
-	 */
-	const saveHandler = async () => {
-		if (!listingData || !userInfo) {
-			return Toast.show({
-				type: 'error',
-				text1: 'Invalid inputs, please check your input again',
-			});
-		}
-		if (!validListingData(listingData)) {
-			setHasEditImage(true);
-			setHasEditName(true);
-			setHasEditPrice(true);
-			setHasEditCategory(true);
-			setHasEditCondition(true);
-			setHasEditDesc(true);
-			setJustPosted(true);
-			return Toast.show({
-				type: 'error',
-				text1: 'Invalid inputs, please check your input again',
-			});
-		}
-
-		let images: string[];
-
-		try {
-			setProgress(0);
-			images = await uploadImagesAsync(
-				listingData.images,
-				listingData.id,
-				listingData.seller.uid,
-				progress,
-				setProgress
-			);
-		} catch (error) {
-			logger.error(error);
-			return navigation.goBack();
-		}
-
-		try {
-			const updatedListing = {
-				...listingData,
-				price: parseFloat(listingData.price).toString(),
-				images,
-			};
-			await fn.httpsCallable('updateListing')(updatedListing);
-		} catch (error) {
-			logger.log(error);
-		} finally {
-			navigation.goBack();
-		}
-	};
+	} = listingErrors;
 
 	return (
 		<>

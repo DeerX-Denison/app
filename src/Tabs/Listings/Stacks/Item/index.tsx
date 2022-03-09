@@ -63,7 +63,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		if (listingData === null) {
 			Toast.show({
 				type: 'info',
-				text1: 'Item does not exist',
+				text1: 'Item was deleted',
 			});
 			navigation.goBack();
 		}

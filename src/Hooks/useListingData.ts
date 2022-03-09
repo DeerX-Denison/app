@@ -13,27 +13,27 @@ const useListingData = (listingId: ListingId) => {
 	>(undefined);
 
 	useEffect(() => {
-		let isSubscribed = true;
-		(async () => {
-			try {
-				const docSnap = await db.collection('listings').doc(listingId).get();
-				if (docSnap.exists) {
-					const listingData = docSnap.data() as ListingData;
-					isSubscribed && setListingData(listingData);
-				} else {
-					isSubscribed && setListingData(null);
+		const unsubscribe = db
+			.collection('listings')
+			.doc(listingId)
+			.onSnapshot(
+				(docSnap) => {
+					if (docSnap.exists) {
+						const listingData = docSnap.data() as ListingData;
+						setListingData(listingData);
+					} else {
+						setListingData(null);
+					}
+				},
+				(error) => {
+					logger.log(error);
+					Toast.show({
+						type: 'error',
+						text1: 'Error fetching listing data, please try again later',
+					});
 				}
-			} catch (error) {
-				logger.log(error);
-				Toast.show({
-					type: 'error',
-					text1: 'Error fetching listing data, please try again later',
-				});
-			}
-		})();
-		return () => {
-			isSubscribed = false;
-		};
+			);
+		return () => unsubscribe();
 	}, []);
 	return { listingData, setListingData };
 };

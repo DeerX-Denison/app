@@ -10,7 +10,7 @@ import { CreateListingFn } from './createListing';
 
 export type RenderPostButton = (
 	navigation: Props['navigation'],
-	createListingHandler: CreateListingFn,
+	createListing: CreateListingFn,
 	categorizing: boolean,
 	listingData: ListingData | null | undefined,
 	setListingData: React.Dispatch<
@@ -26,7 +26,7 @@ export type RenderPostButton = (
  */
 const renderPostButton: RenderPostButton = (
 	navigation,
-	createListingHandler,
+	createListing,
 	categorizing,
 	listingData,
 	setListingData,
@@ -49,9 +49,8 @@ const renderPostButton: RenderPostButton = (
 									title="post"
 									onPress={() => {
 										if (listingData) {
-											setListingData({ ...listingData, status: 'posted' });
-											createListingHandler(
-												listingData,
+											createListing(
+												{ ...listingData, status: 'posted' } as ListingData,
 												userInfo,
 												listingErrors,
 												progress,

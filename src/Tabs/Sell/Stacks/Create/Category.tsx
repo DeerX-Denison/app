@@ -1,3 +1,4 @@
+import { CATEGORIES } from '@Constants';
 import tw from '@tw';
 import React, { FC, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
@@ -13,17 +14,10 @@ interface Props {
 	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const categories: ListingCategory[] = [
-	'BOOKS',
-	'DORM GOODS',
-	'ELECTRONIC',
-	'FASHION',
-	'FURNITURE',
-	'INSTRUMENT',
-	'JEWELRIES',
-	'SEASONAL',
-];
-
+const categories = CATEGORIES;
+/**
+ * category component when user wants to search for category
+ */
 const Category: FC<Props> = ({
 	listingData,
 	setListingData,

@@ -78,6 +78,7 @@ export type ListingImageMetadata = {
 export type ListingName = string;
 export type ListingPrice = string;
 export type ListingCategory =
+	| undefined
 	| 'FURNITURE'
 	| 'FASHION'
 	| 'BOOKS'

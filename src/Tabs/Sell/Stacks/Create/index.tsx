@@ -1,131 +1,50 @@
 import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
-import { CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12 } from '@Constants';
+import {
+	CONDITIONS,
+	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
+} from '@Constants';
 import { UserContext } from '@Contexts';
-import { fn } from '@firebase.config';
 import { useListingError, useNewListingData } from '@Hooks';
-import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import {
-	launchImageLibraryAsync,
-	MediaTypeOptions,
-	requestMediaLibraryPermissionsAsync,
-} from 'expo-image-picker';
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { Alert, Button, Linking, Platform, Text, View } from 'react-native';
+import React, { FC, useContext, useState } from 'react';
+import { Text, View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-	ListingCategory,
-	ListingCondition,
-	ListingData,
-	SellStackParamList,
-} from 'types';
-import uploadImagesAsync from '../uploadImageAsync';
-import validListingData from '../validListingData';
+import { ListingCondition, ListingData, SellStackParamList } from 'types';
+import addImage from './addImage';
 import Category from './Category';
+import createListing from './createListing';
+import removeCategoryHandler from './removeCategory';
+import renderBackButton from './renderBackButton';
+import renderPostButton from './renderPostButton';
 
-interface Props {
+export interface Props {
 	route: RouteProp<SellStackParamList, 'Create'>;
-	navigation: NativeStackNavigationProp<SellStackParamList>;
+	navigation: NativeStackNavigationProp<SellStackParamList, 'Create'>;
 }
 
-const conditions: Item[] = [
-	{ label: 'Brand New', value: 'BRAND NEW' },
-	{ label: 'Like New', value: 'LIKE NEW' },
-	{ label: 'Fairly Used', value: 'FAIRLY USED' },
-	{ label: 'Useable', value: 'USEABLE' },
-	{ label: 'Barely Functional', value: 'BARELY FUNCTIONAL' },
-];
-/**
- * renders button at header that goes back
- */
-const renderBackButton = (
-	navigation: Props['navigation'],
-	categorizing: boolean,
-	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () =>
-					categorizing ? (
-						<>
-							<Button title="back" onPress={() => setCategorizing(false)} />
-						</>
-					) : (
-						<>
-							<Button title="back" onPress={() => navigation.goBack()} />
-						</>
-					),
-			});
-		}
-	});
-};
-
-/**
- * render post button on screen header
- */
-const renderPostButton = (
-	navigation: Props['navigation'],
-	createListingHandler: () => Promise<void>,
-	categorizing: boolean,
-	listingData: ListingData | null | undefined,
-	setListingData: React.Dispatch<
-		React.SetStateAction<ListingData | null | undefined>
-	>
-) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerRight: () =>
-					categorizing ? (
-						<></>
-					) : (
-						<>
-							<Button
-								title="post"
-								onPress={() => {
-									if (listingData) {
-										setListingData({ ...listingData, status: 'posted' });
-										createListingHandler();
-									} else {
-										logger.error(
-											'listing data is null when user click post button'
-										);
-										Toast.show({
-											type: 'error',
-											text1: 'Unexpected error occured',
-										});
-										navigation.goBack();
-									}
-								}}
-							/>
-						</>
-					),
-			});
-		}
-	});
-};
+const conditions: Item[] = CONDITIONS.map((x) => ({
+	label: x.toLowerCase(),
+	value: x.toUpperCase(),
+}));
 
 /**`
  * Create components, when user want to create an item
  */
 const Create: FC<Props> = ({ navigation }) => {
+	const { userInfo } = useContext(UserContext);
 	const [categorizing, setCategorizing] = useState<boolean>(false);
 	renderBackButton(navigation, categorizing, setCategorizing);
-	const { userInfo } = useContext(UserContext);
 	const { listingData, setListingData } = useNewListingData();
 	const [progress, setProgress] = useState<number>(0);
+	const listingErrors = useListingError(listingData);
 	const {
 		imageError,
 		nameError,
@@ -133,139 +52,22 @@ const Create: FC<Props> = ({ navigation }) => {
 		categoryError,
 		conditionError,
 		descError,
-		setHasEditImage,
 		setHasEditName,
 		setHasEditPrice,
-		setHasEditCategory,
 		setHasEditCondition,
 		setHasEditDesc,
-		setJustPosted,
-	} = useListingError(listingData);
-
-	/**
-	 * handle user when click create
-	 *
-	 * if listingData === undefined or user not logged in:
-	 * 		Show user error, indicating invalid input (listingData)
-	 * if data is invalid:
-	 * 		set has edit everything
-	 * 		Show user error, indicating invalid input (listingData)
-	 * upload user image to cloud storage
-	 * upload listingData to database
-	 */
-	const createListingHandler = async () => {
-		if (!listingData || !userInfo) {
-			return Toast.show({
-				type: 'error',
-				text1: 'Invalid inputs, please check your input again',
-			});
-		}
-		if (!validListingData(listingData)) {
-			setHasEditImage(true);
-			setHasEditName(true);
-			setHasEditPrice(true);
-			setHasEditCategory(true);
-			setHasEditCondition(true);
-			setHasEditDesc(true);
-			setJustPosted(true);
-			return Toast.show({
-				type: 'error',
-				text1: 'Invalid inputs, please check your input again',
-			});
-		}
-		// update images
-		let images: string[];
-		try {
-			setProgress(0);
-			images = await uploadImagesAsync(
-				listingData.images,
-				listingData.id,
-				listingData.seller.uid,
-				progress,
-				setProgress
-			);
-		} catch (error) {
-			logger.error(error);
-			return navigation.goBack();
-		}
-
-		try {
-			const newListingData: ListingData = {
-				...listingData,
-				price: parseFloat(listingData.price).toString(),
-				images,
-			};
-			await fn.httpsCallable('createListing')(newListingData);
-		} catch (error) {
-			logger.log(error);
-		} finally {
-			navigation.goBack();
-		}
-	};
+	} = listingErrors;
 
 	renderPostButton(
 		navigation,
-		createListingHandler,
+		createListing,
 		categorizing,
 		listingData,
-		setListingData
+		setListingData,
+		listingErrors,
+		progress,
+		setProgress
 	);
-
-	/**
-	 * handle user add image from local device
-	 *
-	 * if platform is not web:
-	 * 		check media library permission status:
-	 * 			if not granted, alert user to allow permission
-	 * launch library image and get local photo uri
-	 * set that local photo uri to listingData state
-	 */
-	const addImageHandler = async () => {
-		setHasEditImage(true);
-		if (Platform.OS !== 'web') {
-			const { status } = await requestMediaLibraryPermissionsAsync();
-			if (status !== 'granted') {
-				Alert.alert(
-					'Permission Required',
-					'DeerX needs access to your photo to upload your selected images',
-					[
-						{
-							text: 'Okay',
-							style: 'cancel',
-						},
-						{
-							text: 'Enable',
-							onPress: () =>
-								Linking.openURL('app-settings://notification/DeerX'),
-							style: 'default',
-						},
-					]
-				);
-				return;
-			}
-		}
-		const result = await launchImageLibraryAsync({
-			mediaTypes: MediaTypeOptions.All,
-			// allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-		if (!result.cancelled && listingData) {
-			setListingData({
-				...listingData,
-				images: [...listingData.images, result.uri],
-			});
-		}
-	};
-
-	const removeCategoryHandler = (category: ListingCategory) => {
-		if (listingData) {
-			setListingData({
-				...listingData,
-				category: listingData.category.filter((x) => x !== category),
-			});
-		}
-	};
 
 	return (
 		<>
@@ -305,7 +107,15 @@ const Create: FC<Props> = ({ navigation }) => {
 														'h-20 mx-4 my-2 border rounded-lg flex flex-col flex-1 justify-center items-center'
 													)}
 												>
-													<TouchableOpacity onPress={() => addImageHandler()}>
+													<TouchableOpacity
+														onPress={() =>
+															addImage(
+																listingErrors,
+																listingData,
+																setListingData
+															)
+														}
+													>
 														<Text style={tw('text-s-xl font-semibold')}>
 															Add Photos
 														</Text>
@@ -379,7 +189,14 @@ const Create: FC<Props> = ({ navigation }) => {
 															)}
 														>
 															<TouchableOpacity
-																onPress={() => removeCategoryHandler(category)}
+																onPress={() =>
+																	removeCategoryHandler(
+																		category,
+																		listingErrors,
+																		listingData,
+																		setListingData
+																	)
+																}
 															>
 																<Icon
 																	name="times"
@@ -440,7 +257,7 @@ const Create: FC<Props> = ({ navigation }) => {
 													Icon={() => <Icon name="chevron-down" size={16} />}
 													placeholder={
 														{
-															label: 'Select a condition...',
+															label: 'Item Condition...',
 															value: undefined,
 														} as Item
 													}
@@ -489,7 +306,14 @@ const Create: FC<Props> = ({ navigation }) => {
 												title="Save as draft"
 												onPress={() => {
 													setListingData({ ...listingData, status: 'saved' });
-													createListingHandler();
+													createListing(
+														listingData,
+														userInfo,
+														listingErrors,
+														progress,
+														setProgress,
+														navigation
+													);
 												}}
 											/>
 										</View>

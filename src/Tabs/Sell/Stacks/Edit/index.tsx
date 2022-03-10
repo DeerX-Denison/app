@@ -182,7 +182,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 														<View
 															key={category}
 															style={tw(
-																'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
+																'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full bg-yellow-100'
 															)}
 														>
 															<TouchableOpacity
@@ -201,7 +201,13 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 																	style={tw('m-1')}
 																/>
 															</TouchableOpacity>
-															<Text style={tw('capitalize')}>{category}</Text>
+															<Text
+																style={tw(
+																	'capitalize text-s-md font-medium pr-2'
+																)}
+															>
+																{category}
+															</Text>
 														</View>
 													))}
 													<TouchableOpacity
@@ -209,11 +215,15 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 													>
 														<View
 															style={tw(
-																'flex-row border mr-2 my-1 items-center py-0.5 px-1 rounded-full text-xs font-medium bg-yellow-100 flex justify-center items-center'
+																'flex-row border mx-2 my-1 items-center py-0.5 px-1 rounded-full bg-yellow-100'
 															)}
 														>
 															<Icon name="plus" size={16} style={tw('m-1')} />
-															<Text style={tw('capitalize text-s-md pr-2')}>
+															<Text
+																style={tw(
+																	'capitalize text-s-md font-medium pr-2'
+																)}
+															>
 																Category
 															</Text>
 														</View>

@@ -6,7 +6,7 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingCategory, ListingData } from 'types';
-import addCategoryHandler from './addCategory';
+import addCategory from './addCategory';
 
 interface Props {
 	listingData: ListingData | null | undefined;
@@ -33,22 +33,16 @@ const Category: FC<Props> = ({
 	>();
 
 	useEffect(() => {
-		if (query.length > 0) {
-			if (categories) {
-				setSuggestions(
-					categories.filter((x) => x.includes(query.toUpperCase()))
-				);
-			} else {
-				setSuggestions(null);
-			}
+		if (categories) {
+			setSuggestions(categories.filter((x) => x.includes(query.toUpperCase())));
 		} else {
-			setSuggestions(undefined);
+			setSuggestions(null);
 		}
 	}, [query]);
 
 	return (
-		<View style={tw('flex flex-1 bg-pink-200')}>
-			<View style={tw('w-full bg-pink-300')}>
+		<View style={tw('flex flex-1')}>
+			<View style={tw('w-full')}>
 				<TextInput
 					value={query}
 					style={tw('py-3 px-6 border rounded-full m-2 text-s-lg')}
@@ -59,72 +53,62 @@ const Category: FC<Props> = ({
 			<ScrollView
 				keyboardDismissMode="on-drag"
 				keyboardShouldPersistTaps="always"
-				style={tw('flex flex-col flex-1 bg-pink-500')}
+				style={tw('flex flex-col flex-1')}
 			>
-				{suggestions !== undefined ? (
-					// suggestions has started querying
-					<>
-						{suggestions !== null ? (
-							// suggestions has finished querying
-							<>
-								{suggestions.length > 0 ? (
-									// suggestions is not empty
-									<>
-										<View style={tw('flex flex-row flex-wrap')}>
-											{suggestions.map((suggestion) => (
-												<TouchableOpacity
-													key={suggestion}
-													onPress={() =>
-														addCategoryHandler(
-															suggestion,
-															listingData,
-															setListingData,
-															setCategorizing,
-															setQuery,
-															listingErrors
-														)
-													}
+				<>
+					{suggestions ? (
+						// suggestions has finished querying
+						<>
+							{suggestions.length > 0 ? (
+								// suggestions is not empty
+								<>
+									<View style={tw('flex flex-row flex-wrap')}>
+										{suggestions.map((suggestion) => (
+											<TouchableOpacity
+												key={suggestion}
+												onPress={() =>
+													addCategory(
+														suggestion,
+														listingData,
+														setListingData,
+														setCategorizing,
+														setQuery,
+														listingErrors
+													)
+												}
+											>
+												<View
+													style={tw(
+														'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
+													)}
 												>
-													<View
-														style={tw(
-															'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
-														)}
-													>
-														<Icon name="plus" size={16} style={tw('m-1')} />
-														<Text style={tw('capitalize text-s-md pr-2')}>
-															{suggestion}
-														</Text>
-													</View>
-												</TouchableOpacity>
-											))}
-										</View>
-									</>
-								) : (
-									// suggestions is empty
-									<>
-										<View>
-											<Text>No category found</Text>
-										</View>
-									</>
-								)}
-							</>
-						) : (
-							// suggestions is being queried, render loading
-							<>
-								<View>
-									<Text>Loading</Text>
-								</View>
-							</>
-						)}
-					</>
-				) : (
-					// suggestions has not started querying, renders nothing for now TODO
-					<>
-						<View>
-							<Text>Look for categories</Text>
-						</View>
-					</>
-				)}
+													<Icon name="plus" size={16} style={tw('m-1')} />
+													<Text style={tw('capitalize text-s-md pr-2')}>
+														{suggestion}
+													</Text>
+												</View>
+											</TouchableOpacity>
+										))}
+									</View>
+								</>
+							) : (
+								// suggestions is empty
+								<>
+									<View>
+										<Text>No category found</Text>
+									</View>
+								</>
+							)}
+						</>
+					) : (
+						// suggestions is being queried, render loading
+						<>
+							<View>
+								<Text>Loading</Text>
+							</View>
+						</>
+					)}
+				</>
 			</ScrollView>
 		</View>
 	);

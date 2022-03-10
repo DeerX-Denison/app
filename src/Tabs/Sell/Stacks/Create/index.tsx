@@ -74,6 +74,7 @@ const Create: FC<Props> = ({ navigation }) => {
 			{categorizing ? (
 				<Category
 					listingData={listingData}
+					listingErrors={listingErrors}
 					setListingData={setListingData}
 					setCategorizing={setCategorizing}
 				/>

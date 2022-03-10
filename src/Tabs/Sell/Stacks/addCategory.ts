@@ -16,7 +16,7 @@ export type AddCategoryFn = (
 /**
  * handles when user add a category tag
  */
-const addCategoryHandler: AddCategoryFn = (
+const addCategory: AddCategoryFn = (
 	category,
 	listingData,
 	setListingData,
@@ -34,4 +34,4 @@ const addCategoryHandler: AddCategoryFn = (
 		listingErrors.setHasEditCategory(true);
 	}
 };
-export default addCategoryHandler;
+export default addCategory;

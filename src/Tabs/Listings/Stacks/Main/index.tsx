@@ -1,4 +1,5 @@
 import * as Badges from '@Components/Badges';
+import * as Buttons from '@Components/Buttons';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -159,7 +160,19 @@ const Main: FC<Props> = ({ navigation }) => {
 												'flex flex-col flex-1 justify-center items-center'
 											)}
 										>
-											<Text>No item in listing right now</Text>
+											<Text style={tw('text-s-md font-semibold p-4')}>
+												No item in listing right now
+											</Text>
+											<Buttons.Primary
+												size="md"
+												title="Sell one"
+												onPress={() => {
+													const parentNavigation = navigation.getParent();
+													if (parentNavigation) {
+														parentNavigation.navigate('Sell');
+													}
+												}}
+											/>
 										</View>
 									</>
 								)}

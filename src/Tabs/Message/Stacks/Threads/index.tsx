@@ -1,4 +1,4 @@
-import * as Inputs from '@Components/Inputs';
+import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { useThreads } from '@Hooks';
 import logger from '@logger';
@@ -13,6 +13,7 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { MessageStackParamList, UserInfo } from 'types';
@@ -54,7 +55,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 	const [searching, setSearching] = useState<boolean>(false);
 	const { query, setQuery, suggestions } = useAutoComplete();
 	const scrollViewRef = useRef<ScrollView | undefined>();
-
+	const textInputRef = useRef<TextInput | undefined>();
 	const suggestionHandler = (suggestion: UserInfo) => {
 		if (userInfo) {
 			navigation.navigate('Messages', {
@@ -92,7 +93,8 @@ const Threads: FC<Props> = ({ navigation }) => {
 			contentContainerStyle={tw('flex flex-col flex-1')}
 			keyboardShouldPersistTaps="handled"
 		>
-			<Inputs.Text
+			<TextInput
+				ref={textInputRef as any}
 				placeholder="Find Friends"
 				placeholderTextColor={'gray'}
 				value={query}
@@ -192,10 +194,28 @@ const Threads: FC<Props> = ({ navigation }) => {
 											'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
 										)}
 									>
-										<Text style={tw('text-s-lg p-4')}>It's lonely here.</Text>
-										<Text style={tw('text-s-lg p-4')}>
-											Wanna start a message?
+										<Text style={tw('text-s-md font-semibold p-4')}>
+											It's lonely here.
 										</Text>
+										<Buttons.Primary
+											size="md"
+											title="Find friends"
+											onPress={() => {
+												setSearching(true);
+												if (textInputRef.current) {
+													if (
+														typeof (textInputRef.current as any).focus ===
+														'function'
+													) {
+														(textInputRef.current as any).focus();
+													} else {
+														logger.error(
+															'text input ref does not have focus method'
+														);
+													}
+												}
+											}}
+										/>
 									</View>
 								</>
 							)}

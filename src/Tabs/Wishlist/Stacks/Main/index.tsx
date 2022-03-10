@@ -41,7 +41,7 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 };
 const Main: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
-	const { wishlist, fetchWishlist, resetWishlist, fetchedAll } = useWishlist();
+	const { wishlist, fetchWishlist, resetWishlist } = useWishlist();
 	const itemHandler = (listingId: string) => {
 		navigation.navigate('Item', { listingId });
 	};
@@ -57,7 +57,6 @@ const Main: FC<Props> = ({ navigation }) => {
 
 	return (
 		<View style={tw('flex flex-1')}>
-			<Text style={tw('font-bold text-s-lg py-4 text-center')}>Wishlist</Text>
 			{wishlist ? (
 				// wishlist is fetched, render scroll view
 				<>
@@ -98,14 +97,14 @@ const Main: FC<Props> = ({ navigation }) => {
 									</TouchableWithoutFeedback>
 								))}
 							</ScrollView>
-							{fetchedAll && (
+							{/* {fetchedAll && (
 								<View style={tw('w-full')}>
 									<Text>
 										End of wishlist. Temporary implementation. Will implement a
 										more friendly message.
 									</Text>
 								</View>
-							)}
+							)} */}
 						</>
 					) : (
 						// wishlist is empty, display empty message
@@ -113,7 +112,19 @@ const Main: FC<Props> = ({ navigation }) => {
 							<View
 								style={tw('flex flex-col flex-1 justify-center items-center')}
 							>
-								<Text>Wishlist is empty</Text>
+								<Text style={tw('text-s-md font-semibold p-4')}>
+									Like something? Add then here!
+								</Text>
+								<Buttons.Primary
+									size="md"
+									title="Find something"
+									onPress={() => {
+										const parentNavigation = navigation.getParent();
+										if (parentNavigation) {
+											parentNavigation.navigate('Home');
+										}
+									}}
+								/>
 							</View>
 						</>
 					)}

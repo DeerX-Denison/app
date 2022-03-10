@@ -14,9 +14,8 @@ import {
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { ListingId, SellStackParamList } from 'types';
-
 interface Props {
-	navigation: NativeStackNavigationProp<SellStackParamList>;
+	navigation: NativeStackNavigationProp<SellStackParamList, 'MyListing'>;
 }
 
 /**
@@ -113,7 +112,12 @@ const MyListing: FC<Props> = ({ navigation }) => {
 							<View
 								style={tw('flex flex-col flex-1 justify-center items-center')}
 							>
-								<Text>Listing is empty</Text>
+								<Text style={tw('text-s-md font-semibold p-2')}>
+									Nothing on sale
+								</Text>
+								<Text style={tw('text-s-md font-semibold p-2')}>
+									Create one by tapping the top right button!
+								</Text>
 							</View>
 						</>
 					)}

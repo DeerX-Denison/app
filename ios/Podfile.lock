@@ -781,7 +781,7 @@ PODS:
     - React-jsi (= 0.63.4)
   - RNCAsyncStorage (1.16.1):
     - React-Core
-  - RNCPicker (2.2.1):
+  - RNCPicker (2.3.1):
     - React-Core
   - RNFastImage (8.5.11):
     - React-Core
@@ -858,9 +858,9 @@ PODS:
   - RNScreens (3.4.0):
     - React-Core
     - React-RCTImage
-  - RNSVG (12.1.1):
-    - React
-  - RNVectorIcons (9.0.0):
+  - RNSVG (12.3.0):
+    - React-Core
+  - RNVectorIcons (9.1.0):
     - React-Core
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
@@ -1191,7 +1191,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
-  RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
+  RNCPicker: f6c760d4b314585ff35165d8640d7917ae30afb1
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNFBApp: 16bdf8b75b84631513da3d5f5e2520a436ec9b29
   RNFBAuth: 7eb50d60c82b4a59018b0c7a1d4afdd1250eff74
@@ -1205,8 +1205,8 @@ SPEC CHECKSUMS:
   RNNotifee: f1ba270897bd7491f889a1a257d0c038a43376f7
   RNReanimated: e5040efc7c90da0b190a6525fcfc7e1e75973b21
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
-  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
-  RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
+  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
+  RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
   Stripe: c3692f360abcdfeef9751e3c240e7efbc68b921f

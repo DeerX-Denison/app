@@ -1,3 +1,4 @@
+import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
@@ -183,44 +184,39 @@ const Create: FC<Props> = ({ navigation }) => {
 													)}
 												>
 													{listingData.category.map((category) => (
-														<View
-															key={category}
-															style={tw(
-																'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
-															)}
-														>
-															<TouchableOpacity
-																onPress={() =>
-																	removeCategory(
-																		category,
-																		listingErrors,
-																		listingData,
-																		setListingData
-																	)
-																}
-															>
-																<Icon
-																	name="times"
-																	size={16}
-																	style={tw('m-1')}
-																/>
-															</TouchableOpacity>
-															<Text style={tw('capitalize')}>{category}</Text>
+														<View key={category}>
+															<Badges.Light>
+																<TouchableOpacity
+																	onPress={() =>
+																		removeCategory(
+																			category,
+																			listingErrors,
+																			listingData,
+																			setListingData
+																		)
+																	}
+																>
+																	<Icon
+																		name="times"
+																		size={16}
+																		style={tw('m-1')}
+																	/>
+																</TouchableOpacity>
+																<Text style={tw('capitalize text-s-md pr-2')}>
+																	{category}
+																</Text>
+															</Badges.Light>
 														</View>
 													))}
 													<TouchableOpacity
 														onPress={() => setCategorizing(true)}
 													>
-														<View
-															style={tw(
-																'flex-row border mr-2 my-1 items-center py-0.5 px-1 rounded-full text-xs font-medium bg-yellow-100 flex justify-center items-center'
-															)}
-														>
+														<Badges.Light>
 															<Icon name="plus" size={16} style={tw('m-1')} />
 															<Text style={tw('capitalize text-s-md pr-2')}>
 																Category
 															</Text>
-														</View>
+														</Badges.Light>
 													</TouchableOpacity>
 													{categoryError !== '' && (
 														<Text style={tw('text-red-400 text-s-md p-2')}>

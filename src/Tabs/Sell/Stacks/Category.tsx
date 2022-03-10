@@ -1,3 +1,4 @@
+import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
 import tw from '@tw';
 import React, { FC, useEffect, useState } from 'react';
@@ -77,16 +78,12 @@ const Category: FC<Props> = ({
 													)
 												}
 											>
-												<View
-													style={tw(
-														'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100'
-													)}
-												>
+												<Badges.Light>
 													<Icon name="plus" size={16} style={tw('m-1')} />
 													<Text style={tw('capitalize text-s-md pr-2')}>
 														{suggestion}
 													</Text>
-												</View>
+												</Badges.Light>
 											</TouchableOpacity>
 										))}
 									</View>

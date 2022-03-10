@@ -1,3 +1,4 @@
+import * as Badges from '@Components/Badges';
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
 import {
@@ -179,45 +180,38 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 													)}
 												>
 													{listingData.category.map((category) => (
-														<View
-															key={category}
-															style={tw(
-																'flex-row border mx-2 my-1 items-center px-2.5 py-0.5 rounded-full bg-yellow-100'
-															)}
-														>
-															<TouchableOpacity
-																onPress={() =>
-																	removeCategory(
-																		category,
-																		listingErrors,
-																		listingData,
-																		setListingData
-																	)
-																}
-															>
-																<Icon
-																	name="times"
-																	size={16}
-																	style={tw('m-1')}
-																/>
-															</TouchableOpacity>
-															<Text
-																style={tw(
-																	'capitalize text-s-md font-medium pr-2'
-																)}
-															>
-																{category}
-															</Text>
+														<View key={category}>
+															<Badges.Light>
+																<TouchableOpacity
+																	onPress={() =>
+																		removeCategory(
+																			category,
+																			listingErrors,
+																			listingData,
+																			setListingData
+																		)
+																	}
+																>
+																	<Icon
+																		name="times"
+																		size={16}
+																		style={tw('m-1')}
+																	/>
+																</TouchableOpacity>
+																<Text
+																	style={tw(
+																		'capitalize text-s-md font-medium pr-2'
+																	)}
+																>
+																	{category}
+																</Text>
+															</Badges.Light>
 														</View>
 													))}
 													<TouchableOpacity
 														onPress={() => setCategorizing(true)}
 													>
-														<View
-															style={tw(
-																'flex-row border mx-2 my-1 items-center py-0.5 px-1 rounded-full bg-yellow-100'
-															)}
-														>
+														<Badges.Light>
 															<Icon name="plus" size={16} style={tw('m-1')} />
 															<Text
 																style={tw(
@@ -226,7 +220,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 															>
 																Category
 															</Text>
-														</View>
+														</Badges.Light>
 													</TouchableOpacity>
 												</View>
 												{categoryError !== '' && (

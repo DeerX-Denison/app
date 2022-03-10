@@ -7,6 +7,7 @@ module.exports = function (api) {
 				'module-resolver',
 				{
 					alias: {
+						'@Components/Badges': './src/Components/Badges/index',
 						'@Components/Buttons': './src/Components/Buttons/index',
 						'@Components/Carousel': './src/Components/Carousel/index',
 						'@Components/Inputs': './src/Components/Inputs/index',

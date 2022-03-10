@@ -1,31 +1,52 @@
+import * as Badges from '@Components/Badges';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
-	ActivityIndicator,
+	Button,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
 	Text,
+	TouchableOpacity,
 	View,
 } from 'react-native';
+import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import { ListingId, ListingsStackParamList } from 'types';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
 import useListings from '../../../../Hooks/useListings';
+import Category from './Category';
 import Listing from './Listing';
+import removeCategory from './removeCategory';
 interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
 }
 /**
  * derenders button at header
  */
-const derenderBackButton = (navigation: Props['navigation']) => {
+const renderBackButton = (
+	navigation: Props['navigation'],
+	categorizing: boolean,
+	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>
+) => {
 	useEffect(() => {
 		const parentNavigation = navigation.getParent();
 		if (parentNavigation) {
 			parentNavigation.setOptions({
-				headerLeft: () => null,
+				headerLeft: () => (
+					<>
+						{categorizing ? (
+							// user is categorizing, back button should turn "categorizing" to false
+							<>
+								<Button title="back" onPress={() => setCategorizing(false)} />
+							</>
+						) : (
+							<></>
+						)}
+					</>
+				),
 			});
 		} else {
 			logger.error(`Parent navigation is undefined for Listings/Main`);
@@ -40,11 +61,12 @@ const derenderBackButton = (navigation: Props['navigation']) => {
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
 const Main: FC<Props> = ({ navigation }) => {
-	derenderBackButton(navigation);
-	// fetch listings
-	const { listings, fetchListings, resetListings } = useListings();
+	const [categorizing, setCategorizing] = useState(false);
+	const [categoryFilter, setCategoryFilter] = useState<ListingCategory[]>([]);
+	const { listings, fetchListings, resetListings } =
+		useListings(categoryFilter);
 	const scrollViewRef = useRef<ScrollView | undefined>();
-
+	renderBackButton(navigation, categorizing, setCategorizing);
 	const itemHandler = (listingId: ListingId) => {
 		navigation.navigate('Item', { listingId });
 	};
@@ -52,62 +74,115 @@ const Main: FC<Props> = ({ navigation }) => {
 	const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
-			fetchListings();
+			fetchListings(categoryFilter);
 		} else if (offsetY < -50) {
 			resetListings();
 		}
 	};
+
 	return (
 		<View style={tw('flex flex-1 bg-gray-50')}>
-			<ScrollView
-				ref={scrollViewRef as any}
-				onScrollEndDrag={onScrollEndDrag}
-				contentContainerStyle={tw('flex flex-1')}
-			>
-				{listings ? (
-					// listing is fetched
-					<>
-						{listings.length !== 0 ? (
-							// fetched listings length is > 0, render all Listing
-							<View style={tw('flex flex-1 flex-row flex-wrap items-start')}>
-								{listings.map((listing) => (
-									<Listing
-										key={listing.id}
-										listingData={listing}
-										navigation={navigation}
-										onPress={() => itemHandler(listing.id)}
-									/>
-								))}
+			{categorizing ? (
+				// user is categorizing their search, render categorizing component
+				<>
+					<Category
+						category={categoryFilter}
+						setCategory={setCategoryFilter}
+						setCategorizing={setCategorizing}
+					/>
+				</>
+			) : (
+				// user is not categorizing their search, render listing scroll view
+				<>
+					<View
+						style={tw(
+							'mx-1 my-2 flex flex-row flex-wrap border rounded-lg p-2'
+						)}
+					>
+						{categoryFilter.map((category) => (
+							<View key={category}>
+								<Badges.Light>
+									<TouchableOpacity
+										onPress={() =>
+											removeCategory(
+												category,
+												categoryFilter,
+												setCategoryFilter
+											)
+										}
+									>
+										<Icon name="times" size={16} style={tw('m-1')} />
+									</TouchableOpacity>
+									<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+										{category}
+									</Text>
+								</Badges.Light>
 							</View>
+						))}
+						<TouchableOpacity onPress={() => setCategorizing(true)}>
+							<Badges.Light>
+								<Icon name="plus" size={16} style={tw('m-1')} />
+								<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+									Category
+								</Text>
+							</Badges.Light>
+						</TouchableOpacity>
+					</View>
+					<ScrollView
+						ref={scrollViewRef as any}
+						onScrollEndDrag={onScrollEndDrag}
+						contentContainerStyle={tw('flex flex-1')}
+					>
+						{listings ? (
+							// listing is fetched
+							<>
+								{listings.length !== 0 ? (
+									// fetched listings length is > 0, render all Listing
+									<View
+										style={tw('flex flex-1 flex-row flex-wrap items-start')}
+									>
+										{listings.map((listing) => (
+											<Listing
+												key={listing.id}
+												listingData={listing}
+												navigation={navigation}
+												onPress={() => itemHandler(listing.id)}
+											/>
+										))}
+									</View>
+								) : (
+									// fetch listing length is 0, display message saying empty
+									<>
+										<View
+											testID="empty"
+											style={tw(
+												'flex flex-col flex-1 justify-center items-center'
+											)}
+										>
+											<Text>No item in listing right now</Text>
+										</View>
+									</>
+								)}
+							</>
 						) : (
-							// fetch listing length is 0, display message saying empty
+							// listing not fetched yet, render loading
 							<>
 								<View
-									testID="empty"
-									style={tw('flex flex-col flex-1 justify-center items-center')}
+									testID="loading"
+									style={tw(
+										'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
+									)}
 								>
-									<Text>No item in listing right now</Text>
+									<CircleSnail
+										size={80}
+										indeterminate={true}
+										color={['red', 'green', 'blue']}
+									/>
 								</View>
 							</>
 						)}
-					</>
-				) : (
-					// listing not fetched yet, render loading
-					<>
-						{
-							<View
-								testID="loading"
-								style={tw(
-									'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center'
-								)}
-							>
-								<ActivityIndicator size={'large'} />
-							</View>
-						}
-					</>
-				)}
-			</ScrollView>
-			{/* {fetchedAll && (
+					</ScrollView>
+					{/* {fetchedAll && (
 				<View style={tw('w-full')}>
 					<Text>
 						End of listings. Temporary implementation. Will disable scroll to
@@ -115,6 +190,8 @@ const Main: FC<Props> = ({ navigation }) => {
 					</Text>
 				</View>
 			)} */}
+				</>
+			)}
 		</View>
 	);
 };

@@ -42,12 +42,19 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 /**
  * render post button on screen header
  */
-const derenderPostButton = (navigation: Props['navigation']) => {
+const renderCreateButton = (navigation: Props['navigation']) => {
 	useEffect(() => {
 		const parentNavigation = navigation.getParent();
 		if (parentNavigation) {
 			parentNavigation.setOptions({
-				headerRight: () => <></>,
+				headerRight: () => (
+					<>
+						<Button
+							title="Create"
+							onPress={() => navigation.navigate('Create')}
+						/>
+					</>
+				),
 			});
 		}
 	});
@@ -58,17 +65,14 @@ const derenderPostButton = (navigation: Props['navigation']) => {
  */
 const MyListing: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
-	derenderPostButton(navigation);
+	renderCreateButton(navigation);
 	const { myListings } = useMyListings();
-	const createHandler = () => {
-		navigation.navigate('Create');
-	};
+
 	const editHandler = (listingId: ListingId) => {
 		navigation.navigate('Edit', { listingId });
 	};
 	return (
 		<View style={tw('flex flex-1')}>
-			<Button title="Create" onPress={createHandler} />
 			{myListings ? (
 				// myListings is fetched, render scroll view
 				<>

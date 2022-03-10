@@ -70,7 +70,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										onPress={() => {
 											if (listingData) {
 												saveListing(
-													{ ...listingData, status: 'posted' } as ListingData,
+													listingData,
 													userInfo,
 													listingErrors,
 													progress,

@@ -1,19 +1,15 @@
 import Carousel from '@Components/Carousel';
 import * as Inputs from '@Components/Inputs';
-import { CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12 } from '@Constants';
+import {
+	CONDITIONS,
+	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
+} from '@Constants';
 import { useListingData, useListingError } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useEffect, useState } from 'react';
-import {
-	Button,
-	ScrollView,
-	Switch,
-	Text,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import React, { FC, useState } from 'react';
+import { ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -22,6 +18,7 @@ import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
+import renderBackButton from './renderBackButton';
 import renderDeleteSaveButton from './renderDeleteSaveButton';
 import saveListing from './saveListing';
 
@@ -30,45 +27,17 @@ export interface Props {
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>;
 }
 
-const categories: Item[] = [
-	{ label: 'Furniture', value: 'FURNITURE' },
-	{ label: 'Fashion', value: 'FASHION' },
-	{ label: 'Books', value: 'BOOKS' },
-	{ label: 'Furniture', value: 'SEASONAL' },
-	{ label: 'Dorm Goods', value: 'DORM GOODS' },
-	{ label: 'Jewelries', value: 'JEWELRIES' },
-	{ label: 'Electronic', value: 'ELECTRONIC' },
-	{ label: 'Instrument', value: 'INSTRUMENT' },
-];
+const conditions: Item[] = CONDITIONS.map((x) => ({
+	label: x.toLowerCase(),
+	value: x.toUpperCase(),
+}));
 
-const conditions: Item[] = [
-	{ label: 'Brand New', value: 'BRAND NEW' },
-	{ label: 'Like New', value: 'LIKE NEW' },
-	{ label: 'Fairly Used', value: 'FAIRLY USED' },
-	{ label: 'Useable', value: 'USEABLE' },
-	{ label: 'Barely Functional', value: 'BARELY FUNCTIONAL' },
-];
-/**
- * renders button at header that goes back
- */
-const renderBackButton = (navigation: Props['navigation']) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () => (
-					<Button title="back" onPress={() => navigation.goBack()} />
-				),
-			});
-		}
-	});
-};
 /**
  * Edit components, when user want to edit an item that has already been put on sale
  */
 const Edit: FC<Props> = ({ route, navigation }) => {
-	renderBackButton(navigation);
 	const [categorizing, setCategorizing] = useState(false);
+	renderBackButton(navigation, categorizing, setCategorizing);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
 	const listingErrors = useListingError(listingData);
@@ -101,6 +70,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 			{categorizing ? (
 				<Category
 					listingData={listingData}
+					listingErrors={listingErrors}
 					setListingData={setListingData}
 					setCategorizing={setCategorizing}
 				/>
@@ -248,12 +218,12 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 															</Text>
 														</View>
 													</TouchableOpacity>
-													{categoryError !== '' && (
-														<Text style={tw('text-red-400 text-s-md p-2')}>
-															{categoryError}
-														</Text>
-													)}
 												</View>
+												{categoryError !== '' && (
+													<Text style={tw('text-red-400 text-s-md p-2')}>
+														{categoryError}
+													</Text>
+												)}
 											</ScrollView>
 										</View>
 

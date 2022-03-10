@@ -55,7 +55,7 @@ const useListingError = (listingData: ListingData | null | undefined) => {
 			!isFinite(parseFloat(listingData.price)) && hasEditPrice
 				? setPriceError('Please enter valid price')
 				: setPriceError('');
-			!listingData.category && hasEditCategory
+			listingData.category.length <= 0 && hasEditCategory
 				? setCategoryError('Please select a category')
 				: setCategoryError('');
 			!listingData.condition && hasEditCondition
@@ -66,6 +66,7 @@ const useListingError = (listingData: ListingData | null | undefined) => {
 				: setDescError('');
 		}
 	}, [listingData, justPosted]);
+
 	const listingErrors: ListingErrors = {
 		setHasEditImage,
 		setHasEditName,

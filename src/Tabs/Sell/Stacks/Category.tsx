@@ -4,10 +4,13 @@ import React, { FC, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingCategory, ListingData } from 'types';
+import addCategoryHandler from './addCategory';
 
 interface Props {
 	listingData: ListingData | null | undefined;
+	listingErrors: ListingErrors;
 	setListingData: React.Dispatch<
 		React.SetStateAction<ListingData | null | undefined>
 	>;
@@ -20,6 +23,7 @@ const categories = CATEGORIES;
  */
 const Category: FC<Props> = ({
 	listingData,
+	listingErrors,
 	setListingData,
 	setCategorizing,
 }) => {
@@ -41,17 +45,6 @@ const Category: FC<Props> = ({
 			setSuggestions(undefined);
 		}
 	}, [query]);
-
-	const addCategoryHandler = (category: ListingCategory) => {
-		if (listingData) {
-			setListingData({
-				...listingData,
-				category: [...new Set([...listingData.category, category])],
-			});
-			setCategorizing(false);
-			setQuery('');
-		}
-	};
 
 	return (
 		<View style={tw('flex flex-1 bg-pink-200')}>
@@ -81,7 +74,16 @@ const Category: FC<Props> = ({
 											{suggestions.map((suggestion) => (
 												<TouchableOpacity
 													key={suggestion}
-													onPress={() => addCategoryHandler(suggestion)}
+													onPress={() =>
+														addCategoryHandler(
+															suggestion,
+															listingData,
+															setListingData,
+															setCategorizing,
+															setQuery,
+															listingErrors
+														)
+													}
 												>
 													<View
 														style={tw(

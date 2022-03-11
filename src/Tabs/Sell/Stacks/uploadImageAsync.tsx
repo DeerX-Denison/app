@@ -12,8 +12,9 @@ const uploadImageAsync = async (
 	listingId: ListingId,
 	sellerId: string,
 	numImages: number,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>
+	progressArray: number[],
+	setProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
+	index: number
 ) => {
 	try {
 		const imgBlob = await (await fetch(localUrl)).blob();
@@ -38,10 +39,11 @@ const uploadImageAsync = async (
 			uploadTask.on(
 				'state_changed',
 				(snap) => {
-					const subProgress = Math.ceil(
-						(snap.bytesTransferred / snap.totalBytes) * 100
-					);
-					setProgress(progress + Math.floor(subProgress / numImages));
+					const subProgress =
+						snap.bytesTransferred / snap.totalBytes / numImages;
+					const clone = progressArray.map((x) => x);
+					clone[index] = subProgress;
+					setProgressArray(clone);
 				},
 				(error) => {
 					logger.log(`${error.code} - ${error.message}`);
@@ -71,27 +73,27 @@ const uploadImagesAsync = async (
 	images: ListingImageURL[],
 	listingId: ListingId,
 	sellerId: string,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>
+	progressArray: number[],
+	setProgressArray: React.Dispatch<React.SetStateAction<number[]>>
 ) => {
-	const publicUrls: ListingImageURL[] = [];
-	for (let i = 0; i < images.length; i++) {
-		const url = images[i];
-		if (url.startsWith('http')) publicUrls.push(url);
-		else {
+	const newImages = images.filter((x) => !x.startsWith('http'));
+	const oldUrls = images.filter((x) => x.startsWith('http'));
+	const newUrls = await Promise.all(
+		newImages.map(async (url, index) => {
 			const publicUrl = await uploadImageAsync(
 				url,
 				listingId,
 				sellerId,
-				images.length,
-				progress,
-				setProgress
+				newImages.length,
+				progressArray,
+				setProgressArray,
+				index
 			);
-			publicUrls.push(publicUrl);
-		}
-		await new Promise((res) => setTimeout(res, 200));
-	}
-	return publicUrls;
+			return publicUrl;
+		})
+	);
+	const uploadedUrls = [...oldUrls, ...newUrls];
+	return uploadedUrls;
 };
 
 export default uploadImagesAsync;

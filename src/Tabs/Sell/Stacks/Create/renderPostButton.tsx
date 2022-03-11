@@ -17,8 +17,8 @@ export type RenderPostButton = (
 		React.SetStateAction<ListingData | null | undefined>
 	>,
 	listingErrors: ListingErrors,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>
+	subProgressArray: number[],
+	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>
 ) => void;
 
 /**
@@ -31,8 +31,8 @@ const renderPostButton: RenderPostButton = (
 	listingData,
 	setListingData,
 	listingErrors,
-	progress,
-	setProgress
+	subProgressArray,
+	setSubProgressArray
 ) => {
 	const { userInfo } = useContext(UserContext);
 	useEffect(() => {
@@ -53,8 +53,8 @@ const renderPostButton: RenderPostButton = (
 												{ ...listingData, status: 'posted' } as ListingData,
 												userInfo,
 												listingErrors,
-												progress,
-												setProgress,
+												subProgressArray,
+												setSubProgressArray,
 												navigation
 											);
 										} else {

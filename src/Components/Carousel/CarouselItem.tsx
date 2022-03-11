@@ -9,6 +9,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Platform, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
+import { ListingErrors } from 'src/Hooks/useListingError';
 import { CarouselData, ListingData } from 'types';
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
 	setListingData: React.Dispatch<
 		React.SetStateAction<ListingData | null | undefined>
 	>;
+	listingErrors: ListingErrors;
 }
 
 const CarouselItem: FC<Props> = ({
@@ -29,6 +31,7 @@ const CarouselItem: FC<Props> = ({
 	editMode,
 	listingData,
 	setListingData,
+	listingErrors,
 }) => {
 	const [isViewing, setIsViewing] = useState<boolean>(false);
 	const { width } = useWindowDimensions();
@@ -37,12 +40,13 @@ const CarouselItem: FC<Props> = ({
 		images.splice(index, 1);
 		setIndex(index - 1 < 0 ? 0 : index - 1);
 		setListingData({ ...listingData, images } as ListingData);
+		listingErrors.setHasEditImage(true);
 	};
 	const addHandler = async () => {
 		const result = await launchImageLibraryAsync({
 			mediaTypes: MediaTypeOptions.All,
 			// allowsEditing: true,
-			aspect: [4, 3],
+			aspect: [1, 1],
 			quality: 1,
 		});
 		if (!result.cancelled && listingData) {

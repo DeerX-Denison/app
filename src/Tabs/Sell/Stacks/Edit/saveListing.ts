@@ -11,8 +11,8 @@ export type SaveListingFn = (
 	listingData: ListingData,
 	userInfo: UserInfo | null | undefined,
 	listingErrors: ListingErrors,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>,
+	subProgressArray: number[],
+	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>
 ) => Promise<void>;
 
@@ -30,8 +30,8 @@ const saveListing: SaveListingFn = async (
 	listingData,
 	userInfo,
 	listingErrors,
-	progress,
-	setProgress,
+	subProgressArray,
+	setSubProgressArray,
 	navigation
 ) => {
 	const {
@@ -68,13 +68,12 @@ const saveListing: SaveListingFn = async (
 	let images: string[];
 
 	try {
-		setProgress(0);
 		images = await uploadImagesAsync(
 			listingData.images,
 			listingData.id,
 			listingData.seller.uid,
-			progress,
-			setProgress
+			subProgressArray,
+			setSubProgressArray
 		);
 	} catch (error) {
 		logger.error(error);

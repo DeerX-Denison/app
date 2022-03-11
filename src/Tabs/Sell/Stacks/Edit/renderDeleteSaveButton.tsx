@@ -19,8 +19,8 @@ export type RenderDeleteSaveButton = (
 		React.SetStateAction<ListingData | null | undefined>
 	>,
 	listingErrors: ListingErrors,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>
+	subProgressArray: number[],
+	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>
 ) => void;
 
 /**
@@ -33,8 +33,8 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	listingData,
 	setListingData,
 	listingErrors,
-	progress,
-	setProgress
+	subProgressArray,
+	setSubProgressArray
 ) => {
 	const { userInfo } = useContext(UserContext);
 	useEffect(() => {
@@ -73,8 +73,8 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 													listingData,
 													userInfo,
 													listingErrors,
-													progress,
-													setProgress,
+													subProgressArray,
+													setSubProgressArray,
 													navigation
 												);
 											} else {

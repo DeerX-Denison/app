@@ -12,8 +12,13 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useState } from 'react';
-import { Animated, Text, View } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import {
+	Animated,
+	ScrollView,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -25,6 +30,7 @@ import removeCategory from '../removeCategory';
 import createListing from './createListing';
 import renderBackButton from './renderBackButton';
 import renderPostButton from './renderPostButton';
+import useUploadProgress from '../useUploadProgress';
 
 export interface Props {
 	route: RouteProp<SellStackParamList, 'Create'>;
@@ -44,7 +50,9 @@ const Create: FC<Props> = ({ navigation }) => {
 	const [categorizing, setCategorizing] = useState<boolean>(false);
 	renderBackButton(navigation, categorizing, setCategorizing);
 	const { listingData, setListingData } = useNewListingData();
-	const [progress, setProgress] = useState<number>(0);
+	const { progress, setSubProgressArray, subProgressArray } =
+		useUploadProgress();
+
 	const listingErrors = useListingError(listingData);
 	const { scale } = useScaleAnimation(categorizing);
 	const {
@@ -67,8 +75,8 @@ const Create: FC<Props> = ({ navigation }) => {
 		listingData,
 		setListingData,
 		listingErrors,
-		progress,
-		setProgress
+		subProgressArray,
+		setSubProgressArray
 	);
 
 	return (
@@ -85,6 +93,7 @@ const Create: FC<Props> = ({ navigation }) => {
 					// if listing data defined, ask if user is uploading
 					<>
 						<KeyboardAwareScrollView
+							contentContainerStyle={tw('flex flex-col flex-1')}
 							viewIsInsideTabBar={true}
 							keyboardShouldPersistTaps={'handled'}
 							extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
@@ -99,6 +108,7 @@ const Create: FC<Props> = ({ navigation }) => {
 												listingData={listingData}
 												setListingData={setListingData}
 												editMode={true}
+												listingErrors={listingErrors}
 											/>
 										</>
 									) : (
@@ -106,13 +116,16 @@ const Create: FC<Props> = ({ navigation }) => {
 										<>
 											<View
 												style={tw(
-													'h-20 mx-4 my-2 border rounded-lg flex flex-col flex-1 justify-center items-center'
+													'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
 												)}
 											>
 												<TouchableOpacity
 													onPress={() =>
 														addImage(listingErrors, listingData, setListingData)
 													}
+													style={tw(
+														'flex flex-col flex-1 w-full justify-center items-center'
+													)}
 												>
 													<Text style={tw('text-s-xl font-semibold')}>
 														Add Photos
@@ -301,8 +314,8 @@ const Create: FC<Props> = ({ navigation }) => {
 													listingData,
 													userInfo,
 													listingErrors,
-													progress,
-													setProgress,
+													subProgressArray,
+													setSubProgressArray,
 													navigation
 												);
 											}}
@@ -314,11 +327,16 @@ const Create: FC<Props> = ({ navigation }) => {
 								<>
 									<View
 										testID="posting"
-										style={tw(
-											'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center z-10'
-										)}
+										style={{
+											...tw('flex flex-col flex-1 justify-center items-center'),
+										}}
 									>
-										<Bar width={200} indeterminate={true} />
+										<Bar width={200} progress={progress} />
+										<Text style={tw('text-s-md font-semibold p-4')}>
+											{progress < 1
+												? 'Uploading your beautiful images...'
+												: 'Putting your item on sale...'}
+										</Text>
 									</View>
 								</>
 							)}

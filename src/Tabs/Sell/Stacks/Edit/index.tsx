@@ -26,6 +26,7 @@ import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
+import useUploadProgress from '../useUploadProgress';
 import renderBackButton from './renderBackButton';
 import renderDeleteSaveButton from './renderDeleteSaveButton';
 import saveListing from './saveListing';
@@ -50,7 +51,9 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 	const { listingData, setListingData } = useListingData(listingId);
 	const listingErrors = useListingError(listingData);
 	const { scale } = useScaleAnimation(categorizing);
-	const [progress, setProgress] = useState<number>(0);
+	const { progress, setSubProgressArray, subProgressArray } =
+		useUploadProgress();
+
 	renderDeleteSaveButton(
 		navigation,
 		saveListing,
@@ -58,8 +61,8 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		listingData,
 		setListingData,
 		listingErrors,
-		progress,
-		setProgress
+		subProgressArray,
+		setSubProgressArray
 	);
 	const {
 		imageError,
@@ -88,6 +91,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 					// Listing data is fetched, render form with the data as placeholder
 					<>
 						<KeyboardAwareScrollView
+							contentContainerStyle={tw('flex flex-col flex-1')}
 							viewIsInsideTabBar={true}
 							keyboardShouldPersistTaps={'handled'}
 							extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
@@ -102,6 +106,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 												listingData={listingData}
 												setListingData={setListingData}
 												editMode={true}
+												listingErrors={listingErrors}
 											/>
 										</>
 									) : (
@@ -109,13 +114,16 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 										<>
 											<View
 												style={tw(
-													'h-20 mx-4 my-2 border rounded-lg flex flex-col flex-1 justify-center items-center'
+													'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
 												)}
 											>
 												<TouchableOpacity
 													onPress={() =>
 														addImage(listingErrors, listingData, setListingData)
 													}
+													style={tw(
+														'flex flex-col flex-1 w-full justify-center items-center'
+													)}
 												>
 													<Text style={tw('text-s-xl font-semibold')}>
 														Add Photos
@@ -323,11 +331,16 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 								<>
 									<View
 										testID="posting"
-										style={tw(
-											'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center z-10'
-										)}
+										style={{
+											...tw('flex flex-col flex-1 justify-center items-center'),
+										}}
 									>
-										<Bar width={200} indeterminate={true} />
+										<Bar width={200} progress={progress} />
+										<Text style={tw('text-s-md font-semibold p-4')}>
+											{progress < 1
+												? 'Uploading your beautiful images...'
+												: 'Putting your item on sale...'}
+										</Text>
 									</View>
 								</>
 							)}

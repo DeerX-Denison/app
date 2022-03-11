@@ -2,6 +2,7 @@ import tw from '@tw';
 import React, { FC, useRef, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import RNCarousel, { Pagination } from 'react-native-snap-carousel';
+import { ListingErrors } from 'src/Hooks/useListingError';
 import { CarouselData, ListingData } from '../../types';
 import CarouselItem from './CarouselItem';
 
@@ -11,9 +12,15 @@ interface Props {
 		React.SetStateAction<ListingData | null | undefined>
 	>;
 	editMode: boolean;
+	listingErrors: ListingErrors;
 }
 
-const Carousel: FC<Props> = ({ listingData, setListingData, editMode }) => {
+const Carousel: FC<Props> = ({
+	listingData,
+	setListingData,
+	editMode,
+	listingErrors,
+}) => {
 	const carouselRef = useRef<RNCarousel<CarouselData>>(null);
 	const [index, setIndex] = useState<number>(0);
 	const { width } = useWindowDimensions();
@@ -33,6 +40,7 @@ const Carousel: FC<Props> = ({ listingData, setListingData, editMode }) => {
 							editMode={editMode}
 							listingData={listingData}
 							setListingData={setListingData}
+							listingErrors={listingErrors}
 						/>
 					)}
 					sliderWidth={width}

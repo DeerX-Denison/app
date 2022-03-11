@@ -12,8 +12,8 @@ export type CreateListingFn = (
 	listingData: ListingData,
 	userInfo: UserInfo | null | undefined,
 	listingErrors: ListingErrors,
-	progress: number,
-	setProgress: React.Dispatch<React.SetStateAction<number>>,
+	progress: number[],
+	setProgress: React.Dispatch<React.SetStateAction<number[]>>,
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Create'>
 ) => Promise<void>;
 
@@ -32,8 +32,8 @@ const createListing: CreateListingFn = async (
 	listingData,
 	userInfo,
 	listingErrors,
-	progress,
-	setProgress,
+	progressArray,
+	setProgressArray,
 	navigation
 ) => {
 	const {
@@ -68,13 +68,12 @@ const createListing: CreateListingFn = async (
 	// update images
 	let images: string[];
 	try {
-		setProgress(0);
 		images = await uploadImagesAsync(
 			listingData.images,
 			listingData.id,
 			listingData.seller.uid,
-			progress,
-			setProgress
+			progressArray,
+			setProgressArray
 		);
 	} catch (error) {
 		logger.error(error);

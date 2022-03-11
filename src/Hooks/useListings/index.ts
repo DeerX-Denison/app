@@ -55,14 +55,21 @@ const useListings: UseListingsFn = (categoryFilter) => {
 		// append unique newLsts to listings with
 		if (listings && listings.length > 0) {
 			if (newListings && newListings.length > 0) {
-				const updLstDict: { [key: string]: ListingData } = {};
-				listings.forEach((lst) => (updLstDict[lst.id] = lst));
-				newListings.forEach((lst) => (updLstDict[lst.id] = lst));
-				const updLsts: ListingData[] = [];
-				for (const id in updLstDict) {
-					updLsts.push(updLstDict[id]);
+				const unionLstDict: { [key: string]: ListingData } = {};
+				listings.forEach((lst) => (unionLstDict[lst.id] = lst));
+				newListings.forEach((lst) => (unionLstDict[lst.id] = lst));
+				const unionLsts: ListingData[] = [];
+				for (const id in unionLstDict) {
+					unionLsts.push(unionLstDict[id]);
 				}
-				setListings(updLsts);
+				unionLsts.sort((a, b) => {
+					if (a.createdAt && b.createdAt) {
+						return a.createdAt.valueOf > b.createdAt.valueOf ? -1 : 1;
+					} else {
+						return 0;
+					}
+				});
+				setListings(unionLsts);
 			}
 		} else {
 			setListings(newListings);

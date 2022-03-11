@@ -1,6 +1,6 @@
 import { LISTING_PER_PAGE } from '@Constants';
 import { UserContext } from '@Contexts';
-import { db } from '@firebase.config';
+import { db, localTime } from '@firebase.config';
 import logger from '@logger';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
@@ -53,10 +53,17 @@ const useNewListings: UseNewListingsFn = (
 								if (!lastDoc) {
 									setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
 								}
-								const newListings = querySnapshot.docs.map((doc) => {
-									const lstDataSv = doc.data() as ListingData;
-									// eslint-disable-next-line @typescript-eslint/no-unused-vars
-									const { status, ...listingData } = lstDataSv;
+								const newListings = querySnapshot.docs.map((docSnap) => {
+									const lstDataSv = docSnap.data() as ListingData;
+
+									if (lstDataSv) {
+										if (
+											!lstDataSv.createdAt &&
+											docSnap.metadata.hasPendingWrites
+										) {
+											lstDataSv['createdAt'] = localTime();
+										}
+									}
 									return lstDataSv as ListingData;
 								});
 								setNewListings(newListings);

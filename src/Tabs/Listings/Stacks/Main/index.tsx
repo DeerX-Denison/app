@@ -24,7 +24,7 @@ import Listing from './Listing';
 import removeCategory from './removeCategory';
 
 interface Props {
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Main'>;
 }
 /**
  * derenders button at header
@@ -123,17 +123,18 @@ const Main: FC<Props> = ({ navigation }) => {
 						</Badges.Light>
 					</TouchableOpacity>
 				</View>
-				<ScrollView
-					ref={scrollViewRef as any}
-					onScrollEndDrag={onScrollEndDrag}
-					contentContainerStyle={tw('flex flex-1')}
-				>
+				<View ref={scrollViewRef as any} style={tw('flex flex-col flex-1')}>
 					{listings ? (
 						// listing is fetched
 						<>
 							{listings.length !== 0 ? (
 								// fetched listings length is > 0, render all Listing
-								<View style={tw('flex flex-1 flex-row flex-wrap items-start')}>
+								<ScrollView
+									onScrollEndDrag={onScrollEndDrag}
+									contentContainerStyle={tw(
+										'flex flex-row flex-wrap items-start'
+									)}
+								>
 									{listings.map((listing) => (
 										<Listing
 											key={listing.id}
@@ -142,7 +143,7 @@ const Main: FC<Props> = ({ navigation }) => {
 											onPress={() => itemHandler(listing.id)}
 										/>
 									))}
-								</View>
+								</ScrollView>
 							) : (
 								// fetch listing length is 0, display message saying empty
 								<>
@@ -188,7 +189,7 @@ const Main: FC<Props> = ({ navigation }) => {
 							</View>
 						</>
 					)}
-				</ScrollView>
+				</View>
 				{/* {fetchedAll && (
 				<View style={tw('w-full')}>
 					<Text>

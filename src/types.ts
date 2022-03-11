@@ -108,8 +108,8 @@ export type ListingData = {
 	seller: ListingSeller;
 	condition: ListingCondition;
 	description: ListingDescription;
-	readonly createdAt: FirebaseFirestoreTypes.Timestamp | undefined;
-	readonly updatedAt: FirebaseFirestoreTypes.Timestamp | undefined;
+	createdAt: FirebaseFirestoreTypes.Timestamp | undefined;
+	updatedAt: FirebaseFirestoreTypes.Timestamp | undefined;
 	savedBy: ListingSavedBy;
 	status: ListingStatus;
 };

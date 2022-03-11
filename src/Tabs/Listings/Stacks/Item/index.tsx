@@ -23,7 +23,7 @@ import { ListingsStackParamList, TabsParamList, WishlistDataCL } from 'types';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Item'>;
 }
 /**
  * renders button at header that goes back
@@ -56,6 +56,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		listingData?.updatedAt?.toDate(),
 		curTime
 	);
+
 	/**
 	 * effect to check if listingData exists
 	 */
@@ -65,7 +66,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				type: 'info',
 				text1: 'Item was deleted',
 			});
-			navigation.goBack();
+			navigation.navigate('Main');
 		}
 	}, [listingData]);
 

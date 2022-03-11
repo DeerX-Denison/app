@@ -21,7 +21,7 @@ interface Props {
 	setListingData: React.Dispatch<
 		React.SetStateAction<ListingData | null | undefined>
 	>;
-	listingErrors: ListingErrors;
+	listingErrors?: ListingErrors;
 }
 
 const CarouselItem: FC<Props> = ({
@@ -40,7 +40,7 @@ const CarouselItem: FC<Props> = ({
 		images.splice(index, 1);
 		setIndex(index - 1 < 0 ? 0 : index - 1);
 		setListingData({ ...listingData, images } as ListingData);
-		listingErrors.setHasEditImage(true);
+		listingErrors?.setHasEditImage(true);
 	};
 	const addHandler = async () => {
 		const result = await launchImageLibraryAsync({

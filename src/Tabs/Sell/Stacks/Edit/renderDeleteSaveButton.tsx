@@ -50,9 +50,9 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 								<View style={tw('flex flex-row')}>
 									<Button
 										title="delete"
-										onPress={() => {
+										onPress={async () => {
 											if (listingData) {
-												deleteListing(listingData.id, navigation);
+												await deleteListing(listingData.id, navigation);
 											} else {
 												logger.error(
 													'listing data is null when user click delete button'

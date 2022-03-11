@@ -13,7 +13,7 @@ import { ListingData, ListingsStackParamList } from 'types';
 
 interface Props {
 	listingData: ListingData;
-	navigation: NativeStackNavigationProp<ListingsStackParamList>;
+	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Main'>;
 	onPress: () => void;
 }
 
@@ -28,7 +28,7 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 			<TouchableWithoutFeedback onPress={onPress}>
 				<View
 					style={{
-						...tw('bg-gray-50 flex flex-col justify-center items-center'),
+						...tw('flex flex-col justify-center items-center'),
 						width: Math.floor(width / 2),
 					}}
 				>

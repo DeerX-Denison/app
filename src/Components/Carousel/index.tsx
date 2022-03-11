@@ -12,7 +12,7 @@ interface Props {
 		React.SetStateAction<ListingData | null | undefined>
 	>;
 	editMode: boolean;
-	listingErrors: ListingErrors;
+	listingErrors?: ListingErrors;
 }
 
 const Carousel: FC<Props> = ({

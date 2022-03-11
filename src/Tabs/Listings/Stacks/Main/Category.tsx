@@ -23,6 +23,7 @@ const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
 	const [suggestions, setSuggestions] = useState<
 		ListingCategory[] | undefined | null
 	>();
+	const [translation, setTranslation] = useState(200);
 
 	useEffect(() => {
 		if (categories) {
@@ -45,7 +46,7 @@ const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
 			<ScrollView
 				keyboardDismissMode="on-drag"
 				keyboardShouldPersistTaps="always"
-				style={tw('flex flex-col flex-1')}
+				contentContainerStyle={tw('flex flex-col flex-1')}
 			>
 				<>
 					{suggestions ? (
@@ -81,9 +82,14 @@ const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
 							) : (
 								// suggestions is empty
 								<>
-									j
-									<View>
-										<Text>No category found</Text>
+									<View
+										style={tw(
+											'flex flex-col flex-1 justify-center items-center'
+										)}
+									>
+										<Text style={tw('text-s-md font-semibold p-4')}>
+											No category found
+										</Text>
 									</View>
 								</>
 							)}

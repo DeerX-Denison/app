@@ -165,7 +165,7 @@ const Main: FC<Props> = ({ navigation }) => {
 											</Text>
 											<Buttons.Primary
 												size="md"
-												title="Sell one"
+												title="Sell Something"
 												onPress={() => {
 													const parentNavigation = navigation.getParent();
 													if (parentNavigation) {

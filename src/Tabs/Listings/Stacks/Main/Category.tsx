@@ -1,9 +1,17 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
 import tw from '@tw';
-import React, { FC, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import {
+	Animated,
+	Keyboard,
+	ScrollView,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	useWindowDimensions,
+	View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCategory } from 'types';
 import addCategory from './addCategory';
@@ -11,6 +19,7 @@ import addCategory from './addCategory';
 interface Props {
 	category: ListingCategory[];
 	setCategory: React.Dispatch<React.SetStateAction<ListingCategory[]>>;
+	categorizing: boolean;
 	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -18,12 +27,38 @@ const categories = CATEGORIES;
 /**
  * category component when user wants to search for category
  */
-const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
+const Category: FC<Props> = ({
+	category,
+	setCategory,
+	categorizing,
+	setCategorizing,
+}) => {
 	const [query, setQuery] = useState('');
 	const [suggestions, setSuggestions] = useState<
 		ListingCategory[] | undefined | null
 	>();
-	const [translation, setTranslation] = useState(200);
+	const inputTextRef = useRef<TextInput | undefined>();
+	const { height } = useWindowDimensions();
+
+	const translation = useRef(new Animated.Value(height)).current;
+	// animate category sliding bottom up
+	useEffect(() => {
+		if (categorizing) {
+			inputTextRef.current?.focus();
+			Animated.timing(translation, {
+				toValue: 0,
+				useNativeDriver: true,
+				duration: 250,
+			}).start();
+		} else {
+			Keyboard.dismiss();
+			Animated.timing(translation, {
+				toValue: height,
+				useNativeDriver: true,
+				duration: 250,
+			}).start();
+		}
+	}, [categorizing, inputTextRef.current]);
 
 	useEffect(() => {
 		if (categories) {
@@ -34,9 +69,15 @@ const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
 	}, [query]);
 
 	return (
-		<View style={tw('flex flex-1')}>
+		<Animated.View
+			style={{
+				...tw('bg-gray-50 absolute z-10 w-full h-full'),
+				transform: [{ translateY: translation }],
+			}}
+		>
 			<View style={tw('w-full')}>
 				<TextInput
+					ref={inputTextRef as any}
 					value={query}
 					style={tw('py-3 px-6 border rounded-full m-2 text-s-lg')}
 					placeholder="Search categories"
@@ -104,7 +145,7 @@ const Category: FC<Props> = ({ category, setCategory, setCategorizing }) => {
 					)}
 				</>
 			</ScrollView>
-		</View>
+		</Animated.View>
 	);
 };
 

@@ -10,10 +10,10 @@ import {
 	NativeSyntheticEvent,
 	ScrollView,
 	Text,
+	TextInput,
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { MessageStackParamList, UserInfo } from 'types';
@@ -202,18 +202,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 											title="Find friends"
 											onPress={() => {
 												setSearching(true);
-												if (textInputRef.current) {
-													if (
-														typeof (textInputRef.current as any).focus ===
-														'function'
-													) {
-														(textInputRef.current as any).focus();
-													} else {
-														logger.error(
-															'text input ref does not have focus method'
-														);
-													}
-												}
+												textInputRef.current?.focus();
 											}}
 										/>
 									</View>

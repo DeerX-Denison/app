@@ -1,15 +1,14 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
+import { useSlideAnimation } from '@Hooks';
 import tw from '@tw';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
-	Keyboard,
 	ScrollView,
 	Text,
 	TextInput,
 	TouchableOpacity,
-	useWindowDimensions,
 	View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -38,27 +37,8 @@ const Category: FC<Props> = ({
 		ListingCategory[] | undefined | null
 	>();
 	const inputTextRef = useRef<TextInput | undefined>();
-	const { height } = useWindowDimensions();
 
-	const translation = useRef(new Animated.Value(height)).current;
-	// animate category sliding bottom up
-	useEffect(() => {
-		if (categorizing) {
-			inputTextRef.current?.focus();
-			Animated.timing(translation, {
-				toValue: 0,
-				useNativeDriver: true,
-				duration: 250,
-			}).start();
-		} else {
-			Keyboard.dismiss();
-			Animated.timing(translation, {
-				toValue: height,
-				useNativeDriver: true,
-				duration: 250,
-			}).start();
-		}
-	}, [categorizing, inputTextRef.current]);
+	const { translation } = useSlideAnimation(categorizing, inputTextRef);
 
 	useEffect(() => {
 		if (categories) {

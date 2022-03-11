@@ -1,9 +1,16 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
+import { useSlideAnimation } from '@Hooks';
 import tw from '@tw';
-import React, { FC, useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import {
+	Animated,
+	ScrollView,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingCategory, ListingData } from 'types';
@@ -15,6 +22,7 @@ interface Props {
 	setListingData: React.Dispatch<
 		React.SetStateAction<ListingData | null | undefined>
 	>;
+	categorizing: boolean;
 	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -26,12 +34,15 @@ const Category: FC<Props> = ({
 	listingData,
 	listingErrors,
 	setListingData,
+	categorizing,
 	setCategorizing,
 }) => {
 	const [query, setQuery] = useState('');
 	const [suggestions, setSuggestions] = useState<
 		ListingCategory[] | undefined | null
 	>();
+	const inputTextRef = useRef<TextInput | undefined>();
+	const { translation } = useSlideAnimation(categorizing, inputTextRef);
 
 	useEffect(() => {
 		if (categories) {
@@ -42,9 +53,15 @@ const Category: FC<Props> = ({
 	}, [query]);
 
 	return (
-		<View style={tw('flex flex-1')}>
+		<Animated.View
+			style={{
+				...tw('bg-gray-50 absolute z-10 w-full h-full'),
+				transform: [{ translateY: translation }],
+			}}
+		>
 			<View style={tw('w-full')}>
 				<TextInput
+					ref={inputTextRef as any}
 					value={query}
 					style={tw('py-3 px-6 border rounded-full m-2 text-s-lg')}
 					placeholder="Search categories"
@@ -107,7 +124,7 @@ const Category: FC<Props> = ({
 					)}
 				</>
 			</ScrollView>
-		</View>
+		</Animated.View>
 	);
 };
 

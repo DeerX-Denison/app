@@ -1,5 +1,6 @@
 import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
+import { useListings, useScaleAnimation } from '@Hooks';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -18,10 +19,10 @@ import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
-import useListings from '../../../../Hooks/useListings';
 import Category from './Category';
 import Listing from './Listing';
 import removeCategory from './removeCategory';
+
 interface Props {
 	navigation: NativeStackNavigationProp<ListingsStackParamList>;
 }
@@ -82,23 +83,7 @@ const Main: FC<Props> = ({ navigation }) => {
 		}
 	};
 
-	const scale = useRef(new Animated.Value(1)).current;
-	// animate main listing scaling down when categorizing
-	useEffect(() => {
-		if (categorizing) {
-			Animated.timing(scale, {
-				toValue: 0.95,
-				useNativeDriver: true,
-				duration: 250,
-			}).start();
-		} else {
-			Animated.timing(scale, {
-				toValue: 1,
-				useNativeDriver: true,
-				duration: 250,
-			}).start();
-		}
-	}, [categorizing]);
+	const { scale } = useScaleAnimation(categorizing);
 
 	return (
 		<View style={tw('flex flex-1')}>
@@ -167,7 +152,9 @@ const Main: FC<Props> = ({ navigation }) => {
 										)}
 									>
 										<Text style={tw('text-s-md font-semibold p-4')}>
-											No item in listing right now
+											{categoryFilter.length === 0
+												? 'No item in listing right now'
+												: 'No item in selected category'}
 										</Text>
 										<Buttons.Primary
 											size="md"

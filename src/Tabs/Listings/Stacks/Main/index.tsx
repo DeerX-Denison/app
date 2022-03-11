@@ -60,6 +60,7 @@ const renderBackButton = (
 		}
 	});
 };
+
 /**
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */

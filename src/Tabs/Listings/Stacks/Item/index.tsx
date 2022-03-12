@@ -1,3 +1,4 @@
+import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
@@ -238,14 +239,28 @@ const Item: FC<Props> = ({ route, navigation }) => {
 								</Text>
 							</View>
 							<View style={tw('mx-4 my-2')}>
-								<Text style={tw('text-base font-medium')}>
-									Category: {listingData.category}
-								</Text>
-							</View>
-							<View style={tw('mx-4 my-2')}>
-								<Text style={tw('text-base font-medium')}>
-									Condition: {listingData.condition}
-								</Text>
+								<View style={tw('flex flex-row flex-wrap')}>
+									<Badges.Primary>
+										<Text
+											style={tw('capitalize text-s-md font-medium px-2 py-0.5')}
+										>
+											{listingData.condition?.toLocaleLowerCase()}
+										</Text>
+									</Badges.Primary>
+									{listingData.category.map((category) => (
+										<View key={category}>
+											<Badges.Light>
+												<Text
+													style={tw(
+														'capitalize text-s-md font-medium px-2 py-0.5'
+													)}
+												>
+													{category}
+												</Text>
+											</Badges.Light>
+										</View>
+									))}
+								</View>
 							</View>
 						</View>
 					</ScrollView>

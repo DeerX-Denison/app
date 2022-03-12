@@ -13,7 +13,9 @@ const Listings: FC<Props> = () => {
 			initialRouteName="Main"
 			screenOptions={{ headerShown: false }}
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
+			<Stack.Screen name="Main" initialParams={{ reset: false }}>
+				{(props) => <Main {...props} />}
+			</Stack.Screen>
 			<Stack.Screen name="Item">{(props) => <Item {...props} />}</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -3,7 +3,7 @@ import { ListingData } from 'types';
 const validListingData: (listingData: ListingData) => boolean = (
 	listingData
 ) => {
-	if (listingData.images.length == 0) return false;
+	if (listingData.images.length === 0) return false;
 
 	if (listingData.name === '') return false;
 
@@ -11,7 +11,7 @@ const validListingData: (listingData: ListingData) => boolean = (
 
 	if (!isFinite(parseFloat(listingData.price))) return false;
 
-	if (!listingData.category) return false;
+	if (listingData.category.length === 0) return false;
 
 	if (!listingData.condition) return false;
 

@@ -2,7 +2,7 @@ import { db } from '@firebase.config';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
-import { SellStackParamList } from 'types';
+import { SellStackParamList, TabsParamList } from 'types';
 
 export type DeleteListingFn = (
 	listingId: string,
@@ -24,6 +24,14 @@ const deleteListing: DeleteListingFn = async (listingId, navigation) => {
 		}
 	} finally {
 		navigation.goBack();
+		const parentNavigation: NativeStackNavigationProp<TabsParamList> =
+			navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.navigate('Home', {
+				screen: 'Main',
+				params: { reset: true },
+			});
+		}
 	}
 };
 

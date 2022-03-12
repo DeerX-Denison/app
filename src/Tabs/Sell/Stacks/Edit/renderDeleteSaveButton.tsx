@@ -1,11 +1,12 @@
 import { UserContext } from '@Contexts';
 import logger from '@logger';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { useContext, useEffect } from 'react';
 import { Button, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { ListingErrors } from 'src/Hooks/useListingError';
-import { ListingData } from 'types';
+import { ListingData, TabsParamList } from 'types';
 import { Props } from '.';
 import deleteListing from './deleteListing';
 import { SaveListingFn } from './saveListing';
@@ -39,7 +40,8 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	const { userInfo } = useContext(UserContext);
 	useEffect(() => {
 		if (userInfo) {
-			const parentNavigation = navigation.getParent();
+			const parentNavigation: NativeStackNavigationProp<TabsParamList, 'Home'> =
+				navigation.getParent();
 			if (parentNavigation) {
 				parentNavigation.setOptions({
 					headerRight: () =>
@@ -52,7 +54,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										title="delete"
 										onPress={async () => {
 											if (listingData) {
-												await deleteListing(listingData.id, navigation);
+												deleteListing(listingData.id, navigation);
 											} else {
 												logger.error(
 													'listing data is null when user click delete button'

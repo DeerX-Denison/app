@@ -25,6 +25,7 @@ interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Item'>;
 }
+
 /**
  * renders button at header that goes back
  */
@@ -66,7 +67,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				type: 'info',
 				text1: 'Item was deleted',
 			});
-			navigation.navigate('Main');
+			navigation.navigate('Main', { reset: true });
 		}
 	}, [listingData]);
 
@@ -103,6 +104,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			}
 		}
 	};
+
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {

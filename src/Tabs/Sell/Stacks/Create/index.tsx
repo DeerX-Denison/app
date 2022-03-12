@@ -27,10 +27,10 @@ import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
+import useUploadProgress from '../useUploadProgress';
 import createListing from './createListing';
 import renderBackButton from './renderBackButton';
 import renderPostButton from './renderPostButton';
-import useUploadProgress from '../useUploadProgress';
 
 export interface Props {
 	route: RouteProp<SellStackParamList, 'Create'>;

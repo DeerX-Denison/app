@@ -2,6 +2,7 @@ import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
 import { useListings, useScaleAnimation } from '@Hooks';
 import logger from '@logger';
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -24,6 +25,7 @@ import Listing from './Listing';
 import removeCategory from './removeCategory';
 
 interface Props {
+	route: RouteProp<ListingsStackParamList, 'Main'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Main'>;
 }
 /**
@@ -64,7 +66,7 @@ const renderBackButton = (
 /**
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
-const Main: FC<Props> = ({ navigation }) => {
+const Main: FC<Props> = ({ route, navigation }) => {
 	const [categorizing, setCategorizing] = useState(false);
 	const [categoryFilter, setCategoryFilter] = useState<ListingCategory[]>([]);
 	const { listings, fetchListings, resetListings } =
@@ -86,6 +88,11 @@ const Main: FC<Props> = ({ navigation }) => {
 
 	const { scale } = useScaleAnimation(categorizing);
 
+	useEffect(() => {
+		if (route.params.reset === true) {
+			resetListings();
+		}
+	}, [route]);
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category

@@ -64,7 +64,7 @@ const useListings: UseListingsFn = (categoryFilter) => {
 				}
 				unionLsts.sort((a, b) => {
 					if (a.createdAt && b.createdAt) {
-						return a.createdAt.valueOf > b.createdAt.valueOf ? -1 : 1;
+						return a.createdAt.valueOf() > b.createdAt.valueOf() ? -1 : 1;
 					} else {
 						return 0;
 					}

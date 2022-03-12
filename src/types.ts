@@ -10,7 +10,10 @@ export type UserInfo = {
 
 // Params/Props types list for tabs and stacks
 export type TabsParamList = {
-	Home: undefined;
+	Home: {
+		screen: 'Main';
+		params: ListingsStackParamList['Main'];
+	};
 	Inbox: {
 		screen: 'Messages';
 		params: MessageStackParamList['Messages'];
@@ -24,7 +27,7 @@ export type TabsParamList = {
 };
 
 export type ListingsStackParamList = {
-	Main: undefined;
+	Main: { reset: boolean };
 	Item: { listingId: ListingId };
 };
 

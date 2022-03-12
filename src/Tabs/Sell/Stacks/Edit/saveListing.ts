@@ -3,7 +3,12 @@ import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import { ListingErrors } from 'src/Hooks/useListingError';
-import { ListingData, SellStackParamList, UserInfo } from 'types';
+import {
+	ListingData,
+	SellStackParamList,
+	TabsParamList,
+	UserInfo,
+} from 'types';
 import uploadImagesAsync from '../uploadImageAsync';
 import validListingData from '../validListingData';
 
@@ -89,8 +94,21 @@ const saveListing: SaveListingFn = async (
 		await fn.httpsCallable('updateListing')(updatedListing);
 	} catch (error) {
 		logger.log(error);
+		return navigation.goBack();
 	} finally {
 		navigation.goBack();
+		const parentNavigation: NativeStackNavigationProp<TabsParamList> =
+			navigation.getParent();
+		if (parentNavigation) {
+			parentNavigation.navigate('Home', {
+				screen: 'Main',
+				params: { reset: true },
+			});
+		} else {
+			logger.error(
+				`parent navigation is undefined when user clicks saveListing ${listingData.id}`
+			);
+		}
 	}
 };
 export default saveListing;

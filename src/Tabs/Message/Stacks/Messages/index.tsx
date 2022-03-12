@@ -1,7 +1,7 @@
 import * as Buttons from '@Components/Buttons';
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { UserContext } from '@Contexts';
-import { fn, svTime } from '@firebase.config';
+import { fn, localTime, svTime } from '@firebase.config';
 import {
 	useHeights,
 	useKeyboard,
@@ -55,11 +55,19 @@ const renderBackButton = (navigation: Props['navigation']) => {
 const Messages: FC<Props> = ({ route, navigation }) => {
 	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
-	const { threadData, isNewThread, setIsNewThread, fetchMessages } =
-		useThreadData(route.params.members);
+	const {
+		threadData,
+		setThreadData,
+		isNewThread,
+		setIsNewThread,
+		fetchMessages,
+	} = useThreadData(route.params.members);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
+	const [messageStatus, setMessageStatus] = useState<
+		undefined | 'sending' | 'sent' | 'seen'
+	>();
 	const scrollViewRef = useRef<ScrollView | undefined>();
 	const textInputScrollViewRef = useRef<ScrollView | undefined>();
 	const { willShow, didShow, keyboardHeight } = useKeyboard();
@@ -76,6 +84,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setDisableSend(true);
 		if (threadData && userInfo) {
 			if (inputMessage !== '') {
+				setMessageStatus('sending');
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
 				if (isNewThread) {
@@ -100,11 +109,20 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						threadName: threadData.name,
 						time: svTime() as FirebaseFirestoreTypes.Timestamp,
 					};
+
+					setInputMessage('');
+					setThreadData({
+						...threadData,
+						messages: [
+							...threadData.messages,
+							{ ...newMessage, time: localTime() } as MessageData,
+						],
+					});
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
 						message: newMessage,
 					});
-					setInputMessage('');
+					setMessageStatus('sent');
 				} catch (error) {
 					logger.log(error);
 					return Toast.show({
@@ -193,35 +211,48 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				</View>
 
 				{/* MESSAGES CONTAINER */}
-				<ScrollView
-					ref={scrollViewRef as any}
-					onScrollEndDrag={onScrollEndDrag}
-					onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
-					contentContainerStyle={tw('flex flex-col h-full justify-end')}
-				>
-					{parsedMessages ? (
-						// parsedMessages defined
-						<>
-							{parsedMessages.length > 0 ? (
-								<>
-									{parsedMessages.map((message) => (
-										<Message key={message.id} message={message} />
-									))}
-								</>
-							) : (
-								<>
-									<View style={tw('flex flex-1 justify-center items-center')}>
-										<Text style={tw('text-s-lg')}>Send your first message</Text>
-									</View>
-								</>
-							)}
-						</>
-					) : (
-						<>
-							<Text>Loading...</Text>
-						</>
-					)}
-				</ScrollView>
+				<View style={tw('flex flex-col-reverse mt-14')}>
+					<ScrollView
+						ref={scrollViewRef as any}
+						onScrollEndDrag={onScrollEndDrag}
+						onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
+						contentContainerStyle={tw('flex flex-col')}
+					>
+						{parsedMessages ? (
+							// parsedMessages defined
+							<>
+								{parsedMessages.length > 0 ? (
+									<>
+										{parsedMessages.map((message) => (
+											<Message key={message.id} message={message} />
+										))}
+									</>
+								) : (
+									<>
+										<View style={tw('flex flex-1 justify-center items-center')}>
+											<Text style={tw('text-s-lg')}>
+												Send your first message
+											</Text>
+										</View>
+									</>
+								)}
+							</>
+						) : (
+							<>
+								<Text>Loading...</Text>
+							</>
+						)}
+
+						{threadData?.messages[threadData.messages.length - 1].sender.uid ===
+							userInfo?.uid && (
+							<View style={tw('absolute right-4 bottom-2')}>
+								<Text style={tw('text-s-sm font-semibold')}>
+									{messageStatus}
+								</Text>
+							</View>
+						)}
+					</ScrollView>
+				</View>
 			</ScrollView>
 		</>
 	);

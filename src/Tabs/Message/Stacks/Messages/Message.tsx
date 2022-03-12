@@ -29,7 +29,7 @@ const Message: FC<Props> = ({ message }) => {
 					style={tw('w-8 h-8 rounded-full')}
 				/>
 
-				<View style={tw('pl-3 flex-shrink')}>
+				<View style={tw('pl-3 flex-1')}>
 					<View style={tw('flex-col')}>
 						<View style={tw('flex-row justify-start items-end')}>
 							<Text style={tw('text-s-lg font-normal pr-4 text-gray-600')}>
@@ -39,7 +39,6 @@ const Message: FC<Props> = ({ message }) => {
 								{displayTime}
 							</Text>
 						</View>
-
 						{message.contents.map((content) => (
 							<Text key={content.id} style={tw('text-s-md')}>
 								{content.content}

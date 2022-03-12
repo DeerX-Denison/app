@@ -65,6 +65,7 @@ const useThreadData = (initMembers: UserInfo[]) => {
 
 	return {
 		threadData,
+		setThreadData,
 		isNewThread,
 		setIsNewThread,
 		fetchMessages,

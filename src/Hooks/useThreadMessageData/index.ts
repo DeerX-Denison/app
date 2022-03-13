@@ -48,59 +48,6 @@ const useThreadMessagesData = (
 		trigger
 	);
 
-	/**
-	 * listen for new messages and update threadMessageData
-	 */
-	// useEffect(() => {
-	// 	if (userInfo && isNewThread === false) {
-	// 		const unsubscribe = db
-	// 			.collection('threads')
-	// 			.doc(threadId)
-	// 			.collection('messages')
-	// 			.where('membersUid', 'array-contains', userInfo.uid)
-	// 			.orderBy('time', 'desc')
-	// 			.limit(MESSAGE_PER_PAGE)
-	// 			.onSnapshot(
-	// 				(querySnapshot) => {
-	// 					if (!lastDoc) {
-	// 						setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
-	// 					}
-	// 					const newMsgs: MessageData[] = querySnapshot.docs.map((docSnap) => {
-	// 						const msg = docSnap.data() as MessageData;
-	// 						if (msg) {
-	// 							if (!msg.time && docSnap.metadata.hasPendingWrites) {
-	// 								// if message time is null because svTime() not set yet, use localTime() temporarily
-	// 								msg['time'] = localTime();
-	// 							}
-	// 						}
-	// 						return msg;
-	// 					});
-
-	// 					// append unique newMsg to threadMessageData
-	// 					if (threadMessagesData && threadMessagesData.length > 0) {
-	// 						const updMsgsDict: { [key: string]: MessageData } = {};
-	// 						threadMessagesData.forEach((msg) => (updMsgsDict[msg.id] = msg));
-	// 						newMsgs.forEach((msg) => (updMsgsDict[msg.id] = msg));
-
-	// 						const updMsgs: MessageData[] = [];
-	// 						for (const id in updMsgsDict) {
-	// 							updMsgs.push(updMsgsDict[id]);
-	// 						}
-
-	// 						setThreadMessagesData(updMsgs);
-	// 					} else {
-	// 						setThreadMessagesData(newMsgs.reverse());
-	// 					}
-	// 				},
-	// 				(error) => {
-	// 					logger.error(error);
-	// 					return Toast.show({ type: 'error', text1: error.message });
-	// 				}
-	// 			);
-	// 		return () => unsubscribe();
-	// 	}
-	// }, [userInfo, newMsgs]);
-
 	useEffect(() => {
 		if (threadMessagesData && threadMessagesData.length > 0) {
 			if (newMsgs && newMsgs.length > 0) {

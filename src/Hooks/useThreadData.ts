@@ -33,12 +33,6 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	} = useThreadMessagesData(isNewThread, threadId);
 
 	useEffect(() => {
-		if (threadMessagesData) {
-			console.log(threadMessagesData.length);
-		}
-	}, [threadMessagesData]);
-
-	useEffect(() => {
 		if (
 			isNewThread === true &&
 			threadId &&

@@ -24,8 +24,19 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	const { threadId } = useThreadId(membersUid);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);
-	const { threadMessagesData, fetchMessages, resetMessages, fetchedAll } =
-		useThreadMessagesData(isNewThread, threadId);
+	const {
+		threadMessagesData,
+		setThreadMessagesData,
+		fetchMessages,
+		resetMessages,
+		fetchedAll,
+	} = useThreadMessagesData(isNewThread, threadId);
+
+	useEffect(() => {
+		if (threadMessagesData) {
+			console.log(threadMessagesData.length);
+		}
+	}, [threadMessagesData]);
 
 	useEffect(() => {
 		if (
@@ -66,6 +77,7 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	return {
 		threadData,
 		setThreadData,
+		setThreadMessagesData,
 		isNewThread,
 		setIsNewThread,
 		fetchMessages,

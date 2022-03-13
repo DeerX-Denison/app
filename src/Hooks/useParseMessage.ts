@@ -27,6 +27,7 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 	const [parsedMessages, setParsedMessages] = useState<
 		MessageBlockData[] | undefined
 	>();
+
 	useEffect(() => {
 		if (messages && messages.length > 0) {
 			const parsedMessages: MessageBlockData[] = [];

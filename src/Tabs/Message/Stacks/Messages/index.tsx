@@ -49,6 +49,7 @@ const renderBackButton = (navigation: Props['navigation']) => {
 		}
 	});
 };
+
 /**
  * Messages component, Threads contains Thread contains Messages contains Message
  */
@@ -57,11 +58,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const { userInfo } = useContext(UserContext);
 	const {
 		threadData,
-		setThreadData,
+		setThreadMessagesData,
 		isNewThread,
 		setIsNewThread,
 		fetchMessages,
 	} = useThreadData(route.params.members);
+
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
@@ -109,15 +111,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						threadName: threadData.name,
 						time: svTime() as FirebaseFirestoreTypes.Timestamp,
 					};
-
 					setInputMessage('');
-					setThreadData({
-						...threadData,
-						messages: [
-							...threadData.messages,
-							{ ...newMessage, time: localTime() } as MessageData,
-						],
-					});
+					setDisableSend(false);
+					setThreadMessagesData([
+						...threadData.messages,
+						{ ...newMessage, time: localTime() } as MessageData,
+					]);
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
 						message: newMessage,
@@ -136,7 +135,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 			// error handling
 		}
 		scrollViewRef.current?.scrollToEnd();
-		setDisableSend(false);
 	};
 
 	const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -215,7 +213,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					<ScrollView
 						ref={scrollViewRef as any}
 						onScrollEndDrag={onScrollEndDrag}
-						onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
+						onContentSizeChange={() => {
+							scrollViewRef.current?.scrollToEnd();
+						}}
 						contentContainerStyle={tw('flex flex-col')}
 					>
 						{parsedMessages ? (
@@ -243,8 +243,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							</>
 						)}
 
-						{threadData?.messages[threadData.messages.length - 1].sender.uid ===
-							userInfo?.uid && (
+						{threadData?.messages[threadData.messages.length - 1]?.sender
+							.uid === userInfo?.uid && (
 							<View style={tw('absolute right-4 bottom-2')}>
 								<Text style={tw('text-s-sm font-semibold')}>
 									{messageStatus}

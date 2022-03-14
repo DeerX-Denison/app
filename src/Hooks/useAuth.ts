@@ -62,7 +62,6 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 						}
 					}
 				} catch (error) {
-					console.log('errorrrrrrrrrr here');
 					logger.log(error);
 					setUserStatus('error');
 				}

@@ -6,6 +6,7 @@ import {
 	useHeights,
 	useKeyboard,
 	useParseMessage,
+	useSeenIcons,
 	useThreadData,
 } from '@Hooks';
 import logger from '@logger';
@@ -26,7 +27,7 @@ import {
 } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
-import { MessageData, MessageStackParamList } from 'types';
+import { MessageData, MessageSeenAt, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import Message from './Message';
 
@@ -75,6 +76,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const { willShow, didShow, keyboardHeight } = useKeyboard();
 	const { tabsHeight } = useHeights();
 
+	const { seenIcons } = useSeenIcons(threadData);
+
 	// effect to scroll to latest message when focus on keyboard
 	useEffect(() => {
 		if (didShow) {
@@ -98,6 +101,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					setIsNewThread(false);
 				}
 				try {
+					const seenAt: MessageSeenAt = {};
+					threadData.membersUid.forEach((uid) => (seenAt[uid] = null));
+
 					const newMessage: MessageData = {
 						id: uuidv4(),
 						sender: {
@@ -110,6 +116,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						contentType: 'text',
 						threadName: threadData.name,
 						time: svTime() as FirebaseFirestoreTypes.Timestamp,
+						seenAt,
 					};
 					setInputMessage('');
 					setDisableSend(false);
@@ -224,7 +231,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								{parsedMessages.length > 0 ? (
 									<>
 										{parsedMessages.map((message) => (
-											<Message key={message.id} message={message} />
+											<Message
+												key={message.id}
+												message={message}
+												seenIcons={seenIcons}
+											/>
 										))}
 									</>
 								) : (

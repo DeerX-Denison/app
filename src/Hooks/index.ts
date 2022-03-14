@@ -18,6 +18,7 @@ export { default as useNewListingData } from './useNewListingData';
 export { default as useNotification } from './useNotification';
 export { default as useParseMessage } from './useParseMessage';
 export { default as useScaleAnimation } from './useScaleAnimation';
+export { default as useSeenIcons } from './useSeenIcons';
 export { default as useSlideAnimation } from './useSlideAnimation';
 export { default as useThreadData } from './useThreadData';
 export { default as useThreadPreviewDisplayMessage } from './useThreadPreviewDisplayMessage';

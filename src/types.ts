@@ -150,10 +150,13 @@ export type ThreadPreviewDataSv = Omit<ThreadPreviewData, 'name'>;
 export type MessageId = string;
 export type MessageSender = Omit<UserInfo, 'email'>;
 export type MessageTime = FirebaseFirestoreTypes.Timestamp;
-
+export type MessageSeenAt = {
+	[key: string]: FirebaseFirestoreTypes.Timestamp | null;
+};
 //add below more further on: image, listing reference, etc.
 export type MessageContentType = 'text';
 export type MessageContent = string;
+
 export type MessageData = {
 	id: MessageId;
 	sender: MessageSender;
@@ -162,6 +165,7 @@ export type MessageData = {
 	content: MessageContent;
 	membersUid: string[];
 	threadName: ThreadName;
+	seenAt: MessageSeenAt;
 };
 export type MessageBlockData = {
 	id: MessageId;
@@ -171,6 +175,7 @@ export type MessageBlockData = {
 		id: MessageId;
 		contentType: MessageContentType;
 		content: MessageContent;
+		seenAt: MessageSeenAt;
 	}[];
 };
 export type ThreadData = ThreadPreviewData & {
@@ -192,4 +197,19 @@ export type UserFCMTokenData = {
 	updatedAt:
 		| FirebaseFirestoreTypes.Timestamp
 		| FirebaseFirestoreTypes.FieldValue;
+};
+
+export type SeenAts = {
+	[key: MessageId]: {
+		[key: UserInfo['uid']]: FirebaseFirestoreTypes.Timestamp | null;
+	};
+};
+
+export type SeenIcons = {
+	[key: UserInfo['uid']]: MessageId | null;
+};
+
+export type UseSeenIconsFn = (threadData: ThreadData | null | undefined) => {
+	seenIcons: SeenIcons | undefined;
+	setSeenIcons: React.Dispatch<React.SetStateAction<SeenIcons | undefined>>;
 };

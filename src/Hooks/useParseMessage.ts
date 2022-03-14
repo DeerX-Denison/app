@@ -34,14 +34,15 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 
 			// init parsedMessage as the first message
 			let parsedMessage: MessageBlockData = {
-				id: messages[0].id,
+				id: uuidv4(),
 				sender: messages[0].sender,
 				time: messages[0].time,
 				contents: [
 					{
-						id: uuidv4(),
+						id: messages[0].id,
 						content: messages[0].content,
 						contentType: messages[0].contentType,
+						seenAt: messages[0].seenAt,
 					},
 				],
 			};
@@ -55,14 +56,15 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 					parsedMessages.push(parsedMessage);
 					// re-init parsedMessage as the next message
 					parsedMessage = {
-						id: messages[i + 1].id,
+						id: uuidv4(),
 						sender: messages[i + 1].sender,
 						time: messages[i + 1].time,
 						contents: [
 							{
-								id: uuidv4(),
+								id: messages[i + 1].id,
 								content: messages[i + 1].content,
 								contentType: messages[i + 1].contentType,
+								seenAt: messages[i + 1].seenAt,
 							},
 						],
 					};
@@ -75,9 +77,10 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 						contents: [
 							...parsedMessage.contents,
 							{
-								id: uuidv4(),
+								id: messages[i + 1].id,
 								content: messages[i + 1].content,
 								contentType: messages[i + 1].contentType,
+								seenAt: messages[i + 1].seenAt,
 							},
 						],
 					};

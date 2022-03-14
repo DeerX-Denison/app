@@ -1,20 +1,42 @@
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { useCurrentTime, useMessageDisplayTime } from '@Hooks';
 import tw from '@tw';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
-import { MessageBlockData } from 'types';
+import { MessageBlockData, SeenIcons } from 'types';
 
 interface Props {
 	message: MessageBlockData;
+	seenIcons: SeenIcons | undefined;
 }
 
 /**
  * Message component, Threads contains Thread contains Messages contains Message
  */
-const Message: FC<Props> = ({ message }) => {
+const Message: FC<Props> = ({ message, seenIcons }) => {
+	const [msgsWithSeenIcons, setMsgsWithSeenIcons] = useState<string[]>([]);
+	useEffect(() => {
+		const msgsWithSeenIcons: string[] = [];
+		const contentIds = message.contents.map((x) => x.id);
+		for (const nonSelfUid in seenIcons) {
+			if (typeof seenIcons[nonSelfUid] === 'string') {
+				if (contentIds.includes(seenIcons[nonSelfUid] as string)) {
+					msgsWithSeenIcons.push(seenIcons[nonSelfUid] as string);
+				}
+			}
+		}
+		setMsgsWithSeenIcons(msgsWithSeenIcons);
+	}, [seenIcons]);
+
+	useEffect(() => {
+		console.log(msgsWithSeenIcons);
+	}, [msgsWithSeenIcons]);
+
+	// useEffect(() => {
+	// 	console.log(msgsWithSeenIcons);
+	// }, [msgsWithSeenIcons]);
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
 	return (
@@ -40,9 +62,21 @@ const Message: FC<Props> = ({ message }) => {
 							</Text>
 						</View>
 						{message.contents.map((content) => (
-							<Text key={content.id} style={tw('text-s-md')}>
-								{content.content}
-							</Text>
+							<>
+								<View
+									key={content.id}
+									style={tw('flex flex-row justify-between')}
+								>
+									<Text style={tw('text-s-md')}>{content.content}</Text>
+									<View style={tw('flex flex-row')}>
+										{msgsWithSeenIcons.includes(content.id) && (
+											<>
+												<Text>Seen</Text>
+											</>
+										)}
+									</View>
+								</View>
+							</>
 						))}
 					</View>
 				</View>

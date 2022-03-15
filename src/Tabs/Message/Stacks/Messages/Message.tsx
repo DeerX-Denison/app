@@ -30,13 +30,6 @@ const Message: FC<Props> = ({ message, seenIcons }) => {
 		setMsgsWithSeenIcons(msgsWithSeenIcons);
 	}, [seenIcons]);
 
-	useEffect(() => {
-		console.log(msgsWithSeenIcons);
-	}, [msgsWithSeenIcons]);
-
-	// useEffect(() => {
-	// 	console.log(msgsWithSeenIcons);
-	// }, [msgsWithSeenIcons]);
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
 	return (
@@ -62,21 +55,19 @@ const Message: FC<Props> = ({ message, seenIcons }) => {
 							</Text>
 						</View>
 						{message.contents.map((content) => (
-							<>
-								<View
-									key={content.id}
-									style={tw('flex flex-row justify-between')}
-								>
-									<Text style={tw('text-s-md')}>{content.content}</Text>
-									<View style={tw('flex flex-row')}>
-										{msgsWithSeenIcons.includes(content.id) && (
-											<>
-												<Text>Seen</Text>
-											</>
-										)}
-									</View>
+							<View
+								key={content.id}
+								style={tw('flex flex-row justify-between')}
+							>
+								<Text style={tw('text-s-md')}>{content.content}</Text>
+								<View style={tw('flex flex-row')}>
+									{msgsWithSeenIcons.includes(content.id) && (
+										<>
+											<Text>other icon</Text>
+										</>
+									)}
 								</View>
-							</>
+							</View>
 						))}
 					</View>
 				</View>

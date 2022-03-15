@@ -1,7 +1,7 @@
 import * as Buttons from '@Components/Buttons';
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { UserContext } from '@Contexts';
-import { fn, localTime, svTime } from '@firebase.config';
+import { db, fn, localTime, svTime } from '@firebase.config';
 import {
 	useHeights,
 	useKeyboard,
@@ -75,7 +75,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const textInputScrollViewRef = useRef<ScrollView | undefined>();
 	const { willShow, didShow, keyboardHeight } = useKeyboard();
 	const { tabsHeight } = useHeights();
-
 	const { seenIcons } = useSeenIcons(threadData);
 
 	// effect to scroll to latest message when focus on keyboard
@@ -103,6 +102,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				try {
 					const seenAt: MessageSeenAt = {};
 					threadData.membersUid.forEach((uid) => (seenAt[uid] = null));
+					seenAt[userInfo.uid] = localTime();
 
 					const newMessage: MessageData = {
 						id: uuidv4(),
@@ -118,6 +118,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						time: svTime() as FirebaseFirestoreTypes.Timestamp,
 						seenAt,
 					};
+
 					setInputMessage('');
 					setDisableSend(false);
 					setThreadMessagesData([
@@ -148,6 +149,37 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY < -50) {
 			fetchMessages();
+		}
+	};
+
+	const readLatestMessage = async () => {
+		if (threadData && userInfo) {
+			const notSeenMessages = threadData.messages.filter(
+				(x) => x.seenAt[userInfo.uid] === null
+			);
+
+			// convert notSeenMessages to seenMessages
+			const seenMessages = notSeenMessages.map((x) => {
+				return { ...x, seenAt: { ...x.seenAt, [userInfo.uid]: localTime() } };
+			});
+
+			try {
+				const batch = db.batch();
+				seenMessages.forEach((msg) => {
+					batch.update(
+						db
+							.collection('threads')
+							.doc(threadData.id)
+							.collection('messages')
+							.doc(msg.id),
+						msg
+					);
+				});
+				await batch.commit();
+			} catch (error) {
+				logger.error(error);
+				Toast.show({ type: 'error', text1: 'Error while reading messages' });
+			}
 		}
 	};
 
@@ -201,6 +233,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							style={tw('flex-1 mx-4 text-s-lg py-2')}
 							multiline={true}
 							onChangeText={setInputMessage}
+							onFocus={() => readLatestMessage()}
 						/>
 					</ScrollView>
 					<View style={tw('flex-col justify-end')}>
@@ -220,6 +253,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					<ScrollView
 						ref={scrollViewRef as any}
 						onScrollEndDrag={onScrollEndDrag}
+						onScroll={(e) => {
+							const offsetY = e.nativeEvent.contentOffset.y;
+							if (offsetY === 0) {
+								readLatestMessage();
+							}
+						}}
+						scrollEventThrottle={0}
 						onContentSizeChange={() => {
 							scrollViewRef.current?.scrollToEnd();
 						}}

@@ -35,7 +35,7 @@ const useSeenIcons: UseSeenIconsFn = (threadData) => {
 									if (
 										(
 											msgSeenAt[nonSelfUid] as FirebaseFirestoreTypes.Timestamp
-										).valueOf() >
+										).valueOf() >=
 										(
 											seenAts[latestMsgId][
 												nonSelfUid

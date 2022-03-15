@@ -342,6 +342,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 												msgsWithSeenIconsIds={msgsWithSeenIconsIds}
 												msgWithStatusId={msgWithStatusId}
 												messageStatus={messageStatus}
+												nonSelfIcons={threadData?.members
+													.filter((x) => x.uid !== userInfo?.uid)
+													.map((x) => (x.photoURL ? x.photoURL : undefined))}
 											/>
 										))}
 									</>

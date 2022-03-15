@@ -12,6 +12,7 @@ interface Props {
 	msgsWithSeenIconsIds: string[] | undefined;
 	msgWithStatusId: string | undefined;
 	messageStatus: undefined | 'sending' | 'sent' | 'seen';
+	nonSelfIcons: (string | undefined)[] | undefined;
 }
 
 /**
@@ -22,6 +23,7 @@ const Message: FC<Props> = ({
 	msgsWithSeenIconsIds,
 	msgWithStatusId,
 	messageStatus,
+	nonSelfIcons,
 }) => {
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
@@ -56,7 +58,14 @@ const Message: FC<Props> = ({
 								<View style={tw('flex flex-row')}>
 									{msgsWithSeenIconsIds?.includes(content.id) ? (
 										<>
-											<Text>other icon</Text>
+											{nonSelfIcons?.map((iconUrl) => (
+												<View key={iconUrl}>
+													<FastImage
+														source={{ uri: iconUrl }}
+														style={tw('h-4 w-4')}
+													/>
+												</View>
+											))}
 										</>
 									) : (
 										<>

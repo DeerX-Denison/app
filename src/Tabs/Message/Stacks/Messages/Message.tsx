@@ -1,35 +1,28 @@
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { useCurrentTime, useMessageDisplayTime } from '@Hooks';
 import tw from '@tw';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
-import { MessageBlockData, SeenIcons } from 'types';
+import { MessageBlockData } from 'types';
 
 interface Props {
 	message: MessageBlockData;
-	seenIcons: SeenIcons | undefined;
+	msgsWithSeenIconsIds: string[] | undefined;
+	msgWithStatusId: string | undefined;
+	messageStatus: undefined | 'sending' | 'sent' | 'seen';
 }
 
 /**
  * Message component, Threads contains Thread contains Messages contains Message
  */
-const Message: FC<Props> = ({ message, seenIcons }) => {
-	const [msgsWithSeenIcons, setMsgsWithSeenIcons] = useState<string[]>([]);
-	useEffect(() => {
-		const msgsWithSeenIcons: string[] = [];
-		const contentIds = message.contents.map((x) => x.id);
-		for (const nonSelfUid in seenIcons) {
-			if (typeof seenIcons[nonSelfUid] === 'string') {
-				if (contentIds.includes(seenIcons[nonSelfUid] as string)) {
-					msgsWithSeenIcons.push(seenIcons[nonSelfUid] as string);
-				}
-			}
-		}
-		setMsgsWithSeenIcons(msgsWithSeenIcons);
-	}, [seenIcons]);
-
+const Message: FC<Props> = ({
+	message,
+	msgsWithSeenIconsIds,
+	msgWithStatusId,
+	messageStatus,
+}) => {
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
 	return (
@@ -61,9 +54,17 @@ const Message: FC<Props> = ({ message, seenIcons }) => {
 							>
 								<Text style={tw('text-s-md')}>{content.content}</Text>
 								<View style={tw('flex flex-row')}>
-									{msgsWithSeenIcons.includes(content.id) && (
+									{msgsWithSeenIconsIds?.includes(content.id) ? (
 										<>
 											<Text>other icon</Text>
+										</>
+									) : (
+										<>
+											{content.id === msgWithStatusId && (
+												<>
+													<Text>{messageStatus}</Text>
+												</>
+											)}
 										</>
 									)}
 								</View>

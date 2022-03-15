@@ -76,7 +76,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const { willShow, didShow, keyboardHeight } = useKeyboard();
 	const { tabsHeight } = useHeights();
 	const { seenIcons } = useSeenIcons(threadData);
-
+	const [msgsWithSeenIconsIds, setMsgsWithSeenIconsIds] = useState<string[]>(
+		[]
+	);
+	const [msgWithStatusId, setMsgWithStatusId] = useState<string | undefined>();
 	// effect to scroll to latest message when focus on keyboard
 	useEffect(() => {
 		if (didShow) {
@@ -183,6 +186,68 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		}
 	};
 
+	// effect to parse seenIcons and threadData into msgsWithSeenIconsIds
+	useEffect(() => {
+		if (threadData) {
+			const msgsWithSeenIconsIds: string[] = [];
+			const msgIds = threadData.messages.map((x) => x.id);
+			for (const nonSelfUid in seenIcons) {
+				if (typeof seenIcons[nonSelfUid] === 'string') {
+					if (msgIds.includes(seenIcons[nonSelfUid] as string)) {
+						msgsWithSeenIconsIds.push(seenIcons[nonSelfUid] as string);
+					}
+				}
+			}
+			setMsgsWithSeenIconsIds(msgsWithSeenIconsIds);
+		}
+	}, [seenIcons, threadData]);
+
+	// effect to parse msgsWithSeenIconsIds and threadData into msgsWithStatusIds
+	useEffect(() => {
+		if (threadData && threadData.messages.length > 0 && userInfo && seenIcons) {
+			let latestSelfMsg: MessageData = threadData.messages[0];
+			threadData.messages.forEach((msg) => {
+				if (msg.sender.uid === userInfo.uid) {
+					if (latestSelfMsg.time.valueOf() <= msg.time.valueOf()) {
+						latestSelfMsg = msg;
+					}
+				}
+			});
+			// console.log(latestSelfMsg);
+
+			const msgsWithSeenIcon = msgsWithSeenIconsIds.map((msgId) =>
+				threadData.messages.find((msg) => msg.id === msgId)
+			);
+			const nonSelfUids = threadData.membersUid.filter(
+				(x) => x !== userInfo.uid
+			);
+			let latestSelfMsgIsNewerThanAllSeenMessages = true;
+
+			msgsWithSeenIcon.forEach((msg) => {
+				if (msg) {
+					nonSelfUids.forEach((nonSelfUid) => {
+						const msgSeenTime = msg.seenAt[nonSelfUid];
+						const latestMsgSeenTime =
+							latestSelfMsg.seenAt[userInfo.uid]?.valueOf();
+						if (msgSeenTime && latestMsgSeenTime) {
+							// console.log(
+							// 	`${msgSeenTime.valueOf()} > ${latestMsgSeenTime.valueOf()}`
+							// );
+
+							if (msgSeenTime.valueOf() >= latestMsgSeenTime.valueOf()) {
+								latestSelfMsgIsNewerThanAllSeenMessages = false;
+							}
+						}
+					});
+				}
+			});
+
+			if (latestSelfMsgIsNewerThanAllSeenMessages === true) {
+				setMsgWithStatusId(latestSelfMsg.id);
+			}
+		}
+	}, [seenIcons, threadData, userInfo, msgsWithSeenIconsIds]);
+
 	return (
 		<>
 			{/* THREAD TITLE CONTAINER*/}
@@ -274,7 +339,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 											<Message
 												key={message.id}
 												message={message}
-												seenIcons={seenIcons}
+												msgsWithSeenIconsIds={msgsWithSeenIconsIds}
+												msgWithStatusId={msgWithStatusId}
+												messageStatus={messageStatus}
 											/>
 										))}
 									</>
@@ -292,15 +359,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							<>
 								<Text>Loading...</Text>
 							</>
-						)}
-
-						{threadData?.messages[threadData.messages.length - 1]?.sender
-							.uid === userInfo?.uid && (
-							<View style={tw('absolute right-4 bottom-2')}>
-								<Text style={tw('text-s-sm font-semibold')}>
-									{messageStatus}
-								</Text>
-							</View>
 						)}
 					</ScrollView>
 				</View>

@@ -62,7 +62,7 @@ const Message: FC<Props> = ({
 												<View key={iconUrl}>
 													<FastImage
 														source={{ uri: iconUrl }}
-														style={tw('h-4 w-4')}
+														style={tw('h-4 w-4 rounded-full')}
 													/>
 												</View>
 											))}

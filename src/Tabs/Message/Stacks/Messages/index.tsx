@@ -1,6 +1,6 @@
 import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
-import { db, fn, localTime, svTime } from '@firebase.config';
+import { fn, localTime, svTime } from '@firebase.config';
 import {
 	useHeights,
 	useKeyboard,
@@ -140,30 +140,19 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const readLatestMessage = async () => {
 		if (threadData && userInfo) {
-			const notSeenMessages = threadData.messages.filter((x) => {
+			const tobeSeenMessage = threadData.messages.filter((x) => {
 				if ('seenAt' in x) {
-					x.seenAt[userInfo.uid] === null;
+					return x.seenAt[userInfo.uid] === null;
+				} else {
+					return false;
 				}
 			});
-
-			// convert notSeenMessages to seenMessages
-			const seenMessages = notSeenMessages.map((x) => {
-				return { ...x, seenAt: { ...x.seenAt, [userInfo.uid]: localTime() } };
-			});
-
+			const tobeSeenMessageIds = tobeSeenMessage.map((msg) => msg.id);
 			try {
-				const batch = db.batch();
-				seenMessages.forEach((msg) => {
-					batch.update(
-						db
-							.collection('threads')
-							.doc(threadData.id)
-							.collection('messages')
-							.doc(msg.id),
-						msg
-					);
+				await fn.httpsCallable('readMessages')({
+					messageIds: tobeSeenMessageIds,
+					threadId: threadData.id,
 				});
-				await batch.commit();
 			} catch (error) {
 				logger.error(error);
 				Toast.show({ type: 'error', text1: 'Error while reading messages' });

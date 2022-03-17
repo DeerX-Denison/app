@@ -11,11 +11,8 @@ const Menu: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<MenuStackParamList>();
 
 	return (
-		<Stack.Navigator
-			screenOptions={{ headerShown: false }}
-			initialRouteName="MainMenu"
-		>
-			<Stack.Screen name="MainMenu">
+		<Stack.Navigator initialRouteName="MainMenu">
+			<Stack.Screen name="MainMenu" options={{ headerTitle: 'Menu' }}>
 				{(props) => <Main {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>

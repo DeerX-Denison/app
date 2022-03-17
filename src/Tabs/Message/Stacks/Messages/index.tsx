@@ -1,5 +1,4 @@
 import * as Buttons from '@Components/Buttons';
-import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { db, fn, localTime, svTime } from '@firebase.config';
 import {
@@ -16,8 +15,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
-	Button,
-	Image,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
@@ -30,32 +27,17 @@ import Toast from 'react-native-toast-message';
 import { MessageData, MessageSeenAt, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import Message from './Message';
+import renderHeader from './renderHeader';
 
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
 }
-/**
- * renders button at header that goes back
- */
-const renderBackButton = (navigation: Props['navigation']) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () => (
-					<Button title="back" onPress={() => navigation.goBack()} />
-				),
-			});
-		}
-	});
-};
 
 /**
  * Messages component, Threads contains Thread contains Messages contains Message
  */
 const Messages: FC<Props> = ({ route, navigation }) => {
-	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const {
 		threadData,
@@ -64,7 +46,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setIsNewThread,
 		fetchMessages,
 	} = useThreadData(route.params.members);
-
+	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
@@ -247,26 +229,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	return (
 		<>
-			{/* THREAD TITLE CONTAINER*/}
-			<View
-				style={tw('w-full bg-gray-300 flex justify-center items-center h-14')}
-			>
-				<Image
-					source={{
-						uri: userInfo?.photoURL
-							? userInfo.photoURL
-							: DEFAULT_MESSAGE_THUMBNAIL,
-					}}
-				/>
-				{threadData && userInfo ? (
-					<Text style={tw('text-s-xl font-medium')}>
-						{threadData.name[userInfo.uid]}
-					</Text>
-				) : (
-					<Text>Loading...</Text>
-				)}
-			</View>
-
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
 			<ScrollView
 				contentContainerStyle={{

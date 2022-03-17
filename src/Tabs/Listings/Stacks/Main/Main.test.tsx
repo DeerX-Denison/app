@@ -19,7 +19,9 @@ const MockMain: FC = () => (
 			initialRouteName="Main"
 			screenOptions={{ headerShown: false }}
 		>
-			<Stack.Screen name="Main">{(props) => <Listings {...props} />}</Stack.Screen>
+			<Stack.Screen name="Main">
+				{(props) => <Listings {...props} />}
+			</Stack.Screen>
 		</Stack.Navigator>
 	</NavigationContainer>
 );

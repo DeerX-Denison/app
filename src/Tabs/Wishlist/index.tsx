@@ -11,11 +11,10 @@ interface Props {}
 const Wishlist: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<WishlistStackParamList>();
 	return (
-		<Stack.Navigator
-			screenOptions={{ headerShown: false }}
-			initialRouteName="Wishlist"
-		>
-			<Stack.Screen name="Wishlist">{(props) => <Main {...props} />}</Stack.Screen>
+		<Stack.Navigator initialRouteName="Wishlist">
+			<Stack.Screen name="Wishlist" options={{ headerTitle: 'Liked Items' }}>
+				{(props) => <Main {...props} />}
+			</Stack.Screen>
 			<Stack.Screen name="Item">{(props) => <Item {...props} />}</Stack.Screen>
 		</Stack.Navigator>
 	);

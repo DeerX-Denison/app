@@ -4,6 +4,7 @@ import {
 	NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
+import { Button } from 'react-native';
 import { SellStackParamList, TabsParamList } from 'types';
 import { Create, Edit, Main } from './Stacks';
 
@@ -21,9 +22,19 @@ const Sell: FC<Props> = () => {
 	return (
 		<Stack.Navigator
 			initialRouteName="MyListing"
-			screenOptions={{ headerShown: false }}
+			screenOptions={{ headerTitle: 'My Listings' }}
 		>
-			<Stack.Screen name="MyListing">
+			<Stack.Screen
+				name="MyListing"
+				options={({ navigation }) => ({
+					headerRight: () => (
+						<Button
+							title="create"
+							onPress={() => navigation.navigate('Create')}
+						/>
+					),
+				})}
+			>
 				{(props) => <Main {...props} />}
 			</Stack.Screen>
 			<Stack.Screen name="Create">

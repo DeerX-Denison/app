@@ -7,9 +7,6 @@ import React, { FC } from 'react';
 import Toast from 'react-native-toast-message';
 import { TabsParamList } from 'types';
 import SignIn from './SignIn';
-import renderHomeBackButton from './utils/renderHomeBackButton';
-import renderInboxBackButton from './utils/renderInboxBackButton';
-import renderLikedBackButton from './utils/renderLikedBackButton';
 
 interface Props {}
 
@@ -27,32 +24,20 @@ const App: FC<Props> = () => {
 				<>
 					<UserContext.Provider value={{ user, userInfo }}>
 						<NavigationContainer>
-							<Tab.Navigator initialRouteName="Home">
-								<Tab.Screen
-									name="Home"
-									options={({ route, navigation }) => ({
-										headerLeft: () => renderHomeBackButton(route, navigation),
-									})}
-								>
+							<Tab.Navigator
+								initialRouteName="Home"
+								screenOptions={{ headerShown: false }}
+							>
+								<Tab.Screen name="Home">
 									{(props) => <Listings {...props} />}
 								</Tab.Screen>
-								<Tab.Screen
-									name="Inbox"
-									options={({ route, navigation }) => ({
-										headerLeft: () => renderInboxBackButton(route, navigation),
-									})}
-								>
+								<Tab.Screen name="Inbox">
 									{(props) => <Message {...props} />}
 								</Tab.Screen>
 								<Tab.Screen name="Sell">
 									{(props) => <Sell {...props} />}
 								</Tab.Screen>
-								<Tab.Screen
-									name="Liked"
-									options={({ route, navigation }) => ({
-										headerLeft: () => renderLikedBackButton(route, navigation),
-									})}
-								>
+								<Tab.Screen name="Liked">
 									{(props) => <Wishlist {...props} />}
 								</Tab.Screen>
 								<Tab.Screen name="Menu">

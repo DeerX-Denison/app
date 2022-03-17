@@ -39,7 +39,7 @@ const useMembers = (initMembers: UserInfo[]) => {
 		return () => {
 			isSubscribed = false;
 		};
-	}, []);
+	}, [initMembers]);
 
 	return { members };
 };

@@ -1,6 +1,5 @@
-import { UserContext } from '@Contexts';
 import { localTime } from '@firebase.config';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ThreadData, UserInfo } from 'types';
 import useIsNewThread from './useIsNewThread';
 import useMembers from './useMembers';
@@ -15,12 +14,11 @@ import useThumbnail from './useThumbnail';
  * query threadData from input initMembers
  */
 const useThreadData = (initMembers: UserInfo[]) => {
-	const { userInfo } = useContext(UserContext);
 	const [threadData, setThreadData] = useState<ThreadData | undefined>();
 	const { members } = useMembers(initMembers);
-	const { membersUid } = useMembersUid(members, userInfo);
-	const { thumbnail } = useThumbnail(members, userInfo);
-	const { name } = useName(members, userInfo);
+	const { membersUid } = useMembersUid(members);
+	const { thumbnail } = useThumbnail(members);
+	const { name } = useName(members);
 	const { threadId } = useThreadId(membersUid);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);

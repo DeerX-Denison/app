@@ -11,7 +11,8 @@ import useNewMessageData from './useNewMessageData';
  */
 const useThreadMessagesData = (
 	isNewThread: boolean | undefined,
-	threadId: string | undefined
+	threadId: string | undefined,
+	membersUid: string[] | undefined
 ) => {
 	const { userInfo } = useContext(UserContext);
 
@@ -50,7 +51,12 @@ const useThreadMessagesData = (
 
 	useEffect(() => {
 		if (threadMessagesData && threadMessagesData.length > 0) {
-			if (newMsgs && newMsgs.length > 0) {
+			if (
+				newMsgs &&
+				newMsgs.length > 0 &&
+				membersUid &&
+				membersUid.length > 0
+			) {
 				const unionMsgDict: { [key: string]: MessageData } = {};
 				threadMessagesData.forEach((msg) => (unionMsgDict[msg.id] = msg));
 				newMsgs.forEach((msg) => (unionMsgDict[msg.id] = msg));
@@ -63,7 +69,13 @@ const useThreadMessagesData = (
 						return a.time.valueOf() > b.time.valueOf() ? 1 : -1;
 					} else return 0;
 				});
-				setThreadMessagesData(unionMsgs);
+				const filteredNewMsg = unionMsgs.filter((msg) => {
+					return (
+						msg.membersUid.length === membersUid.length &&
+						msg.membersUid.every((value, index) => value === membersUid[index])
+					);
+				});
+				setThreadMessagesData(filteredNewMsg);
 			}
 		} else {
 			setThreadMessagesData(newMsgs?.reverse());

@@ -61,6 +61,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const [msgsWithSeenIconsIds, setMsgsWithSeenIconsIds] = useState<string[]>(
 		[]
 	);
+
 	const [msgWithStatusId, setMsgWithStatusId] = useState<string | undefined>();
 	// effect to scroll to latest message when focus on keyboard
 	useEffect(() => {

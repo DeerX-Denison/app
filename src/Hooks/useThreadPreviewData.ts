@@ -37,7 +37,7 @@ const useThreadPreviewData = (
 				);
 			return () => unsubscribe();
 		}
-	}, [isNewThread]);
+	}, [isNewThread, threadId]);
 	return { threadPreviewData };
 };
 

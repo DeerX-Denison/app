@@ -19,6 +19,9 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	const { membersUid } = useMembersUid(members);
 	const { thumbnail } = useThumbnail(members);
 	const { name } = useName(members);
+	// useEffect(() => {
+	// 	console.log(name);
+	// }, [name]);
 	const { threadId } = useThreadId(membersUid);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);
@@ -28,7 +31,7 @@ const useThreadData = (initMembers: UserInfo[]) => {
 		fetchMessages,
 		resetMessages,
 		fetchedAll,
-	} = useThreadMessagesData(isNewThread, threadId);
+	} = useThreadMessagesData(isNewThread, threadId, membersUid);
 
 	useEffect(() => {
 		if (

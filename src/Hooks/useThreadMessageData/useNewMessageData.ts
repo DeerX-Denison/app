@@ -77,7 +77,7 @@ const useNewMessageData: UseNewMessageData = (
 				);
 			return () => unsubscribe();
 		}
-	}, [userInfo, isNewThread, trigger]);
+	}, [userInfo, isNewThread, threadId, trigger]);
 
 	return { newMsgs, setNewMsgs };
 };

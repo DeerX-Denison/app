@@ -52,7 +52,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				type: 'info',
 				text1: 'Item was deleted',
 			});
-			navigation.navigate('Main', { reset: true });
+			navigation.navigate('Listings', { reset: true });
 		}
 	}, [listingData]);
 
@@ -63,6 +63,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				parentNav.navigate('Inbox', {
 					screen: 'Messages',
 					params: { members: [userInfo, listingData.seller] },
+					initial: false,
 				});
 			} else {
 				logger.error(`Parent navigation is undefined for ${listingId}`);
@@ -118,11 +119,13 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	};
 
 	const editHandler = () => {
-		const parentNavigation = navigation.getParent();
+		const parentNavigation =
+			navigation.getParent<NavigationProp<TabsParamList>>();
 		if (parentNavigation) {
 			parentNavigation.navigate('Sell', {
 				screen: 'Edit',
 				params: { listingId },
+				initial: false,
 			});
 		} else {
 			logger.error(`Parent navigation is undefined for ${listingId}`);

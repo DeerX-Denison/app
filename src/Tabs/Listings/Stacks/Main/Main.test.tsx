@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { cleanup, render } from '@testing-library/react-native';
 import React, { FC } from 'react';
 import { ListingData, ListingsStackParamList } from 'types';
-import Main from '.';
+import Listings from '.';
 import * as useListings from '../../../../Hooks/useListings';
 
 const mockUseListings = useListings.default as jest.Mock;
@@ -19,7 +19,7 @@ const MockMain: FC = () => (
 			initialRouteName="Main"
 			screenOptions={{ headerShown: false }}
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
+			<Stack.Screen name="Main">{(props) => <Listings {...props} />}</Stack.Screen>
 		</Stack.Navigator>
 	</NavigationContainer>
 );

@@ -22,7 +22,6 @@ import ThreadPreview from './ThreadPreview';
 
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
-	directThreadMembers: UserInfo[] | undefined;
 }
 
 /**

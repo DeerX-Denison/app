@@ -13,7 +13,7 @@ import { ListingData, ListingsStackParamList } from 'types';
 
 interface Props {
 	listingData: ListingData;
-	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Main'>;
+	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Listings'>;
 	onPress: () => void;
 }
 

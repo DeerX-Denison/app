@@ -157,9 +157,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const readLatestMessage = async () => {
 		if (threadData && userInfo) {
-			const notSeenMessages = threadData.messages.filter(
-				(x) => x.seenAt[userInfo.uid] === null
-			);
+			const notSeenMessages = threadData.messages.filter((x) => {
+				if ('seenAt' in x) {
+					x.seenAt[userInfo.uid] === null;
+				}
+			});
 
 			// convert notSeenMessages to seenMessages
 			const seenMessages = notSeenMessages.map((x) => {
@@ -213,7 +215,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					}
 				}
 			});
-			// console.log(latestSelfMsg);
 
 			const msgsWithSeenIcon = msgsWithSeenIconsIds.map((msgId) =>
 				threadData.messages.find((msg) => msg.id === msgId)
@@ -230,10 +231,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						const latestMsgSeenTime =
 							latestSelfMsg.seenAt[userInfo.uid]?.valueOf();
 						if (msgSeenTime && latestMsgSeenTime) {
-							// console.log(
-							// 	`${msgSeenTime.valueOf()} > ${latestMsgSeenTime.valueOf()}`
-							// );
-
 							if (msgSeenTime.valueOf() >= latestMsgSeenTime.valueOf()) {
 								latestSelfMsgIsNewerThanAllSeenMessages = false;
 							}

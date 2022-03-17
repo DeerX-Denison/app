@@ -22,27 +22,31 @@ const useSeenIcons: UseSeenIconsFn = (threadData) => {
 					let latestMsgId: string | null = null;
 					for (const messageId in seenAts) {
 						const msgSeenAt = seenAts[messageId];
-						if (msgSeenAt[nonSelfUid] !== null) {
-							// if user has seen the message
-							if (latestMsgId === null) {
-								latestMsgId = messageId;
-							} else {
-								if (
-									nonSelfUid in msgSeenAt &&
-									latestMsgId in seenAts &&
-									nonSelfUid in seenAts[latestMsgId]
-								) {
+						if (msgSeenAt) {
+							if (msgSeenAt[nonSelfUid] !== null) {
+								// if user has seen the message
+								if (latestMsgId === null) {
+									latestMsgId = messageId;
+								} else {
 									if (
-										(
-											msgSeenAt[nonSelfUid] as FirebaseFirestoreTypes.Timestamp
-										).valueOf() >=
-										(
-											seenAts[latestMsgId][
-												nonSelfUid
-											] as FirebaseFirestoreTypes.Timestamp
-										).valueOf()
+										nonSelfUid in msgSeenAt &&
+										latestMsgId in seenAts &&
+										nonSelfUid in seenAts[latestMsgId]
 									) {
-										latestMsgId = messageId;
+										if (
+											(
+												msgSeenAt[
+													nonSelfUid
+												] as FirebaseFirestoreTypes.Timestamp
+											).valueOf() >=
+											(
+												seenAts[latestMsgId][
+													nonSelfUid
+												] as FirebaseFirestoreTypes.Timestamp
+											).valueOf()
+										) {
+											latestMsgId = messageId;
+										}
 									}
 								}
 							}

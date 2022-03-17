@@ -27,7 +27,7 @@ export type TabsParamList = {
 };
 
 export type ListingsStackParamList = {
-	Main: { reset: boolean };
+	Listings: { reset: boolean };
 	Item: { listingId: ListingId };
 };
 
@@ -49,13 +49,12 @@ export type NewThreadUserInfo = {
 };
 
 export type WishlistStackParamList = {
-	Main: undefined;
+	Wishlist: undefined;
 	Item: { listingId: ListingId };
 };
 
 export type MenuStackParamList = {
-	Main: undefined;
-	SignIn: undefined;
+	MainMenu: undefined;
 };
 
 export type TestStackParamList = {

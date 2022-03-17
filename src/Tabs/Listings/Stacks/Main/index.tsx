@@ -1,14 +1,12 @@
 import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
 import { useListings, useScaleAnimation } from '@Hooks';
-import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
-	Button,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
@@ -17,7 +15,6 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
-import Toast from 'react-native-toast-message';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
 import Category from './Category';
@@ -25,54 +22,19 @@ import Listing from './Listing';
 import removeCategory from './removeCategory';
 
 interface Props {
-	route: RouteProp<ListingsStackParamList, 'Main'>;
-	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Main'>;
+	route: RouteProp<ListingsStackParamList, 'Listings'>;
+	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Listings'>;
 }
-/**
- * derenders button at header
- */
-const renderBackButton = (
-	navigation: Props['navigation'],
-	categorizing: boolean,
-	setCategorizing: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () => (
-					<>
-						{categorizing ? (
-							// user is categorizing, back button should turn "categorizing" to false
-							<>
-								<Button title="back" onPress={() => setCategorizing(false)} />
-							</>
-						) : (
-							<></>
-						)}
-					</>
-				),
-			});
-		} else {
-			logger.error(`Parent navigation is undefined for Listings/Main`);
-			Toast.show({
-				type: 'error',
-				text1: 'Unexpected error occured',
-			});
-		}
-	});
-};
 
 /**
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
-const Main: FC<Props> = ({ route, navigation }) => {
+const Listings: FC<Props> = ({ route, navigation }) => {
 	const [categorizing, setCategorizing] = useState(false);
 	const [categoryFilter, setCategoryFilter] = useState<ListingCategory[]>([]);
 	const { listings, fetchListings, resetListings } =
 		useListings(categoryFilter);
 	const scrollViewRef = useRef<ScrollView | undefined>();
-	renderBackButton(navigation, categorizing, setCategorizing);
 	const itemHandler = (listingId: ListingId) => {
 		navigation.navigate('Item', { listingId });
 	};
@@ -197,17 +159,9 @@ const Main: FC<Props> = ({ route, navigation }) => {
 						</>
 					)}
 				</View>
-				{/* {fetchedAll && (
-				<View style={tw('w-full')}>
-					<Text>
-						End of listings. Temporary implementation. Will disable scroll to
-						fetch when end of listings.
-					</Text>
-				</View>
-			)} */}
 			</Animated.View>
 		</View>
 	);
 };
 
-export default Main;
+export default Listings;

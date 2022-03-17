@@ -15,8 +15,8 @@ import logger from '@logger';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect } from 'react';
-import { Button, ScrollView, Text, View } from 'react-native';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
@@ -28,26 +28,9 @@ interface Props {
 }
 
 /**
- * renders button at header that goes back
- */
-const renderBackButton = (navigation: Props['navigation']) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () => (
-					<Button title="back" onPress={() => navigation.goBack()} />
-				),
-			});
-		}
-	});
-};
-
-/**
  * Item components, when user want to view an item in details
  */
 const Item: FC<Props> = ({ route, navigation }) => {
-	renderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
@@ -58,7 +41,8 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		listingData?.updatedAt?.toDate(),
 		curTime
 	);
-
+	const [disabledAddWl, setDisabledAddWl] = useState<boolean>(false);
+	const [disabledRemoveWl, setDisabledRemoveWl] = useState<boolean>(false);
 	/**
 	 * effect to check if listingData exists
 	 */
@@ -93,9 +77,11 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
-				await fn.httpsCallable('deleteWishlist')(listingData.id);
 				setIsInWishlist(false);
 				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
+				setDisabledRemoveWl(true);
+				await fn.httpsCallable('deleteWishlist')(listingData.id);
+				setTimeout(() => setDisabledRemoveWl(false), 1000);
 			} catch (error) {
 				logger.log(error);
 				Toast.show({
@@ -116,9 +102,11 @@ const Item: FC<Props> = ({ route, navigation }) => {
 					price: listingData.price,
 					seller: listingData.seller,
 				};
-				await fn.httpsCallable('createWishlist')(wishlistData);
-				setIsInWishlist(true);
 				setListingData({ ...listingData, savedBy: listingData.savedBy + 1 });
+				setIsInWishlist(true);
+				setDisabledAddWl(true);
+				await fn.httpsCallable('createWishlist')(wishlistData);
+				setTimeout(() => setDisabledAddWl(false), 1000);
 			} catch (error) {
 				logger.log(error);
 				Toast.show({
@@ -181,12 +169,14 @@ const Item: FC<Props> = ({ route, navigation }) => {
 									<View>
 										{isInWishlist ? (
 											<Buttons.Primary
+												disabled={disabledAddWl}
 												size="sm"
 												title="Liked"
 												onPress={removeWishlistHandler}
 											/>
 										) : (
 											<Buttons.Primary
+												disabled={disabledRemoveWl}
 												size="sm"
 												title="Like"
 												onPress={addWishlistHandler}

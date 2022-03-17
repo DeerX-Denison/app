@@ -13,9 +13,9 @@ const Wishlist: FC<Props> = () => {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName="Main"
+			initialRouteName="Wishlist"
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
+			<Stack.Screen name="Wishlist">{(props) => <Main {...props} />}</Stack.Screen>
 			<Stack.Screen name="Item">{(props) => <Item {...props} />}</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { MenuStackParamList } from 'types';
-import { Main, SignIn } from './Stacks';
+import { Main } from './Stacks';
 
 interface Props {}
 /**
@@ -13,11 +13,10 @@ const Menu: FC<Props> = () => {
 	return (
 		<Stack.Navigator
 			screenOptions={{ headerShown: false }}
-			initialRouteName="Main"
+			initialRouteName="MainMenu"
 		>
-			<Stack.Screen name="Main">{(props) => <Main {...props} />}</Stack.Screen>
-			<Stack.Screen name="SignIn">
-				{(props) => <SignIn {...props} />}
+			<Stack.Screen name="MainMenu">
+				{(props) => <Main {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -112,7 +112,13 @@ const useAuth = () => {
 	const { user } = useAuthState();
 	const [userInfo, setUserInfo] = useState<UserInfo | undefined | null>();
 	useEffect(() => {
-		if (user) {
+		if (
+			user &&
+			'email' in user &&
+			'displayName' in user &&
+			'photoURL' in user &&
+			'uid' in user
+		) {
 			setUserInfo({
 				email: user.email,
 				displayName: user.displayName,

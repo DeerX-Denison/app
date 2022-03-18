@@ -9,6 +9,7 @@ export { default as useIsInWishlist } from './useIsInWishlist';
 export { default as useIsSeller } from './useIsSeller';
 export { default as useItemDisplayTime } from './useItemDisplayTime';
 export { default as useKeyboard } from './useKeyboard';
+export { default as useKeyboardPadding } from './useKeyboardPadding';
 export { default as useListingData } from './useListingData';
 export { default as useListingError } from './useListingError';
 export { default as useListings } from './useListings';

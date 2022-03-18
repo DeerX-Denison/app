@@ -2,8 +2,8 @@ import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { fn, localTime, svTime } from '@firebase.config';
 import {
-	useHeights,
 	useKeyboard,
+	useKeyboardPadding,
 	useParseMessage,
 	useSeenIcons,
 	useThreadData,
@@ -15,6 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
+	Animated,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	ScrollView,
@@ -55,12 +56,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	>();
 	const scrollViewRef = useRef<ScrollView | undefined>();
 	const textInputScrollViewRef = useRef<ScrollView | undefined>();
-	const { willShow, didShow, keyboardHeight } = useKeyboard();
-	const { tabsHeight } = useHeights();
+	const { didShow } = useKeyboard();
 	const { seenIcons } = useSeenIcons(threadData);
 	const [msgsWithSeenIconsIds, setMsgsWithSeenIconsIds] = useState<string[]>(
 		[]
 	);
+	const { paddingBottom } = useKeyboardPadding();
 
 	const [msgWithStatusId, setMsgWithStatusId] = useState<string | undefined>();
 	// effect to scroll to latest message when focus on keyboard
@@ -220,101 +221,102 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	return (
 		<>
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
-			<ScrollView
-				contentContainerStyle={{
-					...tw('flex flex-col-reverse flex-1'),
-					paddingBottom: willShow ? keyboardHeight - tabsHeight : 0,
-				}}
-				scrollEnabled={false}
-				nestedScrollEnabled={true}
-				keyboardShouldPersistTaps="always"
-			>
-				{/* TEXT MESSAGE INPUT */}
-				<View
-					style={tw(
-						'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
-					)}
+			<Animated.View style={{ ...tw('flex flex-1'), paddingBottom }}>
+				<ScrollView
+					contentContainerStyle={tw('flex flex-col-reverse flex-1')}
+					scrollEnabled={false}
+					nestedScrollEnabled={true}
+					keyboardShouldPersistTaps="always"
 				>
-					<ScrollView
-						indicatorStyle="black"
-						style={tw('max-h-32')}
-						ref={textInputScrollViewRef as any}
+					{/* TEXT MESSAGE INPUT */}
+					<View
+						style={tw(
+							'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
+						)}
 					>
-						<TextInput
-							onLayout={() => textInputScrollViewRef.current?.scrollToEnd()}
-							value={inputMessage}
-							placeholder="Enter a message"
-							style={tw('flex-1 mx-4 text-s-lg py-2')}
-							multiline={true}
-							onChangeText={setInputMessage}
-							onFocus={() => readLatestMessage()}
-						/>
-					</ScrollView>
-					<View style={tw('flex-col justify-end')}>
-						<View style={tw('pr-4')}>
-							<Buttons.Primary
-								title="Send"
-								onPress={sendHandler}
-								size="md"
-								disabled={disableSend}
+						<ScrollView
+							indicatorStyle="black"
+							style={tw('max-h-32')}
+							ref={textInputScrollViewRef as any}
+						>
+							<TextInput
+								onLayout={() => textInputScrollViewRef.current?.scrollToEnd()}
+								value={inputMessage}
+								placeholder="Enter a message"
+								style={tw('flex-1 mx-4 text-s-lg py-2')}
+								multiline={true}
+								onChangeText={setInputMessage}
+								onFocus={() => readLatestMessage()}
 							/>
+						</ScrollView>
+						<View style={tw('flex-col justify-end')}>
+							<View style={tw('pr-4')}>
+								<Buttons.Primary
+									title="Send"
+									onPress={sendHandler}
+									size="md"
+									disabled={disableSend}
+								/>
+							</View>
 						</View>
 					</View>
-				</View>
 
-				{/* MESSAGES CONTAINER */}
-				<View style={tw('flex flex-col-reverse mt-14')}>
-					<ScrollView
-						ref={scrollViewRef as any}
-						onScrollEndDrag={onScrollEndDrag}
-						onScroll={(e) => {
-							const offsetY = e.nativeEvent.contentOffset.y;
-							if (offsetY === 0) {
-								readLatestMessage();
-							}
-						}}
-						scrollEventThrottle={0}
-						onContentSizeChange={() => {
-							scrollViewRef.current?.scrollToEnd();
-						}}
-						contentContainerStyle={tw('flex flex-col')}
-					>
-						{parsedMessages ? (
-							// parsedMessages defined
-							<>
-								{parsedMessages.length > 0 ? (
-									<>
-										{parsedMessages.map((message) => (
-											<Message
-												key={message.id}
-												message={message}
-												msgsWithSeenIconsIds={msgsWithSeenIconsIds}
-												msgWithStatusId={msgWithStatusId}
-												messageStatus={messageStatus}
-												nonSelfIcons={threadData?.members
-													.filter((x) => x.uid !== userInfo?.uid)
-													.map((x) => (x.photoURL ? x.photoURL : undefined))}
-											/>
-										))}
-									</>
-								) : (
-									<>
-										<View style={tw('flex flex-1 justify-center items-center')}>
-											<Text style={tw('text-s-lg')}>
-												Send your first message
-											</Text>
-										</View>
-									</>
-								)}
-							</>
-						) : (
-							<>
-								<Text>Loading...</Text>
-							</>
-						)}
-					</ScrollView>
-				</View>
-			</ScrollView>
+					{/* MESSAGES CONTAINER */}
+					<View style={tw('flex flex-col-reverse mt-14')}>
+						<ScrollView
+							ref={scrollViewRef as any}
+							onScrollEndDrag={onScrollEndDrag}
+							onScroll={(e) => {
+								const offsetY = e.nativeEvent.contentOffset.y;
+								if (offsetY === 0) {
+									readLatestMessage();
+								}
+							}}
+							scrollEventThrottle={0}
+							onContentSizeChange={() => {
+								scrollViewRef.current?.scrollToEnd();
+							}}
+							contentContainerStyle={tw('flex flex-col')}
+						>
+							{parsedMessages ? (
+								// parsedMessages defined
+								<>
+									{parsedMessages.length > 0 ? (
+										<>
+											{parsedMessages.map((message) => (
+												<Message
+													key={message.id}
+													message={message}
+													msgsWithSeenIconsIds={msgsWithSeenIconsIds}
+													msgWithStatusId={msgWithStatusId}
+													messageStatus={messageStatus}
+													nonSelfIcons={threadData?.members
+														.filter((x) => x.uid !== userInfo?.uid)
+														.map((x) => (x.photoURL ? x.photoURL : undefined))}
+												/>
+											))}
+										</>
+									) : (
+										<>
+											<View
+												style={tw('flex flex-1 justify-center items-center')}
+											>
+												<Text style={tw('text-s-lg')}>
+													Send your first message
+												</Text>
+											</View>
+										</>
+									)}
+								</>
+							) : (
+								<>
+									<Text>Loading...</Text>
+								</>
+							)}
+						</ScrollView>
+					</View>
+				</ScrollView>
+			</Animated.View>
 		</>
 	);
 };

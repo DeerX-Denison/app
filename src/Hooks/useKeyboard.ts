@@ -24,11 +24,11 @@ const useKeyboard = () => {
 	const handleKeyboardWillShow: KeyboardEventListener = (e) => {
 		setWillShow(true);
 		setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
+		setKeyboardHeight(e.endCoordinates.height);
 	};
 	const handleKeyboardDidShow: KeyboardEventListener = (e) => {
 		setDidShow(true);
 		setCoordinates({ start: e.startCoordinates, end: e.endCoordinates });
-		setKeyboardHeight(e.endCoordinates.height);
 	};
 	const handleKeyboardWillHide: KeyboardEventListener = (e) => {
 		setWillShow(false);

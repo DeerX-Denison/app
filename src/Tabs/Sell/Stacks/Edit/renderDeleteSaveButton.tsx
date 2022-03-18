@@ -15,7 +15,9 @@ export type RenderDeleteSaveButton = (
 	listingData: ListingData | null | undefined,
 	listingErrors: ListingErrors,
 	subProgressArray: number[],
-	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>
+	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
+	setUpdating: React.Dispatch<React.SetStateAction<boolean>>,
+	setDeleting: React.Dispatch<React.SetStateAction<boolean>>
 ) => void;
 
 /**
@@ -28,7 +30,9 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	listingData,
 	listingErrors,
 	subProgressArray,
-	setSubProgressArray
+	setSubProgressArray,
+	setUpdating,
+	setDeleting
 ) => {
 	const { userInfo } = useContext(UserContext);
 	const [disabledSaved, setDisabledSave] = useState<boolean>(false);
@@ -49,7 +53,9 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 									onPress={async () => {
 										isSubscribed && setDisabledDelete(true);
 										isSubscribed && setDisabledSave(true);
+										isSubscribed && setDeleting(true);
 										await deleteListing(listingData.id, navigation);
+										isSubscribed && setDeleting(false);
 										isSubscribed && setDisabledDelete(false);
 										isSubscribed && setDisabledSave(false);
 									}}
@@ -60,6 +66,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 									onPress={async () => {
 										isSubscribed && setDisabledDelete(true);
 										isSubscribed && setDisabledSave(true);
+										isSubscribed && setUpdating(true);
 										await saveListing(
 											listingData,
 											userInfo,
@@ -68,6 +75,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 											setSubProgressArray,
 											navigation
 										);
+										isSubscribed && setUpdating(false);
 										isSubscribed && setDisabledDelete(false);
 										isSubscribed && setDisabledSave(false);
 									}}

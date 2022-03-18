@@ -63,10 +63,16 @@ const Category: FC<Props> = ({
 				<TextInput
 					ref={inputTextRef as any}
 					value={query}
-					style={tw('py-3 px-6 border rounded-full m-2 text-s-lg')}
+					style={tw('py-3 pl-12 pr-6 border rounded-full m-2 text-s-lg')}
 					placeholder="Search categories"
 					onChangeText={setQuery}
 				/>
+				<TouchableOpacity
+					style={tw('absolute left-0 h-full justify-center pl-6')}
+					onPress={() => setCategorizing(false)}
+				>
+					<Icon name="chevron-left" size={18} />
+				</TouchableOpacity>
 			</View>
 			<ScrollView
 				keyboardDismissMode="on-drag"

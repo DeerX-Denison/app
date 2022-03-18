@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { ListingData } from 'types';
 
 export type ListingErrors = {
+	hasEditImage: boolean;
 	setHasEditImage: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditName: boolean;
 	setHasEditName: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditPrice: boolean;
 	setHasEditPrice: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditCategory: boolean;
 	setHasEditCategory: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditCondition: boolean;
 	setHasEditCondition: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditDesc: boolean;
 	setHasEditDesc: React.Dispatch<React.SetStateAction<boolean>>;
 	imageError: string;
 	setImageError: React.Dispatch<React.SetStateAction<string>>;
@@ -22,10 +28,14 @@ export type ListingErrors = {
 	setDescError: React.Dispatch<React.SetStateAction<string>>;
 	setJustPosted: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type UseListingErrorFn = (
+	listingData: ListingData | null | undefined
+) => ListingErrors;
 /**
  * custom hook to set user input errors. if undefined, no error, else, the string value is the error message
  */
-const useListingError = (listingData: ListingData | null | undefined) => {
+const useListingError: UseListingErrorFn = (listingData) => {
 	const [imageError, setImageError] = useState<string>('');
 	const [nameError, setNameError] = useState<string>('');
 	const [priceError, setPriceError] = useState<string>('');
@@ -68,11 +78,17 @@ const useListingError = (listingData: ListingData | null | undefined) => {
 	}, [listingData, justPosted]);
 
 	const listingErrors: ListingErrors = {
+		hasEditImage,
 		setHasEditImage,
+		hasEditName,
 		setHasEditName,
+		hasEditPrice,
 		setHasEditPrice,
+		hasEditCategory,
 		setHasEditCategory,
+		hasEditCondition,
 		setHasEditCondition,
+		hasEditDesc,
 		setHasEditDesc,
 		imageError,
 		setImageError,

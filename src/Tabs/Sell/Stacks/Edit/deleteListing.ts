@@ -1,8 +1,8 @@
-import { db } from '@firebase.config';
+import { fn } from '@firebase.config';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
-import { SellStackParamList, TabsParamList } from 'types';
+import { SellStackParamList } from 'types';
 
 export type DeleteListingFn = (
 	listingId: string,
@@ -11,7 +11,8 @@ export type DeleteListingFn = (
 
 const deleteListing: DeleteListingFn = async (listingId, navigation) => {
 	try {
-		await db.collection('listings').doc(listingId).delete();
+		await fn.httpsCallable('deleteListing')(listingId);
+		// await db.collection('listings').doc(listingId).delete();
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			Toast.show({ type: 'error', text1: error.message });
@@ -24,14 +25,6 @@ const deleteListing: DeleteListingFn = async (listingId, navigation) => {
 		}
 	} finally {
 		navigation.goBack();
-		const parentNavigation: NativeStackNavigationProp<TabsParamList> =
-			navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.navigate('Home', {
-				screen: 'Main',
-				params: { reset: true },
-			});
-		}
 	}
 };
 

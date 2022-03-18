@@ -6,7 +6,7 @@ import {
 import React, { FC } from 'react';
 import { Button } from 'react-native';
 import { SellStackParamList, TabsParamList } from 'types';
-import { Create, Edit, Main } from './Stacks';
+import { Create, Edit, MyListings } from './Stacks';
 
 interface Props {
 	route: RouteProp<TabsParamList, 'Sell'>;
@@ -35,12 +35,38 @@ const Sell: FC<Props> = () => {
 					),
 				})}
 			>
-				{(props) => <Main {...props} />}
+				{(props) => <MyListings {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Create">
+			<Stack.Screen
+				name="Create"
+				options={{
+					headerRight: () => (
+						<Button
+							title="post"
+							onPress={() => {
+								// do nothing
+							}}
+						/>
+					),
+				}}
+			>
 				{(props) => <Create {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Edit">{(props) => <Edit {...props} />}</Stack.Screen>
+			<Stack.Screen
+				name="Edit"
+				options={{
+					headerRight: () => (
+						<Button
+							title="save"
+							onPress={() => {
+								// do nothing
+							}}
+						/>
+					),
+				}}
+			>
+				{(props) => <Edit {...props} />}
+			</Stack.Screen>
 		</Stack.Navigator>
 	);
 };

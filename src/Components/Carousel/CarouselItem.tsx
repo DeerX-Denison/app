@@ -21,7 +21,7 @@ interface Props {
 	setListingData: React.Dispatch<
 		React.SetStateAction<ListingData | null | undefined>
 	>;
-	listingErrors?: ListingErrors;
+	listingErrors: ListingErrors | undefined;
 }
 
 const CarouselItem: FC<Props> = ({
@@ -49,11 +49,12 @@ const CarouselItem: FC<Props> = ({
 			aspect: [1, 1],
 			quality: 1,
 		});
-		if (!result.cancelled && listingData) {
+		if (!result.cancelled && listingData && listingErrors) {
 			setListingData({
 				...listingData,
 				images: [...listingData.images, result.uri],
 			});
+			listingErrors.setHasEditImage(true);
 		}
 	};
 	// TODO: change this effect to only prompt permission if user is uploading picture from their device. Currently, when you press to Item, it automatically asks for permission without user wanting to upload anything from their device

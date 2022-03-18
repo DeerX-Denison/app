@@ -1,8 +1,6 @@
 import { UserContext } from '@Contexts';
-import logger from '@logger';
 import React, { useContext, useEffect } from 'react';
 import { Button } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
@@ -36,44 +34,30 @@ const renderPostButton: RenderPostButton = (
 ) => {
 	const { userInfo } = useContext(UserContext);
 	useEffect(() => {
-		if (userInfo) {
-			const parentNavigation = navigation.getParent();
-			if (parentNavigation) {
-				parentNavigation.setOptions({
-					headerRight: () =>
-						categorizing ? (
-							<></>
-						) : (
-							<>
-								<Button
-									title="post"
-									onPress={() => {
-										if (listingData) {
-											createListing(
-												{ ...listingData, status: 'posted' } as ListingData,
-												userInfo,
-												listingErrors,
-												subProgressArray,
-												setSubProgressArray,
-												navigation
-											);
-										} else {
-											logger.error(
-												'listing data is null when user click post button'
-											);
-											Toast.show({
-												type: 'error',
-												text1: 'Unexpected error occured',
-											});
-											navigation.goBack();
-										}
-									}}
-								/>
-							</>
-						),
-				});
-			}
+		if (userInfo && listingData) {
+			navigation.setOptions({
+				headerRight: () =>
+					categorizing ? (
+						<></>
+					) : (
+						<>
+							<Button
+								title="post"
+								onPress={() => {
+									createListing(
+										{ ...listingData, status: 'posted' } as ListingData,
+										userInfo,
+										listingErrors,
+										subProgressArray,
+										setSubProgressArray,
+										navigation
+									);
+								}}
+							/>
+						</>
+					),
+			});
 		}
-	});
+	}, [listingData, userInfo, navigation, categorizing]);
 };
 export default renderPostButton;

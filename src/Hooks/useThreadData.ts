@@ -19,9 +19,6 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	const { membersUid } = useMembersUid(members);
 	const { thumbnail } = useThumbnail(members);
 	const { name } = useName(members);
-	// useEffect(() => {
-	// 	console.log(name);
-	// }, [name]);
 	const { threadId } = useThreadId(membersUid);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);

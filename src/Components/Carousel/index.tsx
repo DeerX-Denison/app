@@ -12,7 +12,8 @@ interface Props {
 		React.SetStateAction<ListingData | null | undefined>
 	>;
 	editMode: boolean;
-	listingErrors?: ListingErrors;
+	// undefined when carousel is rendered when user is not editing/creating, but strictly for viewing
+	listingErrors: ListingErrors | undefined;
 }
 
 const Carousel: FC<Props> = ({

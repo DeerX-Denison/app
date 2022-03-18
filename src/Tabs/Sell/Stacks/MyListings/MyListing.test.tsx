@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { cleanup, render } from '@testing-library/react-native';
 import React, { FC } from 'react';
 import { ListingsStackParamList } from 'types';
-import MyListing from '.';
+import MyListings from '.';
 import * as useMyListings from '../../../../Hooks/useMyListings';
 
 const mockUseMyListings = useMyListings.default as jest.Mock;
@@ -42,7 +42,7 @@ const MockMyListing: FC = () => (
 			screenOptions={{ headerShown: false }}
 		>
 			<Stack.Screen name="MyListing">
-				{(props) => <MyListing {...props} />}
+				{(props) => <MyListings {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	</NavigationContainer>

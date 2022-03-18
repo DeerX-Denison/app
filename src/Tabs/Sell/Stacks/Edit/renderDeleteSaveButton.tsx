@@ -1,12 +1,9 @@
 import { UserContext } from '@Contexts';
-import logger from '@logger';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { ListingErrors } from 'src/Hooks/useListingError';
-import { ListingData, TabsParamList } from 'types';
+import { ListingData } from 'types';
 import { Props } from '.';
 import deleteListing from './deleteListing';
 import { SaveListingFn } from './saveListing';
@@ -16,9 +13,6 @@ export type RenderDeleteSaveButton = (
 	saveListing: SaveListingFn,
 	categorizing: boolean,
 	listingData: ListingData | null | undefined,
-	setListingData: React.Dispatch<
-		React.SetStateAction<ListingData | null | undefined>
-	>,
 	listingErrors: ListingErrors,
 	subProgressArray: number[],
 	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>
@@ -32,71 +26,60 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	saveListing,
 	categorizing,
 	listingData,
-	setListingData,
 	listingErrors,
 	subProgressArray,
 	setSubProgressArray
 ) => {
 	const { userInfo } = useContext(UserContext);
+	const [disabledSaved, setDisabledSave] = useState<boolean>(false);
+	const [disabledDelete, setDisabledDelete] = useState<boolean>(false);
 	useEffect(() => {
-		if (userInfo) {
-			const parentNavigation: NativeStackNavigationProp<TabsParamList, 'Home'> =
-				navigation.getParent();
-			if (parentNavigation) {
-				parentNavigation.setOptions({
-					headerRight: () =>
-						categorizing ? (
-							<></>
-						) : (
-							<>
-								<View style={tw('flex flex-row')}>
-									<Button
-										title="delete"
-										onPress={async () => {
-											if (listingData) {
-												deleteListing(listingData.id, navigation);
-											} else {
-												logger.error(
-													'listing data is null when user click delete button'
-												);
-												Toast.show({
-													type: 'error',
-													text1: 'Unexpected error occured',
-												});
-												navigation.goBack();
-											}
-										}}
-									/>
-									<Button
-										title="save"
-										onPress={() => {
-											if (listingData) {
-												saveListing(
-													listingData,
-													userInfo,
-													listingErrors,
-													subProgressArray,
-													setSubProgressArray,
-													navigation
-												);
-											} else {
-												logger.error(
-													'listing data is null when user click save button'
-												);
-												Toast.show({
-													type: 'error',
-													text1: 'Unexpected error occured',
-												});
-												navigation.goBack();
-											}
-										}}
-									/>
-								</View>
-							</>
-						),
-				});
-			}
+		let isSubscribed = true;
+		if (userInfo && listingData) {
+			navigation.setOptions({
+				headerRight: () =>
+					categorizing ? (
+						<></>
+					) : (
+						<>
+							<View style={tw('flex flex-row')}>
+								<Button
+									disabled={disabledDelete}
+									title="delete"
+									onPress={async () => {
+										isSubscribed && setDisabledDelete(true);
+										isSubscribed && setDisabledSave(true);
+										await deleteListing(listingData.id, navigation);
+										isSubscribed && setDisabledDelete(false);
+										isSubscribed && setDisabledSave(false);
+									}}
+								/>
+								<Button
+									disabled={disabledSaved}
+									title="save"
+									onPress={async () => {
+										isSubscribed && setDisabledDelete(true);
+										isSubscribed && setDisabledSave(true);
+										await saveListing(
+											listingData,
+											userInfo,
+											listingErrors,
+											subProgressArray,
+											setSubProgressArray,
+											navigation
+										);
+										isSubscribed && setDisabledDelete(false);
+										isSubscribed && setDisabledSave(false);
+									}}
+								/>
+							</View>
+						</>
+					),
+			});
 		}
-	});
+		return () => {
+			isSubscribed = false;
+		};
+	}, [userInfo, listingData, listingErrors]);
 };
 export default renderDeleteSaveButton;

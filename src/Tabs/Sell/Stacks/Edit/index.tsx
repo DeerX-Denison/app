@@ -27,7 +27,6 @@ import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
 import useUploadProgress from '../useUploadProgress';
-import renderBackButton from './renderBackButton';
 import renderDeleteSaveButton from './renderDeleteSaveButton';
 import saveListing from './saveListing';
 
@@ -46,7 +45,6 @@ const conditions: Item[] = CONDITIONS.map((x) => ({
  */
 const Edit: FC<Props> = ({ route, navigation }) => {
 	const [categorizing, setCategorizing] = useState(false);
-	renderBackButton(navigation, categorizing, setCategorizing);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
 	const listingErrors = useListingError(listingData);
@@ -59,11 +57,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		saveListing,
 		categorizing,
 		listingData,
-		setListingData,
 		listingErrors,
 		subProgressArray,
 		setSubProgressArray
 	);
+
 	const {
 		imageError,
 		nameError,

@@ -3,12 +3,7 @@ import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 import { ListingErrors } from 'src/Hooks/useListingError';
-import {
-	ListingData,
-	SellStackParamList,
-	TabsParamList,
-	UserInfo,
-} from 'types';
+import { ListingData, SellStackParamList, UserInfo } from 'types';
 import uploadImagesAsync from '../uploadImageAsync';
 import validListingData from '../validListingData';
 
@@ -40,11 +35,17 @@ const saveListing: SaveListingFn = async (
 	navigation
 ) => {
 	const {
+		hasEditImage,
 		setHasEditImage,
+		hasEditName,
 		setHasEditName,
+		hasEditPrice,
 		setHasEditPrice,
+		hasEditCategory,
 		setHasEditCategory,
+		hasEditCondition,
 		setHasEditCondition,
+		hasEditDesc,
 		setHasEditDesc,
 		setJustPosted,
 	} = listingErrors;
@@ -68,6 +69,17 @@ const saveListing: SaveListingFn = async (
 			type: 'error',
 			text1: 'Invalid inputs, please check your input again',
 		});
+	}
+
+	if (
+		!hasEditImage &&
+		!hasEditName &&
+		!hasEditPrice &&
+		!hasEditCategory &&
+		!hasEditCondition &&
+		!hasEditDesc
+	) {
+		return navigation.goBack();
 	}
 
 	let images: string[];
@@ -97,18 +109,6 @@ const saveListing: SaveListingFn = async (
 		return navigation.goBack();
 	} finally {
 		navigation.goBack();
-		const parentNavigation: NativeStackNavigationProp<TabsParamList> =
-			navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.navigate('Home', {
-				screen: 'Main',
-				params: { reset: true },
-			});
-		} else {
-			logger.error(
-				`parent navigation is undefined when user clicks saveListing ${listingData.id}`
-			);
-		}
 	}
 };
 export default saveListing;

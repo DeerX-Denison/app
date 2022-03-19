@@ -13,6 +13,7 @@ export type SaveListingFn = (
 	listingErrors: ListingErrors,
 	subProgressArray: number[],
 	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
+	hasEditStatus: boolean,
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>
 ) => Promise<void>;
 
@@ -32,6 +33,7 @@ const saveListing: SaveListingFn = async (
 	listingErrors,
 	subProgressArray,
 	setSubProgressArray,
+	hasEditStatus,
 	navigation
 ) => {
 	const {
@@ -72,6 +74,7 @@ const saveListing: SaveListingFn = async (
 	}
 
 	if (
+		!hasEditStatus &&
 		!hasEditImage &&
 		!hasEditName &&
 		!hasEditPrice &&
@@ -110,7 +113,6 @@ const saveListing: SaveListingFn = async (
 			type: 'error',
 			text1: 'Fail to update, please try again later',
 		});
-		return navigation.goBack();
 	} finally {
 		navigation.goBack();
 	}

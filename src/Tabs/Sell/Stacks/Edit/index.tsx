@@ -53,7 +53,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		useUploadProgress();
 	const [updating, setUpdating] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
-
+	const [hasEditStatus, setHasEditStatus] = useState<boolean>(false);
 	renderDeleteSaveButton(
 		navigation,
 		saveListing,
@@ -63,7 +63,8 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		subProgressArray,
 		setSubProgressArray,
 		setUpdating,
-		setDeleting
+		setDeleting,
+		hasEditStatus
 	);
 
 	const {
@@ -127,6 +128,24 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 									<Bar width={200} indeterminate={true} />
 									<Text style={tw('text-s-md font-semibold p-4')}>
 										Deleting your items...
+									</Text>
+								</View>
+							</>
+						)}
+						{updating && !deleting && progress !== 0 && (
+							// user is uploading images
+							<>
+								<View
+									testID="uploading"
+									style={{
+										...tw('flex flex-col flex-1 justify-center items-center'),
+									}}
+								>
+									<Bar width={200} progress={progress} />
+									<Text style={tw('text-s-md font-semibold p-4')}>
+										{progress < 1
+											? 'Uploading your beautiful images...'
+											: 'Saving your items...'}
 									</Text>
 								</View>
 							</>
@@ -332,34 +351,17 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 								>
 									<Text style={tw('text-s-md p-2')}>Private</Text>
 									<Switch
-										onValueChange={() =>
+										onValueChange={() => {
+											setHasEditStatus(true);
 											setListingData({
 												...listingData,
 												status:
 													listingData.status === 'posted' ? 'saved' : 'posted',
-											})
-										}
+											});
+										}}
 										value={listingData?.status === 'posted'}
 									/>
 									<Text style={tw('text-s-md p-2')}>Public</Text>
-								</View>
-							</>
-						)}
-						{updating && !deleting && progress !== 0 && (
-							// user is uploading images
-							<>
-								<View
-									testID="uploading"
-									style={{
-										...tw('flex flex-col flex-1 justify-center items-center'),
-									}}
-								>
-									<Bar width={200} progress={progress} />
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										{progress < 1
-											? 'Uploading your beautiful images...'
-											: 'Saving your items...'}
-									</Text>
 								</View>
 							</>
 						)}

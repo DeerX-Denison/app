@@ -12,8 +12,6 @@ const useKeyboardPadding = () => {
 
 	const paddingBottom = useRef(new Animated.Value(0)).current;
 	useEffect(() => {
-		console.log(keyboardHeight, tabsHeight);
-
 		if (willShow) {
 			Animated.timing(paddingBottom, {
 				toValue: keyboardHeight - tabsHeight,

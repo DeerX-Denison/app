@@ -106,6 +106,10 @@ const saveListing: SaveListingFn = async (
 		await fn.httpsCallable('updateListing')(updatedListing);
 	} catch (error) {
 		logger.log(error);
+		Toast.show({
+			type: 'error',
+			text1: 'Fail to update, please try again later',
+		});
 		return navigation.goBack();
 	} finally {
 		navigation.goBack();

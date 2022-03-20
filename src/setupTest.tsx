@@ -49,6 +49,7 @@ jest.mock('./firebase.config.ts', () => ({
 	fn: jest.fn(),
 	auth: jest.fn(),
 	storage: jest.fn(),
+	dynamicLink: jest.fn(),
 }));
 
 // mock react-native-keyboard-aware-scroll-view

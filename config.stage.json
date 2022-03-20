@@ -1,5 +1,6 @@
 {
 	"firebase_env": "staging",
 	"dynamicLinkDomain": "deerxdev.page.link",
-	"authURL": "https://deerx-dev.web.app/passwordless-auth"
+	"authURL": "https://deerx-dev.web.app/passwordless-auth",
+	"hostname": "deerx-dev.web.app"
 }

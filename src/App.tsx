@@ -1,7 +1,17 @@
 import { UserContext } from '@Contexts';
-import { useAnalytics, useAuth, useFCMToken, useNotification } from '@Hooks';
+import {
+	useAnalytics,
+	useAuth,
+	useBackgroundLink,
+	useFCMToken,
+	useForegroundLink,
+	useNotification,
+} from '@Hooks';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+	NavigationContainer,
+	useNavigationContainerRef,
+} from '@react-navigation/native';
 import { Listings, Menu, Message, Sell, Wishlist } from '@Tabs';
 import React, { FC } from 'react';
 import Toast from 'react-native-toast-message';
@@ -16,14 +26,16 @@ const App: FC<Props> = () => {
 	useFCMToken(userInfo);
 	useNotification(userInfo);
 	useAnalytics(userInfo);
-
+	const navigationRef = useNavigationContainerRef<TabsParamList>();
+	useBackgroundLink(navigationRef);
+	useForegroundLink(navigationRef);
 	return (
 		<>
 			{user ? (
 				// if user is logged in, display tabs
 				<>
 					<UserContext.Provider value={{ user, userInfo }}>
-						<NavigationContainer>
+						<NavigationContainer ref={navigationRef}>
 							<Tab.Navigator
 								initialRouteName="Home"
 								screenOptions={{ headerShown: false }}

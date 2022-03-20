@@ -164,6 +164,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 							listingData={listingData}
 							setListingData={setListingData}
 							editMode={false}
+							listingErrors={undefined}
 						/>
 
 						<View style={tw('w-full')}>

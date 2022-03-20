@@ -1,9 +1,11 @@
 export { default as useAnalytics } from './useAnalytics';
 export { default as useAuth } from './useAuth';
 export { default as useAutoComplete } from './useAutoComplete';
+export { default as useBackgroundLink } from './useBackgroundLink';
 export { default as useCurrentTime } from './useCurrentTime';
 export { default as useDebounce } from './useDebounce';
 export { default as useFCMToken } from './useFCMToken';
+export { default as useForegroundLink } from './useForegroundLink';
 export { default as useHasSeenPreview } from './useHasSeenPreview';
 export { default as useHeights } from './useHeights';
 export { default as useIsInWishlist } from './useIsInWishlist';

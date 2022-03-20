@@ -25,7 +25,7 @@ const useWishlist = () => {
 	// boolean state whether user has fetched all wishlist
 	const [fetchedAll, setFetchedAll] = useState<boolean>(false);
 
-		// dummy state to trigger fetching intial wishlist
+	// dummy state to trigger fetching intial wishlist
 	const [trigger, setTrigger] = useState<boolean>(false);
 
 	/**

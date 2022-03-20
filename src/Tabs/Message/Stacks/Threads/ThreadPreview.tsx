@@ -1,6 +1,8 @@
 import { UserContext } from '@Contexts';
 import {
 	useCurrentTime,
+	useHasSeenPreview,
+	useIsSelfMsgPreview,
 	useThreadPreviewDisplayMessage,
 	useThreadPreviewDisplayTime,
 } from '@Hooks';
@@ -9,8 +11,8 @@ import tw from '@tw';
 import React, { FC, useContext } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { MessageStackParamList, ThreadPreviewData } from 'types';
-
 interface Prop {
 	threadPreviewData: ThreadPreviewData;
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
@@ -21,6 +23,9 @@ interface Prop {
  */
 const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 	const { userInfo } = useContext(UserContext);
+	const { hasSeen } = useHasSeenPreview(threadPreviewData);
+	const { isSelfMsgPreview } = useIsSelfMsgPreview(threadPreviewData);
+
 	if (!userInfo) {
 		navigation.navigate('Threads');
 		throw 'User unauthenticated';
@@ -64,7 +69,13 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 					<View style={tw('h-16 px-1 flex flex-1 flex-col justify-between')}>
 						<View style={tw('flex justify-center h-8')}>
 							<Text
-								style={tw('text-s-xl font-semibold')}
+								style={tw(
+									`text-s-xl ${
+										hasSeen === null || hasSeen === true
+											? 'font-light'
+											: 'font-semibold'
+									}`
+								)}
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
@@ -73,17 +84,28 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 						</View>
 						<View style={tw('flex justify-center h-8')}>
 							<Text
-								style={tw('text-s-lg font-light')}
+								style={tw(
+									`text-s-md ${
+										hasSeen === null || hasSeen === true
+											? 'font-light'
+											: 'font-semibold'
+									}`
+								)}
 								numberOfLines={1}
 								ellipsizeMode="tail"
 							>
-								{displayMessage}
+								{isSelfMsgPreview ? `you: ${displayMessage}` : displayMessage}
 							</Text>
 						</View>
 					</View>
 					<View style={tw('h-full flex justify-center items-center')}>
 						<Text style={tw('text-sm leading-7')}>{displayTime}</Text>
 					</View>
+					{hasSeen === false && (
+						<View style={tw('h-full flex justify-center items-center pl-2')}>
+							<Icon name="circle" style={tw('text-red-500')} />
+						</View>
+					)}
 				</View>
 			</TouchableWithoutFeedback>
 		</>

@@ -136,7 +136,11 @@ export type ThreadLatestTime =
 	| FirebaseFirestoreTypes.Timestamp
 	| undefined
 	| null;
+export type ThreadLatestSeenAt = {
+	[key: string]: FirebaseFirestoreTypes.Timestamp | undefined | null;
+};
 export type ThreadLatestMessages = string | undefined | null;
+export type ThreadLatestSenderUid = string | undefined | nul;
 export type ThreadPreviewData = {
 	id: ThreadId;
 	members: ThreadMembers[];
@@ -145,6 +149,8 @@ export type ThreadPreviewData = {
 	name: ThreadName;
 	latestMessage: ThreadLatestMessages;
 	latestTime: ThreadLatestTime;
+	latestSeenAt: ThreadLatestSeenAt;
+	latestSenderUid: ThreadLatestSenderUid;
 };
 export type ThreadPreviewDataSv = Omit<ThreadPreviewData, 'name'>;
 

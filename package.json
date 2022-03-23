@@ -50,7 +50,7 @@
 		"query-string": "^7.1.1",
 		"react": "^17.0.2",
 		"react-dom": "16.13.1",
-		"react-native": "0.63.4",
+		"react-native": "0.67.4",
 		"react-native-fast-image": "^8.5.11",
 		"react-native-gesture-handler": "~1.10.2",
 		"react-native-get-random-values": "^1.7.0",
@@ -97,8 +97,7 @@
 	},
 	"pre-commit": [
 		"lint",
-		"format",
-		"test"
+		"format"
 	],
 	"prettier": {
 		"trailingComma": "es5",

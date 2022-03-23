@@ -140,6 +140,7 @@
 				479378541239168358C1DC8D /* [CP] Copy Pods Resources */,
 				0FDCCB5FA5866D5B9517323B /* [CP-User] [RNFB] Core Configuration */,
 				E0FAAE0D2299C22DA9868693 /* [CP-User] [RNFB] Crashlytics Configuration */,
+				D9C8620933D21DF3A458AB42 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -308,6 +309,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D9C8620933D21DF3A458AB42 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-app/Pods-app-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-app/Pods-app-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E0FAAE0D2299C22DA9868693 /* [CP-User] [RNFB] Crashlytics Configuration */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -376,10 +395,10 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = app/app.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 25;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = SP47CPYW52;
 				ENABLE_BITCODE = NO;
@@ -399,7 +418,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denison.deerx.app;
 				PRODUCT_NAME = DeerX;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore denison.deerx.app";
+				PROVISIONING_PROFILE_SPECIFIER = "match Development denison.deerx.app";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VALIDATE_WORKSPACE = YES;
@@ -418,7 +437,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 25;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = SP47CPYW52;
 				ENABLE_TESTABILITY = YES;

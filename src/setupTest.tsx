@@ -68,9 +68,13 @@ jest.mock('react-native-vector-icons/FontAwesome', () => ({
 }));
 
 // mock react-native/Libraries/Animated/src/NativeAnimatedHelper
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 // mock async storage
 jest.mock('@react-native-async-storage/async-storage', () => mockAsyncStorage);
 
+// jest.mock('react-native-toast-message', () => jest.fn().mockReturnValue(<></>));
+// jest.mock('react-native-snap-carousel', () => jest.fn().mockReturnValue(<></>));
+// jest.mock('react-native-progress', () => jest.fn().mockReturnValue(<></>));
+// jest.mock('react-native-image-viewing', () => jest.fn().mockReturnValue(<></>));
 jest.useFakeTimers();

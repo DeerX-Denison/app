@@ -8,24 +8,28 @@ export type UserInfo = {
 	displayName: string | null;
 };
 
+export type HomeTab = {
+	screen: 'Listings';
+	params: ListingsStackParamList['Listings'];
+};
+export type InboxTab = {
+	screen: 'Messages';
+	params: MessageStackParamList['Messages'];
+	initial: boolean;
+};
+export type SellTab = {
+	screen: 'Edit';
+	params: SellStackParamList['Edit'];
+	initial: boolean;
+};
+
 // Params/Props types list for tabs and stacks
 export type TabsParamList = {
-	Home: {
-		screen: 'Listings';
-		params: ListingsStackParamList['Listings'];
-	};
-	Inbox: {
-		screen: 'Messages';
-		params: MessageStackParamList['Messages'];
-		initial: boolean;
-	};
+	Home: HomeTab | undefined;
+	Inbox: InboxTab | undefined;
 	Liked: undefined;
 	Menu: undefined;
-	Sell: {
-		screen: 'Edit';
-		params: SellStackParamList['Edit'];
-		initial: boolean;
-	};
+	Sell: SellTab | undefined;
 };
 
 export type ListingsStackParamList = {
@@ -140,7 +144,7 @@ export type ThreadLatestSeenAt = {
 	[key: string]: FirebaseFirestoreTypes.Timestamp | undefined | null;
 };
 export type ThreadLatestMessages = string | undefined | null;
-export type ThreadLatestSenderUid = string | undefined | nul;
+export type ThreadLatestSenderUid = string | undefined | null;
 export type ThreadPreviewData = {
 	id: ThreadId;
 	members: ThreadMembers[];

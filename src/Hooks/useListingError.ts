@@ -53,27 +53,49 @@ const useListingError: UseListingErrorFn = (listingData) => {
 	useEffect(() => {
 		// TODO: implement listingData.user check
 		if (listingData) {
-			listingData.images.length <= 0 && hasEditImage
-				? setImageError('Please add an image')
-				: setImageError('');
-			listingData.name === '' && hasEditName
-				? setNameError('Please enter valid name')
-				: setNameError('');
-			isNaN(parseFloat(listingData.price)) && hasEditPrice
-				? setPriceError('Please enter valid price')
-				: setPriceError('');
-			!isFinite(parseFloat(listingData.price)) && hasEditPrice
-				? setPriceError('Please enter valid price')
-				: setPriceError('');
-			listingData.category.length <= 0 && hasEditCategory
-				? setCategoryError('Please select a category')
-				: setCategoryError('');
-			!listingData.condition && hasEditCondition
-				? setConditionError('Please select a condition')
-				: setConditionError('');
-			listingData.description === '' && hasEditDesc
-				? setDescError('Please enter valid description')
-				: setDescError('');
+			if (listingData.images.length <= 0 && hasEditImage) {
+				setImageError('Please add an image');
+			} else {
+				setImageError('');
+			}
+
+			if (listingData.name === '' && hasEditName) {
+				setNameError('Please enter valid name');
+			} else if (listingData.name.length > 50 && hasEditName) {
+				setNameError('Name exceed 50 characters');
+			} else {
+				setNameError('');
+			}
+
+			if (isNaN(parseFloat(listingData.price)) && hasEditPrice) {
+				setPriceError('Please enter valid price');
+			} else if (!isFinite(parseFloat(listingData.price)) && hasEditPrice) {
+				setPriceError('Please enter valid price');
+			} else if (listingData.price.length > 7 && hasEditPrice) {
+				setPriceError('Price exceed 7 characters');
+			} else {
+				setPriceError('');
+			}
+
+			if (listingData.category.length <= 0 && hasEditCategory) {
+				setCategoryError('Please select a category');
+			} else {
+				setCategoryError('');
+			}
+
+			if (!listingData.condition && hasEditCondition) {
+				setConditionError('Please select a condition');
+			} else {
+				setConditionError('');
+			}
+
+			if (listingData.description === '' && hasEditDesc) {
+				setDescError('Please enter valid description');
+			} else if (listingData.description.length > 250 && hasEditDesc) {
+				setDescError('Please enter valid description');
+			} else {
+				setDescError('');
+			}
 		}
 	}, [listingData, justPosted]);
 

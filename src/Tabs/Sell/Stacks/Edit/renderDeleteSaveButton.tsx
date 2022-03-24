@@ -39,8 +39,8 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	const { userInfo } = useContext(UserContext);
 	const [disabledSaved, setDisabledSave] = useState<boolean>(false);
 	const [disabledDelete, setDisabledDelete] = useState<boolean>(false);
+
 	useEffect(() => {
-		let isSubscribed = true;
 		if (userInfo && listingData) {
 			navigation.setOptions({
 				headerRight: () =>
@@ -53,22 +53,22 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 									disabled={disabledDelete}
 									title="delete"
 									onPress={async () => {
-										isSubscribed && setDisabledDelete(true);
-										isSubscribed && setDisabledSave(true);
-										isSubscribed && setDeleting(true);
+										setDisabledDelete(true);
+										setDisabledSave(true);
+										setDeleting(true);
 										await deleteListing(listingData.id, navigation);
-										isSubscribed && setDeleting(false);
-										isSubscribed && setDisabledDelete(false);
-										isSubscribed && setDisabledSave(false);
+										setDeleting(false);
+										setDisabledDelete(false);
+										setDisabledSave(false);
 									}}
 								/>
 								<Button
 									disabled={disabledSaved}
 									title="save"
 									onPress={async () => {
-										isSubscribed && setDisabledDelete(true);
-										isSubscribed && setDisabledSave(true);
-										isSubscribed && setUpdating(true);
+										setDisabledDelete(true);
+										setDisabledSave(true);
+										setUpdating(true);
 										await saveListing(
 											listingData,
 											userInfo,
@@ -78,9 +78,9 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 											hasEditStatus,
 											navigation
 										);
-										isSubscribed && setUpdating(false);
-										isSubscribed && setDisabledDelete(false);
-										isSubscribed && setDisabledSave(false);
+										setUpdating(false);
+										setDisabledDelete(false);
+										setDisabledSave(false);
 									}}
 								/>
 							</View>
@@ -88,9 +88,6 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 					),
 			});
 		}
-		return () => {
-			isSubscribed = false;
-		};
 	}, [userInfo, listingData, listingErrors]);
 };
 export default renderDeleteSaveButton;

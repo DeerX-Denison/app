@@ -51,6 +51,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [disableSend, setDisableSend] = useState<boolean>(false);
+
 	const [messageStatus, setMessageStatus] = useState<
 		undefined | 'sending' | 'sent' | 'seen'
 	>();
@@ -75,6 +76,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setDisableSend(true);
 		if (threadData && userInfo) {
 			if (inputMessage !== '') {
+				setInputMessage('');
 				setMessageStatus('sending');
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -106,7 +108,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						seenAt,
 					};
 
-					setInputMessage('');
 					setDisableSend(false);
 					setThreadMessagesData([
 						...threadData.messages,
@@ -145,7 +146,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				if ('seenAt' in x) {
 					return x.seenAt[userInfo.uid] === null;
 				} else {
-					return false;
+					return true;
 				}
 			});
 			const tobeSeenMessageIds = tobeSeenMessage.map((msg) => msg.id);
@@ -181,39 +182,43 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	useEffect(() => {
 		if (threadData && threadData.messages.length > 0 && userInfo && seenIcons) {
 			let latestSelfMsg: MessageData = threadData.messages[0];
-			threadData.messages.forEach((msg) => {
-				if (msg.sender.uid === userInfo.uid) {
-					if (latestSelfMsg.time.valueOf() <= msg.time.valueOf()) {
-						latestSelfMsg = msg;
-					}
-				}
-			});
-
-			const msgsWithSeenIcon = msgsWithSeenIconsIds.map((msgId) =>
-				threadData.messages.find((msg) => msg.id === msgId)
-			);
-			const nonSelfUids = threadData.membersUid.filter(
-				(x) => x !== userInfo.uid
-			);
-			let latestSelfMsgIsNewerThanAllSeenMessages = true;
-
-			msgsWithSeenIcon.forEach((msg) => {
-				if (msg) {
-					nonSelfUids.forEach((nonSelfUid) => {
-						const msgSeenTime = msg.seenAt[nonSelfUid];
-						const latestMsgSeenTime =
-							latestSelfMsg.seenAt[userInfo.uid]?.valueOf();
-						if (msgSeenTime && latestMsgSeenTime) {
-							if (msgSeenTime.valueOf() >= latestMsgSeenTime.valueOf()) {
-								latestSelfMsgIsNewerThanAllSeenMessages = false;
-							}
+			if ('seenAt' in latestSelfMsg) {
+				threadData.messages.forEach((msg) => {
+					if (msg.sender.uid === userInfo.uid) {
+						if (latestSelfMsg.time.valueOf() <= msg.time.valueOf()) {
+							latestSelfMsg = msg;
 						}
-					});
-				}
-			});
+					}
+				});
 
-			if (latestSelfMsgIsNewerThanAllSeenMessages === true) {
-				setMsgWithStatusId(latestSelfMsg.id);
+				const msgsWithSeenIcon = msgsWithSeenIconsIds.map((msgId) =>
+					threadData.messages.find((msg) => msg.id === msgId)
+				);
+				const nonSelfUids = threadData.membersUid.filter(
+					(x) => x !== userInfo.uid
+				);
+				let latestSelfMsgIsNewerThanAllSeenMessages = true;
+
+				msgsWithSeenIcon.forEach((msg) => {
+					if (msg && 'seenAt' in msg) {
+						nonSelfUids.forEach((nonSelfUid) => {
+							if (nonSelfUid in msg.seenAt && userInfo.uid in msg.seenAt) {
+								const msgSeenTime = msg.seenAt[nonSelfUid];
+								const latestMsgSeenTime =
+									latestSelfMsg.seenAt[userInfo.uid]?.valueOf();
+								if (msgSeenTime && latestMsgSeenTime) {
+									if (msgSeenTime.valueOf() >= latestMsgSeenTime.valueOf()) {
+										latestSelfMsgIsNewerThanAllSeenMessages = false;
+									}
+								}
+							}
+						});
+					}
+				});
+
+				if (latestSelfMsgIsNewerThanAllSeenMessages === true) {
+					setMsgWithStatusId(latestSelfMsg.id);
+				}
 			}
 		}
 	}, [seenIcons, threadData, userInfo, msgsWithSeenIconsIds]);

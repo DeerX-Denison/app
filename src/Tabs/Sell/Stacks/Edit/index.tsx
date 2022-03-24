@@ -35,10 +35,19 @@ export interface Props {
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>;
 }
 
-const conditions: Item[] = CONDITIONS.map((x) => ({
-	label: x.toLowerCase(),
-	value: x.toUpperCase(),
-}));
+const conditions: Item[] = CONDITIONS.map((x) => {
+	const xLower = x.toLowerCase();
+	const arr = xLower.split(' ');
+
+	for (let i = 0; i < arr.length; i++) {
+		arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+	}
+	const xCapitalized = arr.join(' ');
+	return {
+		label: xCapitalized,
+		value: x.toUpperCase(),
+	};
+});
 
 /**
  * Edit components, when user want to edit an item that has already been put on sale
@@ -95,7 +104,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 					// Listing data is fetched, render form with the data as placeholder
 
 					<KeyboardAwareScrollView
-						contentContainerStyle={tw('flex flex-col flex-1')}
+						contentContainerStyle={tw('flex flex-col')}
 						viewIsInsideTabBar={true}
 						keyboardShouldPersistTaps={'handled'}
 						extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
@@ -204,6 +213,8 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											} as ListingData);
 											setHasEditName(true);
 										}}
+										multiline={true}
+										scrollEnabled={false}
 									/>
 									{nameError !== '' && (
 										<Text style={tw('text-red-400 text-s-md p-2')}>
@@ -337,6 +348,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											setHasEditDesc(true);
 										}}
 										multiline={true}
+										scrollEnabled={false}
 									/>
 									{descError !== '' && (
 										<Text style={tw('text-red-400 text-s-md p-2')}>

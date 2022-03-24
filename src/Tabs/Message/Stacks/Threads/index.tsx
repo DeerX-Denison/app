@@ -51,6 +51,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	const { threads, fetchThreads, resetThreads } = useThreads();
+
 	const [searching, setSearching] = useState<boolean>(false);
 	const { query, setQuery, suggestions } = useAutoComplete();
 	const scrollViewRef = useRef<ScrollView | undefined>();

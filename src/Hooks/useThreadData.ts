@@ -49,6 +49,8 @@ const useThreadData = (initMembers: UserInfo[]) => {
 				latestMessage: '',
 				latestTime: localTime(),
 				messages: [],
+				latestSeenAt: {},
+				latestSenderUid: undefined,
 			};
 			setThreadData(newThreadPreviewData);
 		} else {

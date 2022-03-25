@@ -59,7 +59,7 @@ const Create: FC<Props> = ({ navigation }) => {
 	const [categorizing, setCategorizing] = useState<boolean>(false);
 	renderBackButton(navigation, categorizing, setCategorizing);
 	const { listingData, setListingData } = useNewListingData();
-	const { progress, setSubProgressArray, subProgressArray } =
+	const { progress, setProgress, setSubProgressArray, subProgressArray } =
 		useUploadProgress();
 
 	const listingErrors = useListingError(listingData);
@@ -101,14 +101,14 @@ const Create: FC<Props> = ({ navigation }) => {
 				{listingData ? (
 					// if listing data defined, ask if user is uploading
 					<>
-						<KeyboardAwareScrollView
-							contentContainerStyle={tw('flex flex-col')}
-							viewIsInsideTabBar={true}
-							keyboardShouldPersistTaps={'handled'}
-							extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
-						>
-							{progress === 0 ? (
-								// if user not uploading, render form
+						{progress === 0 && (
+							// if user not uploading, render form
+							<KeyboardAwareScrollView
+								contentContainerStyle={tw('flex flex-col')}
+								viewIsInsideTabBar={true}
+								keyboardShouldPersistTaps={'handled'}
+								extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
+							>
 								<>
 									{listingData.images.length > 0 ? (
 										// if images.length > 0, render carousel
@@ -337,25 +337,26 @@ const Create: FC<Props> = ({ navigation }) => {
 										/>
 									</View>
 								</>
-							) : (
-								// else, user is uploading, render progress bar
-								<>
-									<View
-										testID="posting"
-										style={{
-											...tw('flex flex-col flex-1 justify-center items-center'),
-										}}
-									>
-										<Bar width={200} progress={progress} />
-										<Text style={tw('text-s-md font-semibold p-4')}>
-											{progress < 1
-												? 'Uploading your beautiful images...'
-												: 'Putting your item on sale...'}
-										</Text>
-									</View>
-								</>
-							)}
-						</KeyboardAwareScrollView>
+							</KeyboardAwareScrollView>
+						)}
+						{progress !== 0 && (
+							// else, user is uploading, render progress bar
+							<>
+								<View
+									testID="posting"
+									style={{
+										...tw('flex flex-col flex-1 justify-center items-center'),
+									}}
+								>
+									<Bar width={200} progress={progress} />
+									<Text style={tw('text-s-md font-semibold p-4')}>
+										{progress < 1
+											? 'Uploading your beautiful images...'
+											: 'Putting your item on sale...'}
+									</Text>
+								</View>
+							</>
+						)}
 					</>
 				) : (
 					// else, data is not defined, render progress bar

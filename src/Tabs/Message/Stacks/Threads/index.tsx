@@ -90,7 +90,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 		<ScrollView
 			scrollEnabled={false}
 			bounces={false}
-			contentContainerStyle={tw('flex flex-col flex-1')}
+			contentContainerStyle={tw('flex flex-col flex-1 bg-pink-200')}
 			keyboardShouldPersistTaps="handled"
 		>
 			<TextInput

@@ -30,7 +30,7 @@ interface Props {
  * Main component, default screen for Listing tab. Contain all user posted listings and all necessary buttons (create, goto my listing, goto item)
  */
 const Listings: FC<Props> = ({ route, navigation }) => {
-	const [categorizing, setCategorizing] = useState(false);
+	const [categorizing, setCategorizing] = useState(false)
 	const [categoryFilter, setCategoryFilter] = useState<ListingCategory[]>([]);
 	const { listings, fetchListings, resetListings } =
 		useListings(categoryFilter);

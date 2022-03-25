@@ -1,14 +1,10 @@
+import * as Buttons from '@Components/Buttons';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
-import {
-	Image,
-	ScrollView,
-	Text,
-	TouchableWithoutFeedback,
-	View,
-} from 'react-native';
+import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { ListingId, SellStackParamList } from 'types';
 interface Props {
@@ -48,7 +44,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 												'w-full p-2 flex-row justify-between items-center border-t'
 											)}
 										>
-											<Image
+											<FastImage
 												source={{ uri: listing.images[0] }}
 												style={tw('w-16 h-16')}
 											/>
@@ -57,6 +53,11 @@ const MyListings: FC<Props> = ({ navigation }) => {
 													{listing.name}
 												</Text>
 											</View>
+											<Buttons.Primary
+												title="Edit"
+												onPress={() => editHandler(listing.id)}
+												size="sm"
+											/>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

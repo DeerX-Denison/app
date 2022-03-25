@@ -71,9 +71,11 @@ const Main: FC<Props> = ({ route, navigation }) => {
 												source={{ uri: wishlistData.thumbnail }}
 												style={tw('w-16 h-16')}
 											/>
-											<Text style={tw('text-lg font-bold')}>
-												{wishlistData.name}
-											</Text>
+											<View style={tw('flex flex-1 break-words pl-2')}>
+												<Text style={tw('text-lg font-bold')}>
+													{wishlistData.name}
+												</Text>
+											</View>
 											<Buttons.Primary
 												title="View"
 												onPress={() => itemHandler(wishlistData.id)}

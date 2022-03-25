@@ -43,6 +43,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	);
 	const [disabledAddWl, setDisabledAddWl] = useState<boolean>(false);
 	const [disabledRemoveWl, setDisabledRemoveWl] = useState<boolean>(false);
+
+	const [isMounted, setIsMounted] = useState<boolean>(true);
+	useEffect(() => () => setIsMounted(false), []);
+
 	/**
 	 * effect to check if listingData exists
 	 */
@@ -82,7 +86,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
 				setDisabledRemoveWl(true);
 				await fn.httpsCallable('deleteWishlist')(listingData.id);
-				setTimeout(() => setDisabledRemoveWl(false), 1000);
+				setTimeout(() => isMounted && setDisabledRemoveWl(false), 1000);
 			} catch (error) {
 				logger.log(error);
 				Toast.show({
@@ -107,7 +111,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				setIsInWishlist(true);
 				setDisabledAddWl(true);
 				await fn.httpsCallable('createWishlist')(wishlistData);
-				setTimeout(() => setDisabledAddWl(false), 1000);
+				setTimeout(() => isMounted && setDisabledAddWl(false), 1000);
 			} catch (error) {
 				logger.log(error);
 				Toast.show({

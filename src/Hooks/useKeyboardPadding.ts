@@ -9,8 +9,8 @@ import useKeyboard from './useKeyboard';
 const useKeyboardPadding = () => {
 	const { willShow, keyboardHeight } = useKeyboard();
 	const { tabsHeight } = useHeights();
-
 	const paddingBottom = useRef(new Animated.Value(0)).current;
+
 	useEffect(() => {
 		if (willShow) {
 			Animated.timing(paddingBottom, {
@@ -26,6 +26,7 @@ const useKeyboardPadding = () => {
 			}).start();
 		}
 	}, [willShow, keyboardHeight, tabsHeight]);
+
 	return { paddingBottom };
 };
 export default useKeyboardPadding;

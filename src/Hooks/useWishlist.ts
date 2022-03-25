@@ -13,6 +13,7 @@ const useWishlist = () => {
 
 	// final wishlist data to be return from this custom hook and render
 	// sorted in order such that .addedAt closest to current time starts at 0
+	// if fetched no wishlist, default to empty array []
 	// last updated Feb 7, 2022
 
 	const [wishlist, setWishlist] = useState<WishlistDataCL[] | undefined>();
@@ -41,17 +42,21 @@ const useWishlist = () => {
 			// .startAfter(lastDoc ? lastDoc : [])
 			// .limit(WISHLIST_PER_PAGE)
 			.onSnapshot((querySnapshot) => {
-				setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
-				const oldWl = wishlist ? wishlist : [];
-				const oldWlIds = oldWl.map((wl) => wl.id);
-				const extraWl = querySnapshot.docs.map(
-					(docSnap) => docSnap.data() as WishlistDataCL
-				);
-				const uniqueExtraWl = extraWl.filter(
-					(lst) => !oldWlIds.includes(lst.id)
-				);
-				setFetchedAll(uniqueExtraWl.length === 0);
-				setWishlist([...oldWl, ...uniqueExtraWl]);
+				if (querySnapshot.empty) {
+					setWishlist([]);
+				} else {
+					setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
+					const oldWl = wishlist ? wishlist : [];
+					const oldWlIds = oldWl.map((wl) => wl.id);
+					const extraWl = querySnapshot.docs.map(
+						(docSnap) => docSnap.data() as WishlistDataCL
+					);
+					const uniqueExtraWl = extraWl.filter(
+						(lst) => !oldWlIds.includes(lst.id)
+					);
+					setFetchedAll(uniqueExtraWl.length === 0);
+					setWishlist([...oldWl, ...uniqueExtraWl]);
+				}
 			});
 		return () => unsubscribe();
 	}, [userInfo, trigger]);

@@ -8,6 +8,7 @@ export { default as useFCMToken } from './useFCMToken';
 export { default as useForegroundLink } from './useForegroundLink';
 export { default as useHasSeenPreview } from './useHasSeenPreview';
 export { default as useHeights } from './useHeights';
+export { default as useInputMessage } from './useInputMessage';
 export { default as useIsInWishlist } from './useIsInWishlist';
 export { default as useIsSelfMsgPreview } from './useIsSelfMsgPreview';
 export { default as useIsSeller } from './useIsSeller';

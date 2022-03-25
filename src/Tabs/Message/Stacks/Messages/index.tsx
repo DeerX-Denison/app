@@ -40,7 +40,6 @@ interface Props {
 const Messages: FC<Props> = ({ route, navigation }) => {
 	const { userInfo } = useContext(UserContext);
 	const scrollViewRef = useRef<ScrollView | undefined>();
-	const textInputScrollViewRef = useRef<ScrollView | undefined>();
 	const {
 		threadData,
 		setThreadMessagesData,
@@ -66,6 +65,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const { inputMessage, setInputMessage, showingItem } = useInputMessage();
 	const { wishlist } = useWishlist();
+
 	const sendHandler = async () => {
 		setInputMessage('');
 		setDisableSend(true);
@@ -106,6 +106,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						...threadData.messages,
 						{ ...newMessage, time: localTime() } as MessageData,
 					]);
+					setDisableSend(false);
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
 						message: newMessage,
@@ -143,22 +144,16 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
 							)}
 						>
-							<ScrollView
-								indicatorStyle="black"
-								style={tw('max-h-32')}
-								ref={textInputScrollViewRef as any}
-							>
-								<TextInput
-									onLayout={() => textInputScrollViewRef.current?.scrollToEnd()}
-									value={inputMessage}
-									placeholder="Enter a message"
-									style={tw('flex-1 mx-4 text-s-lg py-2')}
-									multiline={true}
-									onChangeText={setInputMessage}
-									onFocus={() => readLatestMessage(threadData, userInfo)}
-									autoCorrect={false}
-								/>
-							</ScrollView>
+							<TextInput
+								value={inputMessage}
+								placeholder="Enter a message"
+								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
+								multiline={true}
+								scrollEnabled={true}
+								onChangeText={setInputMessage}
+								onFocus={() => readLatestMessage(threadData, userInfo)}
+								autoCorrect={false}
+							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
 									<Buttons.Primary

@@ -49,38 +49,44 @@ const useThreadMessagesData = (
 		trigger
 	);
 
-	useEffect(() => {
-		if (threadMessagesData && threadMessagesData.length > 0) {
-			if (
-				newMsgs &&
-				newMsgs.length > 0 &&
-				membersUid &&
-				membersUid.length > 0
-			) {
-				const unionMsgDict: { [key: string]: MessageData } = {};
-				threadMessagesData.forEach((msg) => (unionMsgDict[msg.id] = msg));
-				newMsgs.forEach((msg) => (unionMsgDict[msg.id] = msg));
-				const unionMsgs: MessageData[] = [];
-				for (const id in unionMsgDict) {
-					unionMsgs.push(unionMsgDict[id]);
+	useEffect(
+		() => {
+			if (threadMessagesData && threadMessagesData.length > 0) {
+				if (
+					newMsgs &&
+					newMsgs.length > 0 &&
+					membersUid &&
+					membersUid.length > 0
+				) {
+					const unionMsgDict: { [key: string]: MessageData } = {};
+					threadMessagesData.forEach((msg) => (unionMsgDict[msg.id] = msg));
+					newMsgs.forEach((msg) => (unionMsgDict[msg.id] = msg));
+					const unionMsgs: MessageData[] = [];
+					for (const id in unionMsgDict) {
+						unionMsgs.push(unionMsgDict[id]);
+					}
+					unionMsgs.sort((a, b) => {
+						if (a.time && b.time) {
+							return a.time.valueOf() > b.time.valueOf() ? 1 : -1;
+						} else return 0;
+					});
+					const filteredNewMsg = unionMsgs.filter((msg) => {
+						return (
+							msg.membersUid.length === membersUid.length &&
+							msg.membersUid.every(
+								(value, index) => value === membersUid[index]
+							)
+						);
+					});
+					setThreadMessagesData(filteredNewMsg);
 				}
-				unionMsgs.sort((a, b) => {
-					if (a.time && b.time) {
-						return a.time.valueOf() > b.time.valueOf() ? 1 : -1;
-					} else return 0;
-				});
-				const filteredNewMsg = unionMsgs.filter((msg) => {
-					return (
-						msg.membersUid.length === membersUid.length &&
-						msg.membersUid.every((value, index) => value === membersUid[index])
-					);
-				});
-				setThreadMessagesData(filteredNewMsg);
+			} else {
+				setThreadMessagesData(newMsgs?.reverse());
 			}
-		} else {
-			setThreadMessagesData(newMsgs?.reverse());
-		}
-	}, [userInfo, newMsgs]);
+		},
+		// intentionally left out userInfo cuz it is a dependency of newMsgs already
+		[newMsgs]
+	);
 
 	/**
 	 * query more messages and prepend to threadMessagesData

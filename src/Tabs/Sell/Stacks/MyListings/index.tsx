@@ -52,9 +52,11 @@ const MyListings: FC<Props> = ({ navigation }) => {
 												source={{ uri: listing.images[0] }}
 												style={tw('w-16 h-16')}
 											/>
-											<Text style={tw('text-lg font-bold')}>
-												{listing.name}
-											</Text>
+											<View style={tw('flex flex-1 break-words pl-2')}>
+												<Text style={tw('text-lg font-bold')}>
+													{listing.name}
+												</Text>
+											</View>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

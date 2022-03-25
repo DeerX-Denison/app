@@ -215,6 +215,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 										}}
 										multiline={true}
 										scrollEnabled={false}
+										maxLength={50}
 									/>
 									{nameError !== '' && (
 										<Text style={tw('text-red-400 text-s-md p-2')}>
@@ -236,6 +237,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											setHasEditPrice(true);
 										}}
 										keyboardType="decimal-pad"
+										maxLength={7}
 									/>
 									{priceError !== '' && (
 										<Text style={tw('text-red-400 text-s-md p-2')}>
@@ -349,6 +351,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 										}}
 										multiline={true}
 										scrollEnabled={false}
+										maxLength={250}
 									/>
 									{descError !== '' && (
 										<Text style={tw('text-red-400 text-s-md p-2')}>

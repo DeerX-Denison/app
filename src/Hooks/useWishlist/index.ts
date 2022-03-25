@@ -4,6 +4,7 @@ import { db } from '@firebase.config';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import { WishlistDataCL } from 'types';
+import useNewWishlist from './useNewWishlist';
 
 /**
  * query user's wishlist
@@ -16,7 +17,9 @@ const useWishlist = () => {
 	// if fetched no wishlist, default to empty array []
 	// last updated Feb 7, 2022
 
-	const [wishlist, setWishlist] = useState<WishlistDataCL[] | undefined>();
+	const [wishlist, setWishlist] = useState<
+		WishlistDataCL[] | null | undefined
+	>();
 
 	// current last document of query, used for extra query after initial query
 	const [lastDoc, setLastDoc] = useState<
@@ -29,40 +32,32 @@ const useWishlist = () => {
 	// dummy state to trigger fetching intial wishlist
 	const [trigger, setTrigger] = useState<boolean>(false);
 
-	/**
-	 * listen for new wishlist
-	 */
-	useEffect(() => {
-		if (!userInfo) return;
-		const unsubscribe = db
-			.collection('users')
-			.doc(userInfo.uid)
-			.collection('wishlist')
-			.orderBy('addedAt', 'asc')
-			// .startAfter(lastDoc ? lastDoc : [])
-			// .limit(WISHLIST_PER_PAGE)
-			.onSnapshot((querySnapshot) => {
-				if (querySnapshot.empty) {
-					setWishlist([]);
-				} else {
-					setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
-					const oldWl = wishlist ? wishlist : [];
-					const oldWlIds = oldWl.map((wl) => wl.id);
-					const extraWl = querySnapshot.docs.map(
-						(docSnap) => docSnap.data() as WishlistDataCL
-					);
-					const uniqueExtraWl = extraWl.filter(
-						(lst) => !oldWlIds.includes(lst.id)
-					);
-					setFetchedAll(uniqueExtraWl.length === 0);
-					setWishlist([...oldWl, ...uniqueExtraWl]);
+	const { newWishlist } = useNewWishlist('', trigger, lastDoc, setLastDoc);
+
+	useEffect(
+		() => {
+			// append unique newLsts to listings with
+			if (wishlist && wishlist.length > 0) {
+				if (newWishlist && newWishlist.length > 0) {
+					const unionLstDict: { [key: string]: WishlistDataCL } = {};
+					wishlist.forEach((wl) => (unionLstDict[wl.id] = wl));
+					newWishlist.forEach((wl) => (unionLstDict[wl.id] = wl));
+					const unionWl: WishlistDataCL[] = [];
+					for (const id in unionLstDict) {
+						unionWl.push(unionLstDict[id]);
+					}
+					setWishlist(unionWl);
 				}
-			});
-		return () => unsubscribe();
-	}, [userInfo, trigger]);
+			} else {
+				setWishlist(newWishlist);
+			}
+		},
+		// intentionally left out userInfo cuz its already a dependency of newWishlist
+		[newWishlist]
+	);
 
 	/**
-	 * query more listings and append to listings
+	 * query more wishlist and append to wishlist
 	 */
 	const fetchWishlist = async () => {
 		if (!userInfo) return;

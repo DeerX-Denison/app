@@ -41,66 +41,65 @@ const useNewListings: UseNewListingsFn = (
 
 	useEffect(
 		() => {
-			if (userInfo) {
-				if (categoryFilter.length == 0) {
-					const unsubscribe = db
-						.collection('listings')
-						.where('status', '==', 'posted')
-						.orderBy('createdAt', 'desc')
-						.limit(LISTING_PER_PAGE)
-						.onSnapshot(
-							(querySnapshot) => {
-								if (!lastDoc) {
-									setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
-								}
-								const newListings = querySnapshot.docs.map((docSnap) => {
-									const lstDataSv = docSnap.data() as ListingData;
+			if (!userInfo) return;
+			if (categoryFilter.length == 0) {
+				const unsubscribe = db
+					.collection('listings')
+					.where('status', '==', 'posted')
+					.orderBy('createdAt', 'desc')
+					.limit(LISTING_PER_PAGE)
+					.onSnapshot(
+						(querySnapshot) => {
+							if (!lastDoc) {
+								setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
+							}
+							const newListings = querySnapshot.docs.map((docSnap) => {
+								const lstDataSv = docSnap.data() as ListingData;
 
-									if (lstDataSv) {
-										if (
-											!lstDataSv.createdAt &&
-											docSnap.metadata.hasPendingWrites
-										) {
-											lstDataSv['createdAt'] = localTime();
-										}
+								if (lstDataSv) {
+									if (
+										!lstDataSv.createdAt &&
+										docSnap.metadata.hasPendingWrites
+									) {
+										lstDataSv['createdAt'] = localTime();
 									}
-									return lstDataSv as ListingData;
-								});
-								setNewListings(newListings);
-							},
-							(error) => {
-								logger.log(error);
-								return Toast.show({ type: 'error', text1: error.message });
-							}
-						);
-					return () => unsubscribe();
-				} else {
-					const unsubscribe = db
-						.collection('listings')
-						.where('status', '==', 'posted')
-						.where('category', 'array-contains-any', categoryFilter)
-						.orderBy('createdAt', 'desc')
-						.limit(LISTING_PER_PAGE)
-						.onSnapshot(
-							(querySnapshot) => {
-								if (!lastDoc) {
-									setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
 								}
-								const newListings = querySnapshot.docs.map((doc) => {
-									const lstDataSv = doc.data() as ListingData;
-									// eslint-disable-next-line @typescript-eslint/no-unused-vars
-									const { status, ...listingData } = lstDataSv;
-									return lstDataSv as ListingData;
-								});
-								setNewListings(newListings);
-							},
-							(error) => {
-								logger.log(error);
-								return Toast.show({ type: 'error', text1: error.message });
+								return lstDataSv as ListingData;
+							});
+							setNewListings(newListings);
+						},
+						(error) => {
+							logger.log(error);
+							return Toast.show({ type: 'error', text1: error.message });
+						}
+					);
+				return () => unsubscribe();
+			} else {
+				const unsubscribe = db
+					.collection('listings')
+					.where('status', '==', 'posted')
+					.where('category', 'array-contains-any', categoryFilter)
+					.orderBy('createdAt', 'desc')
+					.limit(LISTING_PER_PAGE)
+					.onSnapshot(
+						(querySnapshot) => {
+							if (!lastDoc) {
+								setLastDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
 							}
-						);
-					return () => unsubscribe();
-				}
+							const newListings = querySnapshot.docs.map((doc) => {
+								const lstDataSv = doc.data() as ListingData;
+								// eslint-disable-next-line @typescript-eslint/no-unused-vars
+								const { status, ...listingData } = lstDataSv;
+								return lstDataSv as ListingData;
+							});
+							setNewListings(newListings);
+						},
+						(error) => {
+							logger.log(error);
+							return Toast.show({ type: 'error', text1: error.message });
+						}
+					);
+				return () => unsubscribe();
 			}
 		},
 		/**

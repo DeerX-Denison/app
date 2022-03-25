@@ -1,8 +1,9 @@
 import * as Buttons from '@Components/Buttons';
 import { useWishlist } from '@Hooks';
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import {
 	NativeScrollEvent,
 	NativeSyntheticEvent,
@@ -16,10 +17,11 @@ import { CircleSnail } from 'react-native-progress';
 import { WishlistStackParamList } from 'types';
 
 interface Props {
+	route: RouteProp<WishlistStackParamList, 'Wishlist'>;
 	navigation: NativeStackNavigationProp<WishlistStackParamList>;
 }
 
-const Main: FC<Props> = ({ navigation }) => {
+const Main: FC<Props> = ({ route, navigation }) => {
 	const { wishlist, fetchWishlist, resetWishlist } = useWishlist();
 	const itemHandler = (listingId: string) => {
 		navigation.navigate('Item', { listingId });
@@ -33,6 +35,11 @@ const Main: FC<Props> = ({ navigation }) => {
 			resetWishlist();
 		}
 	};
+	useEffect(() => {
+		if (route.params.reset === true) {
+			resetWishlist();
+		}
+	}, [route]);
 
 	return (
 		<View style={tw('flex flex-1')}>

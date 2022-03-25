@@ -55,7 +55,7 @@ export type NewThreadUserInfo = {
 };
 
 export type WishlistStackParamList = {
-	Wishlist: undefined;
+	Wishlist: { reset: boolean };
 	Item: { listingId: ListingId };
 };
 

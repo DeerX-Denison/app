@@ -66,6 +66,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const { inputMessage, setInputMessage, showingItem } = useInputMessage();
 	const { wishlist } = useWishlist();
 
+	const [boxHeight, setBoxHeight] = useState(0);
+	const [contentHeight, setContentHeight] = useState(0);
+	const [scroll, setScroll] = useState(true);
+
 	const sendHandler = async () => {
 		setInputMessage('');
 		setDisableSend(true);
@@ -169,7 +173,14 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					</View>
 
 					{/* MESSAGES CONTAINER */}
-					<View style={tw('flex flex-col-reverse mt-14')}>
+					<View
+						style={tw('flex-col-reverse mt-14 h-full')}
+						onLayout={(event) => {
+							const { height } = event.nativeEvent.layout;
+							console.log('Box:', height);
+							setBoxHeight(height);
+						}}
+					>
 						<ScrollView
 							ref={scrollViewRef as any}
 							onScrollEndDrag={(e) => {
@@ -181,50 +192,66 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							onScroll={(e) => {
 								const offsetY = e.nativeEvent.contentOffset.y;
 								if (offsetY === 0) {
+									setScroll(false);
 									readLatestMessage(threadData, userInfo);
 								}
 							}}
 							scrollEventThrottle={0}
 							onContentSizeChange={() => {
-								scrollViewRef.current?.scrollToEnd();
+								if (scroll) {
+									scrollViewRef.current?.scrollToEnd();
+								}
 							}}
-							contentContainerStyle={tw('flex flex-col')}
+							contentContainerStyle={{
+								paddingTop:
+									contentHeight < boxHeight ? boxHeight - contentHeight : 55,
+							}}
 						>
-							{parsedMessages ? (
-								// parsedMessages defined
-								<>
-									{parsedMessages.length > 0 ? (
-										<>
-											{parsedMessages.map((message) => (
-												<Message
-													key={message.id}
-													message={message}
-													msgsWithSeenIconsIds={msgsWithSeenIconsIds}
-													msgWithStatusId={msgWithStatusId}
-													messageStatus={messageStatus}
-													nonSelfIcons={threadData?.members
-														.filter((x) => x.uid !== userInfo?.uid)
-														.map((x) => (x.photoURL ? x.photoURL : undefined))}
-												/>
-											))}
-										</>
-									) : (
-										<>
-											<View
-												style={tw('flex flex-1 justify-center items-center')}
-											>
-												<Text style={tw('text-s-lg')}>
-													Send your first message
-												</Text>
-											</View>
-										</>
-									)}
-								</>
-							) : (
-								<>
-									<Text>Loading...</Text>
-								</>
-							)}
+							<View
+								onLayout={(event) => {
+									const { height } = event.nativeEvent.layout;
+									console.log('Content:', height);
+									setContentHeight(height);
+								}}
+							>
+								{parsedMessages ? (
+									// parsedMessages defined
+									<>
+										{parsedMessages.length > 0 ? (
+											<>
+												{parsedMessages.map((message) => (
+													<Message
+														key={message.id}
+														message={message}
+														msgsWithSeenIconsIds={msgsWithSeenIconsIds}
+														msgWithStatusId={msgWithStatusId}
+														messageStatus={messageStatus}
+														nonSelfIcons={threadData?.members
+															.filter((x) => x.uid !== userInfo?.uid)
+															.map((x) =>
+																x.photoURL ? x.photoURL : undefined
+															)}
+													/>
+												))}
+											</>
+										) : (
+											<>
+												<View
+													style={tw('flex flex-1 justify-center items-center')}
+												>
+													<Text style={tw('text-s-lg')}>
+														Send your first message
+													</Text>
+												</View>
+											</>
+										)}
+									</>
+								) : (
+									<>
+										<Text>Loading...</Text>
+									</>
+								)}
+							</View>
 						</ScrollView>
 					</View>
 				</ScrollView>

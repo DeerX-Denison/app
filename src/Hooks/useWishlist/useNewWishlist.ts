@@ -34,8 +34,20 @@ const useNewWishlist: UseNewWishlist = (
 
 	useEffect(
 		() => {
-			if (!userInfo) return;
-			if (query === null) return;
+			if (!userInfo) {
+				let isSubscribed = true;
+				isSubscribed && setNewWishlist(undefined);
+				return () => {
+					isSubscribed = false;
+				};
+			}
+			if (query === null) {
+				let isSubscribed = true;
+				isSubscribed && setNewWishlist(undefined);
+				return () => {
+					isSubscribed = false;
+				};
+			}
 			if (query.length === 0) {
 				const unsubscribe = db
 					.collection('users')

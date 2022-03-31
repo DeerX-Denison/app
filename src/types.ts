@@ -165,7 +165,7 @@ export type MessageSeenAt = {
 	[key: string]: FirebaseFirestoreTypes.Timestamp | null;
 };
 //add below more further on: image, listing reference, etc.
-export type MessageContentType = 'text';
+export type MessageContentType = 'text' | 'reference';
 export type MessageContent = string;
 
 export type MessageData = {

@@ -122,7 +122,7 @@ const useListings: UseListingsFn = (categoryFilter) => {
 	const resetListings: ResetListingsFn = async () => {
 		if (userInfo) {
 			setFetchedAll(false);
-			setListings([]);
+			setListings(undefined);
 			setLastDoc(undefined);
 			setTrigger(!trigger);
 		}

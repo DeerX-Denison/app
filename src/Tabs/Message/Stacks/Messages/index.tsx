@@ -167,16 +167,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								</View>
 							</View>
 						</View>
-						{showingItem && <ItemSuggestion wishlist={wishlist} />}
+						{showingItem && (
+							<ItemSuggestion query={query} wishlist={wishlist} />
+						)}
 					</View>
 
 					{/* MESSAGES CONTAINER */}
-					<View
-						style={{
-							...tw('flex flex-col-reverse justify-start justify-end'),
-							// height: 500,
-						}}
-					>
+					<View style={tw('flex flex-col-reverse justify-start justify-end')}>
 						<ScrollView
 							ref={scrollViewRef as any}
 							onScrollEndDrag={(e) => {

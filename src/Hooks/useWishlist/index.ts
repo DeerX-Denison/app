@@ -93,7 +93,7 @@ const useWishlist: UseWishlist = (query) => {
 	const resetWishlist = async () => {
 		if (userInfo) {
 			setFetchedAll(false);
-			setWishlist([]);
+			setWishlist(undefined);
 			setLastDoc(undefined);
 			setTrigger(!trigger);
 		}

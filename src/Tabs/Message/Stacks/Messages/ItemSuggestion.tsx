@@ -3,22 +3,28 @@ import React, { FC } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import 'react-native-get-random-values';
+import { CircleSnail } from 'react-native-progress';
 import { WishlistDataCL } from 'types';
-
 interface Props {
+	query: string | null;
 	wishlist: WishlistDataCL[] | null | undefined;
 }
 
-const ItemSuggestion: FC<Props> = ({ wishlist }) => {
+const ItemSuggestion: FC<Props> = ({ query, wishlist }) => {
 	return (
-		<View style={tw('flex flex-col border-t')}>
+		<View style={tw('flex flex-col border-t border-b')}>
 			{wishlist && wishlist.length > 0 && (
 				<>
 					<ScrollView>
-						{wishlist.map((wishlistData) => (
+						{wishlist.map((wishlistData, index) => (
 							<TouchableOpacity
 								key={wishlistData.id}
-								style={tw('flex flex-row px-4 py-1 items-center')}
+								style={tw(
+									`flex flex-row px-4 py-1 items-center ${
+										index === wishlist.length - 1 ? '' : 'border-b'
+									}`
+								)}
 							>
 								<FastImage
 									source={{ uri: wishlistData.thumbnail }}
@@ -41,7 +47,9 @@ const ItemSuggestion: FC<Props> = ({ wishlist }) => {
 				<>
 					<View style={tw('px-4 py-2')}>
 						<Text style={tw('text-s-lg font-bold pb-1')}>
-							No item in wishlist
+							{query && query.length === 0
+								? 'No item in wishlist'
+								: 'No item found'}
 						</Text>
 						<Text style={tw('text-s-md font-normal pt-1')}>
 							Add item to wishlist to mention them here
@@ -49,7 +57,15 @@ const ItemSuggestion: FC<Props> = ({ wishlist }) => {
 					</View>
 				</>
 			)}
-			{!wishlist && <></>}
+			{!wishlist && (
+				<View style={tw('h-16 justify-center items-center')} testID="loading">
+					<CircleSnail
+						size={40}
+						indeterminate={true}
+						color={['red', 'green', 'blue']}
+					/>
+				</View>
+			)}
 		</View>
 	);
 };

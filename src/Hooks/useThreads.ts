@@ -150,7 +150,7 @@ const useThreads = () => {
 	const resetThreads = async () => {
 		if (userInfo) {
 			setFetchedAll(false);
-			setThreads([]);
+			setThreads(undefined);
 			setLastDoc(undefined);
 			setTrigger(!trigger);
 		}

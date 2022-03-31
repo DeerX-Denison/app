@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSuggestionQuery from './useSuggestionQuery';
 
 export type UseInputMessage = () => {
 	inputMessage: string;
 	setInputMessage: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
+	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
 	query: string | null;
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
 };
@@ -21,7 +22,14 @@ const useInputMessage: UseInputMessage = () => {
 		setShowingItem(inputMessage.startsWith('@'));
 	}, [inputMessage]);
 
-	return { inputMessage, setInputMessage, showingItem, query, setQuery };
+	return {
+		inputMessage,
+		setInputMessage,
+		showingItem,
+		setShowingItem,
+		query,
+		setQuery,
+	};
 };
 
 export default useInputMessage;

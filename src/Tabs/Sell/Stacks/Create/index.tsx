@@ -59,7 +59,7 @@ const Create: FC<Props> = ({ navigation }) => {
 	const [categorizing, setCategorizing] = useState<boolean>(false);
 	renderBackButton(navigation, categorizing, setCategorizing);
 	const { listingData, setListingData } = useNewListingData();
-	const { progress, setProgress, setSubProgressArray, subProgressArray } =
+	const { progress, setSubProgressArray, subProgressArray } =
 		useUploadProgress();
 
 	const listingErrors = useListingError(listingData);

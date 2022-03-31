@@ -6,10 +6,17 @@ import { useContext, useEffect, useState } from 'react';
 import { WishlistDataCL } from 'types';
 import useNewWishlist from './useNewWishlist';
 
+export type UseWishlist = (query: string | null) => {
+	wishlist: WishlistDataCL[] | null | undefined;
+	fetchWishlist: () => Promise<void>;
+	resetWishlist: () => Promise<void>;
+	fetchedAll: boolean;
+};
+
 /**
  * query user's wishlist
  */
-const useWishlist = () => {
+const useWishlist: UseWishlist = (query) => {
 	const { userInfo } = useContext(UserContext);
 
 	// final wishlist data to be return from this custom hook and render
@@ -32,7 +39,7 @@ const useWishlist = () => {
 	// dummy state to trigger fetching intial wishlist
 	const [trigger, setTrigger] = useState<boolean>(false);
 
-	const { newWishlist } = useNewWishlist('', trigger, lastDoc, setLastDoc);
+	const { newWishlist } = useNewWishlist(query, trigger, lastDoc, setLastDoc);
 
 	useEffect(
 		() => {
@@ -92,6 +99,15 @@ const useWishlist = () => {
 		}
 	};
 
+	/**
+	 * everytime user changes query, reset displayed wishlist
+	 * Also alter "trigger" to trigger useNewListings to fetch new listings
+	 * This effect eliminates the need for "query"
+	 * in useWishlist dependency array.
+	 */
+	useEffect(() => {
+		resetWishlist();
+	}, [query]);
 	return { wishlist, fetchWishlist, resetWishlist, fetchedAll };
 };
 

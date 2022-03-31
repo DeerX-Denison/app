@@ -63,8 +63,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 	const { paddingBottom } = useKeyboardPadding();
 
-	const { inputMessage, setInputMessage, showingItem } = useInputMessage();
-	const { wishlist } = useWishlist();
+	const { inputMessage, setInputMessage, showingItem, query } =
+		useInputMessage();
+
+	const { wishlist } = useWishlist(query);
 
 	const sendHandler = async () => {
 		setInputMessage('');
@@ -169,7 +171,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					</View>
 
 					{/* MESSAGES CONTAINER */}
-					<View style={tw('flex flex-col-reverse mt-14')}>
+					<View
+						style={{
+							...tw('flex flex-col-reverse justify-start justify-end'),
+							// height: 500,
+						}}
+					>
 						<ScrollView
 							ref={scrollViewRef as any}
 							onScrollEndDrag={(e) => {
@@ -188,43 +195,47 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							onContentSizeChange={() => {
 								scrollViewRef.current?.scrollToEnd();
 							}}
-							contentContainerStyle={tw('flex flex-col')}
+							contentContainerStyle={tw('flex flex-col justify-end')}
 						>
-							{parsedMessages ? (
-								// parsedMessages defined
-								<>
-									{parsedMessages.length > 0 ? (
-										<>
-											{parsedMessages.map((message) => (
-												<Message
-													key={message.id}
-													message={message}
-													msgsWithSeenIconsIds={msgsWithSeenIconsIds}
-													msgWithStatusId={msgWithStatusId}
-													messageStatus={messageStatus}
-													nonSelfIcons={threadData?.members
-														.filter((x) => x.uid !== userInfo?.uid)
-														.map((x) => (x.photoURL ? x.photoURL : undefined))}
-												/>
-											))}
-										</>
-									) : (
-										<>
-											<View
-												style={tw('flex flex-1 justify-center items-center')}
-											>
-												<Text style={tw('text-s-lg')}>
-													Send your first message
-												</Text>
-											</View>
-										</>
-									)}
-								</>
-							) : (
-								<>
-									<Text>Loading...</Text>
-								</>
-							)}
+							<View style={tw('flex flex-1')}>
+								{parsedMessages ? (
+									// parsedMessages defined
+									<>
+										{parsedMessages.length > 0 ? (
+											<>
+												{parsedMessages.map((message) => (
+													<Message
+														key={message.id}
+														message={message}
+														msgsWithSeenIconsIds={msgsWithSeenIconsIds}
+														msgWithStatusId={msgWithStatusId}
+														messageStatus={messageStatus}
+														nonSelfIcons={threadData?.members
+															.filter((x) => x.uid !== userInfo?.uid)
+															.map((x) =>
+																x.photoURL ? x.photoURL : undefined
+															)}
+													/>
+												))}
+											</>
+										) : (
+											<>
+												<View
+													style={tw('flex flex-1 justify-center items-center')}
+												>
+													<Text style={tw('text-s-lg')}>
+														Send your first message
+													</Text>
+												</View>
+											</>
+										)}
+									</>
+								) : (
+									<>
+										<Text>Loading...</Text>
+									</>
+								)}
+							</View>
 						</ScrollView>
 					</View>
 				</ScrollView>

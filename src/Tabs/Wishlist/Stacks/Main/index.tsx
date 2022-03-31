@@ -22,7 +22,7 @@ interface Props {
 }
 
 const Main: FC<Props> = ({ route, navigation }) => {
-	const { wishlist, fetchWishlist, resetWishlist } = useWishlist();
+	const { wishlist, fetchWishlist, resetWishlist } = useWishlist('');
 	const itemHandler = (listingId: string) => {
 		navigation.navigate('Item', { listingId });
 	};

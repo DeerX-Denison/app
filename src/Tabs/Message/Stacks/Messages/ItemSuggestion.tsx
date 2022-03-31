@@ -6,12 +6,12 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { WishlistDataCL } from 'types';
 
 interface Props {
-	wishlist: WishlistDataCL[] | undefined;
+	wishlist: WishlistDataCL[] | null | undefined;
 }
 
 const ItemSuggestion: FC<Props> = ({ wishlist }) => {
 	return (
-		<View style={tw('flex flex-col border')}>
+		<View style={tw('flex flex-col border-t')}>
 			{wishlist && wishlist.length > 0 && (
 				<>
 					<ScrollView>
@@ -39,9 +39,13 @@ const ItemSuggestion: FC<Props> = ({ wishlist }) => {
 			)}
 			{wishlist && wishlist.length === 0 && (
 				<>
-					<View>
-						<Text>No item in wishlist</Text>
-						<Text>Add item to wishlist to mention them here</Text>
+					<View style={tw('px-4 py-2')}>
+						<Text style={tw('text-s-lg font-bold pb-1')}>
+							No item in wishlist
+						</Text>
+						<Text style={tw('text-s-md font-normal pt-1')}>
+							Add item to wishlist to mention them here
+						</Text>
 					</View>
 				</>
 			)}

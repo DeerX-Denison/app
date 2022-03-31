@@ -4,7 +4,7 @@ import { auth } from '@firebase.config';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { Linking, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -34,8 +34,6 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 };
 
 const Main: FC<Props> = ({ navigation }) => {
-	const [value, setValue] = useState<string>('');
-
 	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	return (

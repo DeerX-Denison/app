@@ -2,9 +2,9 @@ import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { fn, localTime, svTime } from '@firebase.config';
 import {
-	useInputMessage,
 	useKeyboard,
 	useKeyboardPadding,
+	useMessage,
 	useParseMessage,
 	useSeenIcons,
 	useThreadData,
@@ -63,8 +63,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 	const { paddingBottom } = useKeyboardPadding();
 
-	const { inputMessage, setInputMessage, showingItem, query } =
-		useInputMessage();
+	const { inputMessage, setInputMessage, showingItem, query } = useMessage();
 
 	const { wishlist } = useWishlist(query);
 

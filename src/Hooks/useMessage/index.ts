@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import useSuggestionQuery from './useSuggestionQuery';
+import { MessageData } from 'types';
+import useSuggestionQuery from '../useSuggestionQuery';
 
-export type UseInputMessage = () => {
+export type UseMessageFn = () => {
 	inputMessage: string;
 	setInputMessage: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
@@ -13,7 +14,8 @@ export type UseInputMessage = () => {
 /**
  * parse input messages to trigger features
  */
-const useInputMessage: UseInputMessage = () => {
+const useMessage: UseMessageFn = () => {
+	const [message, setMessage] = useState<MessageData | undefined>(undefined);
 	const [inputMessage, setInputMessage] = useState<string>('');
 	const [showingItem, setShowingItem] = useState<boolean>(false);
 	const { query, setQuery } = useSuggestionQuery(inputMessage);
@@ -32,4 +34,4 @@ const useInputMessage: UseInputMessage = () => {
 	};
 };
 
-export default useInputMessage;
+export default useMessage;

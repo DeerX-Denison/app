@@ -6,7 +6,7 @@ export type UseSuggestionQuery = (inputMessage: string) => {
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-export type ExtractQueryFn = (inputMessage: string) => string | null;
+export type ExtractQueryFn = (inputText: string) => string | null;
 const extractQuery: ExtractQueryFn = (inputMessage) => {
 	const matchQuery = inputMessage.match(/@(\S)*/g);
 	if (matchQuery && matchQuery.length > 0) {
@@ -19,19 +19,19 @@ const extractQuery: ExtractQueryFn = (inputMessage) => {
 /**
  * extract query from input message in a debounced method
  */
-const useSuggestionQuery: UseSuggestionQuery = (inputMessage) => {
+const useSuggestionQuery: UseSuggestionQuery = (inputText) => {
 	const [query, setQuery] = useState<string | null>(null);
 	const extractQueryDebounced = useDebounce(extractQuery, 300);
 	useEffect(() => {
 		let isSubscribed = true;
 		(async () => {
-			const query = await extractQueryDebounced(inputMessage);
+			const query = await extractQueryDebounced(inputText);
 			isSubscribed && setQuery(query);
 		})();
 		return () => {
 			isSubscribed = false;
 		};
-	}, [inputMessage]);
+	}, [inputText]);
 	return { query, setQuery };
 };
 

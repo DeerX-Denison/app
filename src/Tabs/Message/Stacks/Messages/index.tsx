@@ -1,6 +1,6 @@
 import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
-import { fn, localTime, svTime } from '@firebase.config';
+import { fn, localTime } from '@firebase.config';
 import {
 	useKeyboard,
 	useKeyboardPadding,
@@ -11,7 +11,6 @@ import {
 	useWishlist,
 } from '@Hooks';
 import logger from '@logger';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -19,8 +18,7 @@ import React, { FC, useContext, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
-import { MessageData, MessageSeenAt, MessageStackParamList } from 'types';
-import { v4 as uuidv4 } from 'uuid';
+import { MessageData, MessageStackParamList } from 'types';
 import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
 import readLatestMessage from './readLatestMessage';
@@ -63,15 +61,16 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 	const { paddingBottom } = useKeyboardPadding();
 
-	const { inputMessage, setInputMessage, showingItem, query } = useMessage();
+	const { message, inputText, setInputText, showingItem, query } =
+		useMessage(threadData);
 
 	const { wishlist } = useWishlist(query);
 
 	const sendHandler = async () => {
-		setInputMessage('');
+		setInputText('');
 		setDisableSend(true);
 		if (threadData && userInfo) {
-			if (inputMessage !== '') {
+			if (inputText !== '') {
 				setMessageStatus('sending');
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -84,33 +83,14 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					setIsNewThread(false);
 				}
 				try {
-					const seenAt: MessageSeenAt = {};
-					threadData.membersUid.forEach((uid) => (seenAt[uid] = null));
-					seenAt[userInfo.uid] = localTime();
-
-					const newMessage: MessageData = {
-						id: uuidv4(),
-						sender: {
-							uid: userInfo.uid,
-							photoURL: userInfo.photoURL,
-							displayName: userInfo.displayName,
-						},
-						membersUid: threadData.membersUid,
-						content: inputMessage,
-						contentType: 'text',
-						threadName: threadData.name,
-						time: svTime() as FirebaseFirestoreTypes.Timestamp,
-						seenAt,
-					};
-
 					setThreadMessagesData([
 						...threadData.messages,
-						{ ...newMessage, time: localTime() } as MessageData,
+						{ ...message, time: localTime() } as MessageData,
 					]);
 					setDisableSend(false);
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
-						message: newMessage,
+						message,
 					});
 					setMessageStatus('sent');
 				} catch (error) {
@@ -146,12 +126,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							)}
 						>
 							<TextInput
-								value={inputMessage}
+								value={inputText}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								onChangeText={setInputMessage}
+								onChangeText={setInputText}
 								onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
 							/>

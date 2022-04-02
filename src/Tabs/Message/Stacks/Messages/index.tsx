@@ -74,6 +74,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const { wishlist } = useWishlist(query);
 
+	const [boxHeight, setBoxHeight] = useState(0);
+	const [contentHeight, setContentHeight] = useState(0);
+	const [scroll, setScroll] = useState(true);
+
 	const sendHandler = async () => {
 		setInputText('');
 		setDisableSend(true);
@@ -165,7 +169,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					</View>
 
 					{/* MESSAGES CONTAINER */}
-					<View style={tw('flex flex-col-reverse justify-start justify-end')}>
+					<View
+						style={tw('flex-col-reverse mt-14 h-full')}
+						onLayout={(event) => {
+							const { height } = event.nativeEvent.layout;
+							setBoxHeight(height);
+						}}
+					>
 						<ScrollView
 							ref={scrollViewRef as any}
 							onScrollEndDrag={(e) => {
@@ -177,16 +187,27 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							onScroll={(e) => {
 								const offsetY = e.nativeEvent.contentOffset.y;
 								if (offsetY === 0) {
+									setScroll(false);
 									readLatestMessage(threadData, userInfo);
 								}
 							}}
 							scrollEventThrottle={0}
 							onContentSizeChange={() => {
-								scrollViewRef.current?.scrollToEnd();
+								if (scroll) {
+									scrollViewRef.current?.scrollToEnd();
+								}
 							}}
-							contentContainerStyle={tw('flex flex-col justify-end')}
+							contentContainerStyle={{
+								paddingTop:
+									contentHeight < boxHeight ? boxHeight - contentHeight : 55,
+							}}
 						>
-							<View style={tw('flex flex-1')}>
+							<View
+								onLayout={(event) => {
+									const { height } = event.nativeEvent.layout;
+									setContentHeight(height);
+								}}
+							>
 								{parsedMessages ? (
 									// parsedMessages defined
 									<>

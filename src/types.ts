@@ -172,7 +172,7 @@ export type MessageData = {
 	id: MessageId;
 	sender: MessageSender;
 	time: MessageTime;
-	contentType: MessageContentType;
+	contentType: MessageContentType[];
 	content: MessageContent;
 	membersUid: string[];
 	threadName: ThreadName;
@@ -184,7 +184,7 @@ export type MessageBlockData = {
 	time: MessageTime;
 	contents: {
 		id: MessageId;
-		contentType: MessageContentType;
+		contentType: MessageContentType[];
 		content: MessageContent;
 		seenAt: MessageSeenAt;
 	}[];

@@ -18,7 +18,9 @@ import React, { FC, useContext, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
+import { TextSelection } from 'src/Hooks/useMessage/useInputText';
 import { MessageData, MessageStackParamList } from 'types';
+import { v4 as uuidv4 } from 'uuid';
 import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
 import readLatestMessage from './readLatestMessage';
@@ -61,15 +63,21 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 	const { paddingBottom } = useKeyboardPadding();
 
-	const { message, inputText, setInputText, showingItem, query } =
-		useMessage(threadData);
+	const {
+		message,
+		inputText,
+		setInputText,
+		showingItem,
+		query,
+		setTextSelection,
+	} = useMessage(threadData);
 
 	const { wishlist } = useWishlist(query);
 
 	const sendHandler = async () => {
 		setInputText('');
 		setDisableSend(true);
-		if (threadData && userInfo) {
+		if (threadData && userInfo && message) {
 			if (inputText !== '') {
 				setMessageStatus('sending');
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -82,15 +90,17 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					}
 					setIsNewThread(false);
 				}
+				const newMessage: MessageData = {
+					...message,
+					time: localTime(),
+					id: uuidv4(),
+				};
+				setThreadMessagesData([...threadData.messages, newMessage]);
+				setDisableSend(false);
 				try {
-					setThreadMessagesData([
-						...threadData.messages,
-						{ ...message, time: localTime() } as MessageData,
-					]);
-					setDisableSend(false);
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
-						message,
+						message: newMessage,
 					});
 					setMessageStatus('sent');
 				} catch (error) {
@@ -134,6 +144,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								onChangeText={setInputText}
 								onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
+								onSelectionChange={(e) =>
+									setTextSelection(e.nativeEvent.selection as TextSelection)
+								}
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>

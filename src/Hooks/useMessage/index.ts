@@ -1,9 +1,11 @@
 import { UserContext } from '@Contexts';
 import { localTime } from '@firebase.config';
 import React, { useContext, useEffect, useState } from 'react';
-import { MessageData, MessageSeenAt, ThreadData } from 'types';
+import { MessageData, ThreadData } from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
-import useInputText from './useInputText';
+import useContentType from './useContentType';
+import useInputText, { TextSelection } from './useInputText';
+import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (threadData: ThreadData | undefined) => {
 	message: MessageData | undefined;
@@ -13,6 +15,9 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
 	query: string | null;
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
+	setTextSelection: React.Dispatch<
+		React.SetStateAction<TextSelection | undefined>
+	>;
 };
 
 /**
@@ -21,31 +26,32 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 const useMessage: UseMessageFn = (threadData) => {
 	const { userInfo } = useContext(UserContext);
 	const [message, setMessage] = useState<MessageData | undefined>(undefined);
-	const { inputText, setInputText, showingItem, setShowingItem } =
-		useInputText();
+	const {
+		inputText,
+		setInputText,
+		showingItem,
+		setShowingItem,
+		setTextSelection,
+	} = useInputText();
 	const { query, setQuery } = useSuggestionQuery(inputText);
+	const { contentType } = useContentType(inputText);
+	const { seenAt } = useSeenAt(threadData);
 
 	/**
 	 * effect to parse current message
 	 */
 	useEffect(() => {
 		if (userInfo && threadData) {
-			const seenAt: MessageSeenAt = {};
-			threadData.membersUid.forEach((uid) => (seenAt[uid] = null));
-			seenAt[userInfo.uid] = localTime();
-
-			if (!inputText.includes('@')) {
-				setMessage({
-					id: 'temp-id',
-					sender: userInfo,
-					time: localTime(),
-					contentType: 'text',
-					content: inputText,
-					membersUid: threadData.membersUid,
-					threadName: threadData.name,
-					seenAt,
-				});
-			}
+			setMessage({
+				id: 'temp-id',
+				sender: userInfo,
+				time: localTime(),
+				contentType,
+				content: inputText,
+				membersUid: threadData.membersUid,
+				threadName: threadData.name,
+				seenAt,
+			});
 		}
 	}, [inputText, userInfo, threadData]);
 
@@ -57,6 +63,7 @@ const useMessage: UseMessageFn = (threadData) => {
 		setShowingItem,
 		query,
 		setQuery,
+		setTextSelection,
 	};
 };
 

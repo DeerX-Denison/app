@@ -16,11 +16,12 @@ import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { ListingsStackParamList, TabsParamList, WishlistDataCL } from 'types';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
@@ -176,27 +177,45 @@ const Item: FC<Props> = ({ route, navigation }) => {
 								<View style={tw('flex flex-1 flex-row')}>
 									<View>
 										{isInWishlist ? (
-											<Buttons.Primary
-												disabled={disabledAddWl}
-												size="sm"
-												title="Liked"
+											<TouchableOpacity
+												// style={tw('absolute left-0 h-full justify-center pl-6')}
 												onPress={removeWishlistHandler}
-											/>
+											>
+												<Icon name="heart" color="#d4282e" size={20} style={tw('top-3')} />
+											</TouchableOpacity>
+											// <Buttons.Primary
+											// 	disabled={disabledAddWl}
+											// 	size="sm"
+											// 	title="Liked"
+											// 	onPress={removeWishlistHandler}
+											// />
 										) : (
-											<Buttons.Primary
-												disabled={disabledRemoveWl}
-												size="sm"
-												title="Like"
+											<TouchableOpacity
+												// style={tw('absolute left-0 h-full justify-center pl-6')}
 												onPress={addWishlistHandler}
-											/>
+											>
+												<Icon name="heart" color="black" size={20} style={tw('top-3')} />
+											</TouchableOpacity>
+											// <Buttons.Primary
+											// 	disabled={disabledRemoveWl}
+											// 	size="sm"
+											// 	title="Like"
+											// 	onPress={addWishlistHandler}
+											// />
 										)}
 									</View>
 									<View style={tw('ml-2')}>
-										<Buttons.Primary
+										<TouchableOpacity
+												onPress={messageHandler}
+											>
+												<Icon name="comments" size={24} style={tw('left-2','top-2.5')} />
+										</TouchableOpacity>
+										{/* <Buttons.Primary
 											size="sm"
 											title="Chat"
 											onPress={messageHandler}
-										/>
+										/> */}
+										
 									</View>
 									<View style={tw('ml-2')}>
 										{isSeller && (

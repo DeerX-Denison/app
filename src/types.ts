@@ -35,6 +35,7 @@ export type TabsParamList = {
 export type ListingsStackParamList = {
 	Listings: { reset: boolean };
 	Item: { listingId: ListingId };
+	Messages: { members: UserInfo[] };
 };
 
 export type SellStackParamList = {

@@ -62,22 +62,14 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		}
 	}, [listingData]);
 
+	/**
+	 * handles when user press message icon
+	 */
 	const messageHandler = () => {
 		if (listingData && userInfo) {
-			const parentNav = navigation.getParent<NavigationProp<TabsParamList>>();
-			if (parentNav) {
-				parentNav.navigate('Inbox', {
-					screen: 'Messages',
-					params: { members: [userInfo, listingData.seller] },
-					initial: false,
-				});
-			} else {
-				logger.error(`Parent navigation is undefined for ${listingId}`);
-				Toast.show({
-					type: 'error',
-					text1: 'Unexpected error occured',
-				});
-			}
+			navigation.navigate('Messages', {
+				members: [userInfo, listingData.seller],
+			});
 		}
 	};
 
@@ -256,9 +248,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 								</Text>
 							</View>
 							<View style={tw('mx-4 my-1 h-8 border-b')}>
-								<Text style={tw('text-s-md')}>
-									{displayTime ? displayTime : '...'}
-								</Text>
+								<Text style={tw('text-s-md')}>{displayTime}</Text>
 							</View>
 							<View style={tw('mx-4 my-2')}>
 								<View style={tw('flex flex-row flex-wrap')}>

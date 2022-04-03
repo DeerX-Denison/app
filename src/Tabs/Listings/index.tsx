@@ -2,8 +2,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { Button } from 'react-native';
 import { ListingsStackParamList } from 'types';
+import { Messages } from '../Message/Stacks';
 import { Item, Listings as ListingsScreen } from './Stacks';
-
 interface Props {}
 /**
  * Listing components, part of the 4 tabs of the app
@@ -24,6 +24,9 @@ const Listings: FC<Props> = () => {
 				})}
 			>
 				{(props) => <Item {...props} />}
+			</Stack.Screen>
+			<Stack.Screen name="Messages" options={{ headerTitle: '' }}>
+				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -197,6 +197,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 											title="Chat"
 											onPress={messageHandler}
 										/>
+										{/* TODO: */}
+										{/* <TouchableOpacity onPress={messageHandler}>
+											<Icon />
+										</TouchableOpacity> */}
 									</View>
 									<View style={tw('ml-2')}>
 										{isSeller && (

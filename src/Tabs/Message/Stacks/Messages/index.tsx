@@ -5,6 +5,7 @@ import {
 	useKeyboard,
 	useKeyboardPadding,
 	useMessage,
+	useMessageStatus,
 	useParseMessage,
 	useSeenIcons,
 	useThreadData,
@@ -50,14 +51,15 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
-	const [messageStatus, setMessageStatus] = useState<
-		undefined | 'sending' | 'sent' | 'seen'
-	>();
 	const { seenIcons } = useSeenIcons(threadData);
 	const { msgsWithSeenIconsIds } = useMsgWithSeenIconIds(seenIcons, threadData);
 	const { msgWithStatusId } = useMsgWithStatusId(
 		threadData,
 		msgsWithSeenIconsIds
+	);
+	const { messageStatus, setMessageStatus } = useMessageStatus(
+		threadData,
+		msgWithStatusId
 	);
 	const { didShow } = useKeyboard();
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);

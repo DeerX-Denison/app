@@ -19,6 +19,7 @@ export { default as useListingError } from './useListingError';
 export { default as useListings } from './useListings';
 export { default as useMessage } from './useMessage';
 export { default as useMessageDisplayTime } from './useMessageDisplayTime';
+export { default as useMessageStatus } from './useMessageStatus';
 export { default as useMyListings } from './useMyListings';
 export { default as useNewListingData } from './useNewListingData';
 export { default as useNotification } from './useNotification';

@@ -6,6 +6,7 @@ import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
 import {
 	useCurrentTime,
+	useDebounce,
 	useIsInWishlist,
 	useIsSeller,
 	useItemDisplayTime,
@@ -15,12 +16,18 @@ import logger from '@logger';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React, { FC, useContext, useEffect, useRef } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import { ListingsStackParamList, TabsParamList, WishlistDataCL } from 'types';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+	ListingData,
+	ListingsStackParamList,
+	TabsParamList,
+	WishlistDataCL,
+} from 'types';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
@@ -41,11 +48,6 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		listingData?.updatedAt?.toDate(),
 		curTime
 	);
-	const [disabledAddWl, setDisabledAddWl] = useState<boolean>(false);
-	const [disabledRemoveWl, setDisabledRemoveWl] = useState<boolean>(false);
-
-	const [isMounted, setIsMounted] = useState<boolean>(true);
-	useEffect(() => () => setIsMounted(false), []);
 
 	/**
 	 * effect to check if listingData exists
@@ -79,15 +81,23 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		}
 	};
 
+	// removed wishlist from db handler
+	// ===========================================================================
+	const removeWishlistFromDb = async (listingData: ListingData) => {
+		await fn.httpsCallable('deleteWishlist')(listingData.id);
+	};
+	const debouncedRemoveWishlistFromDb = useRef(
+		useDebounce(removeWishlistFromDb, 5000)
+	);
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
-				setIsInWishlist(false);
 				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
-				setDisabledRemoveWl(true);
-				await fn.httpsCallable('deleteWishlist')(listingData.id);
-				setTimeout(() => isMounted && setDisabledRemoveWl(false), 1000);
+				setIsInWishlist(false);
+				if (debouncedRemoveWishlistFromDb)
+					await debouncedRemoveWishlistFromDb.current(listingData);
 			} catch (error) {
+				setIsInWishlist(true);
 				logger.log(error);
 				Toast.show({
 					type: 'error',
@@ -96,7 +106,14 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			}
 		}
 	};
+	// ===========================================================================
 
+	// add wishlist to db handler
+	// ===========================================================================
+	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
+		await fn.httpsCallable('createWishlist')(wishlistData);
+	};
+	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 5000));
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {
@@ -109,10 +126,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				};
 				setListingData({ ...listingData, savedBy: listingData.savedBy + 1 });
 				setIsInWishlist(true);
-				setDisabledAddWl(true);
-				await fn.httpsCallable('createWishlist')(wishlistData);
-				setTimeout(() => isMounted && setDisabledAddWl(false), 1000);
+				if (debouncedAddWishlistToDb.current)
+					await debouncedAddWishlistToDb.current(wishlistData);
 			} catch (error) {
+				setIsInWishlist(false);
 				logger.log(error);
 				Toast.show({
 					type: 'error',
@@ -121,6 +138,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			}
 		}
 	};
+	// ===========================================================================
 
 	const editHandler = () => {
 		const parentNavigation =
@@ -176,31 +194,33 @@ const Item: FC<Props> = ({ route, navigation }) => {
 								<View style={tw('flex flex-1 flex-row')}>
 									<View>
 										{isInWishlist ? (
-											<Buttons.Primary
-												disabled={disabledAddWl}
-												size="sm"
-												title="Liked"
-												onPress={removeWishlistHandler}
-											/>
+											<TouchableOpacity onPress={removeWishlistHandler}>
+												<Icon
+													name="heart"
+													color="#d4282e"
+													size={20}
+													style={tw('top-3')}
+												/>
+											</TouchableOpacity>
 										) : (
-											<Buttons.Primary
-												disabled={disabledRemoveWl}
-												size="sm"
-												title="Like"
-												onPress={addWishlistHandler}
-											/>
+											<TouchableOpacity onPress={addWishlistHandler}>
+												<Icon
+													name="heart"
+													color="black"
+													size={20}
+													style={tw('top-3')}
+												/>
+											</TouchableOpacity>
 										)}
 									</View>
 									<View style={tw('ml-2')}>
-										<Buttons.Primary
-											size="sm"
-											title="Chat"
-											onPress={messageHandler}
-										/>
-										{/* TODO: */}
-										{/* <TouchableOpacity onPress={messageHandler}>
-											<Icon />
-										</TouchableOpacity> */}
+										<TouchableOpacity onPress={messageHandler}>
+											<Icon
+												name="comments"
+												size={24}
+												style={tw('left-2', 'top-2.5')}
+											/>
+										</TouchableOpacity>
 									</View>
 									<View style={tw('ml-2')}>
 										{isSeller && (

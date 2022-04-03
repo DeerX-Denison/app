@@ -1,6 +1,6 @@
 import { NEW_THREAD_SUGGESTIONS } from '@Constants';
 import { db } from '@firebase.config';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { UserInfo } from 'types';
 import useDebounce from './useDebounce';
 
@@ -26,14 +26,16 @@ const useAutoComplete = () => {
 	const [suggestions, setSuggestions] = useState<UserInfo[] | undefined | null>(
 		undefined
 	);
-	const debouncedQueryAutoComplete = useDebounce(queryAutoComplete, 300);
+	const debouncedQueryAutoComplete = useRef(
+		useDebounce(queryAutoComplete, 275)
+	);
 	// fetch suggestion from query
 	useEffect(() => {
 		let isSubscribed = true;
 		if (query.length >= 1) {
 			isSubscribed && setSuggestions(null);
 			(async () => {
-				const userSuggestions = await debouncedQueryAutoComplete(query);
+				const userSuggestions = await debouncedQueryAutoComplete.current(query);
 				isSubscribed && setSuggestions(userSuggestions);
 			})();
 		} else {

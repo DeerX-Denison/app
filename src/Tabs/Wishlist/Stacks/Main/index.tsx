@@ -76,11 +76,6 @@ const Main: FC<Props> = ({ route, navigation }) => {
 													{wishlistData.name}
 												</Text>
 											</View>
-											<Buttons.Primary
-												title="View"
-												onPress={() => itemHandler(wishlistData.id)}
-												size="sm"
-											/>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

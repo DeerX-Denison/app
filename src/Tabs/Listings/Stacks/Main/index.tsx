@@ -15,7 +15,7 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
 import Category from './Category';
 import Listing from './Listing';

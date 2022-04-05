@@ -1,9 +1,10 @@
 import * as Badges from '@Components/Badges';
-import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
+import { faEdit, faHeart, faMessage } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
 	useDebounce,
@@ -21,7 +22,6 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	ListingData,
 	ListingsStackParamList,
@@ -184,43 +184,43 @@ const Item: FC<Props> = ({ route, navigation }) => {
 						<View style={tw('w-full')}>
 							<View style={tw('mx-4 my-1')}>
 								<View style={tw('flex flex-1 flex-row')}>
-									<View>
+									<View style={tw('mt-2')}>
 										{isInWishlist ? (
 											<TouchableOpacity onPress={removeWishlistHandler}>
-												<Icon
-													name="heart"
-													color="#d4282e"
-													size={20}
-													style={tw('top-3')}
+												<FontAwesomeIcon
+													icon={faHeart}
+													size={24}
+													style={tw('text-red-500')}
 												/>
 											</TouchableOpacity>
 										) : (
 											<TouchableOpacity onPress={addWishlistHandler}>
-												<Icon
-													name="heart"
-													color="black"
-													size={20}
-													style={tw('top-3')}
+												<FontAwesomeIcon
+													icon={faHeart}
+													size={24}
+													style={tw('text-indigo-500')}
 												/>
 											</TouchableOpacity>
 										)}
 									</View>
-									<View style={tw('ml-2')}>
+									<View style={tw('ml-4 mt-2')}>
 										<TouchableOpacity onPress={messageHandler}>
-											<Icon
-												name="comments"
+											<FontAwesomeIcon
+												icon={faMessage}
 												size={24}
-												style={tw('left-2', 'top-2.5')}
+												style={tw('text-indigo-500')}
 											/>
 										</TouchableOpacity>
 									</View>
-									<View style={tw('ml-2')}>
+									<View style={tw('ml-4 mt-2')}>
 										{isSeller && (
-											<Buttons.Primary
-												title="Edit"
-												onPress={editHandler}
-												size="md"
-											/>
+											<TouchableOpacity onPress={editHandler}>
+												<FontAwesomeIcon
+													icon={faEdit}
+													size={24}
+													style={tw('text-indigo-500')}
+												/>
+											</TouchableOpacity>
 										)}
 									</View>
 								</View>

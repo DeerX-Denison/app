@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
-import { Button } from 'react-native';
 import { ListingsStackParamList } from 'types';
 import { Messages } from '../Message/Stacks';
 import { Item, Listings as ListingsScreen } from './Stacks';
@@ -17,15 +16,16 @@ const Listings: FC<Props> = () => {
 			</Stack.Screen>
 			<Stack.Screen
 				name="Item"
-				options={({ navigation }) => ({
-					headerLeft: () => (
-						<Button title="back" onPress={() => navigation.goBack()} />
-					),
+				options={() => ({
+					headerBackTitle: '',
 				})}
 			>
 				{(props) => <Item {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Messages" options={{ headerTitle: '' }}>
+			<Stack.Screen
+				name="Messages"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>

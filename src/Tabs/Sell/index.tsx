@@ -22,7 +22,7 @@ const Sell: FC<Props> = () => {
 	return (
 		<Stack.Navigator
 			initialRouteName="MyListing"
-			screenOptions={{ headerTitle: 'My Listings' }}
+			screenOptions={{ headerTitle: 'My Listings', headerBackTitle: '' }}
 		>
 			<Stack.Screen
 				name="MyListing"

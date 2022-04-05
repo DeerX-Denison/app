@@ -62,8 +62,8 @@ jest.mock('react-native-keyboard-aware-scroll-view', () => ({
 // mock react-native-picker-select
 jest.mock('react-native-picker-select', () => jest.fn().mockReturnValue(<></>));
 
-// mock react-native-vector-icons/FontAwesome
-jest.mock('react-native-vector-icons/FontAwesome', () => ({
+// mock react-native-vector-icons/FontAwesome5
+jest.mock('react-native-vector-icons/FontAwesome5', () => ({
 	default: jest.fn(),
 }));
 

@@ -51,6 +51,14 @@ const Main: FC<Props> = ({ navigation }) => {
 
 			<ScrollView contentContainerStyle={tw('flex flex-col flex-1 p-4')}>
 				<Buttons.Primary
+					title="Edit Profile"
+					onPress={() =>
+						navigation.navigate('EditProfile', { selectedPronouns: null })
+					}
+					size="md"
+				/>
+				<View style={tw('pt-4')} />
+				<Buttons.Primary
 					title="Bug report"
 					onPress={() => Linking.openURL('https://forms.gle/M6sYNPFrWAh5i58d9')}
 					size="md"

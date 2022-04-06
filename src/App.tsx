@@ -31,7 +31,7 @@ interface Props {}
 const App: FC<Props> = () => {
 	const navigationRef = useNavigationContainerRef<TabsParamList>();
 	const { initialRoute, initialParams } = useNotification(navigationRef);
-	const { user, userInfo } = useAuth();
+	const { user, userInfo, userProfile } = useAuth();
 	const Tab = createBottomTabNavigator<TabsParamList>();
 	useFCMToken(userInfo);
 	useAnalytics(userInfo);
@@ -44,7 +44,7 @@ const App: FC<Props> = () => {
 				// if user is logged in, display tabs
 				<>
 					{initialRoute !== null && initialParams !== null && (
-						<UserContext.Provider value={{ user, userInfo }}>
+						<UserContext.Provider value={{ user, userInfo, userProfile }}>
 							<NavigationContainer ref={navigationRef}>
 								<Tab.Navigator
 									initialRouteName={initialRoute}

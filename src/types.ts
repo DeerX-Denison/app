@@ -8,6 +8,12 @@ export type UserInfo = {
 	displayName: string | null;
 };
 
+export type UserPronoun = 'HE' | 'HIM' | undefined;
+export type UserProfile = UserInfo & {
+	pronouns: UserPronoun[] | undefined | null;
+	bio: string | null;
+};
+
 export type HomeTab = {
 	screen: 'Listings';
 	params: ListingsStackParamList['Listings'];
@@ -62,6 +68,8 @@ export type WishlistStackParamList = {
 
 export type MenuStackParamList = {
 	MainMenu: undefined;
+	EditProfile: { selectedPronouns: UserPronoun[] | null | undefined };
+	EditPronouns: { pronouns: UserPronoun[] | null | undefined };
 };
 
 export type TestStackParamList = {

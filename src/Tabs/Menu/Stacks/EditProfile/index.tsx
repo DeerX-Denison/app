@@ -1,5 +1,7 @@
 import { DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -32,10 +34,27 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 		}
 	}, [route]);
 
+	// render check button
 	useEffect(() => {
-		console.log(edittedUserProfile);
-	}, [edittedUserProfile]);
+		navigation.setOptions({
+			headerRight: () => (
+				<TouchableOpacity
+					onPress={() => {
+						// TODO
+						console.log('implement me');
 
+						navigation.navigate('MainMenu');
+					}}
+				>
+					<FontAwesomeIcon
+						icon={faCheck}
+						size={24}
+						style={tw('text-indigo-500')}
+					/>
+				</TouchableOpacity>
+			),
+		});
+	}, [edittedUserProfile]);
 	return (
 		<View style={tw('flex flex-col flex-1')}>
 			{edittedUserProfile ? (
@@ -51,6 +70,7 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 						/>
 						<TouchableOpacity
 							onPress={() => {
+								// TODO
 								console.log('implement me!');
 							}}
 						>

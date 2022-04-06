@@ -35,6 +35,10 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 	const inputTextRef = useRef<TextInput | undefined>();
 
 	useEffect(() => {
+		inputTextRef.current?.focus();
+	}, []);
+
+	useEffect(() => {
 		if (query.length > 0) {
 			if (pronouns) {
 				setSuggestions(
@@ -93,7 +97,11 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 					ref={inputTextRef as any}
 					value={query}
 					style={tw('flex-1 text-s-lg py-2 px-2')}
-					placeholder={selectedPronouns?.length === 0 ? 'Add Pronouns' : ''}
+					placeholder={
+						!selectedPronouns || selectedPronouns.length === 0
+							? 'Add Pronouns'
+							: ''
+					}
 					onChangeText={setQuery}
 				/>
 			</View>

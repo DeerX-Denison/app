@@ -21,7 +21,19 @@ const Menu: FC<Props> = () => {
 			</Stack.Screen>
 			<Stack.Screen
 				name="EditProfile"
-				options={{ headerTitle: 'Edit Profile', headerBackTitle: '' }}
+				options={{
+					headerTitle: 'Edit Profile',
+					headerBackTitle: '',
+					headerRight: () => (
+						<TouchableOpacity onPress={() => null}>
+							<FontAwesomeIcon
+								icon={faCheck}
+								size={24}
+								style={tw('text-indigo-500')}
+							/>
+						</TouchableOpacity>
+					),
+				}}
 			>
 				{(props) => <EditProfile {...props} />}
 			</Stack.Screen>

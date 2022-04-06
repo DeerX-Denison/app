@@ -56,7 +56,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 									'flex-col my-2 justify-center items-center'
 								)}
 							>
-								{wishlist.map((wishlistData) => (
+								{wishlist.map((wishlistData, index) => (
 									<TouchableWithoutFeedback
 										key={wishlistData.id}
 										style={tw('w-full')}
@@ -64,12 +64,14 @@ const Main: FC<Props> = ({ route, navigation }) => {
 									>
 										<View
 											style={tw(
-												'w-full p-2 flex-row justify-between items-center border-t'
+												`flex-row justify-between items-center mx-2 py-2 ${
+													index !== 0 ? 'border-t border-red-700' : ''
+												}`
 											)}
 										>
 											<FastImage
 												source={{ uri: wishlistData.thumbnail }}
-												style={tw('w-16 h-16')}
+												style={tw('w-16 h-16 rounded-lg')}
 											/>
 											<View style={tw('flex flex-1 break-words pl-2')}>
 												<Text style={tw('text-lg font-bold')}>

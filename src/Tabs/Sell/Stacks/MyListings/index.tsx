@@ -40,7 +40,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									'flex-col my-2 justify-center items-center'
 								)}
 							>
-								{myListings.map((listing) => (
+								{myListings.map((listing, index) => (
 									<TouchableWithoutFeedback
 										key={listing.id}
 										style={tw('w-full')}
@@ -48,14 +48,16 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									>
 										<View
 											style={tw(
-												'w-full p-2 flex-row justify-between items-center border-t'
+												`flex-row justify-between items-center mx-2 py-2 ${
+													index !== 0 ? 'border-t border-red-700' : ''
+												}`
 											)}
 										>
 											<FastImage
 												source={{ uri: listing.images[0] }}
-												style={tw('w-16 h-16')}
+												style={tw('w-16 h-16 rounded-lg')}
 											/>
-											<View style={tw('flex flex-1 break-words pl-2')}>
+											<View style={tw('flex flex-1 break-words pl-4')}>
 												<Text style={tw('text-lg font-bold')}>
 													{listing.name}
 												</Text>

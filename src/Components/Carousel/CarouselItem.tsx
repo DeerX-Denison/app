@@ -1,4 +1,5 @@
-import * as Buttons from '@Components/Buttons';
+import { faCirclePlus, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
 import {
 	launchImageLibraryAsync,
@@ -8,7 +9,10 @@ import {
 import React, { FC, useState } from 'react';
 import { Platform, Text, useWindowDimensions, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import {
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
 import ImageView from 'react-native-image-viewing';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { CarouselData, ListingData } from 'types';
@@ -82,18 +86,32 @@ const CarouselItem: FC<Props> = ({
 				<View key={index} style={{ width, height: width }}>
 					<View
 						style={tw(
-							'absolute flex flex-row justify-end items-end z-10 top-0 w-full'
+							'absolute flex flex-row justify-between items-end z-10 top-0 w-full'
 						)}
 					>
 						{editMode && (
-							<Buttons.Primary
-								title="Remove"
+							<TouchableOpacity
 								onPress={removeHandler}
-								size="md"
-							/>
+								containerStyle={tw('rounded-full m-2')}
+							>
+								<FontAwesomeIcon
+									icon={faCircleXmark}
+									size={36}
+									style={tw('text-gray-800')}
+								/>
+							</TouchableOpacity>
 						)}
 						{editMode && (
-							<Buttons.Primary title="Add" onPress={addHandler} size="md" />
+							<TouchableOpacity
+								onPress={addHandler}
+								containerStyle={tw('rounded-full m-2')}
+							>
+								<FontAwesomeIcon
+									icon={faCirclePlus}
+									size={36}
+									style={tw('text-gray-800')}
+								/>
+							</TouchableOpacity>
 						)}
 					</View>
 

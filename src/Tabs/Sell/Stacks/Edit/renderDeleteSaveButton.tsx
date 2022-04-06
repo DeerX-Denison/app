@@ -1,7 +1,9 @@
 import { UserContext } from '@Contexts';
+import { faCloudArrowUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
@@ -49,9 +51,8 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 					) : (
 						<>
 							<View style={tw('flex flex-row')}>
-								<Button
+								<TouchableOpacity
 									disabled={disabledDelete}
-									title="delete"
 									onPress={async () => {
 										setDisabledDelete(true);
 										setDisabledSave(true);
@@ -61,10 +62,15 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										setDisabledDelete(false);
 										setDisabledSave(false);
 									}}
-								/>
-								<Button
+								>
+									<FontAwesomeIcon
+										icon={faTrash}
+										size={24}
+										style={tw('text-indigo-500 mr-8')}
+									/>
+								</TouchableOpacity>
+								<TouchableOpacity
 									disabled={disabledSaved}
-									title="save"
 									onPress={async () => {
 										setDisabledDelete(true);
 										setDisabledSave(true);
@@ -82,7 +88,13 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										setDisabledDelete(false);
 										setDisabledSave(false);
 									}}
-								/>
+								>
+									<FontAwesomeIcon
+										icon={faCloudArrowUp}
+										size={24}
+										style={tw('text-indigo-500')}
+									/>
+								</TouchableOpacity>
 							</View>
 						</>
 					),

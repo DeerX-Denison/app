@@ -1,6 +1,9 @@
 import { UserContext } from '@Contexts';
+import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import tw from '@tw';
 import React, { useContext, useEffect } from 'react';
-import { Button } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
@@ -41,8 +44,7 @@ const renderPostButton: RenderPostButton = (
 						<></>
 					) : (
 						<>
-							<Button
-								title="post"
+							<TouchableOpacity
 								onPress={() => {
 									createListing(
 										{ ...listingData, status: 'posted' } as ListingData,
@@ -53,7 +55,13 @@ const renderPostButton: RenderPostButton = (
 										navigation
 									);
 								}}
-							/>
+							>
+								<FontAwesomeIcon
+									icon={faCloudArrowUp}
+									size={24}
+									style={tw('text-indigo-500')}
+								/>
+							</TouchableOpacity>
 						</>
 					),
 			});

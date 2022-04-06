@@ -1,5 +1,7 @@
 import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListings, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,7 +17,6 @@ import {
 	View,
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
 import Category from './Category';
 import Listing from './Listing';
@@ -75,7 +76,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 										removeCategory(category, categoryFilter, setCategoryFilter)
 									}
 								>
-									<Icon name="times" size={16} style={tw('m-1')} />
+									<FontAwesomeIcon icon={faTimes} size={16} style={tw('m-1')} />
 								</TouchableOpacity>
 								<Text style={tw('capitalize text-s-md font-medium pr-2')}>
 									{category}
@@ -85,7 +86,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 					))}
 					<TouchableOpacity onPress={() => setCategorizing(true)}>
 						<Badges.Light>
-							<Icon name="plus" size={16} style={tw('m-1')} />
+							<FontAwesomeIcon icon={faPlus} size={16} style={tw('m-1')} />
 							<Text style={tw('capitalize text-s-md font-medium pr-2')}>
 								Category
 							</Text>

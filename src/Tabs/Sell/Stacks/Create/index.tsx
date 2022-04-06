@@ -7,6 +7,12 @@ import {
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
 } from '@Constants';
 import { UserContext } from '@Contexts';
+import {
+	faChevronDown,
+	faPlus,
+	faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListingError, useNewListingData, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -22,14 +28,12 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
 import useUploadProgress from '../useUploadProgress';
 import createListing from './createListing';
-import renderBackButton from './renderBackButton';
 import renderPostButton from './renderPostButton';
 
 export interface Props {
@@ -57,7 +61,6 @@ const conditions: Item[] = CONDITIONS.map((x) => {
 const Create: FC<Props> = ({ navigation }) => {
 	const { userInfo } = useContext(UserContext);
 	const [categorizing, setCategorizing] = useState<boolean>(false);
-	renderBackButton(navigation, categorizing, setCategorizing);
 	const { listingData, setListingData } = useNewListingData();
 	const { progress, setSubProgressArray, subProgressArray } =
 		useUploadProgress();
@@ -218,8 +221,8 @@ const Create: FC<Props> = ({ navigation }) => {
 																	)
 																}
 															>
-																<Icon
-																	name="times"
+																<FontAwesomeIcon
+																	icon={faTimes}
 																	size={16}
 																	style={tw('m-1')}
 																/>
@@ -232,7 +235,11 @@ const Create: FC<Props> = ({ navigation }) => {
 												))}
 												<TouchableOpacity onPress={() => setCategorizing(true)}>
 													<Badges.Light>
-														<Icon name="plus" size={16} style={tw('m-1')} />
+														<FontAwesomeIcon
+															icon={faPlus}
+															size={16}
+															style={tw('m-1')}
+														/>
 														<Text style={tw('capitalize text-s-md pr-2')}>
 															Category
 														</Text>
@@ -271,7 +278,9 @@ const Create: FC<Props> = ({ navigation }) => {
 													} as ListingData);
 													setHasEditCondition(true);
 												}}
-												Icon={() => <Icon name="chevron-down" size={16} />}
+												Icon={() => (
+													<FontAwesomeIcon icon={faChevronDown} size={20} />
+												)}
 												placeholder={
 													{
 														label: 'Item Condition...',

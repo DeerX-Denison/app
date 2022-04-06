@@ -1,9 +1,16 @@
-import * as Buttons from '@Components/Buttons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
-import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+	ScrollView,
+	Text,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { ListingId, SellStackParamList } from 'types';
@@ -53,11 +60,16 @@ const MyListings: FC<Props> = ({ navigation }) => {
 													{listing.name}
 												</Text>
 											</View>
-											<Buttons.Primary
-												title="Edit"
+											<TouchableOpacity
 												onPress={() => editHandler(listing.id)}
-												size="sm"
-											/>
+												style={tw('pr-2')}
+											>
+												<FontAwesomeIcon
+													icon={faEdit}
+													size={24}
+													style={tw('text-indigo-500')}
+												/>
+											</TouchableOpacity>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

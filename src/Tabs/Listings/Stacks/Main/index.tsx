@@ -1,6 +1,10 @@
 import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
-import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {
+	faMagnifyingGlass,
+	faPlus,
+	faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListings, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
@@ -68,30 +72,62 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 				<View
 					style={tw('mx-1 my-2 flex flex-row flex-wrap border rounded-lg p-2')}
 				>
-					{categoryFilter.map((category) => (
-						<View key={category}>
-							<Badges.Light>
-								<TouchableOpacity
-									onPress={() =>
-										removeCategory(category, categoryFilter, setCategoryFilter)
-									}
-								>
-									<FontAwesomeIcon icon={faTimes} size={16} style={tw('m-1')} />
-								</TouchableOpacity>
-								<Text style={tw('capitalize text-s-md font-medium pr-2')}>
-									{category}
+					{categoryFilter.length === 0 ? (
+						// user has not selected a filter, render search bar with magnifying glass
+						<>
+							<TouchableOpacity
+								onPress={() => setCategorizing(true)}
+								style={tw(
+									'w-full h-full flex-row justify-start items-center py-1.5'
+								)}
+							>
+								<FontAwesomeIcon
+									icon={faMagnifyingGlass}
+									size={24}
+									style={tw('ml-1')}
+								/>
+								<Text style={tw('text-s-lg font-normal text-gray-600 ml-2')}>
+									Search category
 								</Text>
-							</Badges.Light>
-						</View>
-					))}
-					<TouchableOpacity onPress={() => setCategorizing(true)}>
-						<Badges.Light>
-							<FontAwesomeIcon icon={faPlus} size={16} style={tw('m-1')} />
-							<Text style={tw('capitalize text-s-md font-medium pr-2')}>
-								Category
-							</Text>
-						</Badges.Light>
-					</TouchableOpacity>
+							</TouchableOpacity>
+						</>
+					) : (
+						// user has selected a filter. Render badges with +category
+						<>
+							{categoryFilter.map((category) => (
+								<View key={category}>
+									<Badges.Light>
+										<TouchableOpacity
+											onPress={() =>
+												removeCategory(
+													category,
+													categoryFilter,
+													setCategoryFilter
+												)
+											}
+										>
+											<FontAwesomeIcon
+												icon={faTimes}
+												size={16}
+												style={tw('m-1')}
+											/>
+										</TouchableOpacity>
+										<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+											{category}
+										</Text>
+									</Badges.Light>
+								</View>
+							))}
+							<TouchableOpacity onPress={() => setCategorizing(true)}>
+								<Badges.Light>
+									<FontAwesomeIcon icon={faPlus} size={16} style={tw('m-1')} />
+									<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+										Category
+									</Text>
+								</Badges.Light>
+							</TouchableOpacity>
+						</>
+					)}
 				</View>
 				<View ref={scrollViewRef as any} style={tw('flex flex-col flex-1')}>
 					{listings ? (

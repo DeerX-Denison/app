@@ -189,12 +189,6 @@ const Item: FC<Props> = ({ route, navigation }) => {
 												/>
 											</TouchableOpacity>
 										) : (
-											// <Buttons.Primary
-											// 	disabled={disabledAddWl}
-											// 	size="sm"
-											// 	title="Liked"
-											// 	onPress={removeWishlistHandler}
-											// />
 											<TouchableOpacity
 												// style={tw('absolute left-0 h-full justify-center pl-6')}
 												onPress={addWishlistHandler}

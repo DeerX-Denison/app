@@ -11,6 +11,7 @@ import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { CarouselData, ListingData } from 'types';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface Props {
 	item: CarouselData;
@@ -82,11 +83,17 @@ const CarouselItem: FC<Props> = ({
 					{editMode && (
 						<Buttons.Primary title="Add" onPress={addHandler} size="md" />
 					)}
-					<Buttons.Primary
+					<Icon
+						name="comments"
+						color="white"
+						size={25}
+						style={tw('right-4','top-2')}
+					/>
+					{/* <Buttons.Primary
 						title="View"
 						onPress={() => setIsViewing(true)}
 						size="md"
-					/>
+					/> */}
 				</View>
 
 				<FastImage source={{ uri: item }} style={tw('w-full h-full')} />

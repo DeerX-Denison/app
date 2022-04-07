@@ -1,8 +1,11 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
+import tw from '@tw';
 import { Button } from 'react-native';
 import { ListingsStackParamList } from 'types';
 import { Item, Listings as ListingsScreen } from './Stacks';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 interface Props {}
 /**
@@ -19,7 +22,14 @@ const Listings: FC<Props> = () => {
 				name="Item"
 				options={({ navigation }) => ({
 					headerLeft: () => (
-						<Button title="back" onPress={() => navigation.goBack()} />
+						// <Button title="left" onPress={() => navigation.goBack()} />
+						<TouchableOpacity onPress={() => navigation.goBack()}>
+							<Icon
+							name="arrow-left"
+							size={24}
+							style={tw('left-1')}
+							/>
+						</TouchableOpacity>
 					),
 				})}
 			>

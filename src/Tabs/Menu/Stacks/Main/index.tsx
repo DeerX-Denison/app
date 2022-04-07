@@ -19,17 +19,19 @@ const Main: FC<Props> = ({ route, navigation }) => {
 	const [displayUserProfile, setDisplayUserInfo] = useState<
 		UserProfile | null | undefined
 	>(userProfile);
+	// if user upload invalid image content, this effect will change it on the client side. Always come above the below effect
 	useEffect(() => {
 		if (userProfile) {
 			setDisplayUserInfo(userProfile);
 		}
 	}, [userProfile]);
 
+	// when use upload image, set image on client side
 	useEffect(() => {
 		if (route.params.displayUserProfile) {
 			setDisplayUserInfo(route.params.displayUserProfile);
 		}
-	}, [route]);
+	}, [route.params]);
 
 	return (
 		<View style={tw('flex flex-1')}>

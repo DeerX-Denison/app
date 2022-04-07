@@ -89,7 +89,6 @@ const renderCheckButton: RenderCheckButtonFn = (
 								setProgress(Math.random() * 0.2 + 0.5);
 							}, 50);
 							await saveProfile(imageUrl, bio, pronouns);
-							await user?.updateProfile({ photoURL: imageUrl });
 							clearTimeout(timeout);
 						}
 						navigation.navigate('MainMenu', {

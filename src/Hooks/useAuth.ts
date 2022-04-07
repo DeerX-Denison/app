@@ -114,7 +114,7 @@ const useAuth = () => {
 	const [userProfile, setUserProfile] = useState<
 		UserProfile | undefined | null
 	>();
-	// dummy state for refresh() to toggle to trigger useEffect to fetch userInfo again
+
 	useEffect(() => {
 		if (
 			user &&
@@ -129,6 +129,13 @@ const useAuth = () => {
 				photoURL: user.photoURL,
 				uid: user.uid,
 			});
+		} else {
+			setUserInfo(user);
+		}
+	}, [user]);
+
+	useEffect(() => {
+		if (user) {
 			const unsubscribe = db
 				.collection('users')
 				.doc(user.uid)
@@ -160,11 +167,8 @@ const useAuth = () => {
 					}
 				);
 			return () => unsubscribe();
-		} else {
-			setUserInfo(user);
 		}
 	}, [user]);
-
 	useSaveUser(user);
 
 	return { user, userInfo, userProfile };

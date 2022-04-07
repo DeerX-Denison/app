@@ -18,7 +18,6 @@ import React, { FC, useContext, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
-import { TextSelection } from 'src/Hooks/useMessage/useInputText';
 import { MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import ItemSuggestion from './ItemSuggestion';
@@ -70,6 +69,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		showingItem,
 		query,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		isPressingKey,
+		setIsPressingKey,
+		keyPressed,
+		setKeyPressed,
 	} = useMessage(threadData);
 
 	const { wishlist } = useWishlist(query);
@@ -149,8 +155,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
 								onSelectionChange={(e) =>
-									setTextSelection(e.nativeEvent.selection as TextSelection)
+									setTextSelection(e.nativeEvent.selection)
 								}
+								onKeyPress={(e) => {
+									setIsPressingKey(!isPressingKey);
+									setKeyPressed(e.nativeEvent.key);
+								}}
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
@@ -164,7 +174,16 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							</View>
 						</View>
 						{showingItem && (
-							<ItemSuggestion query={query} wishlist={wishlist} />
+							<ItemSuggestion
+								query={query}
+								wishlist={wishlist}
+								inputText={inputText}
+								textSelection={textSelection}
+								setTextSelection={setTextSelection}
+								refs={refs}
+								setRefs={setRefs}
+								setInputText={setInputText}
+							/>
 						)}
 					</View>
 

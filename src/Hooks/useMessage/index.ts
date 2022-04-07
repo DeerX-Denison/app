@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MessageData, ThreadData } from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
 import useContentType from './useContentType';
-import useInputText, { TextSelection } from './useInputText';
+import useInputText, { Ref, TextSelection } from './useInputText';
 import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (threadData: ThreadData | undefined) => {
@@ -18,6 +18,13 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 	setTextSelection: React.Dispatch<
 		React.SetStateAction<TextSelection | undefined>
 	>;
+	textSelection: TextSelection | undefined;
+	refs: Ref[];
+	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	isPressingKey: boolean;
+	setIsPressingKey: React.Dispatch<React.SetStateAction<boolean>>;
+	keyPressed: string;
+	setKeyPressed: React.Dispatch<React.SetStateAction<string>>
 };
 
 /**
@@ -32,11 +39,17 @@ const useMessage: UseMessageFn = (threadData) => {
 		showingItem,
 		setShowingItem,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		isPressingKey,
+		setIsPressingKey,
+		keyPressed,
+		setKeyPressed
 	} = useInputText();
-	const { query, setQuery } = useSuggestionQuery(inputText);
+	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
 	const { seenAt } = useSeenAt(threadData);
-
 	/**
 	 * effect to parse current message
 	 */
@@ -64,6 +77,13 @@ const useMessage: UseMessageFn = (threadData) => {
 		query,
 		setQuery,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		isPressingKey,
+		setIsPressingKey,
+		keyPressed,
+		setKeyPressed
 	};
 };
 

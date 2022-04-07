@@ -14,6 +14,14 @@ export type UserProfile = UserInfo & {
 	bio: string | null;
 };
 
+export type ProfilePhotoURL = string;
+export type ProfilePhotoMetadata = {
+	uploaderUid: string;
+	imgId: string;
+	resized: 'true' | 'false';
+	contentValidated: 'true' | 'false';
+};
+
 export type HomeTab = {
 	screen: 'Listings';
 	params: ListingsStackParamList['Listings'];
@@ -67,9 +75,14 @@ export type WishlistStackParamList = {
 };
 
 export type MenuStackParamList = {
-	MainMenu: undefined;
-	EditProfile: { selectedPronouns: UserPronoun[] | null | undefined };
-	EditPronouns: { pronouns: UserPronoun[] | null | undefined };
+	MainMenu: { displayUserProfile: UserProfile | null | undefined };
+	EditProfile: {
+		selectedPronouns: UserPronoun[] | null | undefined;
+		displayUserProfile: UserProfile | null | undefined;
+	};
+	EditPronouns: {
+		pronouns: UserPronoun[] | null | undefined;
+	};
 };
 
 export type TestStackParamList = {

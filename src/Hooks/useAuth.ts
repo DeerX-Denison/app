@@ -114,6 +114,7 @@ const useAuth = () => {
 	const [userProfile, setUserProfile] = useState<
 		UserProfile | undefined | null
 	>();
+	// dummy state for refresh() to toggle to trigger useEffect to fetch userInfo again
 	useEffect(() => {
 		let isSubscribed = true;
 		if (
@@ -137,7 +138,7 @@ const useAuth = () => {
 					if ('bio' in userData) {
 						bio = userData.bio;
 					}
-					let pronouns: UserPronoun[] | null = null;
+					let pronouns: UserPronoun[] | undefined | null = null;
 					if ('pronouns' in userData) {
 						pronouns = userData.pronouns;
 					}

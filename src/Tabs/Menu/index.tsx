@@ -16,11 +16,19 @@ const Menu: FC<Props> = () => {
 
 	return (
 		<Stack.Navigator initialRouteName="MainMenu">
-			<Stack.Screen name="MainMenu" options={{ headerTitle: 'Menu' }}>
+			<Stack.Screen
+				name="MainMenu"
+				options={{ headerTitle: 'Menu' }}
+				initialParams={{ displayUserProfile: undefined }}
+			>
 				{(props) => <Main {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="EditProfile"
+				initialParams={{
+					selectedPronouns: undefined,
+					displayUserProfile: undefined,
+				}}
 				options={{
 					headerTitle: 'Edit Profile',
 					headerBackTitle: '',
@@ -39,6 +47,7 @@ const Menu: FC<Props> = () => {
 			</Stack.Screen>
 			<Stack.Screen
 				name="EditPronouns"
+				initialParams={{ pronouns: undefined }}
 				options={{
 					headerTitle: 'Edit Pronouns',
 					headerBackTitle: '',

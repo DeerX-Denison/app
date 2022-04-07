@@ -1,7 +1,9 @@
 import { DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
+import { fn } from '@firebase.config';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -10,7 +12,11 @@ import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import { CircleSnail } from 'react-native-progress';
+import Toast from 'react-native-toast-message';
 import { MenuStackParamList, UserProfile } from 'types';
+import addImage from './addImage';
+import uploadImageAsync from './uploadImageAsync';
+
 interface Props {
 	route: RouteProp<MenuStackParamList, 'EditProfile'>;
 	navigation: NativeStackNavigationProp<MenuStackParamList>;
@@ -20,12 +26,20 @@ interface Props {
  * stack for user editting profiles
  */
 const EditProfile: FC<Props> = ({ route, navigation }) => {
-	const { userProfile } = useContext(UserContext);
+	// initial user profile from sv
+	const { userProfile, user } = useContext(UserContext);
+
+	// parse to final editted user profile to save to db
 	const [edittedUserProfile, setEdittedUserProfile] = useState<
 		UserProfile | null | undefined
 	>(userProfile);
 
+	const [progress, setProgress] = useState<number>(0);
+
 	useEffect(() => {
+		if (route.params.displayUserProfile) {
+			setEdittedUserProfile(route.params.displayUserProfile);
+		}
 		if (route.params.selectedPronouns) {
 			setEdittedUserProfile({
 				...edittedUserProfile,
@@ -39,11 +53,86 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 		navigation.setOptions({
 			headerRight: () => (
 				<TouchableOpacity
-					onPress={() => {
-						// TODO
-						console.log('implement me');
+					onPress={async () => {
+						if (user && userProfile && edittedUserProfile) {
+							// validation
+							if (userProfile.displayName !== edittedUserProfile.displayName) {
+								logger.error('User attempt to update displayName');
+								Toast.show({
+									type: 'error',
+									text1: 'Unexpected Error Occured',
+								});
+							}
+							if (userProfile.email !== edittedUserProfile.email) {
+								logger.error('User attempt to update email');
+								Toast.show({
+									type: 'error',
+									text1: 'Unexpected Error Occured',
+								});
+							}
+							if (userProfile.uid !== edittedUserProfile.uid) {
+								logger.error('User attempt to update uid');
+								Toast.show({
+									type: 'error',
+									text1: 'Unexpected Error Occured',
+								});
+							}
 
-						navigation.navigate('MainMenu');
+							if (userProfile.photoURL !== edittedUserProfile.photoURL) {
+								if (edittedUserProfile.photoURL) {
+									// upload image
+									try {
+										const imageUrl = await uploadImageAsync(
+											edittedUserProfile.photoURL,
+											edittedUserProfile.uid,
+											progress,
+											setProgress
+										);
+										try {
+											await fn.httpsCallable('updateUserProfile')({
+												...edittedUserProfile,
+												photoURL: imageUrl,
+											});
+											await user.updateProfile({ photoURL: imageUrl });
+										} catch (error) {
+											logger.error(error);
+											Toast.show({
+												type: 'error',
+												text1: 'Error Updating Profile',
+												text2: 'Please Try Again Later',
+											});
+										}
+									} catch (error) {
+										logger.error(error);
+										Toast.show({
+											type: 'error',
+											text1: 'Error Uploading Images',
+											text2: 'Please Try Again Later',
+										});
+									}
+								} else {
+									logger.error(
+										'edittedUserProfile photoURL was falsy when user press save'
+									);
+									Toast.show({
+										type: 'error',
+										text1: 'Unexpected Error Occured',
+									});
+								}
+							}
+						} else {
+							logger.error(
+								'user or userProfile or edittedUserProfile was falsy when user press save'
+							);
+							Toast.show({
+								type: 'error',
+								text1: 'Unexpected Error Occured',
+							});
+						}
+
+						navigation.navigate('MainMenu', {
+							displayUserProfile: edittedUserProfile,
+						});
 					}}
 				>
 					<FontAwesomeIcon
@@ -54,7 +143,8 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 				</TouchableOpacity>
 			),
 		});
-	}, [edittedUserProfile]);
+	}, [edittedUserProfile, userProfile]);
+
 	return (
 		<View style={tw('flex flex-col flex-1')}>
 			{edittedUserProfile ? (
@@ -70,8 +160,7 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 						/>
 						<TouchableOpacity
 							onPress={() => {
-								// TODO
-								console.log('implement me!');
+								addImage(edittedUserProfile, setEdittedUserProfile);
 							}}
 						>
 							<Text style={tw('text-s-md font-semibold pt-2 text-red-300')}>
@@ -85,20 +174,9 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 								<Text style={tw('text-s-lg')}>Name</Text>
 							</View>
 							<View style={tw('border-b flex-1 pb-1 mr-4')}>
-								<TextInput
-									style={tw('text-s-lg')}
-									value={
-										edittedUserProfile.displayName
-											? edittedUserProfile.displayName
-											: ''
-									}
-									onChangeText={(displayName) =>
-										setEdittedUserProfile({
-											...edittedUserProfile,
-											displayName,
-										})
-									}
-								/>
+								<Text style={tw('text-s-lg text-gray-500')}>
+									{userProfile?.displayName}
+								</Text>
 							</View>
 						</View>
 						<View style={tw('flex flex-row py-2')}>
@@ -106,19 +184,12 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 								<Text style={tw('text-s-lg')}>Big Red ID</Text>
 							</View>
 							<View style={tw('border-b flex-1 pb-1 mr-4')}>
-								<TextInput
-									style={tw('text-s-lg')}
-									value={edittedUserProfile.email?.substring(
+								<Text style={tw('text-s-lg text-gray-500')}>
+									{edittedUserProfile.email?.substring(
 										0,
 										edittedUserProfile.email.indexOf('@')
 									)}
-									onChangeText={(displayName) =>
-										setEdittedUserProfile({
-											...edittedUserProfile,
-											displayName,
-										})
-									}
-								/>
+								</Text>
 							</View>
 						</View>
 						<View style={tw('flex flex-row py-2')}>
@@ -159,7 +230,7 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 					</View>
 				</View>
 			) : (
-				<View style={tw('flex-1')}>
+				<View style={tw('flex-1 justify-center items-center')}>
 					<CircleSnail
 						size={80}
 						indeterminate={true}

@@ -1,29 +1,49 @@
 import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { auth } from '@firebase.config';
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Linking, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
-import { MenuStackParamList } from 'types';
+import { MenuStackParamList, UserProfile } from 'types';
 interface Props {
+	route: RouteProp<MenuStackParamList, 'MainMenu'>;
 	navigation: NativeStackNavigationProp<MenuStackParamList>;
 }
 
-const Main: FC<Props> = ({ navigation }) => {
-	const { userInfo } = useContext(UserContext);
+const Main: FC<Props> = ({ route, navigation }) => {
+	const { userProfile } = useContext(UserContext);
+	const [displayUserProfile, setDisplayUserInfo] = useState<
+		UserProfile | null | undefined
+	>(userProfile);
+
+	useEffect(() => {
+		if (route.params.displayUserProfile) {
+			setDisplayUserInfo(route.params.displayUserProfile);
+		}
+	}, [route]);
+
 	return (
 		<View style={tw('flex flex-1')}>
 			<View style={tw('flex flex-row h-28 border-b px-4')}>
 				<FastImage
-					source={{ uri: userInfo?.photoURL ? userInfo.photoURL : undefined }}
+					source={{
+						uri: displayUserProfile?.photoURL
+							? displayUserProfile.photoURL
+							: undefined,
+					}}
 					style={tw('h-20 w-20 rounded-full my-4 mr-4 border border-gray-500')}
 				/>
 				<View style={tw('flex flex-col flex-1 justify-evenly')}>
-					<Text style={tw('text-s-lg font-bold')}>{userInfo?.displayName}</Text>
-					<Text style={tw('text-s-md font-semibold')}>{userInfo?.email}</Text>
+					<Text style={tw('text-s-lg font-bold')}>
+						{displayUserProfile?.displayName}
+					</Text>
+					<Text style={tw('text-s-md font-semibold')}>
+						{displayUserProfile?.email}
+					</Text>
 				</View>
 			</View>
 
@@ -31,7 +51,10 @@ const Main: FC<Props> = ({ navigation }) => {
 				<Buttons.Primary
 					title="Edit Profile"
 					onPress={() =>
-						navigation.navigate('EditProfile', { selectedPronouns: null })
+						navigation.navigate('EditProfile', {
+							selectedPronouns: null,
+							displayUserProfile: displayUserProfile,
+						})
 					}
 					size="md"
 				/>

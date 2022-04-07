@@ -116,7 +116,6 @@ const useAuth = () => {
 	>();
 	// dummy state for refresh() to toggle to trigger useEffect to fetch userInfo again
 	useEffect(() => {
-		let isSubscribed = true;
 		if (
 			user &&
 			'email' in user &&
@@ -130,35 +129,40 @@ const useAuth = () => {
 				photoURL: user.photoURL,
 				uid: user.uid,
 			});
-			(async () => {
-				const docSnap = await db.collection('users').doc(user.uid).get();
-				const userData = docSnap.data() as UserProfile;
-				if (userData) {
-					let bio: string | null = null;
-					if ('bio' in userData) {
-						bio = userData.bio;
+			const unsubscribe = db
+				.collection('users')
+				.doc(user.uid)
+				.onSnapshot(
+					(docSnap) => {
+						const userData = docSnap.data() as UserProfile;
+						if (userData) {
+							let bio: string | null = null;
+							if ('bio' in userData) {
+								bio = userData.bio;
+							}
+							let pronouns: UserPronoun[] | undefined | null = null;
+							if ('pronouns' in userData) {
+								pronouns = userData.pronouns;
+							}
+							setUserProfile({
+								email: user.email,
+								displayName: user.displayName,
+								photoURL: user.photoURL,
+								uid: user.uid,
+								bio,
+								pronouns,
+							});
+						}
+					},
+					(error) => {
+						logger.log(error);
+						logger.log(`Error fetching docSnap of uid ${user.uid}`);
 					}
-					let pronouns: UserPronoun[] | undefined | null = null;
-					if ('pronouns' in userData) {
-						pronouns = userData.pronouns;
-					}
-					isSubscribed &&
-						setUserProfile({
-							email: user.email,
-							displayName: user.displayName,
-							photoURL: user.photoURL,
-							uid: user.uid,
-							bio,
-							pronouns,
-						});
-				}
-			})();
+				);
+			return () => unsubscribe();
 		} else {
 			setUserInfo(user);
 		}
-		return () => {
-			isSubscribed = false;
-		};
 	}, [user]);
 
 	useSaveUser(user);

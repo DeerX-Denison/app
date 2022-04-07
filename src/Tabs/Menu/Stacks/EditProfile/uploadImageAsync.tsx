@@ -14,6 +14,8 @@ const uploadImageAsync = async (
 	setProgress: React.Dispatch<React.SetStateAction<number>>
 ) => {
 	try {
+		if (localUrl.startsWith('http'))
+			throw 'Invalid argument: localURL starts with http';
 		const imgBlob = await (await fetch(localUrl)).blob();
 		const imgPaths = localUrl.split('/');
 		const imgName = imgPaths[imgPaths.length - 1];

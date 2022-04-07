@@ -19,6 +19,11 @@ const Main: FC<Props> = ({ route, navigation }) => {
 	const [displayUserProfile, setDisplayUserInfo] = useState<
 		UserProfile | null | undefined
 	>(userProfile);
+	useEffect(() => {
+		if (userProfile) {
+			setDisplayUserInfo(userProfile);
+		}
+	}, [userProfile]);
 
 	useEffect(() => {
 		if (route.params.displayUserProfile) {
@@ -28,23 +33,41 @@ const Main: FC<Props> = ({ route, navigation }) => {
 
 	return (
 		<View style={tw('flex flex-1')}>
-			<View style={tw('flex flex-row h-28 border-b px-4')}>
-				<FastImage
-					source={{
-						uri: displayUserProfile?.photoURL
-							? displayUserProfile.photoURL
-							: undefined,
-					}}
-					style={tw('h-20 w-20 rounded-full my-4 mr-4 border border-gray-500')}
-				/>
-				<View style={tw('flex flex-col flex-1 justify-evenly')}>
-					<Text style={tw('text-s-lg font-bold')}>
-						{displayUserProfile?.displayName}
-					</Text>
-					<Text style={tw('text-s-md font-semibold')}>
-						{displayUserProfile?.email}
-					</Text>
+			<View style={tw('flex flex-col border-b')}>
+				<View
+					style={tw(
+						`flex flex-row h-28 mx-4 ${
+							displayUserProfile?.bio ? 'border-b' : ''
+						}`
+					)}
+				>
+					<FastImage
+						source={{
+							uri: displayUserProfile?.photoURL
+								? displayUserProfile.photoURL
+								: undefined,
+						}}
+						style={tw(
+							'h-20 w-20 rounded-full my-4 mr-4 border border-gray-500'
+						)}
+					/>
+					<View style={tw('flex flex-col flex-1 justify-evenly')}>
+						<View style={tw('flex flex-row items-end')}>
+							<Text style={tw('text-s-lg font-bold')}>
+								{displayUserProfile?.displayName}
+							</Text>
+							<Text style={tw('text-s-md font-light pl-2')}>
+								{displayUserProfile?.pronouns?.join('/').toLowerCase()}
+							</Text>
+						</View>
+						<Text style={tw('text-s-md font-semibold')}>
+							{displayUserProfile?.email}
+						</Text>
+					</View>
 				</View>
+				{displayUserProfile?.bio && (
+					<Text style={tw('px-4 py-3')}>{displayUserProfile?.bio}</Text>
+				)}
 			</View>
 
 			<ScrollView contentContainerStyle={tw('flex flex-col flex-1 p-4')}>
@@ -59,8 +82,14 @@ const Main: FC<Props> = ({ route, navigation }) => {
 					size="md"
 				/>
 				<View style={tw('pt-4')} />
+				<Buttons.White
+					title="Feature Suggestion"
+					onPress={() => Linking.openURL('https://forms.gle/Bv9Brp1bCZf1gC1N6')}
+					size="md"
+				/>
+				<View style={tw('pt-4')} />
 				<Buttons.Primary
-					title="Bug report"
+					title="Bug Report"
 					onPress={() => Linking.openURL('https://forms.gle/M6sYNPFrWAh5i58d9')}
 					size="md"
 				/>

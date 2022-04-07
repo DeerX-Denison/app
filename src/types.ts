@@ -8,7 +8,52 @@ export type UserInfo = {
 	displayName: string | null;
 };
 
-export type UserPronoun = 'HE' | 'HIM' | undefined;
+export type UserPronoun =
+	| 'CO'
+	| 'COS'
+	| 'E'
+	| 'EY'
+	| 'EM'
+	| 'EIR'
+	| 'FAE'
+	| 'FAER'
+	| 'HE'
+	| 'HIM'
+	| 'HIS'
+	| 'HER'
+	| 'HERS'
+	| 'HIR'
+	| 'IT'
+	| 'ITS'
+	| 'MER'
+	| 'MERS'
+	| 'NE'
+	| 'NIR'
+	| 'NIRS'
+	| 'NEE'
+	| 'NER'
+	| 'NERS'
+	| 'PER'
+	| 'PERS'
+	| 'SHE'
+	| 'THEY'
+	| 'THEM'
+	| 'THEIRS'
+	| 'THON'
+	| 'THONS'
+	| 'VE'
+	| 'VER'
+	| 'VIS'
+	| 'VI'
+	| 'VIR'
+	| 'XE'
+	| 'XEM'
+	| 'XYR'
+	| 'ZE'
+	| 'ZIR'
+	| 'ZIE'
+	| undefined;
+
 export type UserProfile = UserInfo & {
 	pronouns: UserPronoun[] | undefined | null;
 	bio: string | null;

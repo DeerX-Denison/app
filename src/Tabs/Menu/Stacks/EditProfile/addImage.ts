@@ -11,7 +11,8 @@ export type AddImageFn = (
 	edittedUserProfile: UserProfile | null | undefined,
 	setEdittedUserProfile: React.Dispatch<
 		React.SetStateAction<UserProfile | null | undefined>
-	>
+	>,
+	setHasEditImage: React.Dispatch<React.SetStateAction<boolean>>
 ) => Promise<void>;
 
 /**
@@ -25,7 +26,8 @@ export type AddImageFn = (
  */
 const addImage: AddImageFn = async (
 	edittedUserProfile,
-	setEdittedUserProfile
+	setEdittedUserProfile,
+	setHasEditImage
 ) => {
 	if (Platform.OS !== 'web') {
 		const { status } = await requestMediaLibraryPermissionsAsync();
@@ -56,6 +58,7 @@ const addImage: AddImageFn = async (
 	});
 	if (!result.cancelled && edittedUserProfile) {
 		setEdittedUserProfile({ ...edittedUserProfile, photoURL: result.uri });
+		setHasEditImage(true);
 	}
 };
 

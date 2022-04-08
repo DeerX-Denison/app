@@ -1,5 +1,8 @@
 import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
 import { UserContext } from '@Contexts';
+import { faCheckCircle as regularCheckIcon } from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle as solidCheckIcon } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
 import React, { FC, useContext } from 'react';
 import { Text, View } from 'react-native';
@@ -76,7 +79,18 @@ const Message: FC<Props> = ({
 														<>
 															{content.id === msgWithStatusId && (
 																<>
-																	<Text>{messageStatus}</Text>
+																	{messageStatus === 'sending' && (
+																		<FontAwesomeIcon
+																			icon={regularCheckIcon}
+																			style={tw('h-4 w-4 text-red-500')}
+																		/>
+																	)}
+																	{messageStatus === 'sent' && (
+																		<FontAwesomeIcon
+																			icon={solidCheckIcon}
+																			style={tw('h-4 w-4 text-red-500')}
+																		/>
+																	)}
 																</>
 															)}
 														</>

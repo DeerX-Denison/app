@@ -32,7 +32,7 @@ const renderCheckButton: RenderCheckButtonFn = (
 	progress,
 	setProgress
 ) => {
-	const { userProfile, user } = useContext(UserContext);
+	const { userProfile } = useContext(UserContext);
 
 	useEffect(() => {
 		navigation.setOptions({

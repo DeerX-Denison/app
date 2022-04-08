@@ -233,6 +233,7 @@ const Create: FC<Props> = ({ navigation }) => {
 														</Badges.Light>
 													</View>
 												))}
+												{listingData.category.length === 0}
 												<TouchableOpacity onPress={() => setCategorizing(true)}>
 													<Badges.Light>
 														<FontAwesomeIcon

@@ -7,6 +7,7 @@ import React, { FC, useEffect, useRef } from 'react';
 import {
 	NativeScrollEvent,
 	NativeSyntheticEvent,
+	RefreshControl,
 	ScrollView,
 	Text,
 	TouchableWithoutFeedback,
@@ -31,15 +32,22 @@ const Main: FC<Props> = ({ route, navigation }) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
 			fetchWishlist();
-		} else if (offsetY < -50) {
-			resetWishlist();
 		}
 	};
+
 	useEffect(() => {
 		if (route.params.reset === true) {
 			resetWishlist();
 		}
 	}, [route]);
+
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await resetWishlist();
+		setRefreshing(false);
+	};
 
 	return (
 		<View style={tw('flex flex-1')}>
@@ -50,6 +58,15 @@ const Main: FC<Props> = ({ route, navigation }) => {
 						// wishlist is not empty, render scroll view
 						<>
 							<ScrollView
+								refreshControl={
+									<RefreshControl
+										refreshing={refreshing}
+										onRefresh={onRefresh}
+										size={24}
+									/>
+								}
+								showsVerticalScrollIndicator={false}
+								showsHorizontalScrollIndicator={false}
 								ref={scrollViewRef as any}
 								onScrollEndDrag={onScrollEndDrag}
 								contentContainerStyle={tw(

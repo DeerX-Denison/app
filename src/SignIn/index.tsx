@@ -6,7 +6,6 @@ import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import tw from '@tw';
 import React, { FC, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { TextInput } from 'react-native-gesture-handler';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Bar, CircleSnail } from 'react-native-progress';
@@ -120,7 +119,16 @@ const SignIn: FC = () => {
 					} catch (error) {
 						logger.log(error);
 						if (error instanceof Error) {
-							Toast.show({ type: 'error', text1: error.message });
+							if (error.message.includes('[auth/invalid-email]')) {
+								Toast.show({
+									type: 'error',
+									text1: 'Invalid Email Address',
+									text2:
+										'Please make sure to type in your Bid Red ID correctly',
+								});
+							} else {
+								Toast.show({ type: 'error', text1: error.message });
+							}
 						} else {
 							logger.log(error);
 							Toast.show({
@@ -128,6 +136,8 @@ const SignIn: FC = () => {
 								text1: 'An unexpected error occured. Please try again later',
 							});
 						}
+					} finally {
+						setSending(false);
 					}
 				}
 			}
@@ -158,7 +168,6 @@ const SignIn: FC = () => {
 						testID="loading"
 						style={tw('flex flex-col flex-1 justify-center items-center')}
 					>
-						<FastImage source={require('./320.png')} />
 						<Bar width={200} indeterminate={true} />
 					</View>
 				</>

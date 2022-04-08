@@ -1,4 +1,4 @@
-import { UserContext } from '@Contexts';
+import { JustSignOut, UserContext } from '@Contexts';
 import {
 	faBars,
 	faHeart,
@@ -22,13 +22,14 @@ import {
 } from '@react-navigation/native';
 import { Listings, Menu, Message, Sell, Wishlist } from '@Tabs';
 import tw from '@tw';
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { HomeTab, InboxTab, SellTab, TabsParamList } from 'types';
 import SignIn from './SignIn';
 interface Props {}
 
 const App: FC<Props> = () => {
+	const [justSignOut, setJustSignOut] = useState<boolean>(false);
 	const navigationRef = useNavigationContainerRef<TabsParamList>();
 	const { initialRoute, initialParams } = useNotification(navigationRef);
 	const { user, userInfo, userProfile } = useAuth();
@@ -45,99 +46,103 @@ const App: FC<Props> = () => {
 				<>
 					{initialRoute !== null && initialParams !== null && (
 						<UserContext.Provider value={{ user, userInfo, userProfile }}>
-							<NavigationContainer ref={navigationRef}>
-								<Tab.Navigator
-									initialRouteName={initialRoute}
-									screenOptions={{ headerShown: false, tabBarShowLabel: false }}
-								>
-									<Tab.Screen
-										name="Home"
-										initialParams={initialParams as HomeTab}
-										options={{
-											tabBarIcon: ({ focused, size }) => (
-												<FontAwesomeIcon
-													icon={faHouse}
-													size={size}
-													style={tw(
-														`${focused ? 'text-red-500' : 'text-indigo-500'}`
-													)}
-												/>
-											),
+							<JustSignOut.Provider value={{ justSignOut, setJustSignOut }}>
+								<NavigationContainer ref={navigationRef}>
+									<Tab.Navigator
+										initialRouteName={initialRoute}
+										screenOptions={{
+											headerShown: false,
+											tabBarShowLabel: false,
 										}}
 									>
-										{(props) => <Listings {...props} />}
-									</Tab.Screen>
-									<Tab.Screen
-										name="Inbox"
-										initialParams={initialParams as InboxTab}
-										options={{
-											tabBarIcon: ({ focused, size }) => (
-												<FontAwesomeIcon
-													icon={faMessage}
-													size={size}
-													style={tw(
-														`${focused ? 'text-red-500' : 'text-indigo-500'}`
-													)}
-												/>
-											),
-										}}
-									>
-										{(props) => <Message {...props} />}
-									</Tab.Screen>
-									<Tab.Screen
-										name="Sell"
-										initialParams={initialParams as SellTab}
-										options={{
-											tabBarIcon: ({ focused, size }) => (
-												<FontAwesomeIcon
-													icon={faStore}
-													size={size}
-													style={tw(
-														`${focused ? 'text-red-500' : 'text-indigo-500'}`
-													)}
-												/>
-											),
-										}}
-									>
-										{(props) => <Sell {...props} />}
-									</Tab.Screen>
-									<Tab.Screen
-										name="Liked"
-										initialParams={initialParams as undefined}
-										options={{
-											tabBarIcon: ({ focused, size }) => (
-												<FontAwesomeIcon
-													icon={faHeart}
-													size={size}
-													style={tw(
-														`${focused ? 'text-red-500' : 'text-indigo-500'}`
-													)}
-												/>
-											),
-										}}
-									>
-										{(props) => <Wishlist {...props} />}
-									</Tab.Screen>
-									<Tab.Screen
-										name="Menu"
-										initialParams={initialParams as undefined}
-										options={{
-											tabBarIcon: ({ focused, size }) => (
-												<FontAwesomeIcon
-													icon={faBars}
-													size={size}
-													style={tw(
-														`${focused ? 'text-red-500' : 'text-indigo-500'}`
-													)}
-												/>
-											),
-										}}
-									>
-										{(props) => <Menu {...props} />}
-									</Tab.Screen>
-								</Tab.Navigator>
-							</NavigationContainer>
-							<Toast />
+										<Tab.Screen
+											name="Home"
+											initialParams={initialParams as HomeTab}
+											options={{
+												tabBarIcon: ({ focused, size }) => (
+													<FontAwesomeIcon
+														icon={faHouse}
+														size={size}
+														style={tw(
+															`${focused ? 'text-red-500' : 'text-indigo-500'}`
+														)}
+													/>
+												),
+											}}
+										>
+											{(props) => <Listings {...props} />}
+										</Tab.Screen>
+										<Tab.Screen
+											name="Inbox"
+											initialParams={initialParams as InboxTab}
+											options={{
+												tabBarIcon: ({ focused, size }) => (
+													<FontAwesomeIcon
+														icon={faMessage}
+														size={size}
+														style={tw(
+															`${focused ? 'text-red-500' : 'text-indigo-500'}`
+														)}
+													/>
+												),
+											}}
+										>
+											{(props) => <Message {...props} />}
+										</Tab.Screen>
+										<Tab.Screen
+											name="Sell"
+											initialParams={initialParams as SellTab}
+											options={{
+												tabBarIcon: ({ focused, size }) => (
+													<FontAwesomeIcon
+														icon={faStore}
+														size={size}
+														style={tw(
+															`${focused ? 'text-red-500' : 'text-indigo-500'}`
+														)}
+													/>
+												),
+											}}
+										>
+											{(props) => <Sell {...props} />}
+										</Tab.Screen>
+										<Tab.Screen
+											name="Liked"
+											initialParams={initialParams as undefined}
+											options={{
+												tabBarIcon: ({ focused, size }) => (
+													<FontAwesomeIcon
+														icon={faHeart}
+														size={size}
+														style={tw(
+															`${focused ? 'text-red-500' : 'text-indigo-500'}`
+														)}
+													/>
+												),
+											}}
+										>
+											{(props) => <Wishlist {...props} />}
+										</Tab.Screen>
+										<Tab.Screen
+											name="Menu"
+											initialParams={initialParams as undefined}
+											options={{
+												tabBarIcon: ({ focused, size }) => (
+													<FontAwesomeIcon
+														icon={faBars}
+														size={size}
+														style={tw(
+															`${focused ? 'text-red-500' : 'text-indigo-500'}`
+														)}
+													/>
+												),
+											}}
+										>
+											{(props) => <Menu {...props} />}
+										</Tab.Screen>
+									</Tab.Navigator>
+								</NavigationContainer>
+							</JustSignOut.Provider>
 						</UserContext.Provider>
 					)}
 				</>
@@ -147,6 +152,7 @@ const App: FC<Props> = () => {
 					<SignIn />
 				</>
 			)}
+			<Toast />
 		</>
 	);
 };

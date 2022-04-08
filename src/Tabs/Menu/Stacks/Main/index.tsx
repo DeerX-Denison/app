@@ -1,5 +1,5 @@
 import * as Buttons from '@Components/Buttons';
-import { UserContext } from '@Contexts';
+import { JustSignOut, UserContext } from '@Contexts';
 import { auth } from '@firebase.config';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -15,6 +15,7 @@ interface Props {
 }
 
 const Main: FC<Props> = ({ route, navigation }) => {
+	const { setJustSignOut } = useContext(JustSignOut);
 	const { userProfile } = useContext(UserContext);
 	const [displayUserProfile, setDisplayUserInfo] = useState<
 		UserProfile | null | undefined
@@ -101,6 +102,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 					title="Sign Out"
 					onPress={async () => {
 						await auth.signOut();
+						setJustSignOut && setJustSignOut(true);
 					}}
 					size="md"
 				/>

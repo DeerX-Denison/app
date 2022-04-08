@@ -1,7 +1,8 @@
+import { JustSignOut } from '@Contexts';
 import { auth } from '@firebase.config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 
 /**
@@ -11,13 +12,29 @@ const useEmailLinkEffect: () => {
 	error: Error | null;
 	loading: boolean;
 } = () => {
+	const { justSignOut, setJustSignOut } = useContext(JustSignOut);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
+
 	useEffect(() => {
 		if (error) {
-			Toast.show({ type: 'error', text1: error.message });
+			if (error.message.includes('[auth/invalid-action-code]')) {
+				if (justSignOut === false) {
+					Toast.show({
+						type: 'error',
+						text1: 'Invalid Authenticate Link',
+						text2: 'Please Try Again',
+					});
+				}
+			} else {
+				Toast.show({
+					type: 'error',
+					text1: 'Unexpected Error Occured',
+					text2: 'Please Try Again',
+				});
+			}
 		}
-	}, [error]);
+	}, [error, justSignOut]);
 
 	useEffect(() => {
 		let isSubscribed = true;
@@ -29,8 +46,12 @@ const useEmailLinkEffect: () => {
 				try {
 					// use the email we saved earlier
 					const email = await AsyncStorage.getItem('emailForSignIn');
-					if (email) await auth.signInWithEmailLink(email, link.url);
-					else throw Error('Email not in async storage');
+					if (email) {
+						await auth.signInWithEmailLink(email, link.url);
+						setJustSignOut && setJustSignOut(false);
+					} else {
+						throw Error('Email not in async storage');
+					}
 					/* You can now navigate to your initial authenticated screen
 			  You can also parse the `link.url` and use the `continueurl` param to go to another screen
 			  The `continueurl` would be the `url` passed to the action code settings */

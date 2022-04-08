@@ -8,7 +8,7 @@ import useNewWishlist from './useNewWishlist';
 
 export type UseWishlist = (query: string | null) => {
 	wishlist: WishlistDataCL[] | null | undefined;
-	fetchWishlist: () => Promise<void>;
+	fetchWishlist: (query: string) => Promise<void>;
 	resetWishlist: () => Promise<void>;
 	fetchedAll: boolean;
 };
@@ -46,12 +46,12 @@ const useWishlist: UseWishlist = (query) => {
 			// append unique newLsts to listings with
 			if (wishlist && wishlist.length > 0) {
 				if (newWishlist && newWishlist.length > 0) {
-					const unionLstDict: { [key: string]: WishlistDataCL } = {};
-					wishlist.forEach((wl) => (unionLstDict[wl.id] = wl));
-					newWishlist.forEach((wl) => (unionLstDict[wl.id] = wl));
+					const unionWlDict: { [key: string]: WishlistDataCL } = {};
+					wishlist.forEach((wl) => (unionWlDict[wl.id] = wl));
+					newWishlist.forEach((wl) => (unionWlDict[wl.id] = wl));
 					const unionWl: WishlistDataCL[] = [];
-					for (const id in unionLstDict) {
-						unionWl.push(unionLstDict[id]);
+					for (const id in unionWlDict) {
+						unionWl.push(unionWlDict[id]);
 					}
 					setWishlist(unionWl);
 				}
@@ -66,12 +66,13 @@ const useWishlist: UseWishlist = (query) => {
 	/**
 	 * query more wishlist and append to wishlist
 	 */
-	const fetchWishlist = async () => {
+	const fetchWishlist = async (query: string) => {
 		if (!userInfo) return;
 		const querySnapshot = await db
 			.collection('users')
 			.doc(userInfo.uid)
 			.collection('wishlist')
+			.where('searchableKeyword', 'array-contains', query.trim().toLowerCase())
 			.orderBy('addedAt', 'asc')
 			.startAfter(lastDoc ? lastDoc : [])
 			.limit(WISHLIST_PER_PAGE)
@@ -108,6 +109,7 @@ const useWishlist: UseWishlist = (query) => {
 	useEffect(() => {
 		resetWishlist();
 	}, [query]);
+
 	return { wishlist, fetchWishlist, resetWishlist, fetchedAll };
 };
 

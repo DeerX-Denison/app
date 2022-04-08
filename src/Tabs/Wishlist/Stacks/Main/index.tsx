@@ -28,10 +28,12 @@ const Main: FC<Props> = ({ route, navigation }) => {
 		navigation.navigate('Item', { listingId });
 	};
 	const scrollViewRef = useRef<ScrollView | undefined>();
+
+	// when user scroll down to bottom
 	const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
-			fetchWishlist();
+			fetchWishlist('');
 		}
 	};
 

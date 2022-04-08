@@ -5,6 +5,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
 import {
+	NativeScrollEvent,
+	NativeSyntheticEvent,
+	RefreshControl,
 	ScrollView,
 	Text,
 	TouchableOpacity,
@@ -22,11 +25,28 @@ interface Props {
  * MyListing components, a list of all items that is created and put on sale by the user
  */
 const MyListings: FC<Props> = ({ navigation }) => {
-	const { myListings } = useMyListings();
+	const { myListings, resetMyListings, fetchMyListings } = useMyListings();
 
 	const editHandler = (listingId: ListingId) => {
 		navigation.navigate('Edit', { listingId });
 	};
+
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await resetMyListings();
+		setRefreshing(false);
+	};
+
+	// when user scroll down to bottom
+	const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+		const offsetY = e.nativeEvent.contentOffset.y;
+		if (offsetY > 50) {
+			fetchMyListings();
+		}
+	};
+
 	return (
 		<View style={tw('flex flex-1')}>
 			{myListings ? (
@@ -36,6 +56,16 @@ const MyListings: FC<Props> = ({ navigation }) => {
 						// myListings fetched is not empty, render scroll view
 						<>
 							<ScrollView
+								refreshControl={
+									<RefreshControl
+										refreshing={refreshing}
+										onRefresh={onRefresh}
+										size={24}
+									/>
+								}
+								onScrollEndDrag={onScrollEndDrag}
+								showsVerticalScrollIndicator={false}
+								showsHorizontalScrollIndicator={false}
 								contentContainerStyle={tw(
 									'flex-col my-2 justify-center items-center'
 								)}

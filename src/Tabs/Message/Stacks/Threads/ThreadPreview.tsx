@@ -1,4 +1,6 @@
 import { UserContext } from '@Contexts';
+import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
 	useHasSeenPreview,
@@ -11,7 +13,6 @@ import tw from '@tw';
 import React, { FC, useContext } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MessageStackParamList, ThreadPreviewData } from 'types';
 interface Prop {
 	threadPreviewData: ThreadPreviewData;
@@ -51,7 +52,7 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 			<TouchableWithoutFeedback onPress={viewThreadHandler}>
 				<View
 					style={tw(
-						'flex flex-row items-start m-1 p-2 h-20 w-full bg-gray-50 border-b border-gray-200'
+						'flex flex-row items-start m-1 p-2 h-20 bg-gray-50 border-b border-gray-200'
 					)}
 				>
 					<View
@@ -103,7 +104,7 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 					</View>
 					{hasSeen === false && (
 						<View style={tw('h-full flex justify-center items-center pl-2')}>
-							<Icon name="circle" style={tw('text-red-500')} />
+							<FontAwesomeIcon icon={faDotCircle} style={tw('text-red-500')} />
 						</View>
 					)}
 				</View>

@@ -8,6 +8,7 @@ import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	NativeScrollEvent,
 	NativeSyntheticEvent,
+	RefreshControl,
 	ScrollView,
 	Text,
 	TextInput,
@@ -81,9 +82,15 @@ const Threads: FC<Props> = ({ navigation }) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
 			fetchThreads();
-		} else if (offsetY < -50) {
-			resetThreads();
 		}
+	};
+
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await resetThreads();
+		setRefreshing(false);
 	};
 
 	return (
@@ -168,8 +175,17 @@ const Threads: FC<Props> = ({ navigation }) => {
 			) : (
 				// User is not searching, render threads
 				<ScrollView
+					refreshControl={
+						<RefreshControl
+							refreshing={refreshing}
+							onRefresh={onRefresh}
+							size={24}
+						/>
+					}
+					showsVerticalScrollIndicator={false}
+					showsHorizontalScrollIndicator={false}
 					ref={scrollViewRef as any}
-					contentContainerStyle={tw('mx-2 flex-1')}
+					contentContainerStyle={tw('mx-2')}
 					onScrollEndDrag={onScrollEndDrag}
 				>
 					{threads ? (

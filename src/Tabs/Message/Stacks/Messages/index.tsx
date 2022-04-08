@@ -16,7 +16,14 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useRef, useState } from 'react';
-import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+	Animated,
+	RefreshControl,
+	ScrollView,
+	Text,
+	TextInput,
+	View,
+} from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
 import { TextSelection } from 'src/Hooks/useMessage/useInputText';
@@ -124,6 +131,14 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		scrollViewRef.current?.scrollToEnd();
 	};
 
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await fetchMessages();
+		setRefreshing(false);
+	};
+
 	return (
 		<>
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
@@ -179,13 +194,19 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						}}
 					>
 						<ScrollView
+							refreshControl={
+								<RefreshControl
+									refreshing={refreshing}
+									onRefresh={onRefresh}
+									progressViewOffset={
+										contentHeight < boxHeight ? boxHeight - contentHeight : 55
+									}
+									size={24}
+								/>
+							}
+							showsVerticalScrollIndicator={false}
+							showsHorizontalScrollIndicator={false}
 							ref={scrollViewRef as any}
-							onScrollEndDrag={(e) => {
-								const offsetY = e.nativeEvent.contentOffset.y;
-								if (offsetY < -50) {
-									fetchMessages();
-								}
-							}}
 							onScroll={(e) => {
 								const offsetY = e.nativeEvent.contentOffset.y;
 								if (offsetY === 0) {

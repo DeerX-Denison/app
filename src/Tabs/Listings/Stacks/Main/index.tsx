@@ -15,6 +15,7 @@ import {
 	Animated,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
+	RefreshControl,
 	ScrollView,
 	Text,
 	TouchableOpacity,
@@ -48,9 +49,15 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
 			fetchListings(categoryFilter);
-		} else if (offsetY < -50) {
-			resetListings();
 		}
+	};
+
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await resetListings();
+		setRefreshing(false);
 	};
 
 	const { scale } = useScaleAnimation(categorizing);
@@ -136,6 +143,15 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 							{listings.length !== 0 ? (
 								// fetched listings length is > 0, render all Listing
 								<ScrollView
+									showsVerticalScrollIndicator={false}
+									showsHorizontalScrollIndicator={false}
+									refreshControl={
+										<RefreshControl
+											refreshing={refreshing}
+											onRefresh={onRefresh}
+											size={24}
+										/>
+									}
 									onScrollEndDrag={onScrollEndDrag}
 									contentContainerStyle={tw(
 										'flex flex-row flex-wrap items-start'

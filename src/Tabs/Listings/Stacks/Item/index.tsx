@@ -79,7 +79,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		await fn.httpsCallable('deleteWishlist')(listingData.id);
 	};
 	const debouncedRemoveWishlistFromDb = useRef(
-		useDebounce(removeWishlistFromDb, 5000)
+		useDebounce(removeWishlistFromDb, 1000)
 	);
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
@@ -105,7 +105,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
 		await fn.httpsCallable('createWishlist')(wishlistData);
 	};
-	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 5000));
+	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {

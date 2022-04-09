@@ -5,6 +5,12 @@ import {
 	CONDITIONS,
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
 } from '@Constants';
+import {
+	faChevronDown,
+	faPlus,
+	faTimes,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListingData, useListingError, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,7 +27,6 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
 import addImage from '../addImage';
 import Category from '../Category';
@@ -265,7 +270,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 																)
 															}
 														>
-															<Icon name="times" size={16} style={tw('m-1')} />
+															<FontAwesomeIcon
+																icon={faTimes}
+																size={16}
+																style={tw('m-1')}
+															/>
 														</TouchableOpacity>
 														<Text
 															style={tw(
@@ -279,7 +288,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											))}
 											<TouchableOpacity onPress={() => setCategorizing(true)}>
 												<Badges.Light>
-													<Icon name="plus" size={16} style={tw('m-1')} />
+													<FontAwesomeIcon
+														icon={faPlus}
+														size={16}
+														style={tw('m-1')}
+													/>
 													<Text
 														style={tw('capitalize text-s-md font-medium pr-2')}
 													>
@@ -319,7 +332,9 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 												} as ListingData);
 												setHasEditCondition(true);
 											}}
-											Icon={() => <Icon name="chevron-down" size={16} />}
+											Icon={() => (
+												<FontAwesomeIcon icon={faChevronDown} size={20} />
+											)}
 											placeholder={
 												{
 													label: 'Item Condition...',

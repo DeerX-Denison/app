@@ -1,5 +1,7 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
+import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useSlideAnimation } from '@Hooks';
 import tw from '@tw';
 import React, { FC, useEffect, useRef, useState } from 'react';
@@ -11,7 +13,6 @@ import {
 	TouchableOpacity,
 	View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingCategory, ListingData } from 'types';
 import addCategory from './addCategory';
@@ -71,7 +72,7 @@ const Category: FC<Props> = ({
 					style={tw('absolute left-0 h-full justify-center pl-6')}
 					onPress={() => setCategorizing(false)}
 				>
-					<Icon name="chevron-left" size={18} />
+					<FontAwesomeIcon icon={faChevronLeft} size={16} />
 				</TouchableOpacity>
 			</View>
 			<ScrollView
@@ -102,7 +103,11 @@ const Category: FC<Props> = ({
 												}
 											>
 												<Badges.Light>
-													<Icon name="plus" size={16} style={tw('m-1')} />
+													<FontAwesomeIcon
+														icon={faPlus}
+														size={16}
+														style={tw('m-1')}
+													/>
 													<Text style={tw('capitalize text-s-md pr-2')}>
 														{suggestion}
 													</Text>

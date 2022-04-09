@@ -1,40 +1,18 @@
 import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { auth } from '@firebase.config';
-import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { Linking, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
-import Toast from 'react-native-toast-message';
 import { MenuStackParamList } from 'types';
 interface Props {
 	navigation: NativeStackNavigationProp<MenuStackParamList>;
 }
-/**
- * derenders button at header
- */
-const derenderBackButton = (navigation: Props['navigation']) => {
-	useEffect(() => {
-		const parentNavigation = navigation.getParent();
-		if (parentNavigation) {
-			parentNavigation.setOptions({
-				headerLeft: () => null,
-			});
-		} else {
-			logger.error(`Parent navigation is undefined for Listings/Main`);
-			Toast.show({
-				type: 'error',
-				text1: 'Unexpected error occured',
-			});
-		}
-	});
-};
 
 const Main: FC<Props> = ({ navigation }) => {
-	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 	return (
 		<View style={tw('flex flex-1')}>
@@ -50,6 +28,14 @@ const Main: FC<Props> = ({ navigation }) => {
 			</View>
 
 			<ScrollView contentContainerStyle={tw('flex flex-col flex-1 p-4')}>
+				<Buttons.Primary
+					title="Edit Profile"
+					onPress={() =>
+						navigation.navigate('EditProfile', { selectedPronouns: null })
+					}
+					size="md"
+				/>
+				<View style={tw('pt-4')} />
 				<Buttons.Primary
 					title="Bug report"
 					onPress={() => Linking.openURL('https://forms.gle/M6sYNPFrWAh5i58d9')}

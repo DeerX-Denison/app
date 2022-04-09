@@ -60,19 +60,12 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 
 					<View
 						style={tw(
-							'flex-row w-full items-center justify-center pb-2 pt-1 pl-4'
+							'absolute bottom-2 left-2 rounded-lg bg-red-200 px-2 py-1'
 						)}
 					>
-						<View style={tw('w-1/4 flex flex-row break-words')}>
-							<Text style={tw('text-s-md font-normal')}>
-								${listingData.price}
-							</Text>
-						</View>
-						<View style={tw('w-3/4 break-words')}>
-							<Text style={tw('text-s-md font-normal')}>
-								{listingData.name}
-							</Text>
-						</View>
+						<Text style={tw('text-s-md font-normal')}>
+							${listingData.price}
+						</Text>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>

@@ -11,7 +11,7 @@ import tw from '@tw';
 import React, { FC, useContext } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import { MessageStackParamList, ThreadPreviewData } from 'types';
 interface Prop {
 	threadPreviewData: ThreadPreviewData;

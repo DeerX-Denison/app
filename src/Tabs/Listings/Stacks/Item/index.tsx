@@ -1,11 +1,13 @@
 import * as Badges from '@Components/Badges';
-import * as Buttons from '@Components/Buttons';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
+import { faEdit, faHeart, faMessage } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
+	useDebounce,
 	useIsInWishlist,
 	useIsSeller,
 	useItemDisplayTime,
@@ -15,13 +17,17 @@ import logger from '@logger';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { ListingsStackParamList, TabsParamList, WishlistDataCL } from 'types';
+import {
+	ListingData,
+	ListingsStackParamList,
+	TabsParamList,
+	WishlistDataCL,
+} from 'types';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
@@ -42,11 +48,6 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		listingData?.updatedAt?.toDate(),
 		curTime
 	);
-	const [disabledAddWl, setDisabledAddWl] = useState<boolean>(false);
-	const [disabledRemoveWl, setDisabledRemoveWl] = useState<boolean>(false);
-
-	const [isMounted, setIsMounted] = useState<boolean>(true);
-	useEffect(() => () => setIsMounted(false), []);
 
 	/**
 	 * effect to check if listingData exists
@@ -61,34 +62,34 @@ const Item: FC<Props> = ({ route, navigation }) => {
 		}
 	}, [listingData]);
 
+	/**
+	 * handles when user press message icon
+	 */
 	const messageHandler = () => {
 		if (listingData && userInfo) {
-			const parentNav = navigation.getParent<NavigationProp<TabsParamList>>();
-			if (parentNav) {
-				parentNav.navigate('Inbox', {
-					screen: 'Messages',
-					params: { members: [userInfo, listingData.seller] },
-					initial: false,
-				});
-			} else {
-				logger.error(`Parent navigation is undefined for ${listingId}`);
-				Toast.show({
-					type: 'error',
-					text1: 'Unexpected error occured',
-				});
-			}
+			navigation.navigate('Messages', {
+				members: [userInfo, listingData.seller],
+			});
 		}
 	};
 
+	// removed wishlist from db handler
+	// ===========================================================================
+	const removeWishlistFromDb = async (listingData: ListingData) => {
+		await fn.httpsCallable('deleteWishlist')(listingData.id);
+	};
+	const debouncedRemoveWishlistFromDb = useRef(
+		useDebounce(removeWishlistFromDb, 5000)
+	);
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
-				setIsInWishlist(false);
 				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
-				setDisabledRemoveWl(true);
-				await fn.httpsCallable('deleteWishlist')(listingData.id);
-				setTimeout(() => isMounted && setDisabledRemoveWl(false), 1000);
+				setIsInWishlist(false);
+				if (debouncedRemoveWishlistFromDb)
+					await debouncedRemoveWishlistFromDb.current(listingData);
 			} catch (error) {
+				setIsInWishlist(true);
 				logger.log(error);
 				Toast.show({
 					type: 'error',
@@ -97,7 +98,14 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			}
 		}
 	};
+	// ===========================================================================
 
+	// add wishlist to db handler
+	// ===========================================================================
+	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
+		await fn.httpsCallable('createWishlist')(wishlistData);
+	};
+	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 5000));
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {
@@ -110,10 +118,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				};
 				setListingData({ ...listingData, savedBy: listingData.savedBy + 1 });
 				setIsInWishlist(true);
-				setDisabledAddWl(true);
-				await fn.httpsCallable('createWishlist')(wishlistData);
-				setTimeout(() => isMounted && setDisabledAddWl(false), 1000);
+				if (debouncedAddWishlistToDb.current)
+					await debouncedAddWishlistToDb.current(wishlistData);
 			} catch (error) {
+				setIsInWishlist(false);
 				logger.log(error);
 				Toast.show({
 					type: 'error',
@@ -122,6 +130,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 			}
 		}
 	};
+	// ===========================================================================
 
 	const editHandler = () => {
 		const parentNavigation =
@@ -175,60 +184,43 @@ const Item: FC<Props> = ({ route, navigation }) => {
 						<View style={tw('w-full')}>
 							<View style={tw('mx-4 my-1')}>
 								<View style={tw('flex flex-1 flex-row')}>
-									<View>
+									<View style={tw('mt-2')}>
 										{isInWishlist ? (
-											<TouchableOpacity
-												// style={tw('absolute left-0 h-full justify-center pl-6')}
-												onPress={removeWishlistHandler}
-											>
-												<Icon
-													name="heart"
-													color="#d4282e"
-													size={20}
-													style={tw('top-3')}
+											<TouchableOpacity onPress={removeWishlistHandler}>
+												<FontAwesomeIcon
+													icon={faHeart}
+													size={24}
+													style={tw('text-red-500')}
 												/>
 											</TouchableOpacity>
 										) : (
-											<TouchableOpacity
-												// style={tw('absolute left-0 h-full justify-center pl-6')}
-												onPress={addWishlistHandler}
-											>
-												<Icon
-													name="heart"
-													color="black"
-													size={20}
-													style={tw('top-3')}
-												/>
+											<TouchableOpacity onPress={addWishlistHandler}>
+													<FontAwesomeIcon
+														icon={faHeart}
+														size={24}
+														style={tw('text-indigo-500')}
+													/>
 											</TouchableOpacity>
-											// <Buttons.Primary
-											// 	disabled={disabledRemoveWl}
-											// 	size="sm"
-											// 	title="Like"
-											// 	onPress={addWishlistHandler}
-											// />
 										)}
 									</View>
-									<View style={tw('ml-2')}>
+									<View style={tw('ml-4 mt-2')}>
 										<TouchableOpacity onPress={messageHandler}>
-											<Icon
-												name="comments"
+											<FontAwesomeIcon
+												icon={faMessage}
 												size={24}
-												style={tw('left-2', 'top-2.5')}
+												style={tw('text-indigo-500')}
 											/>
 										</TouchableOpacity>
-										{/* <Buttons.Primary
-											size="sm"
-											title="Chat"
-											onPress={messageHandler}
-										/> */}
 									</View>
-									<View style={tw('ml-2')}>
+									<View style={tw('ml-4 mt-2')}>
 										{isSeller && (
-											<Buttons.Primary
-												title="Edit"
-												onPress={editHandler}
-												size="md"
-											/>
+											<TouchableOpacity onPress={editHandler}>
+												<FontAwesomeIcon
+													icon={faEdit}
+													size={24}
+													style={tw('text-indigo-500')}
+												/>
+											</TouchableOpacity>
 										)}
 									</View>
 								</View>
@@ -256,9 +248,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 								</Text>
 							</View>
 							<View style={tw('mx-4 my-1 h-8 border-b')}>
-								<Text style={tw('text-s-md')}>
-									{displayTime ? displayTime : '...'}
-								</Text>
+								<Text style={tw('text-s-md')}>{displayTime}</Text>
 							</View>
 							<View style={tw('mx-4 my-2')}>
 								<View style={tw('flex flex-row flex-wrap')}>

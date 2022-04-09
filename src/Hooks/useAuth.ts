@@ -3,7 +3,7 @@ import { auth, db, fn } from '@firebase.config';
 import logger from '@logger';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { useEffect, useState } from 'react';
-import { UserInfo } from 'types';
+import { UserInfo, UserProfile, UserPronoun } from 'types';
 
 /**
  * utility hook to listen for change on auth state, then set "user" accordingly
@@ -111,7 +111,11 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 const useAuth = () => {
 	const { user } = useAuthState();
 	const [userInfo, setUserInfo] = useState<UserInfo | undefined | null>();
+	const [userProfile, setUserProfile] = useState<
+		UserProfile | undefined | null
+	>();
 	useEffect(() => {
+		let isSubscribed = true;
 		if (
 			user &&
 			'email' in user &&
@@ -125,14 +129,40 @@ const useAuth = () => {
 				photoURL: user.photoURL,
 				uid: user.uid,
 			});
+			(async () => {
+				const docSnap = await db.collection('users').doc(user.uid).get();
+				const userData = docSnap.data() as UserProfile;
+				if (userData) {
+					let bio: string | null = null;
+					if ('bio' in userData) {
+						bio = userData.bio;
+					}
+					let pronouns: UserPronoun[] | null = null;
+					if ('pronouns' in userData) {
+						pronouns = userData.pronouns;
+					}
+					isSubscribed &&
+						setUserProfile({
+							email: user.email,
+							displayName: user.displayName,
+							photoURL: user.photoURL,
+							uid: user.uid,
+							bio,
+							pronouns,
+						});
+				}
+			})();
 		} else {
 			setUserInfo(user);
 		}
+		return () => {
+			isSubscribed = false;
+		};
 	}, [user]);
 
 	useSaveUser(user);
 
-	return { user, userInfo };
+	return { user, userInfo, userProfile };
 };
 
 export default useAuth;

@@ -79,7 +79,7 @@ const useItemDisplayTime = (oldTime: Date | undefined, curTime: Date) => {
 				setDisplayTime(month_date_year_hour_minute_ampm);
 			}
 		}
-	}, [curTime]);
+	}, [oldTime, curTime]);
 	return { displayTime };
 };
 

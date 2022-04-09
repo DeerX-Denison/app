@@ -1,4 +1,4 @@
-import { ListingCategory, ListingCondition } from 'types';
+import { ListingCategory, ListingCondition, UserPronoun } from 'types';
 
 export const LISTING_PER_PAGE = 20;
 export const TIME_TO_RESEND_SIGNIN_EMAIL = 30;
@@ -35,3 +35,5 @@ export const CATEGORIES: Exclude<ListingCategory, undefined>[] = [
 	'JEWELRIES',
 	'SEASONAL',
 ];
+
+export const PRONOUNS: Exclude<UserPronoun, undefined>[] = ['HE', 'HIM'];

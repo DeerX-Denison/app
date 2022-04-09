@@ -1,5 +1,4 @@
 import { UserContext } from '@Contexts';
-import { localTime } from '@firebase.config';
 import { useContext, useEffect, useState } from 'react';
 import { MessageSeenAt, ThreadData } from 'types';
 
@@ -17,7 +16,6 @@ const useSeenAt: UseSeenAtFn = (threadData) => {
 		if (threadData && userInfo) {
 			const seenAt: MessageSeenAt = {};
 			threadData.membersUid.forEach((uid) => (seenAt[uid] = null));
-			seenAt[userInfo.uid] = localTime();
 			setSeenAt(seenAt);
 		}
 	}, [threadData]);

@@ -1,9 +1,16 @@
-import * as Buttons from '@Components/Buttons';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
-import { ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+	ScrollView,
+	Text,
+	TouchableOpacity,
+	TouchableWithoutFeedback,
+	View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { ListingId, SellStackParamList } from 'types';
@@ -33,7 +40,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									'flex-col my-2 justify-center items-center'
 								)}
 							>
-								{myListings.map((listing) => (
+								{myListings.map((listing, index) => (
 									<TouchableWithoutFeedback
 										key={listing.id}
 										style={tw('w-full')}
@@ -41,23 +48,30 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									>
 										<View
 											style={tw(
-												'w-full p-2 flex-row justify-between items-center border-t'
+												`flex-row justify-between items-center mx-2 py-2 ${
+													index !== 0 ? 'border-t border-red-700' : ''
+												}`
 											)}
 										>
 											<FastImage
 												source={{ uri: listing.images[0] }}
-												style={tw('w-16 h-16')}
+												style={tw('w-16 h-16 rounded-lg')}
 											/>
-											<View style={tw('flex flex-1 break-words pl-2')}>
+											<View style={tw('flex flex-1 break-words pl-4')}>
 												<Text style={tw('text-lg font-bold')}>
 													{listing.name}
 												</Text>
 											</View>
-											<Buttons.Primary
-												title="Edit"
+											<TouchableOpacity
 												onPress={() => editHandler(listing.id)}
-												size="sm"
-											/>
+												style={tw('pr-2')}
+											>
+												<FontAwesomeIcon
+													icon={faEdit}
+													size={24}
+													style={tw('text-indigo-500')}
+												/>
+											</TouchableOpacity>
 										</View>
 									</TouchableWithoutFeedback>
 								))}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useDebounce from './useDebounce';
 
 export type UseSuggestionQuery = (inputMessage: string) => {
@@ -21,11 +21,11 @@ const extractQuery: ExtractQueryFn = (inputMessage) => {
  */
 const useSuggestionQuery: UseSuggestionQuery = (inputText) => {
 	const [query, setQuery] = useState<string | null>(null);
-	const extractQueryDebounced = useDebounce(extractQuery, 300);
+	const extractQueryDebounced = useRef(useDebounce(extractQuery, 275));
 	useEffect(() => {
 		let isSubscribed = true;
 		(async () => {
-			const query = await extractQueryDebounced(inputText);
+			const query = await extractQueryDebounced.current(inputText);
 			isSubscribed && setQuery(query);
 		})();
 		return () => {

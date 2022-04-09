@@ -18,7 +18,9 @@ const Wishlist: FC<Props> = () => {
 			>
 				{(props) => <Main {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Item">{(props) => <Item {...props} />}</Stack.Screen>
+			<Stack.Screen name="Item" options={{ headerBackTitle: '' }}>
+				{(props) => <Item {...props} />}
+			</Stack.Screen>
 		</Stack.Navigator>
 	);
 };

@@ -5,6 +5,7 @@ import {
 	useKeyboard,
 	useKeyboardPadding,
 	useMessage,
+	useMessageStatus,
 	useParseMessage,
 	useSeenIcons,
 	useThreadData,
@@ -16,6 +17,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
 import { TextSelection } from 'src/Hooks/useMessage/useInputText';
@@ -28,6 +30,8 @@ import renderHeader from './renderHeader';
 import useMsgWithSeenIconIds from './useMsgWithSeenIconIds';
 import useMsgWithStatusId from './useMsgWithStatusId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
@@ -50,14 +54,15 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
-	const [messageStatus, setMessageStatus] = useState<
-		undefined | 'sending' | 'sent' | 'seen'
-	>();
 	const { seenIcons } = useSeenIcons(threadData);
 	const { msgsWithSeenIconsIds } = useMsgWithSeenIconIds(seenIcons, threadData);
 	const { msgWithStatusId } = useMsgWithStatusId(
 		threadData,
 		msgsWithSeenIconsIds
+	);
+	const { messageStatus, setMessageStatus } = useMessageStatus(
+		threadData,
+		msgWithStatusId
 	);
 	const { didShow } = useKeyboard();
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
@@ -154,12 +159,19 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
-									<Buttons.Primary
+									{/* <Buttons.Primary
 										title="Send"
 										onPress={sendHandler}
 										size="md"
 										disabled={disableSend}
-									/>
+									/> */}
+									<TouchableOpacity onPress={sendHandler} disabled={disableSend}>
+										<FontAwesomeIcon
+												icon={faCircleArrowUp}
+												size={25}
+												style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
+											/>
+									</TouchableOpacity>
 								</View>
 							</View>
 						</View>

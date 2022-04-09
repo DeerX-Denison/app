@@ -14,10 +14,16 @@ const Message: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<MessageStackParamList>();
 	return (
 		<Stack.Navigator initialRouteName="Threads">
-			<Stack.Screen name="Threads" options={{ headerTitle: 'Inbox' }}>
+			<Stack.Screen
+				name="Threads"
+				options={{ headerTitle: 'Inbox', headerBackTitle: '' }}
+			>
 				{(props) => <Threads {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Messages" options={{ headerTitle: '' }}>
+			<Stack.Screen
+				name="Messages"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>

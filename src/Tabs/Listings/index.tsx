@@ -1,11 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingsStackParamList } from 'types';
+import { Messages } from '../Message/Stacks';
 import { Item, Listings as ListingsScreen } from './Stacks';
-
 interface Props {}
 /**
  * Listing components, part of the 4 tabs of the app
@@ -19,16 +17,17 @@ const Listings: FC<Props> = () => {
 			</Stack.Screen>
 			<Stack.Screen
 				name="Item"
-				options={({ navigation }) => ({
-					headerLeft: () => (
-						// <Button title="left" onPress={() => navigation.goBack()} />
-						<TouchableOpacity onPress={() => navigation.goBack()}>
-							<Icon name="arrow-left" size={24} style={tw('left-1')} />
-						</TouchableOpacity>
-					),
+				options={() => ({
+					headerBackTitle: '',
 				})}
 			>
 				{(props) => <Item {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Messages"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+			>
+				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

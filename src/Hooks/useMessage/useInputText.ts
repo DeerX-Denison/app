@@ -35,9 +35,6 @@ const useInputText: UseInputText = () => {
 		// TODO: implement check for change in refs in a new inputText
 	}, [inputText]);
 
-	useEffect(() => {
-		console.log(textSelection);
-	}, [textSelection]);
 	return {
 		inputText,
 		setInputText,

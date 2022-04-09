@@ -50,8 +50,11 @@ const MockItem: FC = () => (
 				{(props) => (
 					<Item
 						{...props}
-						// eslint-disable-next-line react/prop-types
-						route={{ ...props.route, params: { listingId: 'Mock Listing Id' } }}
+						route={{
+							// eslint-disable-next-line react/prop-types
+							...props.route,
+							params: { listingId: 'Mock Listing Id', reset: false },
+						}}
 					/>
 				)}
 			</Stack.Screen>

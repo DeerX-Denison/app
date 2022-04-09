@@ -14,7 +14,7 @@ import {
 	useListingData,
 } from '@Hooks';
 import logger from '@logger';
-import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useRef } from 'react';
@@ -22,12 +22,7 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import {
-	ListingData,
-	ListingsStackParamList,
-	TabsParamList,
-	WishlistDataCL,
-} from 'types';
+import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
@@ -133,21 +128,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	// ===========================================================================
 
 	const editHandler = () => {
-		const parentNavigation =
-			navigation.getParent<NavigationProp<TabsParamList>>();
-		if (parentNavigation) {
-			parentNavigation.navigate('Sell', {
-				screen: 'Edit',
-				params: { listingId },
-				initial: false,
-			});
-		} else {
-			logger.error(`Parent navigation is undefined for ${listingId}`);
-			Toast.show({
-				type: 'error',
-				text1: 'Unexpected error occured',
-			});
-		}
+		navigation.navigate('Edit', { listingId });
 	};
 
 	return (
@@ -159,7 +140,9 @@ const Item: FC<Props> = ({ route, navigation }) => {
 						<View style={tw('mx-4 my-2')}>
 							<TouchableOpacity
 								onPress={() =>
-									navigation.navigate('Profile', { uid: userInfo?.uid })
+									navigation.navigate('Profile', {
+										uid: listingData.seller.uid,
+									})
 								}
 								style={tw('flex flex-row justify-start items-center')}
 							>

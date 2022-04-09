@@ -91,11 +91,13 @@ export type TabsParamList = {
 	Sell: SellTab | undefined;
 };
 
+export type ItemScreenParamList = { listingId: ListingId };
 export type ListingsStackParamList = {
 	Listings: { reset: boolean };
-	Item: { listingId: ListingId };
+	Item: ItemScreenParamList;
 	Messages: { members: UserInfo[] };
 	Profile: { uid: string | undefined };
+	Edit: { listingId: ListingId };
 };
 
 export type SellStackParamList = {
@@ -107,6 +109,7 @@ export type SellStackParamList = {
 export type MessageStackParamList = {
 	Threads: undefined;
 	Messages: { members: UserInfo[] };
+	Profile: { uid: string | undefined };
 };
 
 export type NewThreadUserInfo = {
@@ -117,7 +120,8 @@ export type NewThreadUserInfo = {
 
 export type WishlistStackParamList = {
 	Wishlist: { reset: boolean };
-	Item: { listingId: ListingId };
+	Item: ItemScreenParamList;
+	Profile: { uid: string | undefined };
 };
 
 export type MenuStackParamList = {

@@ -14,6 +14,7 @@ import {
 	TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
 import ImageView from 'react-native-image-viewing';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { CarouselData, ListingData } from 'types';
 

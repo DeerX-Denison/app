@@ -1,5 +1,7 @@
 import { fn } from '@firebase.config';
+import logger from '@logger';
 import { useEffect, useState } from 'react';
+import Toast from 'react-native-toast-message';
 import { UserProfile } from 'types';
 
 export type UseProfile = (uid: string | undefined) => {
@@ -14,9 +16,18 @@ const useProfile: UseProfile = (uid) => {
 		let isSubscribed = true;
 
 		(async () => {
-			const res = await fn.httpsCallable('getUserProfile')(uid);
-			const profile = res.data as UserProfile;
-			isSubscribed && setProfile(profile);
+			try {
+				const res = await fn.httpsCallable('getUserProfile')(uid);
+				const profile = res.data as UserProfile;
+				isSubscribed && setProfile(profile);
+			} catch (error) {
+				logger.error(error);
+				Toast.show({
+					type: 'error',
+					text1: 'Fail To View User Profile',
+					text2: 'Please Try Again Later',
+				});
+			}
 		})();
 
 		return () => {

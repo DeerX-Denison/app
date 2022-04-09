@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
+import { Button } from 'react-native';
 import { ListingsStackParamList } from 'types';
 import { Messages } from '../Message/Stacks';
+import { Edit } from '../Sell/Stacks';
 import { Item, Listings as ListingsScreen, Profile } from './Stacks';
 interface Props {}
 /**
@@ -34,6 +36,21 @@ const Listings: FC<Props> = () => {
 				initialParams={{ uid: undefined }}
 			>
 				{(props) => <Profile {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Edit"
+				options={{
+					headerRight: () => (
+						<Button
+							title="save"
+							onPress={() => {
+								// do nothing
+							}}
+						/>
+					),
+				}}
+			>
+				{(props) => <Edit {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

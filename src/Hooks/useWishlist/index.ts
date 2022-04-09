@@ -8,6 +8,9 @@ import useNewWishlist from './useNewWishlist';
 
 export type UseWishlist = (query: string | null) => {
 	wishlist: WishlistDataCL[] | null | undefined;
+	setWishlist: React.Dispatch<
+		React.SetStateAction<WishlistDataCL[] | null | undefined>
+	>;
 	fetchWishlist: (query: string) => Promise<void>;
 	resetWishlist: () => Promise<void>;
 	fetchedAll: boolean;
@@ -110,7 +113,7 @@ const useWishlist: UseWishlist = (query) => {
 		resetWishlist();
 	}, [query]);
 
-	return { wishlist, fetchWishlist, resetWishlist, fetchedAll };
+	return { wishlist, setWishlist, fetchWishlist, resetWishlist, fetchedAll };
 };
 
 export default useWishlist;

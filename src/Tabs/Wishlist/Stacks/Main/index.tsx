@@ -1,4 +1,7 @@
 import * as Buttons from '@Components/Buttons';
+import { fn } from '@firebase.config';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useWishlist } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -10,11 +13,13 @@ import {
 	RefreshControl,
 	ScrollView,
 	Text,
+	TouchableOpacity,
 	TouchableWithoutFeedback,
 	View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
+import { SwipeListView } from 'react-native-swipe-list-view';
 import { WishlistStackParamList } from 'types';
 
 interface Props {
@@ -23,7 +28,8 @@ interface Props {
 }
 
 const Main: FC<Props> = ({ route, navigation }) => {
-	const { wishlist, fetchWishlist, resetWishlist } = useWishlist('');
+	const { wishlist, setWishlist, fetchWishlist, resetWishlist } =
+		useWishlist('');
 	const itemHandler = (listingId: string) => {
 		navigation.navigate('Item', { listingId });
 	};
@@ -34,6 +40,12 @@ const Main: FC<Props> = ({ route, navigation }) => {
 		const offsetY = e.nativeEvent.contentOffset.y;
 		if (offsetY > 50) {
 			fetchWishlist('');
+		}
+	};
+	const deleteHandler = async (id: string) => {
+		if (wishlist) {
+			setWishlist(wishlist.filter((wl) => wl.id !== id));
+			await fn.httpsCallable('deleteWishlist')(id);
 		}
 	};
 
@@ -59,7 +71,9 @@ const Main: FC<Props> = ({ route, navigation }) => {
 					{wishlist.length > 0 ? (
 						// wishlist is not empty, render scroll view
 						<>
-							<ScrollView
+							<SwipeListView
+								ref={scrollViewRef as any}
+								onScrollEndDrag={onScrollEndDrag}
 								refreshControl={
 									<RefreshControl
 										refreshing={refreshing}
@@ -67,48 +81,59 @@ const Main: FC<Props> = ({ route, navigation }) => {
 										size={24}
 									/>
 								}
-								showsVerticalScrollIndicator={false}
-								showsHorizontalScrollIndicator={false}
-								ref={scrollViewRef as any}
-								onScrollEndDrag={onScrollEndDrag}
-								contentContainerStyle={tw(
-									'flex-col my-2 justify-center items-center'
-								)}
-							>
-								{wishlist.map((wishlistData, index) => (
-									<TouchableWithoutFeedback
-										key={wishlistData.id}
-										style={tw('w-full')}
-										onPress={() => itemHandler(wishlistData.id)}
-									>
-										<View
-											style={tw(
-												`flex-row justify-between items-center mx-2 py-2 ${
-													index !== 0 ? 'border-t border-red-700' : ''
-												}`
-											)}
+								data={wishlist}
+								renderItem={({ index, item: wishlistData }) => {
+									return (
+										<TouchableWithoutFeedback
+											key={wishlistData.id}
+											style={tw('flex-1')}
+											onPress={() => itemHandler(wishlistData.id)}
 										>
-											<FastImage
-												source={{ uri: wishlistData.thumbnail }}
-												style={tw('w-16 h-16 rounded-lg')}
-											/>
-											<View style={tw('flex flex-1 break-words pl-2')}>
-												<Text style={tw('text-lg font-bold')}>
-													{wishlistData.name}
-												</Text>
+											<View
+												style={tw(
+													`bg-white flex-row justify-between items-center py-2 ${
+														index !== 0 ? 'border-t border-red-700' : ''
+													}`
+												)}
+											>
+												<FastImage
+													source={{ uri: wishlistData.thumbnail }}
+													style={tw('w-16 h-16 rounded-lg mx-2')}
+												/>
+												<View style={tw('flex flex-1 break-words pl-2')}>
+													<Text style={tw('text-lg font-bold')}>
+														{wishlistData.name}
+													</Text>
+												</View>
 											</View>
+										</TouchableWithoutFeedback>
+									);
+								}}
+								renderHiddenItem={({ item: wishlistData }) => (
+									<View
+										style={tw('flex flex-row flex-1 justify-end bg-gray-700')}
+									>
+										<View style={tw('flex flex-row w-16')}>
+											<TouchableOpacity
+												style={tw('flex flex-1 justify-center items-center')}
+												onPress={() => deleteHandler(wishlistData.id)}
+											>
+												<FontAwesomeIcon
+													icon={faTrash}
+													size={24}
+													style={tw('text-white')}
+												/>
+											</TouchableOpacity>
 										</View>
-									</TouchableWithoutFeedback>
-								))}
-							</ScrollView>
-							{/* {fetchedAll && (
-								<View style={tw('w-full')}>
-									<Text>
-										End of wishlist. Temporary implementation. Will implement a
-										more friendly message.
-									</Text>
-								</View>
-							)} */}
+									</View>
+								)}
+								rightOpenValue={-64}
+								disableRightSwipe={true}
+								swipeToOpenPercent={10}
+								contentContainerStyle={tw(
+									'flex flex-col flex-1 my-2 justify-start'
+								)}
+							/>
 						</>
 					) : (
 						// wishlist is empty, display empty message
@@ -151,4 +176,5 @@ const Main: FC<Props> = ({ route, navigation }) => {
 		</View>
 	);
 };
+
 export default Main;

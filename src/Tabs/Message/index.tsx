@@ -2,6 +2,7 @@ import { RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { MessageStackParamList, TabsParamList } from 'types';
+import { Profile } from '../Listings/Stacks';
 import { Messages, Threads } from './Stacks';
 interface Props {
 	route: RouteProp<TabsParamList, 'Inbox'>;
@@ -25,6 +26,13 @@ const Message: FC<Props> = () => {
 				options={{ headerTitle: '', headerBackTitle: '' }}
 			>
 				{(props) => <Messages {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Profile"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+				initialParams={{ uid: undefined }}
+			>
+				{(props) => <Profile {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

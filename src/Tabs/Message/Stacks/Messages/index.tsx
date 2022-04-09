@@ -1,6 +1,7 @@
-import * as Buttons from '@Components/Buttons';
 import { UserContext } from '@Contexts';
 import { fn, localTime } from '@firebase.config';
+import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useKeyboard,
 	useKeyboardPadding,
@@ -22,6 +23,7 @@ import {
 	ScrollView,
 	Text,
 	TextInput,
+	TouchableOpacity,
 	View,
 } from 'react-native';
 import 'react-native-get-random-values';
@@ -171,12 +173,22 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
-									<Buttons.Primary
+									{/* <Buttons.Primary
 										title="Send"
 										onPress={sendHandler}
 										size="md"
 										disabled={disableSend}
-									/>
+									/> */}
+									<TouchableOpacity
+										onPress={sendHandler}
+										disabled={disableSend}
+									>
+										<FontAwesomeIcon
+											icon={faCircleArrowUp}
+											size={25}
+											style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
+										/>
+									</TouchableOpacity>
 								</View>
 							</View>
 						</View>

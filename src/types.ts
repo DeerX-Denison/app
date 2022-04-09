@@ -95,6 +95,7 @@ export type ListingsStackParamList = {
 	Listings: { reset: boolean };
 	Item: { listingId: ListingId };
 	Messages: { members: UserInfo[] };
+	Profile: { uid: string | undefined };
 };
 
 export type SellStackParamList = {

@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { ListingsStackParamList } from 'types';
 import { Messages } from '../Message/Stacks';
-import { Item, Listings as ListingsScreen } from './Stacks';
+import { Item, Listings as ListingsScreen, Profile } from './Stacks';
 interface Props {}
 /**
  * Listing components, part of the 4 tabs of the app
@@ -27,6 +27,13 @@ const Listings: FC<Props> = () => {
 				options={{ headerTitle: '', headerBackTitle: '' }}
 			>
 				{(props) => <Messages {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Profile"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+				initialParams={{ uid: undefined }}
+			>
+				{(props) => <Profile {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

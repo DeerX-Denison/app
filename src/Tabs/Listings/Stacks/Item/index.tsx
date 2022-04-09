@@ -157,7 +157,12 @@ const Item: FC<Props> = ({ route, navigation }) => {
 				<>
 					<ScrollView>
 						<View style={tw('mx-4 my-2')}>
-							<View style={tw('flex flex-row justify-start items-center')}>
+							<TouchableOpacity
+								onPress={() =>
+									navigation.navigate('Profile', { uid: userInfo?.uid })
+								}
+								style={tw('flex flex-row justify-start items-center')}
+							>
 								<FastImage
 									source={{
 										uri: listingData.seller.photoURL
@@ -172,7 +177,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 										? listingData.seller.displayName
 										: DEFAULT_USER_DISPLAY_NAME}
 								</Text>
-							</View>
+							</TouchableOpacity>
 						</View>
 						<Carousel
 							listingData={listingData}

@@ -287,12 +287,12 @@ const SignIn: FC = () => {
 										onEndEditing={isValidEmail}
 										autoCapitalize="none"
 										style={tw(
-											'font-medium text-s-md p-2 border w-7/12 rounded-tl-md rounded-bl-md h-full'
+											'font-medium text-s-md flex-1 p-2 border rounded-tl-md rounded-bl-md h-full'
 										)}
 									/>
 									<View
 										style={tw(
-											'bg-gray-300 w-5/12 p-2 border-t border-b border-r rounded-tr-md rounded-br-md h-full flex flex-col justify-center items-center'
+											'bg-gray-300 p-2 border rounded-tr-md rounded-br-md h-full flex flex-col justify-center items-center'
 										)}
 									>
 										<Text style={tw('font-medium text-gray-500 text-s-md')}>

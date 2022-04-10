@@ -33,8 +33,6 @@ const Message: FC<Props> = ({
 	const { userInfo } = useContext(UserContext);
 	// const { curTime } = useCurrentTime();
 	// const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
-	console.log(latestNonSelfMsg);
-
 	return (
 		<>
 			<View style={tw('p-1 flex-row items-end')}>

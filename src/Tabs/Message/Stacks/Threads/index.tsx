@@ -204,25 +204,23 @@ const Threads: FC<Props> = ({ navigation }) => {
 								</>
 							) : (
 								// thread is empty, display empty thread message
-								<>
-									<View
-										style={tw(
-											'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
-										)}
-									>
-										<Text style={tw('text-s-md font-semibold p-4')}>
-											It's lonely here.
-										</Text>
-										<Buttons.Primary
-											size="md"
-											title="Find friends"
-											onPress={() => {
-												setSearching(true);
-												textInputRef.current?.focus();
-											}}
-										/>
-									</View>
-								</>
+								<View
+									style={tw(
+										'flex flex-1 items-center justify-center items-center'
+									)}
+								>
+									<Text style={tw('text-s-md font-semibold p-4')}>
+										It's lonely here.
+									</Text>
+									<Buttons.Primary
+										size="md"
+										title="Find friends"
+										onPress={() => {
+											setSearching(true);
+											textInputRef.current?.focus();
+										}}
+									/>
+								</View>
 							)}
 						</>
 					) : (

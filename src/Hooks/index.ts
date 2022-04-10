@@ -14,6 +14,7 @@ export { default as useIsSeller } from './useIsSeller';
 export { default as useItemDisplayTime } from './useItemDisplayTime';
 export { default as useKeyboard } from './useKeyboard';
 export { default as useKeyboardPadding } from './useKeyboardPadding';
+export { default as useLatestNonSelfMsg } from './useLatestNonSelfMsg';
 export { default as useListingData } from './useListingData';
 export { default as useListingError } from './useListingError';
 export { default as useListings } from './useListings';

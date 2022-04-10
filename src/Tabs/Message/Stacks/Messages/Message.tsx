@@ -8,10 +8,11 @@ import React, { FC, useContext } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
-import { MessageBlockData } from 'types';
+import { MessageBlockData, MessageData } from 'types';
 
 interface Props {
 	message: MessageBlockData;
+	latestNonSelfMsg: MessageData | undefined;
 	msgsWithSeenIconsIds: string[] | undefined;
 	msgWithStatusId: string | undefined;
 	messageStatus: undefined | 'sending' | 'sent' | 'seen';
@@ -23,6 +24,7 @@ interface Props {
  */
 const Message: FC<Props> = ({
 	message,
+	latestNonSelfMsg,
 	msgsWithSeenIconsIds,
 	msgWithStatusId,
 	messageStatus,
@@ -31,20 +33,14 @@ const Message: FC<Props> = ({
 	const { userInfo } = useContext(UserContext);
 	// const { curTime } = useCurrentTime();
 	// const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
+	console.log(latestNonSelfMsg);
+
 	return (
 		<>
 			<View style={tw('p-1 flex-row items-end')}>
 				<View style={tw('flex-1')}>
 					<View style={tw('flex-col')}>
-						{/* <View style={tw('flex-row justify-start items-end')}>
-							<Text style={tw('text-s-lg font-normal pr-4 text-gray-600')}>
-								{message.sender.displayName}
-							</Text>
-							<Text style={tw('text-s-md font-normal text-gray-600')}>
-								{displayTime}
-							</Text>
-						</View> */}
-						{userInfo && (
+						{userInfo && latestNonSelfMsg && (
 							// user is logged in, proceed to determine if message is self or other
 							<>
 								{message.sender.uid === userInfo.uid ? (
@@ -77,22 +73,24 @@ const Message: FC<Props> = ({
 														</>
 													) : (
 														<>
-															{content.id === msgWithStatusId && (
-																<>
-																	{messageStatus === 'sending' && (
-																		<FontAwesomeIcon
-																			icon={regularCheckIcon}
-																			style={tw('h-4 w-4 text-red-500')}
-																		/>
-																	)}
-																	{messageStatus === 'sent' && (
-																		<FontAwesomeIcon
-																			icon={solidCheckIcon}
-																			style={tw('h-4 w-4 text-red-500')}
-																		/>
-																	)}
-																</>
-															)}
+															{content.id === msgWithStatusId &&
+																latestNonSelfMsg.time.valueOf() <=
+																	message.time.valueOf() && (
+																	<>
+																		{messageStatus === 'sending' && (
+																			<FontAwesomeIcon
+																				icon={regularCheckIcon}
+																				style={tw('h-4 w-4 text-red-500')}
+																			/>
+																		)}
+																		{messageStatus === 'sent' && (
+																			<FontAwesomeIcon
+																				icon={solidCheckIcon}
+																				style={tw('h-4 w-4 text-red-500')}
+																			/>
+																		)}
+																	</>
+																)}
 														</>
 													)}
 												</View>

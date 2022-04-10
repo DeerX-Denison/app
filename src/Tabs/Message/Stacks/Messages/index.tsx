@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useKeyboard,
 	useKeyboardPadding,
+	useLatestNonSelfMsg,
 	useMessage,
 	useMessageStatus,
 	useParseMessage,
@@ -57,6 +58,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setIsNewThread,
 		fetchMessages,
 	} = useThreadData(route.params.members);
+	const { latestNonSelfMsg } = useLatestNonSelfMsg(threadData?.messages);
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
@@ -252,6 +254,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 													<Message
 														key={message.id}
 														message={message}
+														latestNonSelfMsg={latestNonSelfMsg}
 														msgsWithSeenIconsIds={msgsWithSeenIconsIds}
 														msgWithStatusId={msgWithStatusId}
 														messageStatus={messageStatus}

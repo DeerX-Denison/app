@@ -57,7 +57,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										setDisabledDelete(true);
 										setDisabledSave(true);
 										setDeleting(true);
-										await deleteListing(listingData.id, navigation);
+										await deleteListing(listingData, navigation);
 										setDeleting(false);
 										setDisabledDelete(false);
 										setDisabledSave(false);

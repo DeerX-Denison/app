@@ -99,6 +99,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				setMessageStatus('sending');
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
+				const newMessage: MessageData = {
+					...message,
+					time: localTime(),
+					id: uuidv4(),
+				};
+				setThreadMessagesData([...threadData.messages, newMessage]);
 				if (isNewThread) {
 					try {
 						await fn.httpsCallable('createThread')(threadPreviewData);
@@ -107,12 +113,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					}
 					setIsNewThread(false);
 				}
-				const newMessage: MessageData = {
-					...message,
-					time: localTime(),
-					id: uuidv4(),
-				};
-				setThreadMessagesData([...threadData.messages, newMessage]);
 				setDisableSend(false);
 				try {
 					await fn.httpsCallable('createMessage')({
@@ -245,42 +245,32 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									setContentHeight(height);
 								}}
 							>
-								{parsedMessages ? (
-									// parsedMessages defined
-									<>
-										{parsedMessages.length > 0 ? (
-											<>
-												{parsedMessages.map((message) => (
-													<Message
-														key={message.id}
-														message={message}
-														latestNonSelfMsg={latestNonSelfMsg}
-														msgsWithSeenIconsIds={msgsWithSeenIconsIds}
-														msgWithStatusId={msgWithStatusId}
-														messageStatus={messageStatus}
-														nonSelfIcons={threadData?.members
-															.filter((x) => x.uid !== userInfo?.uid)
-															.map((x) =>
-																x.photoURL ? x.photoURL : undefined
-															)}
-													/>
-												))}
-											</>
-										) : (
-											<>
-												<View
-													style={tw('flex flex-1 justify-center items-center')}
-												>
-													<Text style={tw('text-s-lg')}>
-														Send your first message
-													</Text>
-												</View>
-											</>
-										)}
-									</>
-								) : (
+								{!parsedMessages && (
 									<>
 										<Text>Loading...</Text>
+									</>
+								)}
+								{parsedMessages && parsedMessages.length === 0 && (
+									<View style={tw('flex flex-1 justify-center items-center')}>
+										<Text style={tw('text-s-lg')}>Send your first message</Text>
+									</View>
+								)}
+								{parsedMessages && parsedMessages.length > 0 && (
+									// parsedMessages defined
+									<>
+										{parsedMessages.map((message) => (
+											<Message
+												key={message.id}
+												message={message}
+												latestNonSelfMsg={latestNonSelfMsg}
+												msgsWithSeenIconsIds={msgsWithSeenIconsIds}
+												msgWithStatusId={msgWithStatusId}
+												messageStatus={messageStatus}
+												nonSelfIcons={threadData?.members
+													.filter((x) => x.uid !== userInfo?.uid)
+													.map((x) => (x.photoURL ? x.photoURL : undefined))}
+											/>
+										))}
 									</>
 								)}
 							</View>

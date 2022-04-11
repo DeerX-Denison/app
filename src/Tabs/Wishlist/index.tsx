@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { WishlistStackParamList } from 'types';
 import { Item, Profile } from '../Listings/Stacks';
+import { Messages } from '../Message/Stacks';
 import { Main } from './Stacks';
 
 interface Props {}
@@ -24,6 +25,12 @@ const Wishlist: FC<Props> = () => {
 			</Stack.Screen>
 			<Stack.Screen name="Profile" options={{ headerBackTitle: '' }}>
 				{(props) => <Profile {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Messages"
+				options={{ headerTitle: '', headerBackTitle: '' }}
+			>
+				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

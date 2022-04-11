@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"install": "cd ios && (bundle install & pod install --repo-update)",
-		"dev:ios": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
+		"dev:ios:ip12": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
+		"dev:ios:ipSE": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator \"iPhone SE (3rd generation)\"",
 		"stage:ios:ip12": "./bin/setup_stage.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
 		"stage:ios:ipSE": "./bin/setup_stage.sh && react-native run-ios --scheme app --simulator \"iPhone SE (3rd generation)\"",
 		"prod:ios": "./bin/setup_prod.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",

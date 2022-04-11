@@ -122,6 +122,7 @@ export type WishlistStackParamList = {
 	Wishlist: { reset: boolean };
 	Item: ItemScreenParamList;
 	Profile: { uid: string | undefined };
+	Messages: { members: UserInfo[] };
 };
 
 export type MenuStackParamList = {

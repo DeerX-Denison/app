@@ -29,9 +29,9 @@ const useNewListingData = () => {
 				},
 				condition: undefined,
 				description: '',
-				savedBy: 0,
 				createdAt: undefined,
 				updatedAt: undefined,
+				likedBy: [],
 				status: 'saved',
 			});
 	}, [userInfo]);

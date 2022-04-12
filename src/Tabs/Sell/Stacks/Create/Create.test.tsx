@@ -33,7 +33,7 @@ const mockListingData: ListingData = {
 	},
 	condition: 'BARELY FUNCTIONAL',
 	description: 'mock description',
-	savedBy: 0,
+	likedBy: 0,
 	status: 'saved',
 	createdAt: undefined,
 	updatedAt: undefined,

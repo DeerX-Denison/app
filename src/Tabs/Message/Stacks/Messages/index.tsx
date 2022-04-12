@@ -97,14 +97,14 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
 				setMessageStatus('sending');
-				// eslint-disable-next-line @typescript-eslint/no-unused-vars
-				const { messages, ...threadPreviewData } = threadData;
 				const newMessage: MessageData = {
 					...message,
 					time: localTime(),
 					id: uuidv4(),
 				};
 				setThreadMessagesData([...threadData.messages, newMessage]);
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				const { messages, ...threadPreviewData } = threadData;
 				if (isNewThread) {
 					try {
 						await fn.httpsCallable('createThread')(threadPreviewData);
@@ -113,7 +113,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					}
 					setIsNewThread(false);
 				}
-				setDisableSend(false);
+
 				try {
 					await fn.httpsCallable('createMessage')({
 						threadPreviewData,
@@ -175,12 +175,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
-									{/* <Buttons.Primary
-										title="Send"
-										onPress={sendHandler}
-										size="md"
-										disabled={disableSend}
-									/> */}
 									<TouchableOpacity
 										onPress={sendHandler}
 										disabled={disableSend}
@@ -255,6 +249,15 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										<Text style={tw('text-s-lg')}>Send your first message</Text>
 									</View>
 								)}
+								{parsedMessages &&
+									parsedMessages.length === 1 &&
+									isNewThread === true && (
+										<View style={tw('flex flex-1 justify-center items-center')}>
+											<Text style={tw('text-s-lg')}>
+												Sending your first message...
+											</Text>
+										</View>
+									)}
 								{parsedMessages && parsedMessages.length > 0 && (
 									// parsedMessages defined
 									<>

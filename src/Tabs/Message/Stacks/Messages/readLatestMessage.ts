@@ -1,6 +1,5 @@
 import { fn } from '@firebase.config';
 import logger from '@logger';
-import Toast from 'react-native-toast-message';
 import { ThreadData, UserInfo } from 'types';
 
 export type ReadLatestMessage = (
@@ -25,7 +24,7 @@ const readLatestMessage: ReadLatestMessage = async (threadData, userInfo) => {
 			});
 		} catch (error) {
 			logger.error(error);
-			Toast.show({ type: 'error', text1: 'Error while reading messages' });
+			// Toast.show({ type: 'error', text1: 'Error while reading messages' });
 		}
 	}
 };

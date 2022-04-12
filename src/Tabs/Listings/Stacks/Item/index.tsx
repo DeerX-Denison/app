@@ -79,7 +79,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
-				setListingData({ ...listingData, savedBy: listingData.savedBy - 1 });
+				setListingData({
+					...listingData,
+					likedBy: listingData.likedBy.filter((x) => x !== userInfo.uid),
+				});
 				setIsInWishlist(false);
 				if (debouncedRemoveWishlistFromDb)
 					await debouncedRemoveWishlistFromDb.current(listingData);
@@ -111,7 +114,10 @@ const Item: FC<Props> = ({ route, navigation }) => {
 					price: listingData.price,
 					seller: listingData.seller,
 				};
-				setListingData({ ...listingData, savedBy: listingData.savedBy + 1 });
+				setListingData({
+					...listingData,
+					likedBy: [...listingData.likedBy, userInfo.uid],
+				});
 				setIsInWishlist(true);
 				if (debouncedAddWishlistToDb.current)
 					await debouncedAddWishlistToDb.current(wishlistData);
@@ -215,7 +221,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 							</View>
 							<View style={tw('mx-4 my-1')}>
 								<Text style={tw('text-base font-medium')}>
-									{listingData.savedBy} likes
+									{listingData.likedBy.length} likes
 								</Text>
 							</View>
 							<View style={tw('mx-4 my-1')}>

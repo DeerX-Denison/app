@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { MessageData, ThreadData } from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
 import useContentType from './useContentType';
-import useInputText, { Ref, TextSelection } from './useInputText';
+import useInputText, { Ref, TextSelection, WithinRef } from './useInputText';
 import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (threadData: ThreadData | undefined) => {
@@ -21,10 +21,9 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 	textSelection: TextSelection | undefined;
 	refs: Ref[];
 	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
-	isPressingKey: boolean;
-	setIsPressingKey: React.Dispatch<React.SetStateAction<boolean>>;
 	keyPressed: string;
-	setKeyPressed: React.Dispatch<React.SetStateAction<string>>
+	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
+	isWithinRef: WithinRef
 };
 
 /**
@@ -42,10 +41,9 @@ const useMessage: UseMessageFn = (threadData) => {
 		textSelection,
 		refs,
 		setRefs,
-		isPressingKey,
-		setIsPressingKey,
 		keyPressed,
-		setKeyPressed
+		setKeyPressed,
+		isWithinRef
 	} = useInputText();
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
@@ -80,10 +78,9 @@ const useMessage: UseMessageFn = (threadData) => {
 		textSelection,
 		refs,
 		setRefs,
-		isPressingKey,
-		setIsPressingKey,
 		keyPressed,
-		setKeyPressed
+		setKeyPressed,
+		isWithinRef
 	};
 };
 

@@ -72,10 +72,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		textSelection,
 		refs,
 		setRefs,
-		isPressingKey,
-		setIsPressingKey,
 		keyPressed,
 		setKeyPressed,
+		isWithinRef,
 	} = useMessage(threadData);
 
 	const { wishlist } = useWishlist(query);
@@ -151,14 +150,43 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								onChangeText={setInputText}
+								defaultValue={inputText}
+								onChangeText={(text) => {
+									if (keyPressed === 'Backspace' && isWithinRef.isWithinRef) {
+										const start = isWithinRef.whichRef?.begin;
+										const end = isWithinRef.whichRef?.end + 1;
+										const _ = refs.indexOf(isWithinRef.whichRef);
+										if (_ > -1) {
+											const first = inputText.slice(0, start);
+											const second = inputText.slice(end, inputText.length);
+											console.log(first);
+											console.log(second);
+											setInputText(first + second);
+											const deletedRef =
+												isWithinRef.whichRef?.end -
+												isWithinRef.whichRef?.begin +
+												1;
+											for (let i = 0; i < refs.length; i++) {
+												if (refs[i].begin > isWithinRef.whichRef?.end) {
+													refs[i].begin -= deletedRef;
+													refs[i].end -= deletedRef;
+												}
+											}
+											refs.splice(_, 1);
+											console.log(refs);
+											setRefs(refs);
+										}
+									} else {
+										setInputText(text);
+									}
+								}}
+								selectTextOnFocus={true}
 								onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
 								onSelectionChange={(e) =>
 									setTextSelection(e.nativeEvent.selection)
 								}
 								onKeyPress={(e) => {
-									setIsPressingKey(!isPressingKey);
 									setKeyPressed(e.nativeEvent.key);
 								}}
 							/>

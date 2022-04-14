@@ -12,10 +12,9 @@ export type UseInputText = () => {
 	setTextSelection: React.Dispatch<
 		React.SetStateAction<TextSelection | undefined>
 	>;
-	isPressingKey: boolean;
-	setIsPressingKey: React.Dispatch<React.SetStateAction<boolean>>;
 	keyPressed: string;
-	setKeyPressed: React.Dispatch<React.SetStateAction<string>>
+	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
+	isWithinRef: WithinRef
 };
 export type Ref = {
 	begin: number;
@@ -28,8 +27,8 @@ export type TextSelection = {
 };
 export type WithinRef = {
 	isWithinRef: boolean;
-	whichRef: Ref|undefined;
-}
+	whichRef: Ref | undefined;
+};
 
 /**
  * custom hook to handle user input-ed text in TextInput
@@ -41,72 +40,80 @@ const useInputText: UseInputText = () => {
 	const [textSelection, setTextSelection] = useState<
 		TextSelection | undefined
 	>();
+	
 	const [isChangingLength, setIsChangingLength] = useState<boolean>(false);
 	const [currentLength, setCurrentLength] = useState<number>(0);
+
+	const [isMovingSelection, setIsMovingSelection] = useState<boolean>(false);
+
 	const [isEditing, setIsEditing] = useState<boolean>(false);
-	const [isPressingKey, setIsPressingKey] = useState<boolean>(true);
 	const [keyPressed, setKeyPressed] = useState<string>('');
-	const [isWithinRef, setIsWithinRef] = useState<WithinRef>({isWithinRef: false, whichRef: undefined})
+	const [isWithinRef, setIsWithinRef] = useState<WithinRef>({
+		isWithinRef: false,
+		whichRef: undefined,
+	});
 
-	useEffect(() => {
-		if (inputText.length !== currentLength){
-			setIsChangingLength(true);
-			setCurrentLength(inputText.length)
-		} else {
-			setIsChangingLength(false);
-		}
-	}, [inputText, textSelection])
+	const [previousIndex, setPreviousIndex] = useState<number>(0);
 
+	// check if the user is typing something or deleting something
 	useEffect(() => {
 		if (textSelection?.start == inputText.length) {
-			setIsEditing(false)
+			setIsEditing(false);
+		} else {
+			setIsEditing(true);
 		}
-		else{
-			setIsEditing(true)
+
+		if (inputText.length !== currentLength) {
+			setIsChangingLength(true);
+			setIsMovingSelection(false);
+			setCurrentLength(inputText.length);
+		} else {
+			setIsChangingLength(false);
+			setIsMovingSelection(true);
 		}
-		if(inputText.charAt(textSelection?.start-1) === '@'
-		&&(inputText.charAt(textSelection?.start-2) === ' '
-		||textSelection?.start===1)){
-			setShowingItem(inputText.charAt(textSelection?.start-1) !== ' ');
+		if (
+			inputText.charAt(textSelection?.start - 1) === '@' &&
+			(inputText.charAt(textSelection?.start - 2) === ' ' ||
+				textSelection?.start === 1)
+		) {
+			setShowingItem(true);
+		} else if (inputText.charAt(textSelection?.start - 1) === ' ' || textSelection?.start-previousIndex>1 || textSelection?.start-previousIndex<0){
+			setShowingItem(false);
 		}
-		else if (inputText.charAt(textSelection?.start-1) === ' '){
-			setShowingItem(false)
-		}
-	}, [textSelection, inputText]);
+		setPreviousIndex(textSelection?.start)
+	}, [inputText, textSelection]);	
 
 	useEffect(() => {
+		console.log(textSelection)
 		let exist = false;
 		let ref = undefined;
-		for (let i = 0; i<refs.length; i++){
-			if (textSelection?.start >= refs[i].begin+1 && textSelection?.start <= refs[i].end){
+		for (let i = 0; i < refs.length; i++) {
+			if (
+				textSelection?.start >= refs[i].begin + 1 &&
+				textSelection?.start <= refs[i].end +1
+			) {
 				exist = true;
-				ref = refs[i] as Ref
+				ref = refs[i] as Ref;
 			}
 		}
-		setIsWithinRef({isWithinRef: exist, whichRef: ref});
-	}, [textSelection])
+		setIsWithinRef({ isWithinRef: exist, whichRef: ref });
+	}, [textSelection, keyPressed]);
 
 	useEffect(() => {
-		if (keyPressed === 'Backspace'){
-			const start = isWithinRef.whichRef?.begin-1
-			const end = isWithinRef.whichRef?.end+1
-			const _ = refs.indexOf(isWithinRef?.whichRef)
-			if (_ > -1){
-				setInputText(inputText.slice(0, start) + inputText.slice(end))
-				console.log(_)
-				refs.splice(_, 1)
-				console.log(refs)
-				setRefs(refs)
-			}
-		}
+		console.log(isWithinRef)
 	}, [isWithinRef])
 
 	useEffect(() => {
+		console.log(inputText)
+	}, [inputText])
+
+	// Handle updating the index of reference
+	useEffect(() => {
 		// Updating the references when editing
 		if (isEditing) {
-			if(keyPressed !== 'Backspace' && isChangingLength){
-				for (let i = 0; i < refs.length; i++){
-					if ( refs[i].begin >= textSelection?.start ){
+			if (keyPressed !== 'Backspace' && isChangingLength) {
+				for (let i = 0; i < refs.length; i++) {
+					if (refs[i].begin >= textSelection?.start) {
 						refs[i].begin += 1;
 						refs[i].end += 1;
 					}
@@ -114,8 +121,8 @@ const useInputText: UseInputText = () => {
 				setRefs(refs);
 			} else {
 				if (isChangingLength) {
-					for (let i = 0; i < refs.length; i++){
-						if ( refs[i].begin >= textSelection?.start ){
+					for (let i = 0; i < refs.length; i++) {
+						if (refs[i].begin >= textSelection?.start) {
 							refs[i].begin -= 1;
 							refs[i].end -= 1;
 						}
@@ -123,9 +130,9 @@ const useInputText: UseInputText = () => {
 					setRefs(refs);
 				}
 			}
-		}		
-	}, [isChangingLength, isEditing])
-	
+		}
+	}, [isChangingLength, isEditing]);
+
 	return {
 		inputText,
 		setInputText,
@@ -135,10 +142,9 @@ const useInputText: UseInputText = () => {
 		setRefs,
 		textSelection,
 		setTextSelection,
-		isPressingKey,
-		setIsPressingKey,
 		keyPressed,
-		setKeyPressed
+		setKeyPressed,
+		isWithinRef
 	};
 };
 

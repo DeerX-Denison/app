@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import useDebounce from './useDebounce';
 import { TextSelection } from './useMessage/useInputText';
 
-export type UseSuggestionQuery = (inputMessage: string, textSelection: TextSelection | undefined) => {
+export type UseSuggestionQuery = (
+	inputMessage: string,
+	textSelection: TextSelection | undefined
+) => {
 	query: string | null;
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
 };
@@ -28,14 +31,14 @@ const useSuggestionQuery: UseSuggestionQuery = (inputText, textSelection) => {
 		(async () => {
 			const query = await extractQueryDebounced(inputText);
 			let count = 0;
-			for (let i = 0; i<textSelection?.start; i++){
-				if (inputText.charAt(i) === '@'){
-					count += 1
+			for (let i = 0; i < textSelection?.start; i++) {
+				if (inputText.charAt(i) === '@') {
+					count += 1;
 				}
 			}
-			if (query){
-				const newQuery = query[count-1]
-				isSubscribed && setQuery(newQuery.substring(1));
+			if (query) {
+				const newQuery = query[count - 1].substring(1, );
+				isSubscribed && setQuery(newQuery);
 			}
 		})();
 		return () => {

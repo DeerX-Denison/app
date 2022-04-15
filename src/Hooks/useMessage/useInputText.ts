@@ -57,12 +57,15 @@ const useInputText: UseInputText = () => {
 
 	// check if the user is typing something or deleting something
 	useEffect(() => {
+
+		// Handle if selection is between text
 		if (textSelection?.start == inputText.length) {
 			setIsEditing(false);
 		} else {
 			setIsEditing(true);
 		}
 
+		// Handle if is typing something or if moving selection only
 		if (inputText.length !== currentLength) {
 			setIsChangingLength(true);
 			setIsMovingSelection(false);
@@ -71,10 +74,23 @@ const useInputText: UseInputText = () => {
 			setIsChangingLength(false);
 			setIsMovingSelection(true);
 		}
+
+		let nearRef = false;
+		for (let i = textSelection?.start-1; i>=0; i--){
+			if (inputText.charAt(i) === ' '){
+				break;
+			}
+			if (inputText.charAt(i) === '@'){
+				nearRef = true;
+				break;
+			}
+		}
+
+		// Handle showing item
 		if (
 			inputText.charAt(textSelection?.start - 1) === '@' &&
-			(inputText.charAt(textSelection?.start - 2) === ' ' ||
-				textSelection?.start === 1)
+			([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
+				textSelection?.start === 1) || nearRef
 		) {
 			setShowingItem(true);
 		} else if (

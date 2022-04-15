@@ -103,6 +103,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					id: uuidv4(),
 				};
 				setThreadMessagesData([...threadData.messages, newMessage]);
+				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
 				if (isNewThread) {

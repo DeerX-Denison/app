@@ -14,7 +14,7 @@ export type UseInputText = () => {
 	>;
 	keyPressed: string;
 	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
-	isWithinRef: WithinRef
+	isWithinRef: WithinRef;
 };
 export type Ref = {
 	begin: number;
@@ -40,7 +40,7 @@ const useInputText: UseInputText = () => {
 	const [textSelection, setTextSelection] = useState<
 		TextSelection | undefined
 	>();
-	
+
 	const [isChangingLength, setIsChangingLength] = useState<boolean>(false);
 	const [currentLength, setCurrentLength] = useState<number>(0);
 
@@ -77,35 +77,39 @@ const useInputText: UseInputText = () => {
 				textSelection?.start === 1)
 		) {
 			setShowingItem(true);
-		} else if (inputText.charAt(textSelection?.start - 1) === ' ' || textSelection?.start-previousIndex>1 || textSelection?.start-previousIndex<0){
+		} else if (
+			inputText.charAt(textSelection?.start - 1) === ' ' ||
+			textSelection?.start - previousIndex > 1 ||
+			textSelection?.start - previousIndex < 0
+		) {
 			setShowingItem(false);
 		}
-		setPreviousIndex(textSelection?.start)
-	}, [inputText, textSelection]);	
+		setPreviousIndex(textSelection?.start);
+	}, [inputText, textSelection]);
 
 	useEffect(() => {
-		console.log(textSelection)
+		console.log(textSelection);
 		let exist = false;
 		let ref = undefined;
 		for (let i = 0; i < refs.length; i++) {
 			if (
 				textSelection?.start >= refs[i].begin + 1 &&
-				textSelection?.start <= refs[i].end +1
+				textSelection?.start <= refs[i].end + 1
 			) {
 				exist = true;
 				ref = refs[i] as Ref;
 			}
 		}
 		setIsWithinRef({ isWithinRef: exist, whichRef: ref });
-	}, [textSelection, keyPressed]);
+	}, [textSelection]);
 
 	useEffect(() => {
-		console.log(isWithinRef)
-	}, [isWithinRef])
+		console.log(isWithinRef);
+	}, [isWithinRef]);
 
 	useEffect(() => {
-		console.log(inputText)
-	}, [inputText])
+		console.log(inputText);
+	}, [inputText]);
 
 	// Handle updating the index of reference
 	useEffect(() => {
@@ -144,7 +148,7 @@ const useInputText: UseInputText = () => {
 		setTextSelection,
 		keyPressed,
 		setKeyPressed,
-		isWithinRef
+		isWithinRef,
 	};
 };
 

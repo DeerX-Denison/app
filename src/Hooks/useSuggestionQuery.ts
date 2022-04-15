@@ -37,7 +37,7 @@ const useSuggestionQuery: UseSuggestionQuery = (inputText, textSelection) => {
 				}
 			}
 			if (query) {
-				const newQuery = query[count - 1].substring(1, );
+				const newQuery = query[count - 1].substring(1);
 				isSubscribed && setQuery(newQuery);
 			}
 		})();

@@ -23,7 +23,7 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
 	keyPressed: string;
 	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
-	isWithinRef: WithinRef
+	isWithinRef: WithinRef;
 };
 
 /**
@@ -43,7 +43,7 @@ const useMessage: UseMessageFn = (threadData) => {
 		setRefs,
 		keyPressed,
 		setKeyPressed,
-		isWithinRef
+		isWithinRef,
 	} = useInputText();
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
@@ -80,7 +80,7 @@ const useMessage: UseMessageFn = (threadData) => {
 		setRefs,
 		keyPressed,
 		setKeyPressed,
-		isWithinRef
+		isWithinRef,
 	};
 };
 

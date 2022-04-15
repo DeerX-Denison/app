@@ -83,6 +83,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const [contentHeight, setContentHeight] = useState(0);
 	const [scroll, setScroll] = useState(true);
 
+	const [prevSelector, setPrevSelector] = useState<
+		{ end: number; start: number } | undefined
+	>({ end: 0, start: 0 });
+
 	const sendHandler = async () => {
 		setInputText('');
 		setDisableSend(true);
@@ -152,7 +156,20 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								scrollEnabled={true}
 								defaultValue={inputText}
 								onChangeText={(text) => {
-									if (keyPressed === 'Backspace' && isWithinRef.isWithinRef) {
+									let exist = false;
+									for (let i = 0; i < refs.length; i++) {
+										if (
+											prevSelector?.start >= refs[i].begin + 1 &&
+											prevSelector?.start <= refs[i].end + 1
+										) {
+											exist = true;
+										}
+									}
+									if (
+										keyPressed === 'Backspace' &&
+										isWithinRef.isWithinRef &&
+										exist
+									) {
 										const start = isWithinRef.whichRef?.begin;
 										const end = isWithinRef.whichRef?.end + 1;
 										const _ = refs.indexOf(isWithinRef.whichRef);
@@ -188,6 +205,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								}
 								onKeyPress={(e) => {
 									setKeyPressed(e.nativeEvent.key);
+									if (e.nativeEvent.key === 'Backspace') {
+										setPrevSelector(textSelection);
+									}
 								}}
 							/>
 							<View style={tw('flex-col justify-end')}>

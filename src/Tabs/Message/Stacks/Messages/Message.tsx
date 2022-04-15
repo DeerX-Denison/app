@@ -4,41 +4,49 @@ import { faCheckCircle as regularCheckIcon } from '@fortawesome/free-regular-svg
 import { faCheckCircle as solidCheckIcon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
-import { MessageBlockData, MessageData } from 'types';
-
+import { MessageBlockData, UserInfo } from 'types';
 interface Props {
 	message: MessageBlockData;
-	latestNonSelfMsg: MessageData | undefined;
-	msgsWithSeenIconsIds: string[] | undefined;
-	msgWithStatusId: string | undefined;
-	messageStatus: undefined | 'sending' | 'sent' | 'seen';
-	nonSelfIcons: (string | undefined)[] | undefined;
+	members: UserInfo[] | undefined;
+	latestSeenMsgId: string | undefined;
 }
 
 /**
  * Message component, Threads contains Thread contains Messages contains Message
  */
-const Message: FC<Props> = ({
-	message,
-	latestNonSelfMsg,
-	msgsWithSeenIconsIds,
-	msgWithStatusId,
-	messageStatus,
-	nonSelfIcons,
-}) => {
+const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 	const { userInfo } = useContext(UserContext);
-	// const { curTime } = useCurrentTime();
-	// const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
+	const [nonSelfUid, setNonSelfUid] = useState<string | undefined>();
+	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
+	useEffect(() => {
+		if (userInfo && members && members.length > 0) {
+			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);
+			const nonSelfUids = nonSelf.map((x) => x.uid);
+			if (nonSelfUids.length === 1) {
+				setNonSelfUid(nonSelfUids[0]);
+			} else {
+				setNonSelfUid(undefined);
+			}
+
+			const nonSelfIcon = nonSelf.map((x) => x.photoURL);
+			if (nonSelfIcon.length === 1) {
+				setNonSelfIcon(
+					nonSelfIcon[0] ? nonSelfIcon[0] : DEFAULT_MESSAGE_THUMBNAIL
+				);
+			}
+		}
+	}, [userInfo, members]);
+
 	return (
 		<>
 			<View style={tw('p-1 flex-row items-end')}>
 				<View style={tw('flex-1')}>
 					<View style={tw('flex-col')}>
-						{userInfo && latestNonSelfMsg && (
+						{userInfo && nonSelfUid && (
 							// user is logged in, proceed to determine if message is self or other
 							<>
 								{message.sender.uid === userInfo.uid ? (
@@ -58,39 +66,27 @@ const Message: FC<Props> = ({
 													<Text style={tw('text-s-md')}>{content.content}</Text>
 												</View>
 												<View style={tw('flex flex-row w-4 mb-0.5 ml-1')}>
-													{msgsWithSeenIconsIds?.includes(content.id) ? (
-														<>
-															{nonSelfIcons?.map((iconUrl) => (
-																<View key={iconUrl}>
-																	<FastImage
-																		source={{ uri: iconUrl }}
-																		style={tw('h-4 w-4 rounded-full')}
-																	/>
-																</View>
-															))}
-														</>
-													) : (
-														<>
-															{content.id === msgWithStatusId &&
-																latestNonSelfMsg.time.valueOf() <=
-																	message.time.valueOf() && (
-																	<>
-																		{messageStatus === 'sending' && (
-																			<FontAwesomeIcon
-																				icon={regularCheckIcon}
-																				style={tw('h-4 w-4 text-red-500')}
-																			/>
-																		)}
-																		{messageStatus === 'sent' && (
-																			<FontAwesomeIcon
-																				icon={solidCheckIcon}
-																				style={tw('h-4 w-4 text-red-500')}
-																			/>
-																		)}
-																	</>
-																)}
-														</>
+													{content.seenAt[userInfo.uid] === null && (
+														<FontAwesomeIcon
+															icon={regularCheckIcon}
+															style={tw('h-4 w-4 text-red-500')}
+														/>
 													)}
+													{content.seenAt[userInfo.uid] !== null &&
+														content.seenAt[nonSelfUid] === null && (
+															<FontAwesomeIcon
+																icon={solidCheckIcon}
+																style={tw('h-4 w-4 text-red-500')}
+															/>
+														)}
+													{content.seenAt[userInfo.uid] !== null &&
+														content.seenAt[nonSelfUid] !== null &&
+														content.id === latestSeenMsgId && (
+															<FastImage
+																source={{ uri: nonSelfIcon }}
+																style={tw('h-4 w-4 rounded-full')}
+															/>
+														)}
 												</View>
 											</View>
 										))}

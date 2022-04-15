@@ -5,11 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useKeyboard,
 	useKeyboardPadding,
-	useLatestNonSelfMsg,
 	useMessage,
-	useMessageStatus,
 	useParseMessage,
-	useSeenIcons,
 	useThreadData,
 	useWishlist,
 } from '@Hooks';
@@ -17,7 +14,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -36,8 +33,6 @@ import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
 import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
-import useMsgWithSeenIconIds from './useMsgWithSeenIconIds';
-import useMsgWithStatusId from './useMsgWithStatusId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
 
 interface Props {
@@ -58,20 +53,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setIsNewThread,
 		fetchMessages,
 	} = useThreadData(route.params.members);
-	const { latestNonSelfMsg } = useLatestNonSelfMsg(threadData?.messages);
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
-	const { seenIcons } = useSeenIcons(threadData);
-	const { msgsWithSeenIconsIds } = useMsgWithSeenIconIds(seenIcons, threadData);
-	const { msgWithStatusId } = useMsgWithStatusId(
-		threadData,
-		msgsWithSeenIconsIds
-	);
-	const { messageStatus, setMessageStatus } = useMessageStatus(
-		threadData,
-		msgWithStatusId
-	);
+
 	const { didShow } = useKeyboard();
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 	const { paddingBottom } = useKeyboardPadding();
@@ -85,6 +70,26 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setTextSelection,
 	} = useMessage(threadData);
 
+	// latest seen message id custom hook
+	const [latestSeenMsgId, setSeenMsgId] = useState<string | undefined>();
+	useEffect(() => {
+		if (threadData) {
+			const seenMsgs = threadData.messages.filter((x) => {
+				let seen = true;
+				if ('seenAt' in x) {
+					threadData.membersUid.forEach((uid) => {
+						if (x.seenAt[uid] === null) seen = false;
+					});
+				}
+				return seen;
+			});
+			if (seenMsgs.length > 0) {
+				const latestSeenMsg = seenMsgs[seenMsgs.length - 1];
+				setSeenMsgId(latestSeenMsg.id);
+			}
+		}
+	}, [threadData]);
+
 	const { wishlist } = useWishlist(query);
 
 	const [boxHeight, setBoxHeight] = useState(0);
@@ -96,7 +101,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
-				setMessageStatus('sending');
 				const newMessage: MessageData = {
 					...message,
 					time: localTime(),
@@ -120,7 +124,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						threadPreviewData,
 						message: newMessage,
 					});
-					setMessageStatus('sent');
 				} catch (error) {
 					logger.log(error);
 					return Toast.show({
@@ -266,13 +269,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 											<Message
 												key={message.id}
 												message={message}
-												latestNonSelfMsg={latestNonSelfMsg}
-												msgsWithSeenIconsIds={msgsWithSeenIconsIds}
-												msgWithStatusId={msgWithStatusId}
-												messageStatus={messageStatus}
-												nonSelfIcons={threadData?.members
-													.filter((x) => x.uid !== userInfo?.uid)
-													.map((x) => (x.photoURL ? x.photoURL : undefined))}
+												members={threadData?.members}
+												latestSeenMsgId={latestSeenMsgId}
 											/>
 										))}
 									</>

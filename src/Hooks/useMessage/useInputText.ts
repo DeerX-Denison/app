@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WishlistDataCL } from 'types';
+import { Text, View } from 'react-native'
 
 export type UseInputText = () => {
 	inputText: string;
@@ -44,8 +45,6 @@ const useInputText: UseInputText = () => {
 	const [isChangingLength, setIsChangingLength] = useState<boolean>(false);
 	const [currentLength, setCurrentLength] = useState<number>(0);
 
-	const [isMovingSelection, setIsMovingSelection] = useState<boolean>(false);
-
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [keyPressed, setKeyPressed] = useState<string>('');
 	const [isWithinRef, setIsWithinRef] = useState<WithinRef>({
@@ -57,7 +56,6 @@ const useInputText: UseInputText = () => {
 
 	// check if the user is typing something or deleting something
 	useEffect(() => {
-
 		// Handle if selection is between text
 		if (textSelection?.start == inputText.length) {
 			setIsEditing(false);
@@ -68,19 +66,28 @@ const useInputText: UseInputText = () => {
 		// Handle if is typing something or if moving selection only
 		if (inputText.length !== currentLength) {
 			setIsChangingLength(true);
-			setIsMovingSelection(false);
 			setCurrentLength(inputText.length);
 		} else {
 			setIsChangingLength(false);
-			setIsMovingSelection(true);
+		}
+
+		let nearPossibleRef = false;
+		for (let i = textSelection?.start - 1; i >= 0; i--) {
+			if (inputText.charAt(i) === ' ') {
+				break;
+			}
+			if (inputText.charAt(i) === '@') {
+				nearPossibleRef = true;
+				break;
+			}
 		}
 
 		let nearRef = false;
-		for (let i = textSelection?.start-1; i>=0; i--){
-			if (inputText.charAt(i) === ' '){
-				break;
-			}
-			if (inputText.charAt(i) === '@'){
+		for (let i = 0; i < refs.length; i++) {
+			if (
+				textSelection?.start >= refs[i].begin + 1 &&
+				textSelection?.start <= refs[i].end + 1
+			) {
 				nearRef = true;
 				break;
 			}
@@ -88,9 +95,10 @@ const useInputText: UseInputText = () => {
 
 		// Handle showing item
 		if (
-			inputText.charAt(textSelection?.start - 1) === '@' &&
-			([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
-				textSelection?.start === 1) || nearRef
+			(inputText.charAt(textSelection?.start - 1) === '@' &&
+				([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
+					textSelection?.start === 1)) ||
+			nearPossibleRef && !nearRef
 		) {
 			setShowingItem(true);
 		} else if (
@@ -114,18 +122,11 @@ const useInputText: UseInputText = () => {
 			) {
 				exist = true;
 				ref = refs[i] as Ref;
+				break;
 			}
 		}
 		setIsWithinRef({ isWithinRef: exist, whichRef: ref });
 	}, [textSelection]);
-
-	useEffect(() => {
-		console.log(isWithinRef);
-	}, [isWithinRef]);
-
-	useEffect(() => {
-		console.log(inputText);
-	}, [inputText]);
 
 	// Handle updating the index of reference
 	useEffect(() => {

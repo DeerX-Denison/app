@@ -149,12 +149,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							)}
 						>
 							<TextInput
-								value={inputText}
+								// value={inputText}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								defaultValue={inputText}
+								// defaultValue={inputText}
 								onChangeText={(text) => {
 									let exist = false;
 									for (let i = 0; i < refs.length; i++) {
@@ -176,8 +176,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										if (_ > -1) {
 											const first = inputText.slice(0, start);
 											const second = inputText.slice(end, inputText.length);
-											console.log(first);
-											console.log(second);
 											setInputText(first + second);
 											const deletedRef =
 												isWithinRef.whichRef?.end -
@@ -190,7 +188,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 												}
 											}
 											refs.splice(_, 1);
-											console.log(refs);
 											setRefs(refs);
 										}
 									} else {
@@ -209,7 +206,85 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										setPrevSelector(textSelection);
 									}
 								}}
-							/>
+							>
+								<Text>
+									{refs.length > 0
+										? refs.length === 1
+											? refs.map((item, index) => {
+													return (
+														<>
+															<Text>
+																{inputText.slice(0, refs[index].begin)}
+															</Text>
+															<Text style={tw('font-bold')}>
+																{inputText.slice(
+																	refs[index].begin,
+																	refs[index].end + 1
+																)}
+															</Text>
+															<Text>
+																{inputText.slice(refs[index].end + 1)}
+															</Text>
+														</>
+													);
+												})
+											: refs.map((item, index) => {
+													if (index === refs.length) {
+														return (
+															<>
+																<Text>
+																	{inputText.slice(
+																		refs[index - 1].end + 1,
+																		refs[index].begin
+																	)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+																<Text>
+																	{inputText.slice(refs[index].end + 1)}
+																</Text>
+															</>
+														);
+													} else if (index === 0) {
+														return (
+															<>
+																<Text>
+																	{inputText.slice(0, refs[index].begin)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+															</>
+														);
+													} else {
+														return (
+															<>
+																<Text>
+																	{inputText.slice(
+																		refs[index - 1].end + 1,
+																		refs[index].begin
+																	)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+															</>
+														);
+													}
+												})
+										: inputText}
+								</Text>
+							</TextInput>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
 									<Buttons.Primary

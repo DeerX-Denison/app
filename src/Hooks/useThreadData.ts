@@ -24,7 +24,7 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);
 	const {
 		threadMessagesData,
-		setThreadMessagesData,
+		setNewMsgs,
 		fetchMessages,
 		resetMessages,
 		fetchedAll,
@@ -71,7 +71,7 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	return {
 		threadData,
 		setThreadData,
-		setThreadMessagesData,
+		setNewMsgs,
 		isNewThread,
 		setIsNewThread,
 		fetchMessages,

@@ -41,7 +41,7 @@ const useThreadMessagesData = (
 	// dummy state to trigger listening for new messages again
 	const [trigger, setTrigger] = useState<boolean>(false);
 
-	const { newMsgs } = useNewMessageData(
+	const { newMsgs, setNewMsgs } = useNewMessageData(
 		isNewThread,
 		threadId,
 		lastDoc,
@@ -111,9 +111,8 @@ const useThreadMessagesData = (
 			const uniqueExtraMsgs = extraMsgs.filter(
 				(msg) => !oldMsgIds.includes(msg.id)
 			);
-			const uniqueExtraMsgsRev = uniqueExtraMsgs.reverse();
 			setFetchedAll(uniqueExtraMsgs.length === 0);
-			setThreadMessagesData([...uniqueExtraMsgsRev, ...oldMsgs]);
+			setNewMsgs(uniqueExtraMsgs);
 		}
 	};
 
@@ -131,7 +130,7 @@ const useThreadMessagesData = (
 
 	return {
 		threadMessagesData,
-		setThreadMessagesData,
+		setNewMsgs,
 		fetchMessages,
 		resetMessages,
 		fetchedAll,

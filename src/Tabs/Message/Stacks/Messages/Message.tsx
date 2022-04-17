@@ -22,6 +22,7 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 	const { userInfo } = useContext(UserContext);
 	const [nonSelfUid, setNonSelfUid] = useState<string | undefined>();
 	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
+
 	useEffect(() => {
 		if (userInfo && members && members.length > 0) {
 			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);
@@ -29,13 +30,17 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 			if (nonSelfUids.length === 1) {
 				setNonSelfUid(nonSelfUids[0]);
 			} else {
-				setNonSelfUid(undefined);
+				setNonSelfUid(userInfo.uid);
 			}
 
 			const nonSelfIcon = nonSelf.map((x) => x.photoURL);
 			if (nonSelfIcon.length === 1) {
 				setNonSelfIcon(
 					nonSelfIcon[0] ? nonSelfIcon[0] : DEFAULT_MESSAGE_THUMBNAIL
+				);
+			} else {
+				setNonSelfIcon(
+					userInfo.photoURL ? userInfo.photoURL : DEFAULT_MESSAGE_THUMBNAIL
 				);
 			}
 		}

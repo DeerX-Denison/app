@@ -14,7 +14,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useRef, useState } from 'react';
+import React, { FC, useContext, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -33,7 +33,9 @@ import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
 import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
+import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
+import useScrollToEndOnOpen from './useScrollToEndOnOpen';
 
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
@@ -46,19 +48,15 @@ interface Props {
 const Messages: FC<Props> = ({ route, navigation }) => {
 	const { userInfo } = useContext(UserContext);
 	const scrollViewRef = useRef<ScrollView | undefined>();
-	const {
-		threadData,
-		setThreadMessagesData,
-		isNewThread,
-		setIsNewThread,
-		fetchMessages,
-	} = useThreadData(route.params.members);
+	const { threadData, setNewMsgs, isNewThread, setIsNewThread, fetchMessages } =
+		useThreadData(route.params.members);
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
 
 	const { didShow } = useKeyboard();
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
+	useScrollToEndOnOpen(scrollViewRef, threadData);
 	const { paddingBottom } = useKeyboardPadding();
 
 	const {
@@ -70,43 +68,24 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		setTextSelection,
 	} = useMessage(threadData);
 
-	// latest seen message id custom hook
-	const [latestSeenMsgId, setSeenMsgId] = useState<string | undefined>();
-	useEffect(() => {
-		if (threadData) {
-			const seenMsgs = threadData.messages.filter((x) => {
-				let seen = true;
-				if ('seenAt' in x) {
-					threadData.membersUid.forEach((uid) => {
-						if (x.seenAt[uid] === null) seen = false;
-					});
-				}
-				return seen;
-			});
-			if (seenMsgs.length > 0) {
-				const latestSeenMsg = seenMsgs[seenMsgs.length - 1];
-				setSeenMsgId(latestSeenMsg.id);
-			}
-		}
-	}, [threadData]);
-
+	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
 	const { wishlist } = useWishlist(query);
-
+	// height of the static box window that contains all messages
 	const [boxHeight, setBoxHeight] = useState(0);
+	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
-	const [scroll, setScroll] = useState(true);
 
 	const sendHandler = async () => {
-		setInputText('');
-		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
+				setInputText('');
+				setDisableSend(true);
 				const newMessage: MessageData = {
 					...message,
 					time: localTime(),
 					id: uuidv4(),
 				};
-				setThreadMessagesData([...threadData.messages, newMessage]);
+				setNewMsgs([newMessage]);
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -136,7 +115,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		} else {
 			// error handling
 		}
-		scrollViewRef.current?.scrollToEnd();
+		scrollViewRef.current?.scrollToEnd({ animated: true });
 	};
 
 	// state for refresh control thread preview scroll view
@@ -171,7 +150,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								multiline={true}
 								scrollEnabled={true}
 								onChangeText={setInputText}
-								onFocus={() => readLatestMessage(threadData, userInfo)}
+								// intentionally left out cuz onFocus => open keyboard => scroll to end => readLatestMessage
+								// onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
 								onSelectionChange={(e) =>
 									setTextSelection(e.nativeEvent.selection as TextSelection)
@@ -220,18 +200,15 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							showsHorizontalScrollIndicator={false}
 							ref={scrollViewRef as any}
 							onScroll={(e) => {
-								const offsetY = e.nativeEvent.contentOffset.y;
-								if (offsetY === 0) {
-									setScroll(false);
+								// if user scroll to bottom
+								if (
+									Math.ceil(e.nativeEvent.contentOffset.y) ===
+									Math.ceil(e.nativeEvent.contentSize.height - boxHeight)
+								) {
 									readLatestMessage(threadData, userInfo);
 								}
 							}}
 							scrollEventThrottle={0}
-							onContentSizeChange={() => {
-								if (scroll) {
-									scrollViewRef.current?.scrollToEnd();
-								}
-							}}
 							contentContainerStyle={{
 								paddingTop:
 									contentHeight < boxHeight ? boxHeight - contentHeight : 55,
@@ -243,11 +220,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									setContentHeight(height);
 								}}
 							>
-								{!parsedMessages && (
-									<>
-										<Text>Loading...</Text>
-									</>
-								)}
+								{!parsedMessages && <Text>Loading...</Text>}
 								{parsedMessages && parsedMessages.length === 0 && (
 									<View style={tw('flex flex-1 justify-center items-center')}>
 										<Text style={tw('text-s-lg')}>Send your first message</Text>
@@ -262,19 +235,16 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 											</Text>
 										</View>
 									)}
-								{parsedMessages && parsedMessages.length > 0 && (
-									// parsedMessages defined
-									<>
-										{parsedMessages.map((message) => (
-											<Message
-												key={message.id}
-												message={message}
-												members={threadData?.members}
-												latestSeenMsgId={latestSeenMsgId}
-											/>
-										))}
-									</>
-								)}
+								{parsedMessages &&
+									parsedMessages.length > 0 &&
+									parsedMessages.map((message) => (
+										<Message
+											key={message.id}
+											message={message}
+											members={threadData?.members}
+											latestSeenMsgId={latestSeenMsgId}
+										/>
+									))}
 							</View>
 						</ScrollView>
 					</View>

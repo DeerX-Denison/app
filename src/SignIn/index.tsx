@@ -130,7 +130,6 @@ const SignIn: FC = () => {
 								Toast.show({ type: 'error', text1: error.message });
 							}
 						} else {
-							logger.log(error);
 							Toast.show({
 								type: 'error',
 								text1: 'An unexpected error occured. Please try again later',

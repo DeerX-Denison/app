@@ -111,130 +111,129 @@ const Create: FC<Props> = ({ navigation }) => {
 								viewIsInsideTabBar={true}
 								keyboardShouldPersistTaps={'handled'}
 								extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
+								enableResetScrollToCoords={false}
+								keyboardOpeningTime={0}
 							>
-								<>
-									{listingData.images.length > 0 ? (
-										// if images.length > 0, render carousel
-										<>
-											<Carousel
-												listingData={listingData}
-												setListingData={setListingData}
-												editMode={true}
-												listingErrors={listingErrors}
-											/>
-										</>
-									) : (
-										// else render add button and error if there is error
-										<>
-											<View
-												style={tw(
-													'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
-												)}
-											>
-												<TouchableOpacity
-													onPress={() =>
-														addImage(listingErrors, listingData, setListingData)
-													}
-													style={tw(
-														'flex flex-col flex-1 w-full justify-center items-center'
-													)}
-												>
-													<Text style={tw('text-s-xl font-semibold')}>
-														Add Photos
-													</Text>
-													{imageError !== '' && (
-														<Text style={tw('text-red-400 text-s-md p-2')}>
-															{imageError}
-														</Text>
-													)}
-												</TouchableOpacity>
-											</View>
-										</>
-									)}
-
-									<View style={tw('mx-4 my-2')}>
-										<Inputs.Text
-											placeholder="Item Name"
-											placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
-											style={tw('text-s-xl font-bold border rounded-lg p-2')}
-											value={listingData.name ? listingData.name : undefined}
-											onChangeText={(name) => {
-												setListingData({
-													...listingData,
-													name,
-												} as ListingData);
-												setHasEditName(true);
-											}}
-											multiline={true}
-											scrollEnabled={false}
-											maxLength={50}
+								{listingData.images.length > 0 ? (
+									// if images.length > 0, render carousel
+									<>
+										<Carousel
+											listingData={listingData}
+											setListingData={setListingData}
+											editMode={true}
+											listingErrors={listingErrors}
 										/>
-										{nameError !== '' && (
-											<Text style={tw('text-red-400 text-s-md p-2')}>
-												{nameError}
-											</Text>
-										)}
-									</View>
-
-									<View style={tw('mx-4 my-2')}>
-										<Inputs.Text
-											placeholder="Item Price"
-											placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
+									</>
+								) : (
+									// else render add button and error if there is error
+									<>
+										<View
 											style={tw(
-												'text-s-xl font-semibold border rounded-lg p-2'
+												'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
 											)}
-											value={listingData.price ? listingData.price : ''}
-											onChangeText={(price) => {
-												setListingData({
-													...listingData,
-													price,
-												} as ListingData);
-												setHasEditPrice(true);
-											}}
-											keyboardType="decimal-pad"
-											maxLength={7}
-										/>
-										{priceError !== '' && (
-											<Text style={tw('text-red-400 text-s-md p-2')}>
-												{priceError}
-											</Text>
-										)}
-									</View>
-
-									<View style={tw('mx-4 my-2')}>
-										<ScrollView>
-											<View
+										>
+											<TouchableOpacity
+												onPress={() =>
+													addImage(listingErrors, listingData, setListingData)
+												}
 												style={tw(
-													'flex flex-row flex-wrap flex-1 border rounded-lg p-2'
+													'flex flex-col flex-1 w-full justify-center items-center'
 												)}
 											>
-												{listingData.category.map((category) => (
-													<View key={category}>
-														<Badges.Light>
-															<TouchableOpacity
-																onPress={() =>
-																	removeCategory(
-																		category,
-																		listingErrors,
-																		listingData,
-																		setListingData
-																	)
-																}
-															>
-																<FontAwesomeIcon
-																	icon={faTimes}
-																	size={16}
-																	style={tw('m-1')}
-																/>
-															</TouchableOpacity>
-															<Text style={tw('capitalize text-s-md pr-2')}>
-																{category}
-															</Text>
-														</Badges.Light>
-													</View>
-												))}
-												{listingData.category.length === 0}
-												<TouchableOpacity onPress={() => setCategorizing(true)}>
+												<Text style={tw('text-s-xl font-semibold')}>
+													Add Photos
+												</Text>
+												{imageError !== '' && (
+													<Text style={tw('text-red-400 text-s-md p-2')}>
+														{imageError}
+													</Text>
+												)}
+											</TouchableOpacity>
+										</View>
+									</>
+								)}
+
+								<View style={tw('mx-4 my-2')}>
+									<Inputs.Text
+										placeholder="Item Name"
+										placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
+										style={tw('text-s-xl font-bold border rounded-lg p-2')}
+										value={listingData.name ? listingData.name : undefined}
+										onChangeText={(name) => {
+											setListingData({
+												...listingData,
+												name,
+											} as ListingData);
+											setHasEditName(true);
+										}}
+										multiline={true}
+										scrollEnabled={false}
+										maxLength={50}
+									/>
+									{nameError !== '' && (
+										<Text style={tw('text-red-400 text-s-md p-2')}>
+											{nameError}
+										</Text>
+									)}
+								</View>
+
+								<View style={tw('mx-4 my-2')}>
+									<Inputs.Text
+										placeholder="Item Price"
+										placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
+										style={tw('text-s-xl font-semibold border rounded-lg p-2')}
+										value={listingData.price ? listingData.price : ''}
+										onChangeText={(price) => {
+											setListingData({
+												...listingData,
+												price,
+											} as ListingData);
+											setHasEditPrice(true);
+										}}
+										keyboardType="decimal-pad"
+										maxLength={7}
+									/>
+									{priceError !== '' && (
+										<Text style={tw('text-red-400 text-s-md p-2')}>
+											{priceError}
+										</Text>
+									)}
+								</View>
+
+								<View style={tw('mx-4 my-2')}>
+									<ScrollView>
+										<View
+											style={tw(
+												'flex flex-row flex-wrap flex-1 border rounded-lg p-2'
+											)}
+										>
+											{listingData.category.map((category) => (
+												<View key={category}>
+													<Badges.Light>
+														<TouchableOpacity
+															onPress={() =>
+																removeCategory(
+																	category,
+																	listingErrors,
+																	listingData,
+																	setListingData
+																)
+															}
+														>
+															<FontAwesomeIcon
+																icon={faTimes}
+																size={16}
+																style={tw('m-1')}
+															/>
+														</TouchableOpacity>
+														<Text style={tw('capitalize text-s-md pr-2')}>
+															{category}
+														</Text>
+													</Badges.Light>
+												</View>
+											))}
+											<TouchableOpacity onPress={() => setCategorizing(true)}>
+												{listingData.category.length > 0 && (
 													<Badges.Light>
 														<FontAwesomeIcon
 															icon={faPlus}
@@ -245,108 +244,123 @@ const Create: FC<Props> = ({ navigation }) => {
 															Category
 														</Text>
 													</Badges.Light>
-												</TouchableOpacity>
+												)}
+											</TouchableOpacity>
+											<TouchableOpacity
+												style={tw('flex-1')}
+												onPress={() => setCategorizing(true)}
+											>
+												{listingData.category.length === 0 && (
+													<Text
+														style={{
+															...tw('text-s-xl font-semibold'),
+															color: 'rgba(156, 163, 175, 1.0)',
+														}}
+													>
+														Search category
+													</Text>
+												)}
 												{categoryError !== '' && (
-													<Text style={tw('text-red-400 text-s-md p-2')}>
+													<Text
+														style={tw('text-red-400 text-s-md w-full pt-2')}
+													>
 														{categoryError}
 													</Text>
 												)}
-											</View>
-										</ScrollView>
-									</View>
-
-									<View style={tw('mx-4 my-2')}>
-										<View style={tw('flex flex-row justify-center h-14')}>
-											<Inputs.Select
-												style={{
-													viewContainer: tw(
-														'border flex flex-1 flex-row items-center px-2 rounded-lg'
-													),
-													iconContainer: tw('h-full flex justify-center'),
-													inputIOSContainer: tw('flex flex-1 flex-row'),
-													inputIOS: tw('text-s-xl font-semibold w-full'),
-												}}
-												items={conditions}
-												value={
-													listingData.condition
-														? listingData.condition
-														: undefined
-												}
-												onValueChange={(condition: ListingCondition) => {
-													setListingData({
-														...listingData,
-														condition,
-													} as ListingData);
-													setHasEditCondition(true);
-												}}
-												Icon={() => (
-													<FontAwesomeIcon icon={faChevronDown} size={20} />
-												)}
-												placeholder={
-													{
-														label: 'Item Condition...',
-														value: undefined,
-													} as Item
-												}
-											/>
+											</TouchableOpacity>
 										</View>
-										{conditionError !== '' && (
-											<Text style={tw('text-red-400 text-s-md p-2')}>
-												{conditionError}
-											</Text>
-										)}
-									</View>
+									</ScrollView>
+								</View>
 
-									<View style={tw('mx-4 my-2')}>
-										<Inputs.Text
-											placeholder="Item Description"
-											placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
-											style={tw(
-												'text-s-lg font-semibold border rounded-lg p-2'
-											)}
+								<View style={tw('mx-4 my-2')}>
+									<View style={tw('flex flex-row justify-center h-14')}>
+										<Inputs.Select
+											style={{
+												viewContainer: tw(
+													'border flex flex-1 flex-row items-center px-2 rounded-lg'
+												),
+												iconContainer: tw('h-full flex justify-center'),
+												inputIOSContainer: tw('flex flex-1 flex-row'),
+												inputIOS: tw('text-s-xl font-semibold w-full'),
+											}}
+											items={conditions}
 											value={
-												listingData.description ? listingData.description : ''
+												listingData.condition
+													? listingData.condition
+													: undefined
 											}
-											onChangeText={(description) => {
+											onValueChange={(condition: ListingCondition) => {
 												setListingData({
 													...listingData,
-													description,
+													condition,
 												} as ListingData);
-												setHasEditDesc(true);
+												setHasEditCondition(true);
 											}}
-											multiline={true}
-											scrollEnabled={false}
-											maxLength={250}
+											Icon={() => (
+												<FontAwesomeIcon icon={faChevronDown} size={20} />
+											)}
+											placeholder={
+												{
+													label: 'Item Condition...',
+													value: undefined,
+												} as Item
+											}
 										/>
-										{descError !== '' && (
-											<Text style={tw('text-red-400 text-s-md p-2')}>
-												{descError}
-											</Text>
-										)}
 									</View>
+									{conditionError !== '' && (
+										<Text style={tw('text-red-400 text-s-md p-2')}>
+											{conditionError}
+										</Text>
+									)}
+								</View>
 
-									<View
-										style={tw(
-											'my-2 w-full flex flex-row justify-center items-center'
-										)}
-									>
-										<Buttons.Primary
-											size="md"
-											title="Save as draft"
-											onPress={() => {
-												setListingData({ ...listingData, status: 'saved' });
-												createListing(
-													listingData,
-													userInfo,
-													listingErrors,
-													subProgressArray,
-													setSubProgressArray,
-													navigation
-												);
-											}}
-										/>
-									</View>
-								</>
+								<View style={tw('mx-4 my-2')}>
+									<Inputs.Text
+										placeholder="Item Description"
+										placeholderTextColor={'rgba(156, 163, 175, 1.0)'}
+										style={tw('text-s-lg font-semibold border rounded-lg p-2')}
+										value={
+											listingData.description ? listingData.description : ''
+										}
+										onChangeText={(description) => {
+											setListingData({
+												...listingData,
+												description,
+											} as ListingData);
+											setHasEditDesc(true);
+										}}
+										multiline={true}
+										scrollEnabled={false}
+										maxLength={250}
+									/>
+									{descError !== '' && (
+										<Text style={tw('text-red-400 text-s-md p-2')}>
+											{descError}
+										</Text>
+									)}
+								</View>
+
+								<View
+									style={tw(
+										'my-2 w-full flex flex-row justify-center items-center'
+									)}
+								>
+									<Buttons.Primary
+										size="md"
+										title="Save as draft"
+										onPress={() => {
+											setListingData({ ...listingData, status: 'saved' });
+											createListing(
+												listingData,
+												userInfo,
+												listingErrors,
+												subProgressArray,
+												setSubProgressArray,
+												navigation
+											);
+										}}
+									/>
+								</View>
 							</KeyboardAwareScrollView>
 						)}
 						{progress !== 0 && (

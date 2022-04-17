@@ -113,6 +113,8 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 						viewIsInsideTabBar={true}
 						keyboardShouldPersistTaps={'handled'}
 						extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
+						enableResetScrollToCoords={false}
+						keyboardOpeningTime={0}
 					>
 						{updating && !deleting && !hasEditImage && progress === 0 && (
 							// user just clicked save button, updating listingData in db
@@ -287,24 +289,43 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 												</View>
 											))}
 											<TouchableOpacity onPress={() => setCategorizing(true)}>
-												<Badges.Light>
-													<FontAwesomeIcon
-														icon={faPlus}
-														size={16}
-														style={tw('m-1')}
-													/>
-													<Text
-														style={tw('capitalize text-s-md font-medium pr-2')}
-													>
-														Category
-													</Text>
-												</Badges.Light>
+												{listingData.category.length > 0 && (
+													<Badges.Light>
+														<FontAwesomeIcon
+															icon={faPlus}
+															size={16}
+															style={tw('m-1')}
+														/>
+														<Text
+															style={tw(
+																'capitalize text-s-md font-medium pr-2'
+															)}
+														>
+															Category
+														</Text>
+													</Badges.Light>
+												)}
 											</TouchableOpacity>
-											{categoryError !== '' && (
-												<Text style={tw('text-red-400 text-s-md p-2')}>
-													{categoryError}
-												</Text>
-											)}
+											<TouchableOpacity
+												style={tw('flex-1')}
+												onPress={() => setCategorizing(true)}
+											>
+												{listingData.category.length === 0 && (
+													<Text
+														style={{
+															...tw('text-s-xl font-semibold'),
+															color: 'rgba(156, 163, 175, 1.0)',
+														}}
+													>
+														Search category
+													</Text>
+												)}
+												{categoryError !== '' && (
+													<Text style={tw('text-red-400 text-s-md pt-2')}>
+														{categoryError}
+													</Text>
+												)}
+											</TouchableOpacity>
 										</View>
 									</ScrollView>
 								</View>

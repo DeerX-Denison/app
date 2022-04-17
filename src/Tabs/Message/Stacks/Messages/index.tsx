@@ -55,8 +55,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const [disableSend, setDisableSend] = useState<boolean>(false);
 
 	const { didShow } = useKeyboard();
+
+	// height of the static box window that contains all messages
+	const [boxHeight, setBoxHeight] = useState(0);
+	// height of all the dynamic content of all messages
+	const [contentHeight, setContentHeight] = useState(0);
+	useScrollToEndOnOpen(scrollViewRef, threadData, boxHeight, contentHeight);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
-	useScrollToEndOnOpen(scrollViewRef, threadData);
 	const { paddingBottom } = useKeyboardPadding();
 
 	const {
@@ -70,10 +75,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
 	const { wishlist } = useWishlist(query);
-	// height of the static box window that contains all messages
-	const [boxHeight, setBoxHeight] = useState(0);
-	// height of all the dynamic content of all messages
-	const [contentHeight, setContentHeight] = useState(0);
 
 	const sendHandler = async () => {
 		if (threadData && userInfo && message) {

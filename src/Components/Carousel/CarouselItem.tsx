@@ -93,7 +93,7 @@ const CarouselItem: FC<Props> = ({
 						{editMode && (
 							<TouchableOpacity
 								onPress={removeHandler}
-								containerStyle={tw('rounded-full m-2')}
+								style={tw('rounded-full m-2 bg-white')}
 							>
 								<FontAwesomeIcon
 									icon={faCircleXmark}
@@ -105,7 +105,7 @@ const CarouselItem: FC<Props> = ({
 						{editMode && (
 							<TouchableOpacity
 								onPress={addHandler}
-								containerStyle={tw('rounded-full m-2')}
+								style={tw('rounded-full m-2 bg-white')}
 							>
 								<FontAwesomeIcon
 									icon={faCirclePlus}

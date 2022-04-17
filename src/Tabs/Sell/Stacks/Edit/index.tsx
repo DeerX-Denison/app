@@ -7,6 +7,7 @@ import {
 } from '@Constants';
 import {
 	faChevronDown,
+	faMagnifyingGlass,
 	faPlus,
 	faTimes,
 } from '@fortawesome/free-solid-svg-icons';
@@ -311,14 +312,21 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 												onPress={() => setCategorizing(true)}
 											>
 												{listingData.category.length === 0 && (
-													<Text
-														style={{
-															...tw('text-s-xl font-semibold'),
-															color: 'rgba(156, 163, 175, 1.0)',
-														}}
-													>
-														Search category
-													</Text>
+													<View style={tw('flex-row items-center')}>
+														<FontAwesomeIcon
+															icon={faMagnifyingGlass}
+															size={16}
+															style={tw('mx-1')}
+														/>
+														<Text
+															style={{
+																...tw('text-s-xl font-semibold'),
+																color: 'rgba(156, 163, 175, 1.0)',
+															}}
+														>
+															Search category
+														</Text>
+													</View>
 												)}
 												{categoryError !== '' && (
 													<Text style={tw('text-red-400 text-s-md pt-2')}>

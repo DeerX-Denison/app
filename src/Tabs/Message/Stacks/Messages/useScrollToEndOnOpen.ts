@@ -4,16 +4,12 @@ import { ThreadData } from 'types';
 
 export type UseScrollToEndOnOpen = (
 	scrollViewRef: React.MutableRefObject<ScrollView | undefined>,
-	threadData: ThreadData | undefined,
-	boxHeight: number,
-	contentHeight: number
+	threadData: ThreadData | undefined
 ) => void;
 
 const useScrollToEndOnOpen: UseScrollToEndOnOpen = (
 	scrollViewRef,
-	threadData,
-	boxHeight,
-	contentHeight
+	threadData
 ) => {
 	const [isFirstRender, setIsFirstRender] = useState<boolean>(true);
 
@@ -25,13 +21,11 @@ const useScrollToEndOnOpen: UseScrollToEndOnOpen = (
 
 	useEffect(() => {
 		if (isFirstRender === false) {
-			if (contentHeight > boxHeight) {
-				setTimeout(() => {
-					scrollViewRef.current?.scrollToEnd({ animated: true });
-				}, 0);
-			}
+			setTimeout(() => {
+				scrollViewRef.current?.scrollToEnd({ animated: true });
+			}, 0);
 		}
-	}, [isFirstRender, contentHeight, boxHeight]);
+	}, [isFirstRender]);
 };
 
 export default useScrollToEndOnOpen;

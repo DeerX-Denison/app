@@ -3,6 +3,7 @@ import { UserContext } from '@Contexts';
 import { faCheckCircle as regularCheckIcon } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle as solidCheckIcon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { useCurrentTime, useMessageDisplayTime } from '@Hooks';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
@@ -22,7 +23,8 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 	const { userInfo } = useContext(UserContext);
 	const [nonSelfUid, setNonSelfUid] = useState<string | undefined>();
 	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
-
+	const { curTime } = useCurrentTime();
+	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
 	useEffect(() => {
 		if (userInfo && members && members.length > 0) {
 			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);
@@ -51,6 +53,9 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 			<View style={tw('p-1 flex-row items-end')}>
 				<View style={tw('flex-1')}>
 					<View style={tw('flex-col')}>
+						<View style={tw('justify-center items-center pb-1 pt-2')}>
+							<Text style={tw('text-s-sm font-light')}>{displayTime}</Text>
+						</View>
 						{userInfo && nonSelfUid && (
 							// user is logged in, proceed to determine if message is self or other
 							<>

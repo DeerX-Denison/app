@@ -60,8 +60,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const [boxHeight, setBoxHeight] = useState(0);
 	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
-	useScrollToEndOnOpen(scrollViewRef, threadData, boxHeight, contentHeight);
+
+	useScrollToEndOnOpen(scrollViewRef, threadData);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
+
 	const { paddingBottom } = useKeyboardPadding();
 
 	const {
@@ -180,7 +182,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 					{/* MESSAGES CONTAINER */}
 					<View
-						style={tw('flex-col-reverse mt-14 h-full')}
+						style={tw('flex-col-reverse pt-4 h-full')}
 						onLayout={(event) => {
 							const { height } = event.nativeEvent.layout;
 							setBoxHeight(height);

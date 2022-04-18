@@ -69,7 +69,7 @@ const ItemSuggestion: FC<Props> = ({
 										inputText?.slice(0, closestRef + 1) +
 											wishlistData.name +
 											' ' +
-											inputText?.slice(closestRef + 1, inputText.length)
+											inputText?.slice(textSelection?.start, inputText.length)
 									);
 									for (let i = 0; i < refs.length; i++) {
 										if (closestRef <= refs[i].begin) {

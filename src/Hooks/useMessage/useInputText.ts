@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { WishlistDataCL } from 'types';
-import { Text, View } from 'react-native'
 
 export type UseInputText = () => {
 	inputText: string;
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
 	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
-	refs: Ref[];
-	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	refs: (Ref|undefined)[];
+	setRefs: React.Dispatch<React.SetStateAction<(Ref | undefined)[]>>;
 	textSelection: TextSelection | undefined;
 	setTextSelection: React.Dispatch<
 		React.SetStateAction<TextSelection | undefined>
@@ -37,7 +36,7 @@ export type WithinRef = {
 const useInputText: UseInputText = () => {
 	const [inputText, setInputText] = useState<string>('');
 	const [showingItem, setShowingItem] = useState<boolean>(false);
-	const [refs, setRefs] = useState<Ref[]>([]);
+	const [refs, setRefs] = useState<(Ref|undefined)[]>([]);
 	const [textSelection, setTextSelection] = useState<
 		TextSelection | undefined
 	>();
@@ -85,7 +84,7 @@ const useInputText: UseInputText = () => {
 		let nearRef = false;
 		for (let i = 0; i < refs.length; i++) {
 			if (
-				textSelection?.start >= refs[i].begin + 1 &&
+				textSelection?.start >= refs[i].begin &&
 				textSelection?.start <= refs[i].end + 1
 			) {
 				nearRef = true;
@@ -94,15 +93,19 @@ const useInputText: UseInputText = () => {
 		}
 
 		// Handle showing item
+		console.log((inputText.charAt(textSelection?.start - 1) === '@' &&
+		([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
+			textSelection?.start === 1)) ||
+	(nearPossibleRef && !nearRef))
 		if (
 			(inputText.charAt(textSelection?.start - 1) === '@' &&
 				([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
-					textSelection?.start === 1)) ||
-			nearPossibleRef && !nearRef
+					textSelection?.start === 1)) &&
+			(nearPossibleRef && !nearRef)
 		) {
 			setShowingItem(true);
 		} else if (
-			inputText.charAt(textSelection?.start - 1) === ' ' ||
+			nearRef || inputText.charAt(textSelection?.start - 1) === ' ' ||
 			textSelection?.start - previousIndex > 1 ||
 			textSelection?.start - previousIndex < 0
 		) {
@@ -112,7 +115,6 @@ const useInputText: UseInputText = () => {
 	}, [inputText, textSelection]);
 
 	useEffect(() => {
-		console.log(textSelection);
 		let exist = false;
 		let ref = undefined;
 		for (let i = 0; i < refs.length; i++) {
@@ -132,14 +134,16 @@ const useInputText: UseInputText = () => {
 	useEffect(() => {
 		// Updating the references when editing
 		if (isEditing) {
-			if (keyPressed !== 'Backspace' && isChangingLength) {
-				for (let i = 0; i < refs.length; i++) {
-					if (refs[i].begin >= textSelection?.start) {
-						refs[i].begin += 1;
-						refs[i].end += 1;
+			if (keyPressed !== 'Backspace') {
+				if (isChangingLength) {
+					for (let i = 0; i < refs.length; i++) {
+						if (refs[i].begin >= textSelection?.start) {
+							refs[i].begin += 1;
+							refs[i].end += 1;
+						}
 					}
+					setRefs(refs);
 				}
-				setRefs(refs);
 			} else {
 				if (isChangingLength) {
 					for (let i = 0; i < refs.length; i++) {

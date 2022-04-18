@@ -87,6 +87,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		{ end: number; start: number } | undefined
 	>({ end: 0, start: 0 });
 
+	const [deleteWord, setDeleteWord] = useState<boolean>(false);
+
 	const sendHandler = async () => {
 		setInputText('');
 		setDisableSend(true);
@@ -156,6 +158,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								scrollEnabled={true}
 								// defaultValue={inputText}
 								onChangeText={(text) => {
+									console.log('prev', prevSelector);
 									let exist = false;
 									for (let i = 0; i < refs.length; i++) {
 										if (
@@ -168,7 +171,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									if (
 										keyPressed === 'Backspace' &&
 										isWithinRef.isWithinRef &&
-										exist
+										exist &&
+										!deleteWord
 									) {
 										const start = isWithinRef.whichRef?.begin;
 										const end = isWithinRef.whichRef?.end + 1;
@@ -177,6 +181,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 											const first = inputText.slice(0, start);
 											const second = inputText.slice(end, inputText.length);
 											setInputText(first + second);
+											refs.splice(_, 1);
 											const deletedRef =
 												isWithinRef.whichRef?.end -
 												isWithinRef.whichRef?.begin +
@@ -187,7 +192,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 													refs[i].end -= deletedRef;
 												}
 											}
-											refs.splice(_, 1);
 											setRefs(refs);
 										}
 									} else {
@@ -195,16 +199,22 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									}
 								}}
 								selectTextOnFocus={true}
-								onFocus={() => readLatestMessage(threadData, userInfo)}
+								// onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
-								onSelectionChange={(e) =>
-									setTextSelection(e.nativeEvent.selection)
-								}
+								onSelectionChange={(e) => {
+									console.log('Current', e.nativeEvent.selection);
+									setPrevSelector(textSelection);
+									setTextSelection(e.nativeEvent.selection);
+									if (
+										inputText.charAt(e.nativeEvent.selection.start - 1) ===
+											' ' &&
+										inputText.charAt(e.nativeEvent.selection.end) === ' '
+									) {
+										setDeleteWord(true);
+									}
+								}}
 								onKeyPress={(e) => {
 									setKeyPressed(e.nativeEvent.key);
-									if (e.nativeEvent.key === 'Backspace') {
-										setPrevSelector(textSelection);
-									}
 								}}
 							>
 								<Text>
@@ -227,24 +237,25 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 															</Text>
 														</>
 													);
-												})
+													// eslint-disable-next-line no-mixed-spaces-and-tabs
+											  })
 											: refs.map((item, index) => {
-													if (index === refs.length) {
+													if (index === refs.length - 1) {
 														return (
 															<>
-																<Text>
+																<Text key={uuidv4()}>
 																	{inputText.slice(
 																		refs[index - 1].end + 1,
 																		refs[index].begin
 																	)}
 																</Text>
-																<Text style={tw('font-bold')}>
+																<Text style={tw('font-bold')} key={uuidv4()}>
 																	{inputText.slice(
 																		refs[index].begin,
 																		refs[index].end + 1
 																	)}
 																</Text>
-																<Text>
+																<Text key={uuidv4()}>
 																	{inputText.slice(refs[index].end + 1)}
 																</Text>
 															</>
@@ -252,10 +263,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 													} else if (index === 0) {
 														return (
 															<>
-																<Text>
+																<Text key={uuidv4()}>
 																	{inputText.slice(0, refs[index].begin)}
 																</Text>
-																<Text style={tw('font-bold')}>
+																<Text style={tw('font-bold')} key={uuidv4()}>
 																	{inputText.slice(
 																		refs[index].begin,
 																		refs[index].end + 1
@@ -266,13 +277,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 													} else {
 														return (
 															<>
-																<Text>
+																<Text key={uuidv4()}>
 																	{inputText.slice(
 																		refs[index - 1].end + 1,
 																		refs[index].begin
 																	)}
 																</Text>
-																<Text style={tw('font-bold')}>
+																<Text style={tw('font-bold')} key={uuidv4()}>
 																	{inputText.slice(
 																		refs[index].begin,
 																		refs[index].end + 1
@@ -281,7 +292,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 															</>
 														);
 													}
-												})
+													// eslint-disable-next-line no-mixed-spaces-and-tabs
+											  })
 										: inputText}
 								</Text>
 							</TextInput>

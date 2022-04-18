@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-export type UseInputText = () => {
+export type UseInputText = (setDisableSend: React.Dispatch<React.SetStateAction<boolean>>) => {
 	inputText: string;
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
@@ -23,7 +23,7 @@ export type TextSelection = {
 /**
  * custom hook to handle user input-ed text in TextInput
  */
-const useInputText: UseInputText = () => {
+const useInputText: UseInputText = (setDisableSend) => {
 	const [inputText, setInputText] = useState<string>('');
 	const [showingItem, setShowingItem] = useState<boolean>(false);
 	const [refs, setRefs] = useState<Ref[]>([]);
@@ -31,9 +31,17 @@ const useInputText: UseInputText = () => {
 		TextSelection | undefined
 	>();
 	useEffect(() => {
+		if (inputText === ''){
+			setDisableSend(true);
+		}
+		else {
+			setDisableSend(false);
+		}
 		setShowingItem(inputText.startsWith('@'));
 		// TODO: implement check for change in refs in a new inputText
 	}, [inputText]);
+
+
 
 	return {
 		inputText,

@@ -1,5 +1,5 @@
 import * as Buttons from '@Components/Buttons';
-import { auth } from '@firebase.config';
+import { auth, fn } from '@firebase.config';
 import logger from '@logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
@@ -112,7 +112,11 @@ const SignIn: FC = () => {
 					};
 					try {
 						setSending(true);
-						await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+						// await auth.sendSignInLinkToEmail(email, actionCodeSettings);
+						await fn.httpsCallable('sendSignInEmail')({
+							email,
+							actionCodeSettings,
+						});
 						await AsyncStorage.setItem('emailForSignIn', email);
 						setSending(false);
 						setEmailSent(true);

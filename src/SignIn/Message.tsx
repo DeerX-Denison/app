@@ -18,10 +18,9 @@ const Message: FC<Props> = ({ setEmailSent }) => {
 		TIME_TO_RESEND_SIGNIN_EMAIL
 	);
 	useEffect(() => {
-		setTimeRemain(
-			TIME_TO_RESEND_SIGNIN_EMAIL -
-				Math.round(curTime.getSeconds() - initTime.getSeconds())
-		);
+		const milliElapsed = curTime.getTime() - initTime.getTime();
+		const secondElapsed = new Date(milliElapsed).getSeconds();
+		setTimeRemain(TIME_TO_RESEND_SIGNIN_EMAIL - secondElapsed);
 	}, [curTime]);
 
 	useEffect(() => {

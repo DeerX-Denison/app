@@ -1,12 +1,5 @@
 import { JustSignOut, UserContext } from '@Contexts';
 import {
-	faBars,
-	faHeart,
-	faMessage,
-	faStore,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import {
 	useAnalytics,
 	useAuth,
 	useBackgroundLink,
@@ -20,12 +13,20 @@ import {
 	useNavigationContainerRef,
 } from '@react-navigation/native';
 import { Listings, Menu, Message, Sell, Wishlist } from '@Tabs';
-import tw from '@tw';
 import React, { FC, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { HomeTab, InboxTab, SellTab, TabsParamList } from 'types';
 import SignIn from './SignIn';
-import TestIcon from './testIcon.svg';
+import ChatActive from './static/chat-active.svg';
+import ChatInactive from './static/chat-inactive.svg';
+import HeartActive from './static/heart-active.svg';
+import HeartInactive from './static/heart-inactive.svg';
+import HomeActive from './static/home-active.svg';
+import HomeInactive from './static/home-inactive.svg';
+import MenuActive from './static/menu-active.svg';
+import MenuInactive from './static/menu-inactive.svg';
+import ShopActive from './static/shop-active.svg';
+import ShopInactive from './static/shop-inactive.svg';
 
 interface Props {}
 
@@ -62,9 +63,9 @@ const App: FC<Props> = () => {
 											options={{
 												tabBarIcon: ({ focused }) =>
 													focused ? (
-														<TestIcon height={48} width={48} />
+														<HomeActive height={32} width={32} />
 													) : (
-														<TestIcon height={48} width={48} />
+														<HomeInactive height={32} width={32} />
 													),
 											}}
 										>
@@ -74,15 +75,12 @@ const App: FC<Props> = () => {
 											name="Inbox"
 											initialParams={initialParams as InboxTab}
 											options={{
-												tabBarIcon: ({ focused, size }) => (
-													<FontAwesomeIcon
-														icon={faMessage}
-														size={size}
-														style={tw(
-															`${focused ? 'text-red-500' : 'text-indigo-500'}`
-														)}
-													/>
-												),
+												tabBarIcon: ({ focused }) =>
+													focused ? (
+														<ChatActive height={42} width={42} />
+													) : (
+														<ChatInactive height={42} width={42} />
+													),
 											}}
 										>
 											{(props) => <Message {...props} />}
@@ -91,15 +89,12 @@ const App: FC<Props> = () => {
 											name="Sell"
 											initialParams={initialParams as SellTab}
 											options={{
-												tabBarIcon: ({ focused, size }) => (
-													<FontAwesomeIcon
-														icon={faStore}
-														size={size}
-														style={tw(
-															`${focused ? 'text-red-500' : 'text-indigo-500'}`
-														)}
-													/>
-												),
+												tabBarIcon: ({ focused }) =>
+													focused ? (
+														<ShopActive height={32} width={32} />
+													) : (
+														<ShopInactive height={32} width={32} />
+													),
 											}}
 										>
 											{(props) => <Sell {...props} />}
@@ -108,15 +103,12 @@ const App: FC<Props> = () => {
 											name="Liked"
 											initialParams={initialParams as undefined}
 											options={{
-												tabBarIcon: ({ focused, size }) => (
-													<FontAwesomeIcon
-														icon={faHeart}
-														size={size}
-														style={tw(
-															`${focused ? 'text-red-500' : 'text-indigo-500'}`
-														)}
-													/>
-												),
+												tabBarIcon: ({ focused }) =>
+													focused ? (
+														<HeartActive height={32} width={32} />
+													) : (
+														<HeartInactive height={32} width={32} />
+													),
 											}}
 										>
 											{(props) => <Wishlist {...props} />}
@@ -125,15 +117,12 @@ const App: FC<Props> = () => {
 											name="Menu"
 											initialParams={initialParams as undefined}
 											options={{
-												tabBarIcon: ({ focused, size }) => (
-													<FontAwesomeIcon
-														icon={faBars}
-														size={size}
-														style={tw(
-															`${focused ? 'text-red-500' : 'text-indigo-500'}`
-														)}
-													/>
-												),
+												tabBarIcon: ({ focused }) =>
+													focused ? (
+														<MenuActive height={32} width={32} />
+													) : (
+														<MenuInactive height={32} width={32} />
+													),
 											}}
 										>
 											{(props) => <Menu {...props} />}

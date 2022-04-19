@@ -162,28 +162,29 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							/>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
-									{inputText ? <TouchableOpacity
-										onPress={sendHandler}
-										disabled={disableSend}
-									>
-										<FontAwesomeIcon
-											icon={faCircleArrowUp}
-											size={25}
-											style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
-										/> 
-									</TouchableOpacity>
-									:
-									<TouchableOpacity
-									onPress={sendHandler}
-									disabled={disableSend}
-									>
-										<FontAwesomeIcon
-											icon={faCircleArrowUp}
-											size={25}
-											style={tw('bottom-2', 'text-gray-500', 'text-s-sm')}
-										/> 
-									</TouchableOpacity>
-									}
+									{inputText ? (
+										<TouchableOpacity
+											onPress={sendHandler}
+											disabled={disableSend}
+										>
+											<FontAwesomeIcon
+												icon={faCircleArrowUp}
+												size={25}
+												style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
+											/>
+										</TouchableOpacity>
+									) : (
+										<TouchableOpacity
+											onPress={sendHandler}
+											disabled={disableSend}
+										>
+											<FontAwesomeIcon
+												icon={faCircleArrowUp}
+												size={25}
+												style={tw('bottom-2', 'text-gray-500', 'text-s-sm')}
+											/>
+										</TouchableOpacity>
+									)}
 								</View>
 							</View>
 						</View>

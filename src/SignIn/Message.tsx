@@ -22,7 +22,6 @@ const Message: FC<Props> = ({ setEmailSent }) => {
 		const secondElapsed = new Date(milliElapsed).getSeconds();
 		setTimeRemain(TIME_TO_RESEND_SIGNIN_EMAIL - secondElapsed);
 	}, [curTime]);
-
 	useEffect(() => {
 		if (timeRemain <= 0) {
 			setEmailSent(false);

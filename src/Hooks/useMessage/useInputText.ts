@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-export type UseInputText = (setDisableSend: React.Dispatch<React.SetStateAction<boolean>>) => {
+export type UseInputText = (
+	setDisableSend: React.Dispatch<React.SetStateAction<boolean>>
+) => {
 	inputText: string;
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
@@ -31,17 +33,14 @@ const useInputText: UseInputText = (setDisableSend) => {
 		TextSelection | undefined
 	>();
 	useEffect(() => {
-		if (inputText === ''){
+		if (inputText === '') {
 			setDisableSend(true);
-		}
-		else {
+		} else {
 			setDisableSend(false);
 		}
 		setShowingItem(inputText.startsWith('@'));
 		// TODO: implement check for change in refs in a new inputText
 	}, [inputText]);
-
-
 
 	return {
 		inputText,

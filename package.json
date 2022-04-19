@@ -69,6 +69,7 @@
 		"react-native-screens": "~3.4.0",
 		"react-native-snap-carousel": "^3.9.1",
 		"react-native-svg": "^12.3.0",
+		"react-native-svg-transformer": "^1.0.0",
 		"react-native-swipe-list-view": "^3.2.9",
 		"react-native-toast-message": "^2.0.2",
 		"react-native-unimodules": "^0.14.8",

@@ -2,7 +2,6 @@ import { JustSignOut, UserContext } from '@Contexts';
 import {
 	faBars,
 	faHeart,
-	faHouse,
 	faMessage,
 	faStore,
 } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +25,8 @@ import React, { FC, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { HomeTab, InboxTab, SellTab, TabsParamList } from 'types';
 import SignIn from './SignIn';
+import TestIcon from './testIcon.svg';
+
 interface Props {}
 
 const App: FC<Props> = () => {
@@ -59,15 +60,12 @@ const App: FC<Props> = () => {
 											name="Home"
 											initialParams={initialParams as HomeTab}
 											options={{
-												tabBarIcon: ({ focused, size }) => (
-													<FontAwesomeIcon
-														icon={faHouse}
-														size={size}
-														style={tw(
-															`${focused ? 'text-red-500' : 'text-indigo-500'}`
-														)}
-													/>
-												),
+												tabBarIcon: ({ focused }) =>
+													focused ? (
+														<TestIcon height={48} width={48} />
+													) : (
+														<TestIcon height={48} width={48} />
+													),
 											}}
 										>
 											{(props) => <Listings {...props} />}

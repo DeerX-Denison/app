@@ -7,7 +7,10 @@ import useContentType from './useContentType';
 import useInputText, { TextSelection } from './useInputText';
 import useSeenAt from './useSeenAt';
 
-export type UseMessageFn = (threadData: ThreadData | undefined, setDisableSend: React.Dispatch<React.SetStateAction<boolean>>) => {
+export type UseMessageFn = (
+	threadData: ThreadData | undefined,
+	setDisableSend: React.Dispatch<React.SetStateAction<boolean>>
+) => {
 	message: MessageData | undefined;
 	inputText: string;
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
@@ -24,10 +27,10 @@ export type UseMessageFn = (threadData: ThreadData | undefined, setDisableSend: 
  * parse input messages to trigger features
  */
 const useMessage: UseMessageFn = (threadData, setDisableSend) => {
-	if (setDisableSend === undefined){
-		console.log("@@@@@");
+	if (setDisableSend === undefined) {
+		console.log('@@@@@');
 	}
-	
+
 	const { userInfo } = useContext(UserContext);
 	const [message, setMessage] = useState<MessageData | undefined>(undefined);
 	const {
@@ -40,7 +43,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 	const { query, setQuery } = useSuggestionQuery(inputText);
 	const { contentType } = useContentType(inputText);
 	const { seenAt } = useSeenAt(threadData);
-	
+
 	/**
 	 * effect to parse current message
 	 */

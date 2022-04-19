@@ -48,7 +48,6 @@ const ItemSuggestion: FC<Props> = ({
 									}`
 								)}
 								onPress={() => {
-									// console.log(wishlist);
 									let closestRef = 0;
 									for (let i: number = textSelection?.start; i >= 0; i--) {
 										if (inputText?.charAt(i) === '@') {
@@ -63,8 +62,6 @@ const ItemSuggestion: FC<Props> = ({
 										begin: start,
 										data: wishlistData,
 									};
-									// console.log('ref:', closestRef);
-									// console.log(inputText);
 									setInputText(
 										inputText?.slice(0, closestRef + 1) +
 											wishlistData.name +

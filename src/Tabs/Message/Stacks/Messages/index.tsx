@@ -18,6 +18,7 @@ import React, { FC, useContext, useRef, useState } from 'react';
 import { Animated, ScrollView, Text, TextInput, View } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
+import { Ref } from 'src/Hooks/useMessage/useInputText';
 import { MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import ItemSuggestion from './ItemSuggestion';
@@ -87,10 +88,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		{ end: number; start: number } | undefined
 	>({ end: 0, start: 0 });
 
-	const [deleteWord, setDeleteWord] = useState<boolean>(false);
+	const [extendingSelection, setExtendingSelection] = useState<boolean>(false);
+	const [withinWhichRef, setWithinWhichRef] = useState<Ref[]>([]);
 
 	const sendHandler = async () => {
 		setInputText('');
+		setRefs([]);
 		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
@@ -151,14 +154,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							)}
 						>
 							<TextInput
-								// value={inputText}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								// defaultValue={inputText}
 								onChangeText={(text) => {
-									console.log('prev', prevSelector);
 									let exist = false;
 									for (let i = 0; i < refs.length; i++) {
 										if (
@@ -172,7 +172,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										keyPressed === 'Backspace' &&
 										isWithinRef.isWithinRef &&
 										exist &&
-										!deleteWord
+										!extendingSelection
 									) {
 										const start = isWithinRef.whichRef?.begin;
 										const end = isWithinRef.whichRef?.end + 1;
@@ -196,21 +196,63 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										}
 									} else {
 										setInputText(text);
+										if (text.length < inputText.length) {
+											if (!extendingSelection && keyPressed === 'Backspace') {
+												for (let i = 0; i < refs.length; i++) {
+													if (refs[i].begin >= prevSelector?.start - 1) {
+														refs[i].begin -= 1;
+														refs[i].end -= 1;
+													}
+												}
+											} else {
+												for (let i = 0; i < refs.length; i++) {
+													if (refs[i].begin >= prevSelector?.end - 1) {
+														refs[i].begin -= inputText.length - text.length;
+														refs[i].end -= inputText.length - text.length;
+													}
+												}
+												for (let i = 0; i < withinWhichRef.length; i++) {
+													const _ = refs.indexOf(withinWhichRef[i]);
+													if (_ > -1) {
+														refs.splice(_, 1);
+													}
+												}
+												setRefs(refs);
+											}
+										} else if (text.length > inputText.length) {
+											if (!extendingSelection) {
+												for (let i = 0; i < refs.length; i++) {
+													if (refs[i].begin >= prevSelector?.start - 1) {
+														refs[i].begin += text.length - inputText.length;
+														refs[i].end += text.length - inputText.length;
+													}
+												}
+											}
+										}
 									}
 								}}
 								selectTextOnFocus={true}
 								// onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
 								onSelectionChange={(e) => {
-									console.log('Current', e.nativeEvent.selection);
 									setPrevSelector(textSelection);
 									setTextSelection(e.nativeEvent.selection);
-									if (
-										inputText.charAt(e.nativeEvent.selection.start - 1) ===
-											' ' &&
-										inputText.charAt(e.nativeEvent.selection.end) === ' '
-									) {
-										setDeleteWord(true);
+									const arr: Ref[] = [];
+									for (let i = 0; i < refs.length; i++) {
+										if (
+											(refs[i].begin <= textSelection?.start - 1 &&
+												refs[i].end >= textSelection?.start) ||
+											(refs[i].begin <= textSelection?.end - 1 &&
+												refs[i].end >= textSelection?.end)
+										) {
+											arr.push(refs[i]);
+										}
+									}
+									setWithinWhichRef(arr);
+									if (prevSelector?.start !== prevSelector?.end) {
+										setExtendingSelection(true);
+									} else {
+										setExtendingSelection(false);
 									}
 								}}
 								onKeyPress={(e) => {

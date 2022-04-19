@@ -6,7 +6,7 @@ export type UseInputText = () => {
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
 	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
-	refs: (Ref|undefined)[];
+	refs: (Ref | undefined)[];
 	setRefs: React.Dispatch<React.SetStateAction<(Ref | undefined)[]>>;
 	textSelection: TextSelection | undefined;
 	setTextSelection: React.Dispatch<
@@ -36,15 +36,11 @@ export type WithinRef = {
 const useInputText: UseInputText = () => {
 	const [inputText, setInputText] = useState<string>('');
 	const [showingItem, setShowingItem] = useState<boolean>(false);
-	const [refs, setRefs] = useState<(Ref|undefined)[]>([]);
+	const [refs, setRefs] = useState<(Ref | undefined)[]>([]);
 	const [textSelection, setTextSelection] = useState<
 		TextSelection | undefined
 	>();
 
-	const [isChangingLength, setIsChangingLength] = useState<boolean>(false);
-	const [currentLength, setCurrentLength] = useState<number>(0);
-
-	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [keyPressed, setKeyPressed] = useState<string>('');
 	const [isWithinRef, setIsWithinRef] = useState<WithinRef>({
 		isWithinRef: false,
@@ -55,21 +51,6 @@ const useInputText: UseInputText = () => {
 
 	// check if the user is typing something or deleting something
 	useEffect(() => {
-		// Handle if selection is between text
-		if (textSelection?.start == inputText.length) {
-			setIsEditing(false);
-		} else {
-			setIsEditing(true);
-		}
-
-		// Handle if is typing something or if moving selection only
-		if (inputText.length !== currentLength) {
-			setIsChangingLength(true);
-			setCurrentLength(inputText.length);
-		} else {
-			setIsChangingLength(false);
-		}
-
 		let nearPossibleRef = false;
 		for (let i = textSelection?.start - 1; i >= 0; i--) {
 			if (inputText.charAt(i) === ' ') {
@@ -93,19 +74,17 @@ const useInputText: UseInputText = () => {
 		}
 
 		// Handle showing item
-		console.log((inputText.charAt(textSelection?.start - 1) === '@' &&
-		([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
-			textSelection?.start === 1)) ||
-	(nearPossibleRef && !nearRef))
 		if (
-			(inputText.charAt(textSelection?.start - 1) === '@' &&
-				([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
-					textSelection?.start === 1)) &&
-			(nearPossibleRef && !nearRef)
+			inputText.charAt(textSelection?.start - 1) === '@' &&
+			([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
+				textSelection?.start === 1) &&
+			nearPossibleRef &&
+			!nearRef
 		) {
 			setShowingItem(true);
 		} else if (
-			nearRef || inputText.charAt(textSelection?.start - 1) === ' ' ||
+			nearRef ||
+			inputText.charAt(textSelection?.start - 1) === ' ' ||
 			textSelection?.start - previousIndex > 1 ||
 			textSelection?.start - previousIndex < 0
 		) {
@@ -130,33 +109,6 @@ const useInputText: UseInputText = () => {
 		setIsWithinRef({ isWithinRef: exist, whichRef: ref });
 	}, [textSelection]);
 
-	// Handle updating the index of reference
-	useEffect(() => {
-		// Updating the references when editing
-		if (isEditing) {
-			if (keyPressed !== 'Backspace') {
-				if (isChangingLength) {
-					for (let i = 0; i < refs.length; i++) {
-						if (refs[i].begin >= textSelection?.start) {
-							refs[i].begin += 1;
-							refs[i].end += 1;
-						}
-					}
-					setRefs(refs);
-				}
-			} else {
-				if (isChangingLength) {
-					for (let i = 0; i < refs.length; i++) {
-						if (refs[i].begin >= textSelection?.start) {
-							refs[i].begin -= 1;
-							refs[i].end -= 1;
-						}
-					}
-					setRefs(refs);
-				}
-			}
-		}
-	}, [isChangingLength, isEditing]);
 
 	return {
 		inputText,

@@ -19,7 +19,7 @@ export type UseMessageFn = (threadData: ThreadData | undefined) => {
 		React.SetStateAction<TextSelection | undefined>
 	>;
 	textSelection: TextSelection | undefined;
-	refs: (Ref|undefined)[];
+	refs: (Ref | undefined)[];
 	setRefs: React.Dispatch<React.SetStateAction<(Ref | undefined)[]>>;
 	keyPressed: string;
 	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;

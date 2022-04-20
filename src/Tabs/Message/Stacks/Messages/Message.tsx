@@ -91,47 +91,52 @@ const Message: FC<Props> = ({
 													}}
 												>
 													<TextContent content={content} />
-													{content.contentType.includes('reference') && (
-														<View
-															style={{
-																...tw(
-																	'rounded-xl mt-2 flex flex-row flex-wrap'
-																),
-																shadowColor: DENISON_RED_RGBA,
-																shadowOffset: { width: 2, height: 2 },
-																shadowOpacity: 0.25,
-																shadowRadius: 4,
-															}}
-														>
-															{[...new Set(content.refs.map((x) => x.data.id))]
-																.map(
-																	(uniqueId) =>
-																		content.refs.filter(
-																			(ref) => ref.data.id === uniqueId
-																		)[0]
-																)
-																.map(({ data: wishlist }) => (
-																	<View key={wishlist.id}>
-																		<TouchableOpacity
-																			onPress={() =>
-																				navigation.navigate('Item', {
-																					listingId: wishlist.id,
-																				})
-																			}
-																		>
-																			<FastImage
-																				source={{ uri: wishlist.thumbnail }}
-																				style={{
-																					...tw('rounded-xl m-0.5'),
-																					height: 90,
-																					width: 90,
-																				}}
-																			/>
-																		</TouchableOpacity>
-																	</View>
-																))}
-														</View>
-													)}
+													{content.contentType.includes('reference') &&
+														'ref' in content && (
+															<View
+																style={{
+																	...tw(
+																		'rounded-xl mt-2 flex flex-row flex-wrap'
+																	),
+																	shadowColor: DENISON_RED_RGBA,
+																	shadowOffset: { width: 2, height: 2 },
+																	shadowOpacity: 0.25,
+																	shadowRadius: 4,
+																}}
+															>
+																{[
+																	...new Set(
+																		content.refs.map((x) => x.data.id)
+																	),
+																]
+																	.map(
+																		(uniqueId) =>
+																			content.refs.filter(
+																				(ref) => ref.data.id === uniqueId
+																			)[0]
+																	)
+																	.map(({ data: wishlist }) => (
+																		<View key={wishlist.id}>
+																			<TouchableOpacity
+																				onPress={() =>
+																					navigation.navigate('Item', {
+																						listingId: wishlist.id,
+																					})
+																				}
+																			>
+																				<FastImage
+																					source={{ uri: wishlist.thumbnail }}
+																					style={{
+																						...tw('rounded-xl m-0.5'),
+																						height: 90,
+																						width: 90,
+																					}}
+																				/>
+																			</TouchableOpacity>
+																		</View>
+																	))}
+															</View>
+														)}
 												</View>
 												<View style={tw('flex flex-row w-4 mb-0.5 ml-1')}>
 													{content.seenAt[userInfo.uid] === null && (
@@ -189,51 +194,52 @@ const Message: FC<Props> = ({
 														}}
 													>
 														<TextContent content={content} />
-														{content.contentType.includes('reference') && (
-															<View
-																style={{
-																	...tw(
-																		'rounded-xl mt-2 flex flex-row flex-wrap'
-																	),
-																	shadowColor: DENISON_RED_RGBA,
-																	shadowOffset: { width: 2, height: 2 },
-																	shadowOpacity: 0.25,
-																	shadowRadius: 4,
-																}}
-															>
-																{[
-																	...new Set(
-																		content.refs.map((x) => x.data.id)
-																	),
-																]
-																	.map(
-																		(uniqueId) =>
-																			content.refs.filter(
-																				(ref) => ref.data.id === uniqueId
-																			)[0]
-																	)
-																	.map(({ data: wishlist }) => (
-																		<View key={wishlist.id}>
-																			<TouchableOpacity
-																				onPress={() =>
-																					navigation.navigate('Item', {
-																						listingId: wishlist.id,
-																					})
-																				}
-																			>
-																				<FastImage
-																					source={{ uri: wishlist.thumbnail }}
-																					style={{
-																						...tw('rounded-xl m-0.5'),
-																						height: 90,
-																						width: 90,
-																					}}
-																				/>
-																			</TouchableOpacity>
-																		</View>
-																	))}
-															</View>
-														)}
+														{content.contentType.includes('reference') &&
+															'ref' in content && (
+																<View
+																	style={{
+																		...tw(
+																			'rounded-xl mt-2 flex flex-row flex-wrap'
+																		),
+																		shadowColor: DENISON_RED_RGBA,
+																		shadowOffset: { width: 2, height: 2 },
+																		shadowOpacity: 0.25,
+																		shadowRadius: 4,
+																	}}
+																>
+																	{[
+																		...new Set(
+																			content.refs.map((x) => x.data.id)
+																		),
+																	]
+																		.map(
+																			(uniqueId) =>
+																				content.refs.filter(
+																					(ref) => ref.data.id === uniqueId
+																				)[0]
+																		)
+																		.map(({ data: wishlist }) => (
+																			<View key={wishlist.id}>
+																				<TouchableOpacity
+																					onPress={() =>
+																						navigation.navigate('Item', {
+																							listingId: wishlist.id,
+																						})
+																					}
+																				>
+																					<FastImage
+																						source={{ uri: wishlist.thumbnail }}
+																						style={{
+																							...tw('rounded-xl m-0.5'),
+																							height: 90,
+																							width: 90,
+																						}}
+																					/>
+																				</TouchableOpacity>
+																			</View>
+																		))}
+																</View>
+															)}
 													</View>
 												</View>
 											))}

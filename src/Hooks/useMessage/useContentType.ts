@@ -14,7 +14,9 @@ const useContentType: UseContentTypeFn = (inputText) => {
 	]);
 	useEffect(() => {
 		if (inputText.includes('@')) {
-			setContentType([...contentType, 'reference']);
+			setContentType([
+				...new Set<MessageContentType>([...contentType, 'reference']),
+			]);
 		}
 	}, [inputText]);
 	return { contentType };

@@ -1,10 +1,10 @@
 import { UserContext } from '@Contexts';
 import { localTime } from '@firebase.config';
 import React, { useContext, useEffect, useState } from 'react';
-import { MessageData, ThreadData } from 'types';
+import { MessageData, MessageReferenceData, ThreadData } from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
 import useContentType from './useContentType';
-import useInputText, { TextSelection } from './useInputText';
+import useInputText, { Ref, TextSelection, WithinRef } from './useInputText';
 import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (
@@ -18,19 +18,19 @@ export type UseMessageFn = (
 	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
 	query: string | null;
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
-	setTextSelection: React.Dispatch<
-		React.SetStateAction<TextSelection | undefined>
-	>;
+	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
+	textSelection: TextSelection;
+	refs: Ref[];
+	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	keyPressed: string;
+	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
+	isWithinRef: WithinRef;
 };
 
 /**
  * parse input messages to trigger features
  */
 const useMessage: UseMessageFn = (threadData, setDisableSend) => {
-	if (setDisableSend === undefined) {
-		console.log('@@@@@');
-	}
-
 	const { userInfo } = useContext(UserContext);
 	const [message, setMessage] = useState<MessageData | undefined>(undefined);
 	const {
@@ -39,16 +39,25 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		showingItem,
 		setShowingItem,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		keyPressed,
+		setKeyPressed,
+		isWithinRef,
 	} = useInputText(setDisableSend);
-	const { query, setQuery } = useSuggestionQuery(inputText);
+	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
 	const { seenAt } = useSeenAt(threadData);
-
 	/**
 	 * effect to parse current message
 	 */
 	useEffect(() => {
 		if (userInfo && threadData) {
+			const messageRefs: MessageReferenceData = {};
+			refs.forEach((ref) => {
+				messageRefs[ref.data.id] = { begin: ref.begin, end: ref.end };
+			});
 			setMessage({
 				id: 'temp-id',
 				sender: userInfo,
@@ -57,6 +66,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 				content: inputText,
 				membersUid: threadData.membersUid,
 				threadName: threadData.name,
+				refs: messageRefs,
 				seenAt,
 			});
 		}
@@ -71,6 +81,12 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		query,
 		setQuery,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		keyPressed,
+		setKeyPressed,
+		isWithinRef,
 	};
 };
 

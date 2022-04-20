@@ -26,7 +26,7 @@ import {
 } from 'react-native';
 import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
-import { TextSelection } from 'src/Hooks/useMessage/useInputText';
+import { Ref } from 'src/Hooks/useMessage/useInputText';
 import { MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import ItemSuggestion from './ItemSuggestion';
@@ -73,12 +73,30 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		showingItem,
 		query,
 		setTextSelection,
+		textSelection,
+		refs,
+		setRefs,
+		keyPressed,
+		setKeyPressed,
+		isWithinRef,
 	} = useMessage(threadData, setDisableSend);
 
 	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
 	const { wishlist } = useWishlist(query);
 
+	// previous cursor begin and end index of inputText string
+	const [prevSelector, setPrevSelector] = useState<{
+		end: number;
+		start: number;
+	}>({ end: 0, start: 0 });
+
+	const [extendingSelection, setExtendingSelection] = useState<boolean>(false);
+	const [withinWhichRef, setWithinWhichRef] = useState<Ref[]>([]);
+
 	const sendHandler = async () => {
+		setInputText('');
+		setRefs([]);
+		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
 				setInputText('');
@@ -122,7 +140,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	};
 
 	// state for refresh control thread preview scroll view
-	const [refreshing, setRefreshing] = React.useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 	const onRefresh = async () => {
 		setRefreshing(true);
 		await fetchMessages();
@@ -147,19 +165,195 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							)}
 						>
 							<TextInput
-								value={inputText}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								onChangeText={setInputText}
+								onChangeText={(text) => {
+									const mutableRefs = refs.map((x) => x);
+									// check if deleteing a refs, stick begin of ref to end of ref
+									if (
+										keyPressed === 'Backspace' &&
+										isWithinRef &&
+										isWithinRef.isWithinRef &&
+										isWithinRef.whichRef &&
+										!extendingSelection
+									) {
+										const start = isWithinRef.whichRef.begin;
+										const end = isWithinRef.whichRef.end + 1;
+										const _ = refs.indexOf(isWithinRef.whichRef);
+										if (_ > -1) {
+											const first = inputText.slice(0, start);
+											const second = inputText.slice(end, inputText.length);
+											setInputText(first + second);
+											mutableRefs.splice(_, 1);
+											const deletedRef =
+												isWithinRef.whichRef?.end -
+												isWithinRef.whichRef?.begin +
+												1;
+											for (let i = 0; i < mutableRefs.length; i++) {
+												if (mutableRefs[i].begin > isWithinRef.whichRef?.end) {
+													mutableRefs[i].begin -= deletedRef;
+													mutableRefs[i].end -= deletedRef;
+												}
+											}
+											setRefs(mutableRefs);
+										}
+									} else {
+										setInputText(text);
+										if (text.length < inputText.length) {
+											if (!extendingSelection && keyPressed === 'Backspace') {
+												for (let i = 0; i < mutableRefs.length; i++) {
+													if (mutableRefs[i].begin >= prevSelector?.start - 1) {
+														mutableRefs[i].begin -= 1;
+														mutableRefs[i].end -= 1;
+													}
+												}
+											} else {
+												for (let i = 0; i < mutableRefs.length; i++) {
+													if (mutableRefs[i].begin >= prevSelector.end - 1) {
+														mutableRefs[i].begin -=
+															inputText.length - text.length;
+														mutableRefs[i].end -=
+															inputText.length - text.length;
+													}
+												}
+												for (let i = 0; i < withinWhichRef.length; i++) {
+													const _ = mutableRefs.indexOf(withinWhichRef[i]);
+													if (_ > -1) {
+														mutableRefs.splice(_, 1);
+													}
+												}
+											}
+										} else if (text.length > inputText.length) {
+											if (!extendingSelection) {
+												for (let i = 0; i < mutableRefs.length; i++) {
+													if (mutableRefs[i].begin >= prevSelector?.start - 1) {
+														mutableRefs[i].begin +=
+															text.length - inputText.length;
+														mutableRefs[i].end +=
+															text.length - inputText.length;
+													}
+												}
+											}
+										}
+										setRefs(mutableRefs);
+									}
+								}}
+								selectTextOnFocus={true}
 								// intentionally left out cuz onFocus => open keyboard => scroll to end => readLatestMessage
 								// onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
-								onSelectionChange={(e) =>
-									setTextSelection(e.nativeEvent.selection as TextSelection)
-								}
-							/>
+								onSelectionChange={(e) => {
+									setPrevSelector(textSelection);
+									setTextSelection(e.nativeEvent.selection);
+									const arr: Ref[] = [];
+									for (let i = 0; i < refs.length; i++) {
+										if (
+											(refs[i].begin <= textSelection.start - 1 &&
+												refs[i].end >= textSelection.start) ||
+											(refs[i].begin <= textSelection.end - 1 &&
+												refs[i].end >= textSelection.end)
+										) {
+											arr.push(refs[i]);
+										}
+									}
+									setWithinWhichRef(arr);
+									if (prevSelector.start !== prevSelector?.end) {
+										setExtendingSelection(true);
+									} else {
+										setExtendingSelection(false);
+									}
+								}}
+								onKeyPress={(e) => {
+									setKeyPressed(e.nativeEvent.key);
+								}}
+							>
+								<Text>
+									{refs.length > 0
+										? refs.length === 1
+											? refs.map((item, index) => {
+													return (
+														<Text key={uuidv4()}>
+															<Text>
+																{inputText.slice(0, refs[index].begin)}
+															</Text>
+															<Text style={tw('font-bold')}>
+																{inputText.slice(
+																	refs[index].begin,
+																	refs[index].end + 1
+																)}
+															</Text>
+															<Text>
+																{inputText.slice(refs[index].end + 1)}
+															</Text>
+														</Text>
+													);
+													// eslint-disable-next-line no-mixed-spaces-and-tabs
+											  })
+											: refs.map((item, index) => {
+													if (index === refs.length - 1) {
+														return (
+															<Text key={uuidv4()}>
+																<Text>
+																	{inputText.slice(
+																		refs[index - 1].end + 1,
+																		refs[index].begin
+																	)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+																<Text>
+																	{inputText.slice(refs[index].end + 1)}
+																</Text>
+															</Text>
+														);
+													} else if (index === 0) {
+														return (
+															<Text key={uuidv4()}>
+																<Text>
+																	{inputText.slice(0, refs[index].begin)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+															</Text>
+														);
+													} else {
+														return (
+															<Text key={uuidv4()}>
+																<Text>
+																	{inputText.slice(
+																		refs[index - 1].end + 1,
+																		refs[index].begin
+																	)}
+																</Text>
+																<Text style={tw('font-bold')}>
+																	{inputText.slice(
+																		refs[index].begin,
+																		refs[index].end + 1
+																	)}
+																</Text>
+															</Text>
+														);
+													}
+													// eslint-disable-next-line no-mixed-spaces-and-tabs
+											  })
+										: inputText}
+								</Text>
+								{/* <Text>
+									{[...inputText].map((char, index) => {
+										return <Text key={index}>{char}</Text>;
+									})}
+								</Text> */}
+							</TextInput>
 							<View style={tw('flex-col justify-end')}>
 								<View style={tw('pr-4')}>
 									{inputText ? (
@@ -189,7 +383,16 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							</View>
 						</View>
 						{showingItem && (
-							<ItemSuggestion query={query} wishlist={wishlist} />
+							<ItemSuggestion
+								query={query}
+								wishlist={wishlist}
+								inputText={inputText}
+								textSelection={textSelection}
+								setTextSelection={setTextSelection}
+								refs={refs}
+								setRefs={setRefs}
+								setInputText={setInputText}
+							/>
 						)}
 					</View>
 

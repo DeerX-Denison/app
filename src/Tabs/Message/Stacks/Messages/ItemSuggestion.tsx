@@ -5,13 +5,28 @@ import FastImage from 'react-native-fast-image';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import { CircleSnail } from 'react-native-progress';
+import { Ref, TextSelection } from 'src/Hooks/useMessage/useInputText';
 import { WishlistDataCL } from 'types';
 interface Props {
 	query: string | null;
 	wishlist: WishlistDataCL[] | null | undefined;
+	inputText: string | undefined;
+	textSelection: TextSelection;
+	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
+	refs: Ref[];
+	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	setInputText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const ItemSuggestion: FC<Props> = ({ query, wishlist }) => {
+const ItemSuggestion: FC<Props> = ({
+	query,
+	wishlist,
+	inputText,
+	textSelection,
+	refs,
+	setRefs,
+	setInputText,
+}) => {
 	return (
 		<View style={tw('flex flex-col border-t border-b')}>
 			{wishlist && wishlist.length > 0 && (
@@ -25,6 +40,38 @@ const ItemSuggestion: FC<Props> = ({ query, wishlist }) => {
 										index === wishlist.length - 1 ? '' : 'border-b'
 									}`
 								)}
+								onPress={() => {
+									let closestRef = 0;
+									for (let i: number = textSelection?.start; i >= 0; i--) {
+										if (inputText?.charAt(i) === '@') {
+											closestRef = i;
+											break;
+										}
+									}
+									const start: number = closestRef;
+									const end: number = start + wishlistData.name.length;
+									const newRef: Ref = {
+										end: end,
+										begin: start,
+										data: wishlistData,
+									};
+									setInputText(
+										inputText?.slice(0, closestRef + 1) +
+											wishlistData.name +
+											' ' +
+											inputText?.slice(textSelection?.start, inputText.length)
+									);
+									const mutableRefs = refs.map((x) => x);
+									for (let i = 0; i < mutableRefs.length; i++) {
+										if (closestRef <= mutableRefs[i].begin) {
+											mutableRefs[i].begin += wishlistData.name.length + 1;
+											mutableRefs[i].end += wishlistData.name.length + 1;
+										}
+									}
+									mutableRefs.push(newRef);
+									mutableRefs.sort((a, b) => a.begin - b.begin);
+									setRefs(mutableRefs);
+								}}
 							>
 								<FastImage
 									source={{ uri: wishlistData.thumbnail }}

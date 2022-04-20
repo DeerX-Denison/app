@@ -241,6 +241,10 @@ export type MessageSeenAt = {
 export type MessageContentType = 'text' | 'reference';
 export type MessageContent = string;
 
+export type MessageReferenceData = {
+	[id: string]: { begin: number; end: number };
+};
+
 export type MessageData = {
 	id: MessageId;
 	sender: MessageSender;
@@ -250,6 +254,7 @@ export type MessageData = {
 	membersUid: string[];
 	threadName: ThreadName;
 	seenAt: MessageSeenAt;
+	refs: MessageReferenceData;
 };
 export type MessageBlockData = {
 	id: MessageId;

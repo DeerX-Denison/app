@@ -103,7 +103,7 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 									</Text>
 								</TouchableOpacity>
 							</View>
-							<View style={tw('h-0.5 bg-denison-red w-2/3 m-auto')} />
+							<View style={tw('h-0.5 bg-denison-red mx-4')} />
 							<View style={tw('flex-1 flex-col px-2')}>
 								<View style={tw('flex flex-row py-2')}>
 									<View style={tw('justify-center items-start w-28 pl-2')}>

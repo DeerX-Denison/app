@@ -38,7 +38,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 
 	return (
 		<View style={tw('flex flex-1')}>
-			<View style={tw('flex flex-col border-b')}>
+			<View style={tw('flex flex-col')}>
 				<View
 					style={tw(
 						`flex flex-row h-28 mx-4 ${
@@ -80,6 +80,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 				{displayUserProfile?.bio && (
 					<Text style={tw('px-4 py-3')}>{displayUserProfile?.bio}</Text>
 				)}
+				<View style={tw('h-0.5 bg-denison-red mx-4')} />
 			</View>
 
 			<ScrollView contentContainerStyle={tw('flex flex-col flex-1 p-4')}>

@@ -5257,10 +5257,10 @@
 	},
 	"border-denison-red": {
 		"--tw-border-opacity": 1,
-		"borderTopColor": "rgba(199, 32, 47, var(--tw-bg-opacity))",
-		"borderRightColor": "rgba(199, 32, 47, var(--tw-bg-opacity))",
-		"borderBottomColor": "rgba(199, 32, 47, var(--tw-bg-opacity))",
-		"borderLeftColor": "rgba(199, 32, 47, var(--tw-bg-opacity))"
+		"borderTopColor": "rgba(199, 32, 47, var(--tw-border-opacity))",
+		"borderRightColor": "rgba(199, 32, 47, var(--tw-border-opacity))",
+		"borderBottomColor": "rgba(199, 32, 47, var(--tw-border-opacity))",
+		"borderLeftColor": "rgba(199, 32, 47, var(--tw-border-opacity))"
 	},
 	"border-red-50": {
 		"--tw-border-opacity": 1,
@@ -7358,8 +7358,8 @@
 		"color": "rgba(17, 24, 39, var(--tw-text-opacity))"
 	},
 	"text-denison-red": {
-		"--tw-bg-opacity": 1,
-		"color": "rgba(199, 32, 47, var(--tw-bg-opacity))"
+		"--tw-text-opacity": 1,
+		"color": "rgba(199, 32, 47, var(--tw-text-opacity))"
 	},
 	"text-red-50": {
 		"--tw-text-opacity": 1,

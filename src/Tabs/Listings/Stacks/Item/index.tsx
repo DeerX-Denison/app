@@ -19,10 +19,10 @@ import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
-import ChatActive from '../../../../static/chat-active.svg';
+import ChatActive from '../../../../static/chat-outline-active.svg';
 import Edit from '../../../../static/edit.svg';
 import HeartActive from '../../../../static/heart-active.svg';
-import HeartInactive from '../../../../static/heart-inactive.svg';
+import HeartInactive from '../../../../static/heart-outline-active.svg';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;

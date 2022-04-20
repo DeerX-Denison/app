@@ -12,8 +12,6 @@ export type UseInputText = (
 	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
 	textSelection: TextSelection;
 	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
-	keyPressed: string;
-	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
 	isWithinRef: WithinRef;
 };
 export type Ref = {
@@ -42,8 +40,6 @@ const useInputText: UseInputText = (setDisableSend) => {
 		start: 0,
 		end: 0,
 	});
-
-	const [keyPressed, setKeyPressed] = useState<string>('');
 
 	// state to determine if current cursor is within a ref, if yes, which ref
 	const [isWithinRef, setIsWithinRef] = useState<WithinRef>({
@@ -131,8 +127,6 @@ const useInputText: UseInputText = (setDisableSend) => {
 		setRefs,
 		textSelection,
 		setTextSelection,
-		keyPressed,
-		setKeyPressed,
 		isWithinRef,
 	};
 };

@@ -22,8 +22,6 @@ export type UseMessageFn = (
 	textSelection: TextSelection;
 	refs: Ref[];
 	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
-	keyPressed: string;
-	setKeyPressed: React.Dispatch<React.SetStateAction<string>>;
 	isWithinRef: WithinRef;
 };
 
@@ -42,8 +40,6 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		textSelection,
 		refs,
 		setRefs,
-		keyPressed,
-		setKeyPressed,
 		isWithinRef,
 	} = useInputText(setDisableSend);
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
@@ -84,8 +80,6 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		textSelection,
 		refs,
 		setRefs,
-		keyPressed,
-		setKeyPressed,
 		isWithinRef,
 	};
 };

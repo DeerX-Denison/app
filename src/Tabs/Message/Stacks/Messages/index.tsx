@@ -14,7 +14,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -76,8 +76,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		textSelection,
 		refs,
 		setRefs,
-		keyPressed,
-		setKeyPressed,
 		isWithinRef,
 	} = useMessage(threadData, setDisableSend);
 
@@ -89,7 +87,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		end: number;
 		start: number;
 	}>({ end: 0, start: 0 });
+	// key user just pressed. initially empty string
+	const [keyPressed, setKeyPressed] = useState<string>('');
 
+	// state if user is extending cursor selection
 	const [extendingSelection, setExtendingSelection] = useState<boolean>(false);
 	const [withinWhichRef, setWithinWhichRef] = useState<Ref[]>([]);
 

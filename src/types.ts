@@ -241,7 +241,6 @@ export type MessageSeenAt = {
 //add below more further on: image, listing reference, etc.
 export type MessageContentType = 'text' | 'reference';
 export type MessageContent = string;
-
 export type MessageReferenceData = {
 	begin: number;
 	end: number;

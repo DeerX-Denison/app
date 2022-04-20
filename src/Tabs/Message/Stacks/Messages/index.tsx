@@ -63,7 +63,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
 
-	useScrollToEndOnOpen(scrollViewRef, threadData, boxHeight, contentHeight);
+	useScrollToEndOnOpen(scrollViewRef, threadData);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 
 	const { paddingBottom } = useKeyboardPadding();
@@ -100,7 +100,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const sendHandler = async () => {
 		setInputText('');
-		setRefs([]);
 		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
@@ -112,6 +111,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					id: uuidv4(),
 				};
 				setNewMsgs([newMessage]);
+				setRefs([]);
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -141,7 +141,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		} else {
 			// error handling
 		}
-		scrollViewRef.current?.scrollToEnd({ animated: true });
+		setTimeout(() => {
+			scrollViewRef.current?.scrollToEnd({ animated: true });
+		}, 0);
 	};
 
 	// state for refresh control thread preview scroll view

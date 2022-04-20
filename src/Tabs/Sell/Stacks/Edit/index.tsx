@@ -275,7 +275,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 														</TouchableOpacity>
 														<Text
 															style={tw(
-																'capitalize text-s-md font-medium pr-2'
+																'capitalize text-s-md font-semibold pr-2 text-white'
 															)}
 														>
 															{category}
@@ -289,7 +289,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 														<Plus height={16} width={16} style={tw('m-1')} />
 														<Text
 															style={tw(
-																'capitalize text-s-md font-medium pr-2'
+																'capitalize text-s-md font-semibold pr-2 text-white'
 															)}
 														>
 															Category

@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,7 +22,7 @@ const Menu: FC<Props> = () => {
 				options={{
 					headerTitle: 'MENU',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 				initialParams={{ displayUserProfile: undefined }}
 			>
@@ -36,7 +37,7 @@ const Menu: FC<Props> = () => {
 				options={{
 					headerTitle: 'EDIT PROFILE',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
 							<FontAwesomeIcon
@@ -55,7 +56,7 @@ const Menu: FC<Props> = () => {
 				initialParams={{ pronouns: undefined }}
 				options={{
 					headerTitle: 'EDIT PRONOUNS',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 					headerBackTitle: '',
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>

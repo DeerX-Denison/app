@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { RouteProp } from '@react-navigation/native';
 import {
 	createNativeStackNavigator,
@@ -34,7 +35,7 @@ const Sell: FC<Props> = () => {
 					),
 					headerTitle: 'MY LISTINGS',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				})}
 			>
 				{(props) => <MyListings {...props} />}
@@ -49,7 +50,7 @@ const Sell: FC<Props> = () => {
 					),
 					headerTitle: 'CREATE LISTING',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Create {...props} />}
@@ -67,7 +68,7 @@ const Sell: FC<Props> = () => {
 					),
 					headerTitle: 'EDIT LISTING',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Edit {...props} />}

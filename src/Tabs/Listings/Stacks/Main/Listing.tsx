@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useState } from 'react';
@@ -30,6 +31,10 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 					style={{
 						...tw('flex flex-col justify-center items-center'),
 						width: Math.floor(width / 2),
+						shadowColor: DENISON_RED_RGBA,
+						shadowOffset: { width: 4, height: 4 },
+						shadowOpacity: 0.25,
+						shadowRadius: 4,
 					}}
 				>
 					<FastImage

@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { Button } from 'react-native';
@@ -21,7 +22,7 @@ const Listings: FC<Props> = () => {
 				options={() => ({
 					headerBackTitle: '',
 					headerTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				})}
 			>
 				{(props) => <Item {...props} />}
@@ -31,7 +32,7 @@ const Listings: FC<Props> = () => {
 				options={{
 					headerTitle: '',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Messages {...props} />}
@@ -41,7 +42,7 @@ const Listings: FC<Props> = () => {
 				options={{
 					headerTitle: 'PROFILE',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 				initialParams={{ uid: undefined }}
 			>
@@ -60,7 +61,7 @@ const Listings: FC<Props> = () => {
 					),
 					headerTitle: 'EDIT',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Edit {...props} />}

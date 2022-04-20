@@ -20,7 +20,6 @@ import Toast from 'react-native-toast-message';
 import { MessageStackParamList, UserInfo } from 'types';
 import useAutoComplete from '../../../../Hooks/useAutoComplete';
 import ThreadPreview from './ThreadPreview';
-
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 }
@@ -106,7 +105,9 @@ const Threads: FC<Props> = ({ navigation }) => {
 				placeholderTextColor={'gray'}
 				value={query}
 				onChangeText={setQuery}
-				style={tw('text-s-md font-normal border rounded-lg p-2 m-2')}
+				style={tw(
+					'text-s-lg font-normal border rounded-full px-6 py-3.5 mx-1 my-2 bg-white'
+				)}
 				autoCapitalize="none"
 				onFocus={() => setSearching(true)}
 				onBlur={() => setSearching(false)}
@@ -121,7 +122,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 								// still fetching, render circle snail
 								<View
 									style={tw(
-										'flex flex-col justify-center items-center border rounded-md m-2 p-2 bg-gray-50'
+										'flex flex-col justify-center items-center border rounded-md m-2 p-2 bg-gray'
 									)}
 								>
 									<CircleSnail
@@ -134,7 +135,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 								// fetched
 								<View
 									style={tw(
-										'flex flex-col justify-center border rounded-md m-2 p-2 bg-gray-50'
+										'flex flex-col justify-center border rounded-md m-2 p-2 bg-gray'
 									)}
 								>
 									{suggestions.length > 0 ? (
@@ -185,7 +186,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 					showsVerticalScrollIndicator={false}
 					showsHorizontalScrollIndicator={false}
 					ref={scrollViewRef as any}
-					contentContainerStyle={tw('mx-2')}
+					contentContainerStyle={tw('mx-1')}
 					onScrollEndDrag={onScrollEndDrag}
 				>
 					{threads ? (

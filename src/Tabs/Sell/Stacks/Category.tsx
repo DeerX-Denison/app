@@ -57,7 +57,7 @@ const Category: FC<Props> = ({
 	return (
 		<Animated.View
 			style={{
-				...tw('bg-gray-50 absolute z-10 w-full h-full'),
+				...tw('bg-gray absolute z-10 w-full h-full'),
 				transform: [{ translateY: translation }],
 			}}
 		>
@@ -65,7 +65,9 @@ const Category: FC<Props> = ({
 				<TextInput
 					ref={inputTextRef as any}
 					value={query}
-					style={tw('py-3 pl-12 pr-6 border rounded-full m-2 text-s-lg')}
+					style={tw(
+						'py-3 pl-12 pr-6 border rounded-full m-2 text-s-lg bg-white'
+					)}
 					placeholder="Search categories"
 					onChangeText={setQuery}
 				/>
@@ -73,7 +75,11 @@ const Category: FC<Props> = ({
 					style={tw('absolute left-0 h-full justify-center pl-6')}
 					onPress={() => setCategorizing(false)}
 				>
-					<FontAwesomeIcon icon={faChevronLeft} size={16} />
+					<FontAwesomeIcon
+						icon={faChevronLeft}
+						size={16}
+						style={tw('text-denison-red')}
+					/>
 				</TouchableOpacity>
 			</View>
 			<ScrollView
@@ -105,7 +111,11 @@ const Category: FC<Props> = ({
 											>
 												<Badges.Light>
 													<Plus height={16} width={16} style={tw('m-1')} />
-													<Text style={tw('capitalize text-s-md pr-2')}>
+													<Text
+														style={tw(
+															'capitalize text-s-md pr-2 font-semibold text-white'
+														)}
+													>
 														{suggestion}
 													</Text>
 												</Badges.Light>

@@ -1,3 +1,4 @@
+import { DEFAULT_LATEST_MESSAGE } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn, localTime } from '@firebase.config';
 import {
@@ -157,7 +158,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
 			<Animated.View style={{ ...tw('flex flex-1'), paddingBottom }}>
 				<ScrollView
-					contentContainerStyle={tw('flex flex-col-reverse flex-1')}
+					contentContainerStyle={tw(
+						'flex flex-col-reverse flex-1 bg-light-pink'
+					)}
 					scrollEnabled={false}
 					nestedScrollEnabled={true}
 					keyboardShouldPersistTaps="always"
@@ -166,7 +169,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					<View style={tw('flex flex-col-reverse')}>
 						<View
 							style={tw(
-								'py-2 flex-row border-t border-b border-gray-400 bg-gray-200'
+								'py-2 flex-row border-t border-b border-gray-400 bg-gray'
 							)}
 						>
 							<TextInput
@@ -278,8 +281,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							scrollEventThrottle={0}
 							contentContainerStyle={{
 								paddingTop:
-									contentHeight < boxHeight ? boxHeight - contentHeight : 55,
+									contentHeight < boxHeight
+										? boxHeight - contentHeight - 15
+										: 55,
 							}}
+							// contentContainerStyle={tw(
+							// 	'flex justify-center items-center pt-12'
+							// )}
 						>
 							<View
 								onLayout={(event) => {
@@ -289,8 +297,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							>
 								{!parsedMessages && <Text>Loading...</Text>}
 								{parsedMessages && parsedMessages.length === 0 && (
-									<View style={tw('flex flex-1 justify-center items-center')}>
-										<Text style={tw('text-s-lg')}>Send your first message</Text>
+									<View
+										style={tw('flex flex-1 justify-center items-center p-4')}
+									>
+										<Text style={tw('text-s-lg font-semibold')}>
+											{DEFAULT_LATEST_MESSAGE}
+										</Text>
 									</View>
 								)}
 								{parsedMessages &&

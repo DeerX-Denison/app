@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
@@ -20,7 +21,7 @@ const Message: FC<Props> = () => {
 				options={{
 					headerTitle: 'INBOX',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Threads {...props} />}
@@ -30,7 +31,7 @@ const Message: FC<Props> = () => {
 				options={{
 					headerTitle: '',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Messages {...props} />}
@@ -40,7 +41,7 @@ const Message: FC<Props> = () => {
 				options={{
 					headerTitle: 'PROFILE',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 				initialParams={{ uid: undefined }}
 			>

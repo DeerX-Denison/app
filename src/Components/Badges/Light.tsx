@@ -11,7 +11,7 @@ const Light: FC<Props> = ({ children }) => {
 	return (
 		<View
 			style={tw(
-				'flex-row border mx-2 my-1 items-center py-0.5 px-1 rounded-full bg-blue-100'
+				'flex-row border mx-2 my-1 items-center py-0.5 px-1 rounded-full bg-pink border-denison-red'
 			)}
 		>
 			{children}

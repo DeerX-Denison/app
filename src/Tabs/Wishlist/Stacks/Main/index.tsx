@@ -1,4 +1,5 @@
 import * as Buttons from '@Components/Buttons';
+import { DENISON_RED_RGBA } from '@Constants';
 import { fn } from '@firebase.config';
 import { useWishlist } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
@@ -94,10 +95,19 @@ const Main: FC<Props> = ({ route, navigation }) => {
 													}`
 												)}
 											>
-												<FastImage
-													source={{ uri: wishlistData.thumbnail }}
-													style={tw('w-16 h-16 rounded-lg mx-2')}
-												/>
+												<View
+													style={{
+														shadowColor: DENISON_RED_RGBA,
+														shadowOffset: { width: 4, height: 4 },
+														shadowOpacity: 0.25,
+														shadowRadius: 4,
+													}}
+												>
+													<FastImage
+														source={{ uri: wishlistData.thumbnail }}
+														style={tw('w-16 h-16 rounded-lg mx-2')}
+													/>
+												</View>
 												<View style={tw('flex flex-1 break-words pl-2')}>
 													<Text style={tw('text-lg font-bold')}>
 														{wishlistData.name}
@@ -108,7 +118,9 @@ const Main: FC<Props> = ({ route, navigation }) => {
 									);
 								}}
 								renderHiddenItem={({ item: wishlistData }) => (
-									<View style={tw('flex flex-row flex-1 justify-end bg-gray')}>
+									<View
+										style={tw('flex flex-row flex-1 justify-end bg-light-pink')}
+									>
 										<View style={tw('flex flex-row w-16')}>
 											<TouchableOpacity
 												style={tw('flex flex-1 justify-center items-center')}
@@ -123,7 +135,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 								disableRightSwipe={true}
 								swipeToOpenPercent={10}
 								contentContainerStyle={tw(
-									'flex flex-col flex-1 my-2 justify-start'
+									'flex flex-col flex-1 my-2 justify-start mx-2'
 								)}
 							/>
 						</>

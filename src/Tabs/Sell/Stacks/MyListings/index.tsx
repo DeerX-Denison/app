@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -66,26 +67,35 @@ const MyListings: FC<Props> = ({ navigation }) => {
 								showsVerticalScrollIndicator={false}
 								showsHorizontalScrollIndicator={false}
 								contentContainerStyle={tw(
-									'flex-col my-2 justify-center items-center'
+									'flex-col my-2 mx-2 justify-center items-center'
 								)}
 							>
 								{myListings.map((listing, index) => (
 									<TouchableWithoutFeedback
 										key={listing.id}
-										style={tw('w-full')}
+										style={tw('w-full mx-1')}
 										onPress={() => editHandler(listing.id)}
 									>
 										<View
 											style={tw(
-												`flex-row justify-between items-center mx-2 py-2 ${
+												`flex-row justify-between items-center px-2 py-2 bg-white ${
 													index !== 0 ? 'border-t border-red-700' : ''
 												}`
 											)}
 										>
-											<FastImage
-												source={{ uri: listing.images[0] }}
-												style={tw('w-16 h-16 rounded-lg')}
-											/>
+											<View
+												style={{
+													shadowColor: DENISON_RED_RGBA,
+													shadowOffset: { width: 2, height: 4 },
+													shadowOpacity: 0.25,
+													shadowRadius: 4,
+												}}
+											>
+												<FastImage
+													source={{ uri: listing.images[0] }}
+													style={tw('w-16 h-16 rounded-lg')}
+												/>
+											</View>
 											<View style={tw('flex flex-1 break-words pl-4')}>
 												<Text style={tw('text-lg font-bold')}>
 													{listing.name}

@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC } from 'react';
 import { WishlistStackParamList } from 'types';
@@ -18,7 +19,7 @@ const Wishlist: FC<Props> = () => {
 				options={{
 					headerTitle: 'LIKED ITEMS',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 				initialParams={{ reset: false }}
 			>
@@ -29,7 +30,7 @@ const Wishlist: FC<Props> = () => {
 				options={{
 					headerBackTitle: '',
 					headerTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Item {...props} />}
@@ -39,7 +40,7 @@ const Wishlist: FC<Props> = () => {
 				options={{
 					headerBackTitle: '',
 					headerTitle: 'PROFILE',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Profile {...props} />}
@@ -49,7 +50,7 @@ const Wishlist: FC<Props> = () => {
 				options={{
 					headerTitle: '',
 					headerBackTitle: '',
-					headerTintColor: 'rgba(199, 32, 47, 1)',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Messages {...props} />}

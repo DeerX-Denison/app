@@ -220,7 +220,11 @@ const Create: FC<Props> = ({ navigation }) => {
 														>
 															<XIcon height={16} width={16} style={tw('m-1')} />
 														</TouchableOpacity>
-														<Text style={tw('capitalize text-s-md pr-2')}>
+														<Text
+															style={tw(
+																'capitalize text-s-md pr-2 font-semibold text-white'
+															)}
+														>
 															{category}
 														</Text>
 													</Badges.Light>
@@ -230,7 +234,11 @@ const Create: FC<Props> = ({ navigation }) => {
 												{listingData.category.length > 0 && (
 													<Badges.Light>
 														<Plus height={16} width={16} style={tw('m-1')} />
-														<Text style={tw('capitalize text-s-md pr-2')}>
+														<Text
+															style={tw(
+																'capitalize text-s-md pr-2 font-semibold text-white'
+															)}
+														>
 															Category
 														</Text>
 													</Badges.Light>

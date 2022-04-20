@@ -9,7 +9,7 @@ interface Props {
 
 const TextContent: FC<Props> = ({ content }) => {
 	return (
-		<Text style={tw('text-s-md')}>
+		<Text style={tw('text-s-md text-gray')}>
 			{'refs' in content && content.refs
 				? content.refs.length > 0
 					? content.refs.length === 1

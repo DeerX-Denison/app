@@ -73,7 +73,9 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 			/>
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				<View
-					style={tw('mx-1 my-2 flex flex-row flex-wrap border rounded-lg p-2')}
+					style={tw(
+						'mx-1 my-2 flex flex-row flex-wrap border rounded-full px-2 py-1 bg-white'
+					)}
 				>
 					{categoryFilter.length === 0 ? (
 						// user has not selected a filter, render search bar with magnifying glass
@@ -107,7 +109,11 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 										>
 											<XIcon style={tw('m-1')} width={16} height={16} />
 										</TouchableOpacity>
-										<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+										<Text
+											style={tw(
+												'capitalize text-s-md font-semibold pr-2 text-white'
+											)}
+										>
 											{category}
 										</Text>
 									</Badges.Light>
@@ -116,7 +122,11 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 							<TouchableOpacity onPress={() => setCategorizing(true)}>
 								<Badges.Light>
 									<Plus height={16} width={16} style={tw('m-1')} />
-									<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+									<Text
+										style={tw(
+											'capitalize text-s-md font-semibold pr-2 text-white'
+										)}
+									>
 										Category
 									</Text>
 								</Badges.Light>

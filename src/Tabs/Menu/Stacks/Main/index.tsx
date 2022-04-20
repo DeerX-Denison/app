@@ -1,4 +1,5 @@
 import * as Buttons from '@Components/Buttons';
+import { DENISON_RED_RGBA } from '@Constants';
 import { JustSignOut, UserContext } from '@Contexts';
 import { auth } from '@firebase.config';
 import { RouteProp } from '@react-navigation/native';
@@ -45,16 +46,23 @@ const Main: FC<Props> = ({ route, navigation }) => {
 						}`
 					)}
 				>
-					<FastImage
-						source={{
-							uri: displayUserProfile?.photoURL
-								? displayUserProfile.photoURL
-								: undefined,
+					<View
+						style={{
+							shadowColor: DENISON_RED_RGBA,
+							shadowOffset: { width: 0, height: 2 },
+							shadowOpacity: 0.25,
+							shadowRadius: 4,
 						}}
-						style={tw(
-							'h-20 w-20 rounded-full my-4 mr-4 border border-gray-500'
-						)}
-					/>
+					>
+						<FastImage
+							source={{
+								uri: displayUserProfile?.photoURL
+									? displayUserProfile.photoURL
+									: undefined,
+							}}
+							style={tw('h-20 w-20 rounded-full my-4 mr-4')}
+						/>
+					</View>
 					<View style={tw('flex flex-col flex-1 justify-evenly')}>
 						<View style={tw('flex flex-row items-end')}>
 							<Text style={tw('text-s-lg font-bold')}>

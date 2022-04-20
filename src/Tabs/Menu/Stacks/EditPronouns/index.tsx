@@ -93,7 +93,9 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 						>
 							<XIcon style={tw('m-1')} height={16} width={16} />
 						</TouchableOpacity>
-						<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+						<Text
+							style={tw('capitalize text-s-md font-semibold pr-2 text-white')}
+						>
 							{pronoun}
 						</Text>
 					</Badges.Light>
@@ -141,7 +143,11 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 											>
 												<Badges.Light>
 													<Plus height={16} width={16} style={tw('m-1')} />
-													<Text style={tw('capitalize text-s-md pr-2')}>
+													<Text
+														style={tw(
+															'capitalize text-s-md pr-2 font-semibold text-white'
+														)}
+													>
 														{suggestion}
 													</Text>
 												</Badges.Light>

@@ -1,4 +1,4 @@
-import { DEFAULT_MESSAGE_THUMBNAIL } from '@Constants';
+import { DEFAULT_MESSAGE_THUMBNAIL, DENISON_RED_RGBA } from '@Constants';
 import { UserContext } from '@Contexts';
 import { faCheckCircle as regularCheckIcon } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle as solidCheckIcon } from '@fortawesome/free-solid-svg-icons';
@@ -71,8 +71,12 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 											>
 												<View
 													style={{
-														...tw('rounded-xl px-3 py-2 mb-0.5 bg-red-300'),
+														...tw('rounded-xl p-2 my-1 mb-0.5 bg-pink'),
 														maxWidth: '80%',
+														shadowColor: DENISON_RED_RGBA,
+														shadowOffset: { height: 2.5, width: 1 },
+														shadowOpacity: 0.35,
+														shadowRadius: 0.5,
 													}}
 												>
 													<TextContent content={content} />
@@ -124,8 +128,12 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 												>
 													<View
 														style={{
-															...tw('rounded-xl px-3 py-2 mb-0.5 bg-red-300'),
+															...tw('rounded-xl p-2 mb-0.5 bg-red-300'),
 															maxWidth: '80%',
+															shadowColor: DENISON_RED_RGBA,
+															shadowOffset: { height: 2.5, width: 1 },
+															shadowOpacity: 0.35,
+															shadowRadius: 0.5,
 														}}
 													>
 														<TextContent content={content} />

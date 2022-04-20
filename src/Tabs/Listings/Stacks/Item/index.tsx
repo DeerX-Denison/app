@@ -232,19 +232,21 @@ const Item: FC<Props> = ({ route, navigation }) => {
 							</View>
 							<View style={tw('mx-4 my-2')}>
 								<View style={tw('flex flex-row flex-wrap')}>
-									<Badges.Primary>
+									<Badges.Light>
 										<Text
-											style={tw('capitalize text-s-md font-medium px-2 py-0.5')}
+											style={tw(
+												'capitalize text-s-md font-semibold px-2 py-0.5 text-white'
+											)}
 										>
 											{listingData.condition?.toLocaleLowerCase()}
 										</Text>
-									</Badges.Primary>
+									</Badges.Light>
 									{listingData.category.map((category) => (
 										<View key={category}>
 											<Badges.Light>
 												<Text
 													style={tw(
-														'capitalize text-s-md font-medium px-2 py-0.5'
+														'capitalize text-s-md font-semibold px-2 py-0.5 text-gray'
 													)}
 												>
 													{category}

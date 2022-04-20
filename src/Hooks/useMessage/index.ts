@@ -1,10 +1,16 @@
 import { UserContext } from '@Contexts';
 import { localTime } from '@firebase.config';
 import React, { useContext, useEffect, useState } from 'react';
-import { MessageData, MessageReferenceData, ThreadData } from 'types';
+import {
+	InputTextRef,
+	MessageData,
+	MessageReferenceData,
+	ThreadData,
+	WithinRef,
+} from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
 import useContentType from './useContentType';
-import useInputText, { Ref, TextSelection, WithinRef } from './useInputText';
+import useInputText, { TextSelection } from './useInputText';
 import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (
@@ -20,8 +26,8 @@ export type UseMessageFn = (
 	setQuery: React.Dispatch<React.SetStateAction<string | null>>;
 	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
 	textSelection: TextSelection;
-	refs: Ref[];
-	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	refs: InputTextRef[];
+	setRefs: React.Dispatch<React.SetStateAction<InputTextRef[]>>;
 	isWithinRef: WithinRef;
 };
 
@@ -45,15 +51,17 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
 	const { seenAt } = useSeenAt(threadData);
+
 	/**
 	 * effect to parse current message
 	 */
 	useEffect(() => {
 		if (userInfo && threadData) {
-			const messageRefs: MessageReferenceData = {};
-			refs.forEach((ref) => {
-				messageRefs[ref.data.id] = { begin: ref.begin, end: ref.end };
-			});
+			const messageRefs: MessageReferenceData[] = refs.map((ref) => ({
+				begin: ref.begin,
+				end: ref.end,
+				id: ref.data.id,
+			}));
 			setMessage({
 				id: 'temp-id',
 				sender: userInfo,

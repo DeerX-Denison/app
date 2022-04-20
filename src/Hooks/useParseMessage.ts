@@ -43,6 +43,7 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 						content: messages[0].content,
 						contentType: messages[0].contentType,
 						seenAt: messages[0].seenAt,
+						refs: messages[0].refs,
 					},
 				],
 			};
@@ -65,6 +66,7 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 								content: messages[i + 1].content,
 								contentType: messages[i + 1].contentType,
 								seenAt: messages[i + 1].seenAt,
+								refs: messages[i + 1].refs,
 							},
 						],
 					};
@@ -81,6 +83,7 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 								content: messages[i + 1].content,
 								contentType: messages[i + 1].contentType,
 								seenAt: messages[i + 1].seenAt,
+								refs: messages[i + 1].refs,
 							},
 						],
 					};

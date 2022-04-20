@@ -241,10 +241,20 @@ export type MessageSeenAt = {
 export type MessageContentType = 'text' | 'reference';
 export type MessageContent = string;
 
-export type MessageReferenceData = {
-	[id: string]: { begin: number; end: number };
+export type MessageReferenceData = { begin: number; end: number; id: string };
+export type InputTextRef = {
+	begin: number;
+	end: number;
+	data: WishlistDataCL;
 };
-
+export type TextSelection = {
+	start: number;
+	end: number;
+};
+export type WithinRef = {
+	isWithinRef: boolean;
+	whichRef: InputTextRef | undefined;
+};
 export type MessageData = {
 	id: MessageId;
 	sender: MessageSender;
@@ -254,18 +264,20 @@ export type MessageData = {
 	membersUid: string[];
 	threadName: ThreadName;
 	seenAt: MessageSeenAt;
-	refs: MessageReferenceData;
+	refs: MessageReferenceData[];
+};
+export type MessageBlockContent = {
+	id: MessageId;
+	contentType: MessageContentType[];
+	content: MessageContent;
+	seenAt: MessageSeenAt;
+	refs: MessageReferenceData[];
 };
 export type MessageBlockData = {
 	id: MessageId;
 	sender: MessageSender;
 	time: MessageTime;
-	contents: {
-		id: MessageId;
-		contentType: MessageContentType[];
-		content: MessageContent;
-		seenAt: MessageSeenAt;
-	}[];
+	contents: MessageBlockContent[];
 };
 export type ThreadData = ThreadPreviewData & {
 	messages: MessageData[];

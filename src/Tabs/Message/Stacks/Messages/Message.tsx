@@ -10,6 +10,8 @@ import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
 import { MessageBlockData, UserInfo } from 'types';
+import TextContent from './TextContent';
+
 interface Props {
 	message: MessageBlockData;
 	members: UserInfo[] | undefined;
@@ -73,7 +75,7 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 														maxWidth: '80%',
 													}}
 												>
-													<Text style={tw('text-s-md')}>{content.content}</Text>
+													<TextContent content={content} />
 												</View>
 												<View style={tw('flex flex-row w-4 mb-0.5 ml-1')}>
 													{content.seenAt[userInfo.uid] === null && (
@@ -126,9 +128,7 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 															maxWidth: '80%',
 														}}
 													>
-														<Text style={tw('text-s-md')}>
-															{content.content}
-														</Text>
+														<TextContent content={content} />
 													</View>
 												</View>
 											))}

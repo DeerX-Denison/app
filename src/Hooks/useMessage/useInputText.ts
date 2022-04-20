@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { WishlistDataCL } from 'types';
+import { InputTextRef, TextSelection, WithinRef } from 'types';
 
 export type UseInputText = (
 	setDisableSend: React.Dispatch<React.SetStateAction<boolean>>
@@ -8,24 +8,11 @@ export type UseInputText = (
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 	showingItem: boolean;
 	setShowingItem: React.Dispatch<React.SetStateAction<boolean>>;
-	refs: Ref[];
-	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	refs: InputTextRef[];
+	setRefs: React.Dispatch<React.SetStateAction<InputTextRef[]>>;
 	textSelection: TextSelection;
 	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
 	isWithinRef: WithinRef;
-};
-export type Ref = {
-	begin: number;
-	end: number;
-	data: WishlistDataCL;
-};
-export type TextSelection = {
-	start: number;
-	end: number;
-};
-export type WithinRef = {
-	isWithinRef: boolean;
-	whichRef: Ref | undefined;
 };
 
 /**
@@ -35,7 +22,7 @@ const useInputText: UseInputText = (setDisableSend) => {
 	const [inputText, setInputText] = useState<string>('');
 	const [showingItem, setShowingItem] = useState<boolean>(false);
 	// current ref user has in input text. If no ref, empty array.
-	const [refs, setRefs] = useState<Ref[]>([]);
+	const [refs, setRefs] = useState<InputTextRef[]>([]);
 	const [textSelection, setTextSelection] = useState<TextSelection>({
 		start: 0,
 		end: 0,
@@ -107,11 +94,11 @@ const useInputText: UseInputText = (setDisableSend) => {
 		let ref = undefined;
 		for (let i = 0; i < refs.length; i++) {
 			if (
-				textSelection?.start >= refs[i].begin + 1 &&
-				textSelection?.start <= refs[i].end + 1
+				textSelection.start >= refs[i].begin + 1 &&
+				textSelection.start <= refs[i].end + 1
 			) {
 				exist = true;
-				ref = refs[i] as Ref;
+				ref = refs[i] as InputTextRef;
 				break;
 			}
 		}

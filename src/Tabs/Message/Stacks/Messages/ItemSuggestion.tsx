@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import { CircleSnail } from 'react-native-progress';
-import { Ref, TextSelection } from 'src/Hooks/useMessage/useInputText';
+import { InputTextRef, TextSelection } from 'src/Hooks/useMessage/useInputText';
 import { WishlistDataCL } from 'types';
 interface Props {
 	query: string | null;
@@ -13,8 +13,8 @@ interface Props {
 	inputText: string | undefined;
 	textSelection: TextSelection;
 	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
-	refs: Ref[];
-	setRefs: React.Dispatch<React.SetStateAction<Ref[]>>;
+	refs: InputTextRef[];
+	setRefs: React.Dispatch<React.SetStateAction<InputTextRef[]>>;
 	setInputText: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -50,7 +50,7 @@ const ItemSuggestion: FC<Props> = ({
 									}
 									const start: number = closestRef;
 									const end: number = start + wishlistData.name.length;
-									const newRef: Ref = {
+									const newRef: InputTextRef = {
 										end: end,
 										begin: start,
 										data: wishlistData,

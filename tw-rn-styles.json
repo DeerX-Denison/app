@@ -5801,6 +5801,10 @@
 		"--tw-bg-opacity": 1,
 		"backgroundColor": "rgba(255, 255, 255, var(--tw-bg-opacity))"
 	},
+	"bg-gray": {
+		"--tw-bg-opacity": 1,
+		"backgroundColor": "rgba(245, 245, 249, var(--tw-bg-opacity))"
+	},
 	"bg-gray-50": {
 		"--tw-bg-opacity": 1,
 		"backgroundColor": "rgba(249, 250, 251, var(--tw-bg-opacity))"
@@ -5840,6 +5844,10 @@
 	"bg-gray-900": {
 		"--tw-bg-opacity": 1,
 		"backgroundColor": "rgba(17, 24, 39, var(--tw-bg-opacity))"
+	},
+	"bg-denison-red": {
+		"--tw-bg-opacity": 1,
+		"backgroundColor": "rgba(199, 32, 47, var(--tw-bg-opacity))"
 	},
 	"bg-red-50": {
 		"--tw-bg-opacity": 1,
@@ -6080,6 +6088,10 @@
 	"bg-purple-900": {
 		"--tw-bg-opacity": 1,
 		"backgroundColor": "rgba(76, 29, 149, var(--tw-bg-opacity))"
+	},
+	"bg-pink": {
+		"--tw-bg-opacity": 1,
+		"backgroundColor": "rgba(241, 141, 158, var(--tw-bg-opacity))"
 	},
 	"bg-pink-50": {
 		"--tw-bg-opacity": 1,
@@ -7329,6 +7341,10 @@
 	"text-gray-900": {
 		"--tw-text-opacity": 1,
 		"color": "rgba(17, 24, 39, var(--tw-text-opacity))"
+	},
+	"text-denison-red": {
+		"--tw-bg-opacity": 1,
+		"color": "rgba(199, 32, 47, var(--tw-bg-opacity))"
 	},
 	"text-red-50": {
 		"--tw-text-opacity": 1,

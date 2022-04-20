@@ -15,20 +15,42 @@ const Wishlist: FC<Props> = () => {
 		<Stack.Navigator initialRouteName="Wishlist">
 			<Stack.Screen
 				name="Wishlist"
-				options={{ headerTitle: 'Liked Items' }}
+				options={{
+					headerTitle: 'LIKED ITEMS',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 				initialParams={{ reset: false }}
 			>
 				{(props) => <Main {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Item" options={{ headerBackTitle: '' }}>
+			<Stack.Screen
+				name="Item"
+				options={{
+					headerBackTitle: '',
+					headerTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
+			>
 				{(props) => <Item {...props} />}
 			</Stack.Screen>
-			<Stack.Screen name="Profile" options={{ headerBackTitle: '' }}>
+			<Stack.Screen
+				name="Profile"
+				options={{
+					headerBackTitle: '',
+					headerTitle: 'PROFILE',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
+			>
 				{(props) => <Profile {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Messages"
-				options={{ headerTitle: '', headerBackTitle: '' }}
+				options={{
+					headerTitle: '',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>

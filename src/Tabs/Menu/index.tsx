@@ -18,7 +18,11 @@ const Menu: FC<Props> = () => {
 		<Stack.Navigator initialRouteName="MainMenu">
 			<Stack.Screen
 				name="MainMenu"
-				options={{ headerTitle: 'Menu' }}
+				options={{
+					headerTitle: 'MENU',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 				initialParams={{ displayUserProfile: undefined }}
 			>
 				{(props) => <Main {...props} />}
@@ -30,14 +34,15 @@ const Menu: FC<Props> = () => {
 					displayUserProfile: undefined,
 				}}
 				options={{
-					headerTitle: 'Edit Profile',
+					headerTitle: 'EDIT PROFILE',
 					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
 							<FontAwesomeIcon
 								icon={faCheck}
 								size={24}
-								style={tw('text-indigo-500')}
+								style={tw('text-denison-red')}
 							/>
 						</TouchableOpacity>
 					),
@@ -49,14 +54,15 @@ const Menu: FC<Props> = () => {
 				name="EditPronouns"
 				initialParams={{ pronouns: undefined }}
 				options={{
-					headerTitle: 'Edit Pronouns',
+					headerTitle: 'EDIT PRONOUNS',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
 					headerBackTitle: '',
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
 							<FontAwesomeIcon
 								icon={faCheck}
 								size={24}
-								style={tw('text-indigo-500')}
+								style={tw('text-denison-red')}
 							/>
 						</TouchableOpacity>
 					),

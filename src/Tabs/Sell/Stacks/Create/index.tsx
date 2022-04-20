@@ -7,12 +7,7 @@ import {
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
 } from '@Constants';
 import { UserContext } from '@Contexts';
-import {
-	faChevronDown,
-	faMagnifyingGlass,
-	faPlus,
-	faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListingError, useNewListingData, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
@@ -30,13 +25,15 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
+import Magnify from '../../../../static/magnify.svg';
+import Plus from '../../../../static/plus.svg';
+import XIcon from '../../../../static/x.svg';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
 import useUploadProgress from '../useUploadProgress';
 import createListing from './createListing';
 import renderPostButton from './renderPostButton';
-
 export interface Props {
 	route: RouteProp<SellStackParamList, 'Create'>;
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Create'>;
@@ -221,11 +218,7 @@ const Create: FC<Props> = ({ navigation }) => {
 																)
 															}
 														>
-															<FontAwesomeIcon
-																icon={faTimes}
-																size={16}
-																style={tw('m-1')}
-															/>
+															<XIcon height={16} width={16} style={tw('m-1')} />
 														</TouchableOpacity>
 														<Text style={tw('capitalize text-s-md pr-2')}>
 															{category}
@@ -236,11 +229,7 @@ const Create: FC<Props> = ({ navigation }) => {
 											<TouchableOpacity onPress={() => setCategorizing(true)}>
 												{listingData.category.length > 0 && (
 													<Badges.Light>
-														<FontAwesomeIcon
-															icon={faPlus}
-															size={16}
-															style={tw('m-1')}
-														/>
+														<Plus height={16} width={16} style={tw('m-1')} />
 														<Text style={tw('capitalize text-s-md pr-2')}>
 															Category
 														</Text>
@@ -253,9 +242,9 @@ const Create: FC<Props> = ({ navigation }) => {
 											>
 												{listingData.category.length === 0 && (
 													<View style={tw('flex-row items-center')}>
-														<FontAwesomeIcon
-															icon={faMagnifyingGlass}
-															size={16}
+														<Magnify
+															height={16}
+															width={16}
 															style={tw('mx-1')}
 														/>
 														<Text
@@ -305,7 +294,11 @@ const Create: FC<Props> = ({ navigation }) => {
 												setHasEditCondition(true);
 											}}
 											Icon={() => (
-												<FontAwesomeIcon icon={faChevronDown} size={20} />
+												<FontAwesomeIcon
+													icon={faChevronDown}
+													size={20}
+													style={tw('text-denison-red')}
+												/>
 											)}
 											placeholder={
 												{

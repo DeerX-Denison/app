@@ -3,8 +3,6 @@ import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
-import { faEdit, faHeart, faMessage } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
 	useDebounce,
@@ -23,6 +21,10 @@ import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
+import ChatActive from '../../../../static/chat-active.svg';
+import Edit from '../../../../static/edit.svg';
+import HeartActive from '../../../../static/heart-active.svg';
+import HeartInactive from '../../../../static/heart-inactive.svg';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
@@ -181,39 +183,23 @@ const Item: FC<Props> = ({ route, navigation }) => {
 									<View style={tw('mt-2')}>
 										{isInWishlist ? (
 											<TouchableOpacity onPress={removeWishlistHandler}>
-												<FontAwesomeIcon
-													icon={faHeart}
-													size={24}
-													style={tw('text-red-500')}
-												/>
+												<HeartActive height={32} width={32} />
 											</TouchableOpacity>
 										) : (
 											<TouchableOpacity onPress={addWishlistHandler}>
-												<FontAwesomeIcon
-													icon={faHeart}
-													size={24}
-													style={tw('text-indigo-500')}
-												/>
+												<HeartInactive height={32} width={32} />
 											</TouchableOpacity>
 										)}
 									</View>
 									<View style={tw('ml-4 mt-2')}>
 										<TouchableOpacity onPress={messageHandler}>
-											<FontAwesomeIcon
-												icon={faMessage}
-												size={24}
-												style={tw('text-indigo-500')}
-											/>
+											<ChatActive height={36} width={36} />
 										</TouchableOpacity>
 									</View>
 									<View style={tw('ml-4 mt-2')}>
 										{isSeller && (
 											<TouchableOpacity onPress={editHandler}>
-												<FontAwesomeIcon
-													icon={faEdit}
-													size={24}
-													style={tw('text-indigo-500')}
-												/>
+												<Edit height={32} width={32} />
 											</TouchableOpacity>
 										)}
 									</View>

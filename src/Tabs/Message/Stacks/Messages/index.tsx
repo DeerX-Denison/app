@@ -1,7 +1,5 @@
 import { UserContext } from '@Contexts';
 import { fn, localTime } from '@firebase.config';
-import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useKeyboard,
 	useKeyboardPadding,
@@ -28,6 +26,8 @@ import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
 import { InputTextRef, MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
+import SendActive from '../../../../static/send-active.svg';
+import SendInactive from '../../../../static/send-inactive.svg';
 import InputTextContent from './InputTextContent';
 import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
@@ -38,7 +38,6 @@ import renderHeader from './renderHeader';
 import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
 import useScrollToEndOnOpen from './useScrollToEndOnOpen';
-
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
@@ -167,7 +166,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					<View style={tw('flex flex-col-reverse')}>
 						<View
 							style={tw(
-								'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
+								'py-2 flex-row border-t border-b border-gray-400 bg-gray-200'
 							)}
 						>
 							<TextInput
@@ -212,28 +211,20 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								<InputTextContent refs={refs} inputText={inputText} />
 							</TextInput>
 							<View style={tw('flex-col justify-end')}>
-								<View style={tw('pr-4')}>
+								<View style={tw('pr-4 flex-1')}>
 									{inputText ? (
 										<TouchableOpacity
 											onPress={sendHandler}
 											disabled={disableSend}
 										>
-											<FontAwesomeIcon
-												icon={faCircleArrowUp}
-												size={25}
-												style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
-											/>
+											<SendActive height={36} width={36} />
 										</TouchableOpacity>
 									) : (
 										<TouchableOpacity
 											onPress={sendHandler}
 											disabled={disableSend}
 										>
-											<FontAwesomeIcon
-												icon={faCircleArrowUp}
-												size={25}
-												style={tw('bottom-2', 'text-gray-500', 'text-s-sm')}
-											/>
+											<SendInactive height={36} width={36} />
 										</TouchableOpacity>
 									)}
 								</View>

@@ -59,11 +59,9 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 					)}
 
 					<View
-						style={tw(
-							'absolute bottom-2 left-2 rounded-lg bg-red-200 px-2 py-1'
-						)}
+						style={tw('absolute bottom-3 left-3 rounded-xl bg-pink px-2 py-1')}
 					>
-						<Text style={tw('text-s-md font-normal')}>
+						<Text style={tw('text-s-md font-semibold text-white')}>
 							${listingData.price}
 						</Text>
 					</View>

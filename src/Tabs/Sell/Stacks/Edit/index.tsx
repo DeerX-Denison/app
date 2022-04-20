@@ -5,12 +5,7 @@ import {
 	CONDITIONS,
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
 } from '@Constants';
-import {
-	faChevronDown,
-	faMagnifyingGlass,
-	faPlus,
-	faTimes,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListingData, useListingError, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
@@ -29,6 +24,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
 import { ListingCondition, ListingData, SellStackParamList } from 'types';
+import Magnify from '../../../../static/magnify.svg';
+import Plus from '../../../../static/plus.svg';
+import XIcon from '../../../../static/x.svg';
 import addImage from '../addImage';
 import Category from '../Category';
 import removeCategory from '../removeCategory';
@@ -273,11 +271,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 																)
 															}
 														>
-															<FontAwesomeIcon
-																icon={faTimes}
-																size={16}
-																style={tw('m-1')}
-															/>
+															<XIcon style={tw('m-1')} height={16} width={16} />
 														</TouchableOpacity>
 														<Text
 															style={tw(
@@ -292,11 +286,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											<TouchableOpacity onPress={() => setCategorizing(true)}>
 												{listingData.category.length > 0 && (
 													<Badges.Light>
-														<FontAwesomeIcon
-															icon={faPlus}
-															size={16}
-															style={tw('m-1')}
-														/>
+														<Plus height={16} width={16} style={tw('m-1')} />
 														<Text
 															style={tw(
 																'capitalize text-s-md font-medium pr-2'
@@ -313,9 +303,9 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 											>
 												{listingData.category.length === 0 && (
 													<View style={tw('flex-row items-center')}>
-														<FontAwesomeIcon
-															icon={faMagnifyingGlass}
-															size={16}
+														<Magnify
+															height={16}
+															width={16}
 															style={tw('mx-1')}
 														/>
 														<Text
@@ -362,7 +352,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 												setHasEditCondition(true);
 											}}
 											Icon={() => (
-												<FontAwesomeIcon icon={faChevronDown} size={20} />
+												<FontAwesomeIcon
+													icon={faChevronDown}
+													size={20}
+													style={tw('text-denison-red')}
+												/>
 											)}
 											placeholder={
 												{

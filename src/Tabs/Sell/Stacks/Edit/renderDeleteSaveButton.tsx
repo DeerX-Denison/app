@@ -1,12 +1,12 @@
 import { UserContext } from '@Contexts';
-import { faCloudArrowUp, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
 import React, { useContext, useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
+import Trash from '../../../../static/trash.svg';
+import Upload from '../../../../static/upload.svg';
 import deleteListing from './deleteListing';
 import { SaveListingFn } from './saveListing';
 
@@ -63,11 +63,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										setDisabledSave(false);
 									}}
 								>
-									<FontAwesomeIcon
-										icon={faTrash}
-										size={24}
-										style={tw('text-indigo-500 mr-8')}
-									/>
+									<Trash height={32} width={32} style={tw('mr-4')} />
 								</TouchableOpacity>
 								<TouchableOpacity
 									disabled={disabledSaved}
@@ -89,11 +85,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 										setDisabledSave(false);
 									}}
 								>
-									<FontAwesomeIcon
-										icon={faCloudArrowUp}
-										size={24}
-										style={tw('text-indigo-500')}
-									/>
+									<Upload height={32} width={32} />
 								</TouchableOpacity>
 							</View>
 						</>

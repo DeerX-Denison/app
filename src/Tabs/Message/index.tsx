@@ -17,19 +17,31 @@ const Message: FC<Props> = () => {
 		<Stack.Navigator initialRouteName="Threads">
 			<Stack.Screen
 				name="Threads"
-				options={{ headerTitle: 'Inbox', headerBackTitle: '' }}
+				options={{
+					headerTitle: 'INBOX',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 			>
 				{(props) => <Threads {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Messages"
-				options={{ headerTitle: '', headerBackTitle: '' }}
+				options={{
+					headerTitle: '',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Profile"
-				options={{ headerTitle: '', headerBackTitle: '' }}
+				options={{
+					headerTitle: 'PROFILE',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 				initialParams={{ uid: undefined }}
 			>
 				{(props) => <Profile {...props} />}

@@ -1,6 +1,6 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useSlideAnimation } from '@Hooks';
 import tw from '@tw';
@@ -14,6 +14,7 @@ import {
 	View,
 } from 'react-native';
 import { ListingCategory } from 'types';
+import Plus from '../../../../static/plus.svg';
 import addCategory from './addCategory';
 interface Props {
 	category: ListingCategory[];
@@ -97,11 +98,7 @@ const Category: FC<Props> = ({
 												}
 											>
 												<Badges.Light>
-													<FontAwesomeIcon
-														icon={faPlus}
-														size={16}
-														style={tw('m-1')}
-													/>
+													<Plus height={16} width={16} style={tw('m-1')} />
 													<Text style={tw('capitalize text-s-md pr-2')}>
 														{suggestion}
 													</Text>

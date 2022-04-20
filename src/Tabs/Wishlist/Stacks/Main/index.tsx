@@ -1,7 +1,5 @@
 import * as Buttons from '@Components/Buttons';
 import { fn } from '@firebase.config';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useWishlist } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,7 +19,7 @@ import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { WishlistStackParamList } from 'types';
-
+import Trash from '../../../../static/trash.svg';
 interface Props {
 	route: RouteProp<WishlistStackParamList, 'Wishlist'>;
 	navigation: NativeStackNavigationProp<WishlistStackParamList>;
@@ -110,19 +108,13 @@ const Main: FC<Props> = ({ route, navigation }) => {
 									);
 								}}
 								renderHiddenItem={({ item: wishlistData }) => (
-									<View
-										style={tw('flex flex-row flex-1 justify-end bg-gray-700')}
-									>
+									<View style={tw('flex flex-row flex-1 justify-end bg-gray')}>
 										<View style={tw('flex flex-row w-16')}>
 											<TouchableOpacity
 												style={tw('flex flex-1 justify-center items-center')}
 												onPress={() => deleteHandler(wishlistData.id)}
 											>
-												<FontAwesomeIcon
-													icon={faTrash}
-													size={24}
-													style={tw('text-white')}
-												/>
+												<Trash height={48} width={48} />
 											</TouchableOpacity>
 										</View>
 									</View>

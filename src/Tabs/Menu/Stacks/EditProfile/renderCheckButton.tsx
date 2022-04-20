@@ -99,7 +99,7 @@ const renderCheckButton: RenderCheckButtonFn = (
 					<FontAwesomeIcon
 						icon={faCheck}
 						size={24}
-						style={tw('text-indigo-500')}
+						style={tw('text-denison-red')}
 					/>
 				</TouchableOpacity>
 			),

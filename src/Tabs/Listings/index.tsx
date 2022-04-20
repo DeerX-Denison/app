@@ -20,19 +20,29 @@ const Listings: FC<Props> = () => {
 				name="Item"
 				options={() => ({
 					headerBackTitle: '',
+					headerTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
 				})}
 			>
 				{(props) => <Item {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Messages"
-				options={{ headerTitle: '', headerBackTitle: '' }}
+				options={{
+					headerTitle: '',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Profile"
-				options={{ headerTitle: '', headerBackTitle: '' }}
+				options={{
+					headerTitle: 'PROFILE',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
+				}}
 				initialParams={{ uid: undefined }}
 			>
 				{(props) => <Profile {...props} />}
@@ -48,6 +58,9 @@ const Listings: FC<Props> = () => {
 							}}
 						/>
 					),
+					headerTitle: 'EDIT',
+					headerBackTitle: '',
+					headerTintColor: 'rgba(199, 32, 47, 1)',
 				}}
 			>
 				{(props) => <Edit {...props} />}

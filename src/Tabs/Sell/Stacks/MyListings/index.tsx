@@ -1,5 +1,3 @@
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useMyListings } from '@Hooks';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -17,6 +15,7 @@ import {
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { ListingId, SellStackParamList } from 'types';
+import EditIcon from '../../../../static/edit.svg';
 interface Props {
 	navigation: NativeStackNavigationProp<SellStackParamList, 'MyListing'>;
 }
@@ -96,11 +95,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 												onPress={() => editHandler(listing.id)}
 												style={tw('pr-2')}
 											>
-												<FontAwesomeIcon
-													icon={faEdit}
-													size={24}
-													style={tw('text-indigo-500')}
-												/>
+												<EditIcon height={32} width={32} />
 											</TouchableOpacity>
 										</View>
 									</TouchableWithoutFeedback>

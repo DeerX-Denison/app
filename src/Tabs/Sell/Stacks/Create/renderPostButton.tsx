@@ -1,14 +1,11 @@
 import { UserContext } from '@Contexts';
-import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import tw from '@tw';
 import React, { useContext, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
+import Upload from '../../../../static/upload.svg';
 import { CreateListingFn } from './createListing';
-
 export type RenderPostButton = (
 	navigation: Props['navigation'],
 	createListing: CreateListingFn,
@@ -56,11 +53,7 @@ const renderPostButton: RenderPostButton = (
 									);
 								}}
 							>
-								<FontAwesomeIcon
-									icon={faCloudArrowUp}
-									size={24}
-									style={tw('text-indigo-500')}
-								/>
+								<Upload height={32} width={32} />
 							</TouchableOpacity>
 						</>
 					),

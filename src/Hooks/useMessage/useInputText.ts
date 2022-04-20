@@ -67,13 +67,13 @@ const useInputText: UseInputText = (setDisableSend) => {
 				break;
 			}
 		}
-
+		
 		// Handle showing item
 		if (
-			inputText.charAt(textSelection?.start - 1) === '@' &&
+			((inputText.charAt(textSelection?.start - 1) === '@' &&
 			([' ', '\n'].includes(inputText.charAt(textSelection.start - 2)) ||
-				textSelection?.start === 1) &&
-			nearPossibleRef &&
+				textSelection?.start === 1)) ||
+			nearPossibleRef) &&
 			!nearRef
 		) {
 			setShowingItem(true);

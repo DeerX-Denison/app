@@ -41,12 +41,13 @@ const ItemSuggestion: FC<Props> = ({
 								)}
 								onPress={() => {
 									let closestRef = 0;
-									for (let i: number = textSelection?.start; i >= 0; i--) {
+									for (let i: number = textSelection.start; i >= 0; i--) {
 										if (inputText?.charAt(i) === '@') {
 											closestRef = i;
 											break;
 										}
 									}
+									const typedRef = textSelection.start - closestRef - 1;
 									const start: number = closestRef;
 									const end: number = start + wishlistData.name.length;
 									const newRef: InputTextRef = {
@@ -63,8 +64,10 @@ const ItemSuggestion: FC<Props> = ({
 									const mutableRefs = refs.map((x) => x);
 									for (let i = 0; i < mutableRefs.length; i++) {
 										if (closestRef <= mutableRefs[i].begin) {
-											mutableRefs[i].begin += wishlistData.name.length + 1;
-											mutableRefs[i].end += wishlistData.name.length + 1;
+											mutableRefs[i].begin +=
+												wishlistData.name.length - typedRef + 1;
+											mutableRefs[i].end +=
+												wishlistData.name.length - typedRef + 1;
 										}
 									}
 									mutableRefs.push(newRef);

@@ -82,6 +82,12 @@ const onChangeTextHandler: OnChangeTextHandler = (
 			}
 		} else if (text.length > inputText.length) {
 			if (!extendingSelection) {
+				if (isWithinRef.isWithinRef && isWithinRef.whichRef){
+					const toBeDeleted = refs.indexOf(isWithinRef.whichRef)
+					if (toBeDeleted > -1){
+						mutableRefs.splice(toBeDeleted, 1)
+					}
+				}
 				for (let i = 0; i < mutableRefs.length; i++) {
 					if (mutableRefs[i].begin >= prevSelector.start - 1) {
 						mutableRefs[i].begin += text.length - inputText.length;

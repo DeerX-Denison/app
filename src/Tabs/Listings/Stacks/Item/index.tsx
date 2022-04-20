@@ -2,10 +2,8 @@ import * as Badges from '@Components/Badges';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
-import { fn } from '@firebase.config';
 import {
 	useCurrentTime,
-	useDebounce,
 	useIsInWishlist,
 	useIsSeller,
 	useItemDisplayTime,
@@ -15,7 +13,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
@@ -29,12 +27,23 @@ import HeartInactive from '../../../../static/heart-inactive.svg';
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Item'>;
+	debouncedAddWishlistToDb: React.MutableRefObject<
+		(args: WishlistDataCL) => Promise<Promise<void>>
+	>;
+	debouncedRemoveWishlistFromDb: React.MutableRefObject<
+		(args: ListingData) => Promise<Promise<void>>
+	>;
 }
 
 /**
  * Item components, when user want to view an item in details
  */
-const Item: FC<Props> = ({ route, navigation }) => {
+const Item: FC<Props> = ({
+	route,
+	navigation,
+	debouncedAddWishlistToDb,
+	debouncedRemoveWishlistFromDb,
+}) => {
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
@@ -72,12 +81,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 
 	// removed wishlist from db handler
 	// ===========================================================================
-	const removeWishlistFromDb = async (listingData: ListingData) => {
-		await fn.httpsCallable('deleteWishlist')(listingData.id);
-	};
-	const debouncedRemoveWishlistFromDb = useRef(
-		useDebounce(removeWishlistFromDb, 1000)
-	);
+
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
@@ -102,10 +106,6 @@ const Item: FC<Props> = ({ route, navigation }) => {
 
 	// add wishlist to db handler
 	// ===========================================================================
-	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
-		await fn.httpsCallable('createWishlist')(wishlistData);
-	};
-	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {

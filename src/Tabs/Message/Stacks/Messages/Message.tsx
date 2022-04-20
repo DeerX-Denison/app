@@ -92,7 +92,7 @@ const Message: FC<Props> = ({
 												>
 													<TextContent content={content} />
 													{content.contentType.includes('reference') &&
-														'ref' in content && (
+														'refs' in content && (
 															<View
 																style={{
 																	...tw(
@@ -195,7 +195,7 @@ const Message: FC<Props> = ({
 													>
 														<TextContent content={content} />
 														{content.contentType.includes('reference') &&
-															'ref' in content && (
+															'refs' in content && (
 																<View
 																	style={{
 																		...tw(

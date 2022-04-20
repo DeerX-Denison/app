@@ -106,7 +106,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 				value={query}
 				onChangeText={setQuery}
 				style={tw(
-					'text-s-lg font-normal border rounded-full px-6 py-3.5 mx-1 my-2 bg-white'
+					'text-s-lg font-normal border border-denison-red rounded-full px-6 py-3.5 mx-1 my-2 bg-white'
 				)}
 				autoCapitalize="none"
 				onFocus={() => setSearching(true)}

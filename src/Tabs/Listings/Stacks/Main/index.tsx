@@ -74,7 +74,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				<View
 					style={tw(
-						'mx-1 my-2 flex flex-row flex-wrap border rounded-full px-2 py-1 bg-white'
+						'mx-1 my-2 flex flex-row flex-wrap border border-denison-red rounded-full px-2 py-1 bg-white'
 					)}
 				>
 					{categoryFilter.length === 0 ? (

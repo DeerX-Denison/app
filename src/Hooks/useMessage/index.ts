@@ -61,7 +61,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 			const messageRefs: MessageReferenceData[] = refs.map((ref) => ({
 				begin: ref.begin,
 				end: ref.end,
-				id: ref.data.id,
+				data: { id: ref.data.id, thumbnail: ref.data.thumbnail },
 			}));
 			setMessage({
 				id: 'temp-id',

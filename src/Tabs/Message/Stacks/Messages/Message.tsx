@@ -4,15 +4,20 @@ import { faCheckCircle as regularCheckIcon } from '@fortawesome/free-regular-svg
 import { faCheckCircle as solidCheckIcon } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useCurrentTime, useMessageDisplayTime } from '@Hooks';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
-import { MessageBlockData, UserInfo } from 'types';
+import { MessageBlockData, MessageStackParamList, UserInfo } from 'types';
 import TextContent from './TextContent';
 
 interface Props {
+	navigation: NativeStackNavigationProp<MessageStackParamList>;
+	route: RouteProp<MessageStackParamList, 'Messages'>;
 	message: MessageBlockData;
 	members: UserInfo[] | undefined;
 	latestSeenMsgId: string | undefined;
@@ -21,12 +26,18 @@ interface Props {
 /**
  * Message component, Threads contains Thread contains Messages contains Message
  */
-const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
+const Message: FC<Props> = ({
+	navigation,
+	message,
+	members,
+	latestSeenMsgId,
+}) => {
 	const { userInfo } = useContext(UserContext);
 	const [nonSelfUid, setNonSelfUid] = useState<string | undefined>();
 	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
+
 	useEffect(() => {
 		if (userInfo && members && members.length > 0) {
 			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);
@@ -80,6 +91,47 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 													}}
 												>
 													<TextContent content={content} />
+													{content.contentType.includes('reference') && (
+														<View
+															style={{
+																...tw(
+																	'rounded-xl mt-2 flex flex-row flex-wrap'
+																),
+																shadowColor: DENISON_RED_RGBA,
+																shadowOffset: { width: 2, height: 2 },
+																shadowOpacity: 0.25,
+																shadowRadius: 4,
+															}}
+														>
+															{[...new Set(content.refs.map((x) => x.data.id))]
+																.map(
+																	(uniqueId) =>
+																		content.refs.filter(
+																			(ref) => ref.data.id === uniqueId
+																		)[0]
+																)
+																.map(({ data: wishlist }) => (
+																	<View key={wishlist.id}>
+																		<TouchableOpacity
+																			onPress={() =>
+																				navigation.navigate('Item', {
+																					listingId: wishlist.id,
+																				})
+																			}
+																		>
+																			<FastImage
+																				source={{ uri: wishlist.thumbnail }}
+																				style={{
+																					...tw('rounded-xl m-0.5'),
+																					height: 90,
+																					width: 90,
+																				}}
+																			/>
+																		</TouchableOpacity>
+																	</View>
+																))}
+														</View>
+													)}
 												</View>
 												<View style={tw('flex flex-row w-4 mb-0.5 ml-1')}>
 													{content.seenAt[userInfo.uid] === null && (
@@ -137,6 +189,51 @@ const Message: FC<Props> = ({ message, members, latestSeenMsgId }) => {
 														}}
 													>
 														<TextContent content={content} />
+														{content.contentType.includes('reference') && (
+															<View
+																style={{
+																	...tw(
+																		'rounded-xl mt-2 flex flex-row flex-wrap'
+																	),
+																	shadowColor: DENISON_RED_RGBA,
+																	shadowOffset: { width: 2, height: 2 },
+																	shadowOpacity: 0.25,
+																	shadowRadius: 4,
+																}}
+															>
+																{[
+																	...new Set(
+																		content.refs.map((x) => x.data.id)
+																	),
+																]
+																	.map(
+																		(uniqueId) =>
+																			content.refs.filter(
+																				(ref) => ref.data.id === uniqueId
+																			)[0]
+																	)
+																	.map(({ data: wishlist }) => (
+																		<View key={wishlist.id}>
+																			<TouchableOpacity
+																				onPress={() =>
+																					navigation.navigate('Item', {
+																						listingId: wishlist.id,
+																					})
+																				}
+																			>
+																				<FastImage
+																					source={{ uri: wishlist.thumbnail }}
+																					style={{
+																						...tw('rounded-xl m-0.5'),
+																						height: 90,
+																						width: 90,
+																					}}
+																				/>
+																			</TouchableOpacity>
+																		</View>
+																	))}
+															</View>
+														)}
 													</View>
 												</View>
 											))}

@@ -63,7 +63,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
 
-	useScrollToEndOnOpen(scrollViewRef, threadData);
+	useScrollToEndOnOpen(scrollViewRef, threadData, boxHeight, contentHeight);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
 
 	const { paddingBottom } = useKeyboardPadding();
@@ -83,7 +83,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
 	const { wishlist } = useWishlist(query);
-
 	// previous cursor begin and end index of inputText string
 	const [prevSelector, setPrevSelector] = useState<{
 		end: number;
@@ -318,6 +317,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									parsedMessages.length > 0 &&
 									parsedMessages.map((message) => (
 										<Message
+											navigation={navigation}
+											route={route}
 											key={message.id}
 											message={message}
 											members={threadData?.members}

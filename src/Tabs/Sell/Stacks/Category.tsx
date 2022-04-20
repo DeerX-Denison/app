@@ -66,7 +66,7 @@ const Category: FC<Props> = ({
 					ref={inputTextRef as any}
 					value={query}
 					style={tw(
-						'py-3 pl-12 pr-6 border rounded-full m-2 text-s-lg bg-white'
+						'py-3 pl-12 pr-6 border border-denison-red rounded-full m-2 text-s-lg bg-white'
 					)}
 					placeholder="Search categories"
 					onChangeText={setQuery}

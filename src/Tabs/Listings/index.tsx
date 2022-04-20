@@ -14,7 +14,15 @@ const Listings: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<ListingsStackParamList>();
 	return (
 		<Stack.Navigator initialRouteName="Listings">
-			<Stack.Screen name="Listings" initialParams={{ reset: false }}>
+			<Stack.Screen
+				name="Listings"
+				initialParams={{ reset: false }}
+				options={() => ({
+					headerBackTitle: '',
+					headerTitle: 'LISTINGS',
+					headerTintColor: DENISON_RED_RGBA,
+				})}
+			>
 				{(props) => <ListingsScreen {...props} />}
 			</Stack.Screen>
 			<Stack.Screen

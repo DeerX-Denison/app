@@ -5,12 +5,13 @@ import {
 	InputTextRef,
 	MessageData,
 	MessageReferenceData,
+	TextSelection,
 	ThreadData,
 	WithinRef,
 } from 'types';
 import useSuggestionQuery from '../useSuggestionQuery';
 import useContentType from './useContentType';
-import useInputText, { TextSelection } from './useInputText';
+import useInputText from './useInputText';
 import useSeenAt from './useSeenAt';
 
 export type UseMessageFn = (

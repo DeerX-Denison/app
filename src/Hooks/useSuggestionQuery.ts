@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { TextSelection } from 'types';
 import useDebounce from './useDebounce';
-import { TextSelection } from './useMessage/useInputText';
 
 export type UseSuggestionQuery = (
 	inputMessage: string,
@@ -29,15 +29,15 @@ const useSuggestionQuery: UseSuggestionQuery = (inputText, textSelection) => {
 	useEffect(() => {
 		let isSubscribed = true;
 		(async () => {
-			const query = await extractQueryDebounced.current(inputText);
+			const curQueries = await extractQueryDebounced.current(inputText);
 			let count = 0;
 			for (let i = 0; i < textSelection.start; i++) {
 				if (inputText.charAt(i) === '@') {
 					count += 1;
 				}
 			}
-			if (query) {
-				const newQuery = query[count - 1].substring(1);
+			if (curQueries && curQueries.length > 0) {
+				const newQuery = curQueries[count - 1].substring(1);
 				isSubscribed && setQuery(newQuery);
 			}
 		})();

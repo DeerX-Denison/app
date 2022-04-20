@@ -5,8 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import { CircleSnail } from 'react-native-progress';
-import { InputTextRef, TextSelection } from 'src/Hooks/useMessage/useInputText';
-import { WishlistDataCL } from 'types';
+import { InputTextRef, TextSelection, WishlistDataCL } from 'types';
 interface Props {
 	query: string | null;
 	wishlist: WishlistDataCL[] | null | undefined;

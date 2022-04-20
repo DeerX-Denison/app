@@ -61,7 +61,7 @@ const onChangeTextHandler: OnChangeTextHandler = (
 		if (text.length < inputText.length) {
 			if (!extendingSelection && keyPressed === 'Backspace') {
 				for (let i = 0; i < mutableRefs.length; i++) {
-					if (mutableRefs[i].begin >= prevSelector?.start - 1) {
+					if (mutableRefs[i].begin >= prevSelector.start - 1) {
 						mutableRefs[i].begin -= 1;
 						mutableRefs[i].end -= 1;
 					}
@@ -83,7 +83,7 @@ const onChangeTextHandler: OnChangeTextHandler = (
 		} else if (text.length > inputText.length) {
 			if (!extendingSelection) {
 				for (let i = 0; i < mutableRefs.length; i++) {
-					if (mutableRefs[i].begin >= prevSelector?.start - 1) {
+					if (mutableRefs[i].begin >= prevSelector.start - 1) {
 						mutableRefs[i].begin += text.length - inputText.length;
 						mutableRefs[i].end += text.length - inputText.length;
 					}

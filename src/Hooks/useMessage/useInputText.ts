@@ -60,8 +60,8 @@ const useInputText: UseInputText = (setDisableSend) => {
 		let nearRef = false;
 		for (let i = 0; i < refs.length; i++) {
 			if (
-				textSelection?.start >= refs[i].begin &&
-				textSelection?.start <= refs[i].end + 1
+				textSelection.start >= refs[i].begin &&
+				textSelection.start <= refs[i].end + 1
 			) {
 				nearRef = true;
 				break;
@@ -71,7 +71,7 @@ const useInputText: UseInputText = (setDisableSend) => {
 		// Handle showing item
 		if (
 			inputText.charAt(textSelection?.start - 1) === '@' &&
-			([' ', '\n'].includes(inputText.charAt(textSelection?.start - 2)) ||
+			([' ', '\n'].includes(inputText.charAt(textSelection.start - 2)) ||
 				textSelection?.start === 1) &&
 			nearPossibleRef &&
 			!nearRef
@@ -80,15 +80,14 @@ const useInputText: UseInputText = (setDisableSend) => {
 		} else if (
 			nearRef ||
 			inputText.charAt(textSelection?.start - 1) === ' ' ||
-			textSelection?.start - previousIndex > 1 ||
-			textSelection?.start - previousIndex < 0
+			textSelection.start - previousIndex > 1 ||
+			textSelection.start - previousIndex < 0
 		) {
 			setShowingItem(false);
 		}
-		setPreviousIndex(textSelection?.start);
+		setPreviousIndex(textSelection.start);
 	}, [inputText, textSelection]);
 
-	// TODO: combine into custom useIsWithinRef
 	useEffect(() => {
 		let exist = false;
 		let ref = undefined;

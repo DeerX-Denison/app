@@ -1,10 +1,12 @@
 import { UserContext } from '@Contexts';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import tw from '@tw';
 import React, { useContext, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
-import Upload from '../../../../static/upload.svg';
 import { CreateListingFn } from './createListing';
 export type RenderPostButton = (
 	navigation: Props['navigation'],
@@ -53,7 +55,11 @@ const renderPostButton: RenderPostButton = (
 									);
 								}}
 							>
-								<Upload height={32} width={32} />
+								<FontAwesomeIcon
+									icon={faCheck}
+									size={24}
+									style={tw('text-denison-red')}
+								/>
 							</TouchableOpacity>
 						</>
 					),

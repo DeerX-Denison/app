@@ -1,6 +1,6 @@
 import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useSlideAnimation } from '@Hooks';
 import tw from '@tw';
@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingCategory, ListingData } from 'types';
+import Plus from '../../../static/plus.svg';
 import addCategory from './addCategory';
 
 interface Props {
@@ -56,7 +57,7 @@ const Category: FC<Props> = ({
 	return (
 		<Animated.View
 			style={{
-				...tw('bg-gray-50 absolute z-10 w-full h-full'),
+				...tw('bg-gray absolute z-10 w-full h-full'),
 				transform: [{ translateY: translation }],
 			}}
 		>
@@ -64,7 +65,9 @@ const Category: FC<Props> = ({
 				<TextInput
 					ref={inputTextRef as any}
 					value={query}
-					style={tw('py-3 pl-12 pr-6 border rounded-full m-2 text-s-lg')}
+					style={tw(
+						'py-3 pl-12 pr-6 border border-denison-red rounded-full m-2 text-s-lg bg-white'
+					)}
 					placeholder="Search categories"
 					onChangeText={setQuery}
 				/>
@@ -72,7 +75,11 @@ const Category: FC<Props> = ({
 					style={tw('absolute left-0 h-full justify-center pl-6')}
 					onPress={() => setCategorizing(false)}
 				>
-					<FontAwesomeIcon icon={faChevronLeft} size={16} />
+					<FontAwesomeIcon
+						icon={faChevronLeft}
+						size={16}
+						style={tw('text-denison-red')}
+					/>
 				</TouchableOpacity>
 			</View>
 			<ScrollView
@@ -103,12 +110,12 @@ const Category: FC<Props> = ({
 												}
 											>
 												<Badges.Light>
-													<FontAwesomeIcon
-														icon={faPlus}
-														size={16}
-														style={tw('m-1')}
-													/>
-													<Text style={tw('capitalize text-s-md pr-2')}>
+													<Plus height={16} width={16} style={tw('m-1')} />
+													<Text
+														style={tw(
+															'capitalize text-s-md pr-2 font-semibold text-white'
+														)}
+													>
 														{suggestion}
 													</Text>
 												</Badges.Light>

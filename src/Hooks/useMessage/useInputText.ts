@@ -53,15 +53,15 @@ const useInputText: UseInputText = (setDisableSend) => {
 	// check if the user is typing something or deleting something
 	useEffect(() => {
 		let nearPossibleRef = false;
-		let continueFromRef = false
+		let continueFromRef = false;
 		for (let i = textSelection?.start - 1; i >= 0; i--) {
-			for (let j = 0; j < refs.length; j++){
-				if (i >= refs[j].begin+1 && i <= refs[j].end){
-					continueFromRef= true;
+			for (let j = 0; j < refs.length; j++) {
+				if (i >= refs[j].begin + 1 && i <= refs[j].end) {
+					continueFromRef = true;
 				}
 			}
 			if (continueFromRef) {
-				break
+				break;
 			}
 			if (inputText.charAt(i) === ' ') {
 				break;
@@ -147,7 +147,7 @@ const useInputText: UseInputText = (setDisableSend) => {
 		textSelection,
 		setTextSelection,
 		isWithinRef,
-		insideRef
+		insideRef,
 	};
 };
 

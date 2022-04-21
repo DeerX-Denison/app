@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,7 +19,11 @@ const Menu: FC<Props> = () => {
 		<Stack.Navigator initialRouteName="MainMenu">
 			<Stack.Screen
 				name="MainMenu"
-				options={{ headerTitle: 'Menu' }}
+				options={{
+					headerTitle: 'MENU',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
+				}}
 				initialParams={{ displayUserProfile: undefined }}
 			>
 				{(props) => <Main {...props} />}
@@ -30,14 +35,15 @@ const Menu: FC<Props> = () => {
 					displayUserProfile: undefined,
 				}}
 				options={{
-					headerTitle: 'Edit Profile',
+					headerTitle: 'EDIT PROFILE',
 					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
 							<FontAwesomeIcon
 								icon={faCheck}
 								size={24}
-								style={tw('text-indigo-500')}
+								style={tw('text-denison-red')}
 							/>
 						</TouchableOpacity>
 					),
@@ -49,14 +55,15 @@ const Menu: FC<Props> = () => {
 				name="EditPronouns"
 				initialParams={{ pronouns: undefined }}
 				options={{
-					headerTitle: 'Edit Pronouns',
+					headerTitle: 'EDIT PRONOUNS',
+					headerTintColor: DENISON_RED_RGBA,
 					headerBackTitle: '',
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
 							<FontAwesomeIcon
 								icon={faCheck}
 								size={24}
-								style={tw('text-indigo-500')}
+								style={tw('text-denison-red')}
 							/>
 						</TouchableOpacity>
 					),

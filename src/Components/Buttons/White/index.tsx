@@ -22,35 +22,35 @@ const Secondary: FC<Props> = ({ title, onPress, size }) => {
 					'flex items-center justify-center px-2.5 py-1.5 border border-gray-300 shadow-sm rounded bg-white'
 				)
 			);
-			setTextStyle(tw('text-gray-700 text-xs font-medium'));
+			setTextStyle(tw('text-denison-red text-xs font-semibold'));
 		} else if (size === 'sm') {
 			setButtonStyle(
 				tw(
 					'flex items-center justify-center px-3 py-2 border border-gray-300 shadow-sm rounded bg-white'
 				)
 			);
-			setTextStyle(tw('text-indigo-700 text-sm font-medium'));
+			setTextStyle(tw('text-denison-red text-sm font-semibold'));
 		} else if (size === 'md') {
 			setButtonStyle(
 				tw(
 					'flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm rounded bg-white'
 				)
 			);
-			setTextStyle(tw('text-indigo-700 text-sm font-medium'));
+			setTextStyle(tw('text-denison-red text-sm font-semibold'));
 		} else if (size === 'lg') {
 			setButtonStyle(
 				tw(
 					'flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm rounded bg-white'
 				)
 			);
-			setTextStyle(tw('text-indigo-700 text-base font-medium'));
+			setTextStyle(tw('text-denison-red text-base font-semibold'));
 		} else if (size === 'xl') {
 			setButtonStyle(
 				tw(
 					'flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm rounded bg-white'
 				)
 			);
-			setTextStyle(tw('text-indigo-700 text-base font-medium'));
+			setTextStyle(tw('text-denison-red text-base font-semibold'));
 		}
 	}, [size]);
 

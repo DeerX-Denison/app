@@ -108,6 +108,7 @@ export type SellStackParamList = {
 
 export type MessageStackParamList = {
 	Threads: undefined;
+	Item: ItemScreenParamList;
 	Messages: { members: UserInfo[] };
 	Profile: { uid: string | undefined };
 };
@@ -240,8 +241,14 @@ export type MessageSeenAt = {
 //add below more further on: image, listing reference, etc.
 export type MessageContentType = 'text' | 'reference';
 export type MessageContent = string;
-
-export type MessageReferenceData = { begin: number; end: number; id: string };
+export type MessageReferenceData = {
+	begin: number;
+	end: number;
+	data: {
+		id: ListingId;
+		thumbnail: ListingImageURL;
+	};
+};
 export type InputTextRef = {
 	begin: number;
 	end: number;

@@ -1,11 +1,5 @@
 import * as Badges from '@Components/Badges';
 import * as Buttons from '@Components/Buttons';
-import {
-	faMagnifyingGlass,
-	faPlus,
-	faTimes,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useListings, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -23,10 +17,12 @@ import {
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
 import { ListingCategory, ListingId, ListingsStackParamList } from 'types';
+import Magnify from '../../../../static/magnify.svg';
+import Plus from '../../../../static/plus.svg';
+import XIcon from '../../../../static/x.svg';
 import Category from './Category';
 import Listing from './Listing';
 import removeCategory from './removeCategory';
-
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Listings'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Listings'>;
@@ -77,7 +73,9 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 			/>
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				<View
-					style={tw('mx-1 my-2 flex flex-row flex-wrap border rounded-lg p-2')}
+					style={tw(
+						'mx-1 my-2 flex flex-row flex-wrap border border-denison-red rounded-full px-2 py-1 bg-white'
+					)}
 				>
 					{categoryFilter.length === 0 ? (
 						// user has not selected a filter, render search bar with magnifying glass
@@ -88,11 +86,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 									'w-full h-full flex-row justify-start items-center py-1.5'
 								)}
 							>
-								<FontAwesomeIcon
-									icon={faMagnifyingGlass}
-									size={24}
-									style={tw('ml-1')}
-								/>
+								<Magnify height={24} width={24} style={tw('m-1')} />
 								<Text style={tw('text-s-lg font-normal text-gray-600 ml-2')}>
 									Search category
 								</Text>
@@ -113,13 +107,13 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 												)
 											}
 										>
-											<FontAwesomeIcon
-												icon={faTimes}
-												size={16}
-												style={tw('m-1')}
-											/>
+											<XIcon style={tw('m-1')} width={16} height={16} />
 										</TouchableOpacity>
-										<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+										<Text
+											style={tw(
+												'capitalize text-s-md font-semibold pr-2 text-white'
+											)}
+										>
 											{category}
 										</Text>
 									</Badges.Light>
@@ -127,8 +121,12 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 							))}
 							<TouchableOpacity onPress={() => setCategorizing(true)}>
 								<Badges.Light>
-									<FontAwesomeIcon icon={faPlus} size={16} style={tw('m-1')} />
-									<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+									<Plus height={16} width={16} style={tw('m-1')} />
+									<Text
+										style={tw(
+											'capitalize text-s-md font-semibold pr-2 text-white'
+										)}
+									>
 										Category
 									</Text>
 								</Badges.Light>

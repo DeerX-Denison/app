@@ -50,7 +50,8 @@ const onChangeTextHandler: OnChangeTextHandler = (
 		isWithinRef &&
 		isWithinRef.isWithinRef &&
 		isWithinRef.whichRef &&
-		!extendingSelection && prevWithinRef
+		!extendingSelection &&
+		prevWithinRef
 	) {
 		const start = isWithinRef.whichRef.begin;
 		const end = isWithinRef.whichRef.end + 1;

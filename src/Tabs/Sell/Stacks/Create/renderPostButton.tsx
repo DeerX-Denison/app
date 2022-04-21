@@ -1,5 +1,5 @@
 import { UserContext } from '@Contexts';
-import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import tw from '@tw';
 import React, { useContext, useEffect } from 'react';
@@ -8,7 +8,6 @@ import { ListingErrors } from 'src/Hooks/useListingError';
 import { ListingData } from 'types';
 import { Props } from '.';
 import { CreateListingFn } from './createListing';
-
 export type RenderPostButton = (
 	navigation: Props['navigation'],
 	createListing: CreateListingFn,
@@ -57,9 +56,9 @@ const renderPostButton: RenderPostButton = (
 								}}
 							>
 								<FontAwesomeIcon
-									icon={faCloudArrowUp}
+									icon={faCheck}
 									size={24}
-									style={tw('text-indigo-500')}
+									style={tw('text-denison-red')}
 								/>
 							</TouchableOpacity>
 						</>

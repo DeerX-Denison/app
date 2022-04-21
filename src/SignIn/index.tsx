@@ -269,10 +269,10 @@ const SignIn: FC = () => {
 							>
 								<Text
 									style={tw(
-										'mb-3 mt-60 text-center text-3xl font-extrabold text-gray-900'
+										'mb-3 mt-60 text-center text-3xl font-extrabold text-denison-red'
 									)}
 								>
-									Sign In
+									SIGN IN
 								</Text>
 								<View
 									style={tw(
@@ -290,12 +290,12 @@ const SignIn: FC = () => {
 										onEndEditing={isValidEmail}
 										autoCapitalize="none"
 										style={tw(
-											'font-medium text-s-md flex-1 p-2 border rounded-tl-md rounded-bl-md h-full'
+											'font-medium text-s-md flex-1 p-2 border border-denison-red border-2 bg-gray rounded-tl-2xl rounded-bl-2xl h-full'
 										)}
 									/>
 									<View
 										style={tw(
-											'bg-gray-300 p-2 border rounded-tr-md rounded-br-md h-full flex flex-col justify-center items-center'
+											'bg-gray-300 p-2 border border-denison-red border-2 rounded-tr-2xl rounded-br-2xl h-full flex flex-col justify-center items-center'
 										)}
 									>
 										<Text style={tw('font-medium text-gray-500 text-s-md')}>

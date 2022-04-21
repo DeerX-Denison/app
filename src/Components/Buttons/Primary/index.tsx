@@ -23,47 +23,47 @@ const Primary: FC<Props & ButtonProps> = ({
 			setButtonStyle(
 				tw(
 					`flex items-center justify-center px-2.5 py-1.5 border border-transparent rounded shadow-sm ${
-						props.disabled ? 'bg-gray-400' : 'bg-indigo-600'
+						props.disabled ? 'bg-gray-400' : 'bg-pink'
 					}`
 				)
 			);
-			setTextStyle(tw('text-white text-xs font-medium'));
+			setTextStyle(tw('text-white text-xs font-semibold'));
 		} else if (size === 'sm') {
 			setButtonStyle(
 				tw(
 					`flex items-center justify-center px-3 py-2 border border-transparent rounded-md shadow-sm ${
-						props.disabled ? 'bg-gray-400' : 'bg-indigo-600'
+						props.disabled ? 'bg-gray-400' : 'bg-pink'
 					}`
 				)
 			);
-			setTextStyle(tw('text-white text-sm font-medium'));
+			setTextStyle(tw('text-white text-sm font-semibold'));
 		} else if (size === 'md') {
 			setButtonStyle(
 				tw(
 					`flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm ${
-						props.disabled ? 'bg-gray-400' : 'bg-indigo-600'
+						props.disabled ? 'bg-gray-400' : 'bg-pink'
 					}`
 				)
 			);
-			setTextStyle(tw('text-white text-sm font-medium'));
+			setTextStyle(tw('text-white text-sm font-semibold'));
 		} else if (size === 'lg') {
 			setButtonStyle(
 				tw(
 					`flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm ${
-						props.disabled ? 'bg-gray-400' : 'bg-indigo-600'
+						props.disabled ? 'bg-gray-400' : 'bg-pink'
 					}`
 				)
 			);
-			setTextStyle(tw('text-white text-base font-medium'));
+			setTextStyle(tw('text-white text-base font-semibold'));
 		} else if (size === 'xl') {
 			setButtonStyle(
 				tw(
 					`flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm ${
-						props.disabled ? 'bg-gray-400' : 'bg-indigo-600'
+						props.disabled ? 'bg-gray-400' : 'bg-pink'
 					}`
 				)
 			);
-			setTextStyle(tw('text-white text-base font-medium'));
+			setTextStyle(tw('text-white text-base font-semibold'));
 		}
 	}, [size, props.disabled]);
 

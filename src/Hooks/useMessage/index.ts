@@ -49,7 +49,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		refs,
 		setRefs,
 		isWithinRef,
-		insideRef
+		insideRef,
 	} = useInputText(setDisableSend);
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
@@ -63,7 +63,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 			const messageRefs: MessageReferenceData[] = refs.map((ref) => ({
 				begin: ref.begin,
 				end: ref.end,
-				id: ref.data.id,
+				data: { id: ref.data.id, thumbnail: ref.data.thumbnail },
 			}));
 			setMessage({
 				id: 'temp-id',
@@ -92,7 +92,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		refs,
 		setRefs,
 		isWithinRef,
-		insideRef
+		insideRef,
 	};
 };
 

@@ -10,7 +10,7 @@ interface Props {
 
 const InputTextContent: FC<Props> = ({ refs, inputText }) => {
 	return (
-		<Text>
+		<Text style={tw('text-black')}>
 			{refs.length > 0
 				? refs.length === 1
 					? refs.map((item, index) => {

@@ -1,16 +1,14 @@
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { DENISON_RED_RGBA } from '@Constants';
 import { RouteProp } from '@react-navigation/native';
 import {
 	createNativeStackNavigator,
 	NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import tw from '@tw';
 import React, { FC } from 'react';
 import { Button, TouchableOpacity } from 'react-native';
 import { SellStackParamList, TabsParamList } from 'types';
+import Plus from '../../static/plus.svg';
 import { Create, Edit, MyListings } from './Stacks';
-
 interface Props {
 	route: RouteProp<TabsParamList, 'Sell'>;
 	navigation: NativeStackNavigationProp<TabsParamList, 'Sell'>;
@@ -32,13 +30,12 @@ const Sell: FC<Props> = () => {
 				options={({ navigation }) => ({
 					headerRight: () => (
 						<TouchableOpacity onPress={() => navigation.navigate('Create')}>
-							<FontAwesomeIcon
-								icon={faPlus}
-								size={24}
-								style={tw('text-indigo-500')}
-							/>
+							<Plus height={24} width={24} />
 						</TouchableOpacity>
 					),
+					headerTitle: 'MY LISTINGS',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
 				})}
 			>
 				{(props) => <MyListings {...props} />}
@@ -48,13 +45,12 @@ const Sell: FC<Props> = () => {
 				options={{
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
-							<FontAwesomeIcon
-								icon={faPlus}
-								size={24}
-								style={tw('text-indigo-500')}
-							/>
+							<Plus height={24} width={24} />
 						</TouchableOpacity>
 					),
+					headerTitle: 'CREATE LISTING',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Create {...props} />}
@@ -70,6 +66,9 @@ const Sell: FC<Props> = () => {
 							}}
 						/>
 					),
+					headerTitle: 'EDIT LISTING',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
 				{(props) => <Edit {...props} />}

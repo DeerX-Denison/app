@@ -1,7 +1,6 @@
 import * as Buttons from '@Components/Buttons';
+import { DENISON_RED_RGBA } from '@Constants';
 import { fn } from '@firebase.config';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useWishlist } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,7 +20,7 @@ import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { WishlistStackParamList } from 'types';
-
+import Trash from '../../../../static/trash.svg';
 interface Props {
 	route: RouteProp<WishlistStackParamList, 'Wishlist'>;
 	navigation: NativeStackNavigationProp<WishlistStackParamList>;
@@ -96,10 +95,19 @@ const Main: FC<Props> = ({ route, navigation }) => {
 													}`
 												)}
 											>
-												<FastImage
-													source={{ uri: wishlistData.thumbnail }}
-													style={tw('w-16 h-16 rounded-lg mx-2')}
-												/>
+												<View
+													style={{
+														shadowColor: DENISON_RED_RGBA,
+														shadowOffset: { width: 4, height: 4 },
+														shadowOpacity: 0.25,
+														shadowRadius: 4,
+													}}
+												>
+													<FastImage
+														source={{ uri: wishlistData.thumbnail }}
+														style={tw('w-16 h-16 rounded-lg mx-2')}
+													/>
+												</View>
 												<View style={tw('flex flex-1 break-words pl-2')}>
 													<Text style={tw('text-lg font-bold')}>
 														{wishlistData.name}
@@ -111,18 +119,14 @@ const Main: FC<Props> = ({ route, navigation }) => {
 								}}
 								renderHiddenItem={({ item: wishlistData }) => (
 									<View
-										style={tw('flex flex-row flex-1 justify-end bg-gray-700')}
+										style={tw('flex flex-row flex-1 justify-end bg-light-pink')}
 									>
 										<View style={tw('flex flex-row w-16')}>
 											<TouchableOpacity
 												style={tw('flex flex-1 justify-center items-center')}
 												onPress={() => deleteHandler(wishlistData.id)}
 											>
-												<FontAwesomeIcon
-													icon={faTrash}
-													size={24}
-													style={tw('text-white')}
-												/>
+												<Trash height={48} width={48} />
 											</TouchableOpacity>
 										</View>
 									</View>
@@ -131,7 +135,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 								disableRightSwipe={true}
 								swipeToOpenPercent={10}
 								contentContainerStyle={tw(
-									'flex flex-col flex-1 my-2 justify-start'
+									'flex flex-col flex-1 my-2 justify-start mx-2'
 								)}
 							/>
 						</>

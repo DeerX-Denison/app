@@ -1,6 +1,6 @@
 import * as Badges from '@Components/Badges';
 import { PRONOUNS } from '@Constants';
-import { faCheck, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -14,6 +14,9 @@ import {
 	View,
 } from 'react-native';
 import { MenuStackParamList, UserPronoun } from 'types';
+import Plus from '../../../../static/plus.svg';
+import XIcon from '../../../../static/x.svg';
+
 interface Props {
 	route: RouteProp<MenuStackParamList, 'EditPronouns'>;
 	navigation: NativeStackNavigationProp<MenuStackParamList>;
@@ -60,13 +63,16 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 			headerRight: () => (
 				<TouchableOpacity
 					onPress={() => {
-						navigation.navigate('EditProfile', { selectedPronouns });
+						navigation.navigate('EditProfile', {
+							selectedPronouns,
+							displayUserProfile: undefined,
+						});
 					}}
 				>
 					<FontAwesomeIcon
 						icon={faCheck}
 						size={24}
-						style={tw('text-indigo-500')}
+						style={tw('text-denison-red')}
 					/>
 				</TouchableOpacity>
 			),
@@ -85,9 +91,11 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 								);
 							}}
 						>
-							<FontAwesomeIcon icon={faTimes} size={16} style={tw('m-1')} />
+							<XIcon style={tw('m-1')} height={16} width={16} />
 						</TouchableOpacity>
-						<Text style={tw('capitalize text-s-md font-medium pr-2')}>
+						<Text
+							style={tw('capitalize text-s-md font-semibold pr-2 text-white')}
+						>
 							{pronoun}
 						</Text>
 					</Badges.Light>
@@ -134,12 +142,12 @@ const EditPronouns: FC<Props> = ({ route, navigation }) => {
 												}}
 											>
 												<Badges.Light>
-													<FontAwesomeIcon
-														icon={faPlus}
-														size={16}
-														style={tw('m-1')}
-													/>
-													<Text style={tw('capitalize text-s-md pr-2')}>
+													<Plus height={16} width={16} style={tw('m-1')} />
+													<Text
+														style={tw(
+															'capitalize text-s-md pr-2 font-semibold text-white'
+														)}
+													>
 														{suggestion}
 													</Text>
 												</Badges.Light>

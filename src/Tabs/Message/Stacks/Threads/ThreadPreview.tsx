@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { UserContext } from '@Contexts';
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -52,13 +53,19 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 			<TouchableWithoutFeedback onPress={viewThreadHandler}>
 				<View
 					style={tw(
-						'flex flex-row items-start m-1 p-2 h-20 bg-gray-50 border-b border-gray-200'
+						'flex flex-row items-start m-1 p-2 h-20 bg-white border-b border-gray-200'
 					)}
 				>
 					<View
 						// width must match height of the parent View. Currently 16
 						// last updated Jan 14, 2022
-						style={tw('h-full w-16 flex justify-center items-center')}
+						style={{
+							...tw('h-full w-16 flex justify-center items-center'),
+							shadowColor: DENISON_RED_RGBA,
+							shadowOffset: { width: 1, height: 2 },
+							shadowOpacity: 0.25,
+							shadowRadius: 4,
+						}}
 					>
 						<FastImage
 							source={{
@@ -67,7 +74,9 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 							style={tw('h-full w-full rounded-full')}
 						/>
 					</View>
-					<View style={tw('h-16 px-1 flex flex-1 flex-col justify-between')}>
+					<View
+						style={tw('h-16 pr-1 pl-3 flex flex-1 flex-col justify-between')}
+					>
 						<View style={tw('flex justify-center h-8')}>
 							<Text
 								style={tw(

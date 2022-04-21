@@ -48,7 +48,7 @@ const renderHeader: RenderMessageHeaderFn = (navigation, threadData) => {
 							}
 						}}
 					>
-						<Text style={tw('text-lg font-bold')}>
+						<Text style={tw('text-lg font-bold text-denison-red')}>
 							{threadData.name[userInfo.uid]}
 						</Text>
 					</TouchableOpacity>

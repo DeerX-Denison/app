@@ -1,7 +1,6 @@
+import { DEFAULT_LATEST_MESSAGE } from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn, localTime } from '@firebase.config';
-import { faCircleArrowUp } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useKeyboard,
 	useKeyboardPadding,
@@ -14,7 +13,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -28,6 +27,8 @@ import 'react-native-get-random-values';
 import Toast from 'react-native-toast-message';
 import { InputTextRef, MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
+import SendActive from '../../../../static/send-active.svg';
+import SendInactive from '../../../../static/send-inactive.svg';
 import InputTextContent from './InputTextContent';
 import ItemSuggestion from './ItemSuggestion';
 import Message from './Message';
@@ -37,8 +38,6 @@ import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
 import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
-import useScrollToEndOnOpen from './useScrollToEndOnOpen';
-
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
@@ -63,8 +62,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
 
-	useScrollToEndOnOpen(scrollViewRef, threadData);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
+	const textInputRef = useRef<TextInput | undefined>();
+	useEffect(() => {
+		textInputRef.current?.focus();
+	}, [textInputRef]);
 
 	const { paddingBottom } = useKeyboardPadding();
 
@@ -84,7 +86,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
 	const { wishlist } = useWishlist(query);
-
 	// previous cursor begin and end index of inputText string
 	const [prevSelector, setPrevSelector] = useState<{
 		end: number;
@@ -102,7 +103,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	const sendHandler = async () => {
 		setInputText('');
-		setRefs([]);
 		setDisableSend(true);
 		if (threadData && userInfo && message) {
 			if (inputText !== '') {
@@ -114,6 +114,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					id: uuidv4(),
 				};
 				setNewMsgs([newMessage]);
+				setRefs([]);
+				scrollViewRef.current?.scrollToEnd({ animated: true });
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -143,7 +145,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		} else {
 			// error handling
 		}
-		scrollViewRef.current?.scrollToEnd({ animated: true });
+		setTimeout(() => {
+			scrollViewRef.current?.scrollToEnd({ animated: true });
+		}, 0);
 	};
 
 	// state for refresh control thread preview scroll view
@@ -159,7 +163,9 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 			{/* MESSAGES AND TEXT INPUT CONTAINER */}
 			<Animated.View style={{ ...tw('flex flex-1'), paddingBottom }}>
 				<ScrollView
-					contentContainerStyle={tw('flex flex-col-reverse flex-1')}
+					contentContainerStyle={tw(
+						'flex flex-col-reverse flex-1 bg-light-pink'
+					)}
 					scrollEnabled={false}
 					nestedScrollEnabled={true}
 					keyboardShouldPersistTaps="always"
@@ -168,10 +174,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					<View style={tw('flex flex-col-reverse')}>
 						<View
 							style={tw(
-								'py-2 flex-row border-t border-b border-gray-400 bg-gray-300'
+								'py-2 flex-row border-t border-b border-gray-400 bg-gray'
 							)}
 						>
 							<TextInput
+								ref={textInputRef as any}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
@@ -214,28 +221,20 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								<InputTextContent refs={refs} inputText={inputText} />
 							</TextInput>
 							<View style={tw('flex-col justify-end')}>
-								<View style={tw('pr-4')}>
+								<View style={tw('pr-4 flex-1')}>
 									{inputText ? (
 										<TouchableOpacity
 											onPress={sendHandler}
 											disabled={disableSend}
 										>
-											<FontAwesomeIcon
-												icon={faCircleArrowUp}
-												size={25}
-												style={tw('bottom-2', 'text-blue-500', 'text-s-sm')}
-											/>
+											<SendActive height={36} width={36} />
 										</TouchableOpacity>
 									) : (
 										<TouchableOpacity
 											onPress={sendHandler}
 											disabled={disableSend}
 										>
-											<FontAwesomeIcon
-												icon={faCircleArrowUp}
-												size={25}
-												style={tw('bottom-2', 'text-gray-500', 'text-s-sm')}
-											/>
+											<SendInactive height={36} width={36} />
 										</TouchableOpacity>
 									)}
 								</View>
@@ -289,8 +288,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							scrollEventThrottle={0}
 							contentContainerStyle={{
 								paddingTop:
-									contentHeight < boxHeight ? boxHeight - contentHeight : 55,
+									contentHeight < boxHeight
+										? boxHeight - contentHeight - 15
+										: 55,
 							}}
+							// contentContainerStyle={tw(
+							// 	'flex justify-center items-center pt-12'
+							// )}
 						>
 							<View
 								onLayout={(event) => {
@@ -300,8 +304,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							>
 								{!parsedMessages && <Text>Loading...</Text>}
 								{parsedMessages && parsedMessages.length === 0 && (
-									<View style={tw('flex flex-1 justify-center items-center')}>
-										<Text style={tw('text-s-lg')}>Send your first message</Text>
+									<View
+										style={tw('flex flex-1 justify-center items-center p-4')}
+									>
+										<Text style={tw('text-s-lg font-semibold')}>
+											{DEFAULT_LATEST_MESSAGE}
+										</Text>
 									</View>
 								)}
 								{parsedMessages &&
@@ -317,6 +325,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									parsedMessages.length > 0 &&
 									parsedMessages.map((message) => (
 										<Message
+											navigation={navigation}
+											route={route}
 											key={message.id}
 											message={message}
 											members={threadData?.members}

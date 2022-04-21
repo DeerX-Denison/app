@@ -2,12 +2,8 @@ import * as Badges from '@Components/Badges';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
-import { fn } from '@firebase.config';
-import { faEdit, faHeart, faMessage } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
-	useDebounce,
 	useIsInWishlist,
 	useIsSeller,
 	useItemDisplayTime,
@@ -17,22 +13,37 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
 import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
+import ChatActive from '../../../../static/chat-outline-active.svg';
+import Edit from '../../../../static/edit.svg';
+import HeartActive from '../../../../static/heart-active.svg';
+import HeartInactive from '../../../../static/heart-outline-active.svg';
 
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Item'>;
 	navigation: NativeStackNavigationProp<ListingsStackParamList, 'Item'>;
+	debouncedAddWishlistToDb: React.MutableRefObject<
+		(args: WishlistDataCL) => Promise<Promise<void>>
+	>;
+	debouncedRemoveWishlistFromDb: React.MutableRefObject<
+		(args: ListingData) => Promise<Promise<void>>
+	>;
 }
 
 /**
  * Item components, when user want to view an item in details
  */
-const Item: FC<Props> = ({ route, navigation }) => {
+const Item: FC<Props> = ({
+	route,
+	navigation,
+	debouncedAddWishlistToDb,
+	debouncedRemoveWishlistFromDb,
+}) => {
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
 	const { listingData, setListingData } = useListingData(listingId);
@@ -70,12 +81,7 @@ const Item: FC<Props> = ({ route, navigation }) => {
 
 	// removed wishlist from db handler
 	// ===========================================================================
-	const removeWishlistFromDb = async (listingData: ListingData) => {
-		await fn.httpsCallable('deleteWishlist')(listingData.id);
-	};
-	const debouncedRemoveWishlistFromDb = useRef(
-		useDebounce(removeWishlistFromDb, 1000)
-	);
+
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
@@ -100,10 +106,6 @@ const Item: FC<Props> = ({ route, navigation }) => {
 
 	// add wishlist to db handler
 	// ===========================================================================
-	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
-		await fn.httpsCallable('createWishlist')(wishlistData);
-	};
-	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {
@@ -181,39 +183,23 @@ const Item: FC<Props> = ({ route, navigation }) => {
 									<View style={tw('mt-2')}>
 										{isInWishlist ? (
 											<TouchableOpacity onPress={removeWishlistHandler}>
-												<FontAwesomeIcon
-													icon={faHeart}
-													size={24}
-													style={tw('text-red-500')}
-												/>
+												<HeartActive height={32} width={32} />
 											</TouchableOpacity>
 										) : (
 											<TouchableOpacity onPress={addWishlistHandler}>
-												<FontAwesomeIcon
-													icon={faHeart}
-													size={24}
-													style={tw('text-indigo-500')}
-												/>
+												<HeartInactive height={32} width={32} />
 											</TouchableOpacity>
 										)}
 									</View>
 									<View style={tw('ml-4 mt-2')}>
 										<TouchableOpacity onPress={messageHandler}>
-											<FontAwesomeIcon
-												icon={faMessage}
-												size={24}
-												style={tw('text-indigo-500')}
-											/>
+											<ChatActive height={36} width={36} />
 										</TouchableOpacity>
 									</View>
 									<View style={tw('ml-4 mt-2')}>
 										{isSeller && (
 											<TouchableOpacity onPress={editHandler}>
-												<FontAwesomeIcon
-													icon={faEdit}
-													size={24}
-													style={tw('text-indigo-500')}
-												/>
+												<Edit height={32} width={32} />
 											</TouchableOpacity>
 										)}
 									</View>
@@ -246,19 +232,21 @@ const Item: FC<Props> = ({ route, navigation }) => {
 							</View>
 							<View style={tw('mx-4 my-2')}>
 								<View style={tw('flex flex-row flex-wrap')}>
-									<Badges.Primary>
+									<Badges.Light>
 										<Text
-											style={tw('capitalize text-s-md font-medium px-2 py-0.5')}
+											style={tw(
+												'capitalize text-s-md font-semibold px-2 py-0.5 text-white'
+											)}
 										>
 											{listingData.condition?.toLocaleLowerCase()}
 										</Text>
-									</Badges.Primary>
+									</Badges.Light>
 									{listingData.category.map((category) => (
 										<View key={category}>
 											<Badges.Light>
 												<Text
 													style={tw(
-														'capitalize text-s-md font-medium px-2 py-0.5'
+														'capitalize text-s-md font-semibold px-2 py-0.5 text-gray'
 													)}
 												>
 													{category}

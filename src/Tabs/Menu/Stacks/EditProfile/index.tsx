@@ -1,4 +1,4 @@
-import { DEFAULT_USER_PHOTO_URL } from '@Constants';
+import { DEFAULT_USER_PHOTO_URL, DENISON_RED_RGBA } from '@Constants';
 import { UserContext } from '@Contexts';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -65,15 +65,28 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 				<>
 					{edittedUserProfile ? (
 						<View style={tw('flex-1')}>
-							<View style={tw('h-36 justify-center items-center border-b')}>
-								<FastImage
-									source={{
-										uri: edittedUserProfile.photoURL
-											? edittedUserProfile.photoURL
-											: DEFAULT_USER_PHOTO_URL,
+							<View
+								style={{
+									...tw('h-36 justify-center items-center'),
+								}}
+							>
+								<View
+									style={{
+										shadowColor: DENISON_RED_RGBA,
+										shadowOffset: { width: 0, height: 2 },
+										shadowOpacity: 0.25,
+										shadowRadius: 4,
 									}}
-									style={tw('h-20 w-20 rounded-full')}
-								/>
+								>
+									<FastImage
+										source={{
+											uri: edittedUserProfile.photoURL
+												? edittedUserProfile.photoURL
+												: DEFAULT_USER_PHOTO_URL,
+										}}
+										style={tw('h-20 w-20 rounded-full')}
+									/>
+								</View>
 								<TouchableOpacity
 									onPress={() => {
 										addImage(
@@ -83,11 +96,14 @@ const EditProfile: FC<Props> = ({ route, navigation }) => {
 										);
 									}}
 								>
-									<Text style={tw('text-s-md font-semibold pt-3 text-red-500')}>
+									<Text
+										style={tw('text-s-md font-semibold pt-3 text-denison-red')}
+									>
 										Upload Profile Photo
 									</Text>
 								</TouchableOpacity>
 							</View>
+							<View style={tw('h-0.5 bg-denison-red mx-4')} />
 							<View style={tw('flex-1 flex-col px-2')}>
 								<View style={tw('flex flex-row py-2')}>
 									<View style={tw('justify-center items-start w-28 pl-2')}>

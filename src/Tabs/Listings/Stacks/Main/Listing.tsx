@@ -1,3 +1,4 @@
+import { DENISON_RED_RGBA } from '@Constants';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useState } from 'react';
@@ -30,6 +31,10 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 					style={{
 						...tw('flex flex-col justify-center items-center'),
 						width: Math.floor(width / 2),
+						shadowColor: DENISON_RED_RGBA,
+						shadowOffset: { width: 4, height: 4 },
+						shadowOpacity: 0.25,
+						shadowRadius: 4,
 					}}
 				>
 					<FastImage
@@ -59,11 +64,9 @@ const Listing: FC<Props> = ({ listingData, onPress }) => {
 					)}
 
 					<View
-						style={tw(
-							'absolute bottom-2 left-2 rounded-lg bg-red-200 px-2 py-1'
-						)}
+						style={tw('absolute bottom-3 left-3 rounded-xl bg-pink px-2 py-1')}
 					>
-						<Text style={tw('text-s-md font-normal')}>
+						<Text style={tw('text-s-md font-semibold text-white')}>
 							${listingData.price}
 						</Text>
 					</View>

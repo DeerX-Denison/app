@@ -37,7 +37,9 @@ const Message: FC<Props> = ({
 	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
-
+	useEffect(() => {
+		console.log(message.contents.map((x) => x.refs));
+	}, [message]);
 	useEffect(() => {
 		if (userInfo && members && members.length > 0) {
 			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);
@@ -92,7 +94,8 @@ const Message: FC<Props> = ({
 												>
 													<TextContent content={content} />
 													{content.contentType.includes('reference') &&
-														'refs' in content && (
+														'refs' in content &&
+														content.refs.length > 0 && (
 															<View
 																style={{
 																	...tw(
@@ -106,9 +109,14 @@ const Message: FC<Props> = ({
 															>
 																{[
 																	...new Set(
-																		content.refs.map((x) => x.data.id)
+																		content.refs.map((x) => {
+																			if ('data' in x && 'id' in x.data)
+																				return x.data.id;
+																			else return undefined;
+																		})
 																	),
 																]
+																	.filter((x) => x !== undefined)
 																	.map(
 																		(uniqueId) =>
 																			content.refs.filter(
@@ -195,7 +203,8 @@ const Message: FC<Props> = ({
 													>
 														<TextContent content={content} />
 														{content.contentType.includes('reference') &&
-															'refs' in content && (
+															'refs' in content &&
+															content.refs.length > 0 && (
 																<View
 																	style={{
 																		...tw(
@@ -209,9 +218,14 @@ const Message: FC<Props> = ({
 																>
 																	{[
 																		...new Set(
-																			content.refs.map((x) => x.data.id)
+																			content.refs.map((x) => {
+																				if ('data' in x && 'id' in x.data)
+																					return x.data.id;
+																				else return undefined;
+																			})
 																		),
 																	]
+																		.filter((x) => x !== undefined)
 																		.map(
 																			(uniqueId) =>
 																				content.refs.filter(

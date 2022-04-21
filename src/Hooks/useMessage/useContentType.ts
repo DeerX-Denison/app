@@ -17,6 +17,8 @@ const useContentType: UseContentTypeFn = (inputText) => {
 			setContentType([
 				...new Set<MessageContentType>([...contentType, 'reference']),
 			]);
+		} else {
+			setContentType(['text']);
 		}
 	}, [inputText]);
 	return { contentType };

@@ -16,10 +16,9 @@
 		"format": "yarn prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
 		"clean:ios": "cd ios && bundle exec fastlane clean",
 		"build:ios": "./bin/setup_stage.sh && cd ios && bundle exec fastlane build",
-		"patch:ios": "./bin/setup_stage.sh && cd ios && bundle exec fastlane patch",
-		"minor:ios": "./bin/setup_stage.sh && cd ios && bundle exec fastlane minor",
-		"major:ios": "./bin/setup_stage.sh && cd ios && bundle exec fastlane major",
-		"release:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane release"
+		"patch:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane patch",
+		"minor:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane minor",
+		"major:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane major"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.1.1",

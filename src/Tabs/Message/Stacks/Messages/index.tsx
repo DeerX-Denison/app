@@ -114,8 +114,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					id: uuidv4(),
 				};
 				setNewMsgs([newMessage]);
+				setTimeout(() => {
+					scrollViewRef.current?.scrollToEnd({ animated: true });
+				}, 0);
 				setRefs([]);
-				scrollViewRef.current?.scrollToEnd({ animated: true });
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;

@@ -31,7 +31,13 @@ platform :ios do
 		)
 		match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
 		increment_build_number(xcodeproj: 'app.xcodeproj')
-		build_app(workspace: 'app.xcworkspace', scheme: 'app')
+		build_app(
+			workspace: 'app.xcworkspace',
+			scheme: 'app',
+			export_options: {
+				manageAppVersionAndBuildNumber: false,
+			},
+		)
 		upload_to_testflight(skip_waiting_for_build_processing: true)
 	end
 
@@ -43,7 +49,13 @@ platform :ios do
 		)
 		match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
 		increment_build_number(xcodeproj: 'app.xcodeproj')
-		build_app(workspace: 'app.xcworkspace', scheme: 'app')
+		build_app(
+			workspace: 'app.xcworkspace',
+			scheme: 'app',
+			export_options: {
+				manageAppVersionAndBuildNumber: false,
+			},
+		)
 		upload_to_testflight
 	end
 
@@ -56,8 +68,14 @@ platform :ios do
 		match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
 		increment_build_number(build_number: '1', xcodeproj: 'app.xcodeproj')
 		increment_version_number(bump_type: 'patch')
-		build_app(workspace: 'app.xcworkspace', scheme: 'app')
-		upload_to_testflight
+		build_app(
+			workspace: 'app.xcworkspace',
+			scheme: 'app',
+			export_options: {
+				manageAppVersionAndBuildNumber: false,
+			},
+		)
+		upload_to_testflight(build_number: '1')
 	end
 
 	lane :minor do
@@ -69,8 +87,14 @@ platform :ios do
 		match(type: 'appstore', git_basic_authorization: ENV['GIT_AUTH_TOKEN'])
 		increment_build_number(build_number: '1', xcodeproj: 'app.xcodeproj')
 		increment_version_number(bump_type: 'minor')
-		build_app(workspace: 'app.xcworkspace', scheme: 'app')
-		upload_to_testflight
+		build_app(
+			workspace: 'app.xcworkspace',
+			scheme: 'app',
+			export_options: {
+				manageAppVersionAndBuildNumber: false,
+			},
+		)
+		upload_to_testflight(build_number: '1')
 	end
 
 	lane :major do

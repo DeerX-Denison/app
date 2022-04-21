@@ -19,7 +19,7 @@ export type OnChangeTextHandler = (
 		end: number;
 		start: number;
 	},
-	withinWhichRef: InputTextRef[],
+	withinWhichRef: InputTextRef[]
 ) => void;
 
 const onChangeTextHandler: OnChangeTextHandler = (
@@ -109,7 +109,10 @@ const onChangeTextHandler: OnChangeTextHandler = (
 					}
 				}
 				for (let i = 0; i < mutableRefs.length; i++) {
-					if (mutableRefs[i].begin >= textSelection.start - (text.length - inputText.length)) {
+					if (
+						mutableRefs[i].begin >=
+						textSelection.start - (text.length - inputText.length)
+					) {
 						mutableRefs[i].begin += text.length - inputText.length;
 						mutableRefs[i].end += text.length - inputText.length;
 					}

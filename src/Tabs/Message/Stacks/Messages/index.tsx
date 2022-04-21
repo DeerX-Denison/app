@@ -13,7 +13,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext, useRef, useState } from 'react';
+import React, { FC, useContext, useEffect, useRef, useState } from 'react';
 import {
 	Animated,
 	RefreshControl,
@@ -38,7 +38,6 @@ import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
 import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
-import useScrollToEndOnOpen from './useScrollToEndOnOpen';
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
@@ -63,8 +62,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	// height of all the dynamic content of all messages
 	const [contentHeight, setContentHeight] = useState(0);
 
-	useScrollToEndOnOpen(scrollViewRef, threadData);
 	useScrollToEndOnKeyboard(didShow, scrollViewRef);
+	const textInputRef = useRef<TextInput | undefined>();
+	useEffect(() => {
+		textInputRef.current?.focus();
+	}, [textInputRef]);
 
 	const { paddingBottom } = useKeyboardPadding();
 
@@ -113,6 +115,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 				};
 				setNewMsgs([newMessage]);
 				setRefs([]);
+				scrollViewRef.current?.scrollToEnd({ animated: true });
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const { messages, ...threadPreviewData } = threadData;
@@ -175,6 +178,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							)}
 						>
 							<TextInput
+								ref={textInputRef as any}
 								placeholder="Enter a message"
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}

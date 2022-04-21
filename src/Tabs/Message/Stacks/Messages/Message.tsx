@@ -37,9 +37,7 @@ const Message: FC<Props> = ({
 	const [nonSelfIcon, setNonSelfIcon] = useState<string | undefined>();
 	const { curTime } = useCurrentTime();
 	const { displayTime } = useMessageDisplayTime(message.time.toDate(), curTime);
-	useEffect(() => {
-		console.log(message.contents.map((x) => x.refs));
-	}, [message]);
+
 	useEffect(() => {
 		if (userInfo && members && members.length > 0) {
 			const nonSelf = members.filter((member) => member.uid !== userInfo.uid);

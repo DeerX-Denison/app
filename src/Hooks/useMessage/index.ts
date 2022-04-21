@@ -30,6 +30,7 @@ export type UseMessageFn = (
 	refs: InputTextRef[];
 	setRefs: React.Dispatch<React.SetStateAction<InputTextRef[]>>;
 	isWithinRef: WithinRef;
+	insideRef: WithinRef;
 };
 
 /**
@@ -48,6 +49,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		refs,
 		setRefs,
 		isWithinRef,
+		insideRef,
 	} = useInputText(setDisableSend);
 	const { query, setQuery } = useSuggestionQuery(inputText, textSelection);
 	const { contentType } = useContentType(inputText);
@@ -90,6 +92,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 		refs,
 		setRefs,
 		isWithinRef,
+		insideRef,
 	};
 };
 

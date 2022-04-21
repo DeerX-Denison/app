@@ -1,7 +1,9 @@
 import { DENISON_RED_RGBA } from '@Constants';
+import { fn } from '@firebase.config';
+import { useDebounce } from '@Hooks';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { FC } from 'react';
-import { WishlistStackParamList } from 'types';
+import React, { FC, useRef } from 'react';
+import { ListingData, WishlistDataCL, WishlistStackParamList } from 'types';
 import { Item, Profile } from '../Listings/Stacks';
 import { Messages } from '../Message/Stacks';
 import { Main } from './Stacks';
@@ -12,6 +14,16 @@ interface Props {}
  */
 const Wishlist: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<WishlistStackParamList>();
+	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
+		await fn.httpsCallable('createWishlist')(wishlistData);
+	};
+	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
+	const removeWishlistFromDb = async (listingData: ListingData) => {
+		await fn.httpsCallable('deleteWishlist')(listingData.id);
+	};
+	const debouncedRemoveWishlistFromDb = useRef(
+		useDebounce(removeWishlistFromDb, 1000)
+	);
 	return (
 		<Stack.Navigator initialRouteName="Wishlist">
 			<Stack.Screen
@@ -33,7 +45,13 @@ const Wishlist: FC<Props> = () => {
 					headerTintColor: DENISON_RED_RGBA,
 				}}
 			>
-				{(props) => <Item {...props} />}
+				{(props) => (
+					<Item
+						debouncedAddWishlistToDb={debouncedAddWishlistToDb}
+						debouncedRemoveWishlistFromDb={debouncedRemoveWishlistFromDb}
+						{...props}
+					/>
+				)}
 			</Stack.Screen>
 			<Stack.Screen
 				name="Profile"

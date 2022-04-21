@@ -79,6 +79,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		refs,
 		setRefs,
 		isWithinRef,
+		insideRef,
 	} = useMessage(threadData, setDisableSend);
 
 	const { latestSeenMsgId } = useLatestSeenMsgId(threadData);
@@ -185,6 +186,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										setRefs,
 										keyPressed,
 										isWithinRef,
+										insideRef,
 										extendingSelection,
 										inputText,
 										setInputText,

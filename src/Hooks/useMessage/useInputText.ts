@@ -13,6 +13,7 @@ export type UseInputText = (
 	textSelection: TextSelection;
 	setTextSelection: React.Dispatch<React.SetStateAction<TextSelection>>;
 	isWithinRef: WithinRef;
+	insideRef: WithinRef;
 };
 
 /**
@@ -34,6 +35,11 @@ const useInputText: UseInputText = (setDisableSend) => {
 		whichRef: undefined,
 	});
 
+	const [insideRef, setInsideRef] = useState<WithinRef>({
+		isWithinRef: false,
+		whichRef: undefined,
+	});
+
 	const [previousIndex, setPreviousIndex] = useState<number>(0);
 	// check if input text is not an empty string
 	useEffect(() => {
@@ -47,7 +53,16 @@ const useInputText: UseInputText = (setDisableSend) => {
 	// check if the user is typing something or deleting something
 	useEffect(() => {
 		let nearPossibleRef = false;
+		let continueFromRef = false;
 		for (let i = textSelection?.start - 1; i >= 0; i--) {
+			for (let j = 0; j < refs.length; j++) {
+				if (i >= refs[j].begin + 1 && i <= refs[j].end) {
+					continueFromRef = true;
+				}
+			}
+			if (continueFromRef) {
+				break;
+			}
 			if (inputText.charAt(i) === ' ') {
 				break;
 			}
@@ -89,6 +104,8 @@ const useInputText: UseInputText = (setDisableSend) => {
 	}, [inputText, textSelection]);
 
 	useEffect(() => {
+		// Check if the selection is within a ref. This is used for
+		// checking when we are about to delete a ref
 		let exist = false;
 		let ref = undefined;
 		for (let i = 0; i < refs.length; i++) {
@@ -102,6 +119,22 @@ const useInputText: UseInputText = (setDisableSend) => {
 			}
 		}
 		setIsWithinRef({ isWithinRef: exist, whichRef: ref });
+
+		// Check if the selection is inside a ref. This is used for
+		// editing within a ref
+		exist = false;
+		ref = undefined;
+		for (let i = 0; i < refs.length; i++) {
+			if (
+				textSelection.start >= refs[i].begin + 1 &&
+				textSelection.start <= refs[i].end
+			) {
+				exist = true;
+				ref = refs[i] as InputTextRef;
+				break;
+			}
+		}
+		setInsideRef({ isWithinRef: exist, whichRef: ref });
 	}, [textSelection]);
 
 	return {
@@ -114,6 +147,7 @@ const useInputText: UseInputText = (setDisableSend) => {
 		textSelection,
 		setTextSelection,
 		isWithinRef,
+		insideRef,
 	};
 };
 

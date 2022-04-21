@@ -15,6 +15,10 @@ export type OnChangeTextHandler = (
 		end: number;
 		start: number;
 	},
+	textSelection: {
+		end: number;
+		start: number;
+	},
 	withinWhichRef: InputTextRef[],
 ) => void;
 
@@ -29,7 +33,8 @@ const onChangeTextHandler: OnChangeTextHandler = (
 	inputText,
 	setInputText,
 	prevSelector,
-	withinWhichRef,
+	textSelection,
+	withinWhichRef
 ) => {
 	const mutableRefs = refs.map((x) => x);
 	// check if prevSelector is within ref. Prevent deleting extra space from a ref
@@ -104,7 +109,7 @@ const onChangeTextHandler: OnChangeTextHandler = (
 					}
 				}
 				for (let i = 0; i < mutableRefs.length; i++) {
-					if (mutableRefs[i].begin >= prevSelector.start - 1) {
+					if (mutableRefs[i].begin >= textSelection.start - (text.length - inputText.length)) {
 						mutableRefs[i].begin += text.length - inputText.length;
 						mutableRefs[i].end += text.length - inputText.length;
 					}

@@ -195,6 +195,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										inputText,
 										setInputText,
 										prevSelector,
+										textSelection,
 										withinWhichRef
 									)
 								}

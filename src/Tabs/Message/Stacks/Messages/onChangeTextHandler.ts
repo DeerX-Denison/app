@@ -7,6 +7,7 @@ export type OnChangeTextHandler = (
 	setRefs: React.Dispatch<React.SetStateAction<InputTextRef[]>>,
 	keyPressed: string,
 	isWithinRef: WithinRef,
+	insideRef: WithinRef,
 	extendingSelection: boolean,
 	inputText: string,
 	setInputText: React.Dispatch<React.SetStateAction<string>>,
@@ -14,7 +15,7 @@ export type OnChangeTextHandler = (
 		end: number;
 		start: number;
 	},
-	withinWhichRef: InputTextRef[]
+	withinWhichRef: InputTextRef[],
 ) => void;
 
 const onChangeTextHandler: OnChangeTextHandler = (
@@ -23,20 +24,33 @@ const onChangeTextHandler: OnChangeTextHandler = (
 	setRefs,
 	keyPressed,
 	isWithinRef,
+	insideRef,
 	extendingSelection,
 	inputText,
 	setInputText,
 	prevSelector,
-	withinWhichRef
+	withinWhichRef,
 ) => {
 	const mutableRefs = refs.map((x) => x);
+	// check if prevSelector is within ref. Prevent deleting extra space from a ref
+	let prevWithinRef = false;
+	for (let i = 0; i < refs.length; i++) {
+		if (
+			prevSelector.start >= refs[i].begin + 1 &&
+			prevSelector.start <= refs[i].end + 1
+		) {
+			prevWithinRef = true;
+			break;
+		}
+	}
+
 	// check if deleteing a refs, stick begin of ref to end of ref
 	if (
 		keyPressed === 'Backspace' &&
 		isWithinRef &&
 		isWithinRef.isWithinRef &&
 		isWithinRef.whichRef &&
-		!extendingSelection
+		!extendingSelection && prevWithinRef
 	) {
 		const start = isWithinRef.whichRef.begin;
 		const end = isWithinRef.whichRef.end + 1;
@@ -82,10 +96,10 @@ const onChangeTextHandler: OnChangeTextHandler = (
 			}
 		} else if (text.length > inputText.length) {
 			if (!extendingSelection) {
-				if (isWithinRef.isWithinRef && isWithinRef.whichRef){
-					const toBeDeleted = refs.indexOf(isWithinRef.whichRef)
-					if (toBeDeleted > -1){
-						mutableRefs.splice(toBeDeleted, 1)
+				if (insideRef.isWithinRef && insideRef.whichRef) {
+					const toBeDeleted = refs.indexOf(insideRef.whichRef);
+					if (toBeDeleted > -1) {
+						mutableRefs.splice(toBeDeleted, 1);
 					}
 				}
 				for (let i = 0; i < mutableRefs.length; i++) {

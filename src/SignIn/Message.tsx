@@ -35,6 +35,9 @@ const Message: FC<Props> = ({ setEmailSent }) => {
 						Sign In Email Sent
 					</Text>
 				</View>
+				<Text style={tw('text-s-md px-8 py-1 font-bold text-denison-red')}>
+					Please Open Sign In Email On This Device
+				</Text>
 				<Text style={tw('text-s-md px-8 py-1')}>
 					If you have not received your email
 				</Text>

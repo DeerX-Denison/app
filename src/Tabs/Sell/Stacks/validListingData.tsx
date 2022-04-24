@@ -4,6 +4,7 @@ const validListingData: (listingData: ListingData) => boolean = (
 	listingData
 ) => {
 	if (listingData.images.length === 0) return false;
+	if (listingData.images.length > 5) return false;
 
 	if (listingData.name === '') return false;
 	if (listingData.name.length > 50) return false;

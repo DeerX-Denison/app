@@ -114,41 +114,44 @@ const Create: FC<Props> = ({ navigation }) => {
 							>
 								{listingData.images.length > 0 ? (
 									// if images.length > 0, render carousel
-									<>
+									<View>
 										<Carousel
 											listingData={listingData}
 											setListingData={setListingData}
 											editMode={true}
 											listingErrors={listingErrors}
 										/>
-									</>
+										{imageError !== '' && (
+											<Text style={tw('text-red-400 text-s-md p-2 mx-4')}>
+												{imageError}
+											</Text>
+										)}
+									</View>
 								) : (
 									// else render add button and error if there is error
-									<>
-										<View
+									<View
+										style={tw(
+											'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
+										)}
+									>
+										<TouchableOpacity
+											onPress={() =>
+												addImage(listingErrors, listingData, setListingData)
+											}
 											style={tw(
-												'h-20 mx-4 my-2 border rounded-lg flex flex-col justify-center items-center'
+												'flex flex-col flex-1 w-full justify-center items-center'
 											)}
 										>
-											<TouchableOpacity
-												onPress={() =>
-													addImage(listingErrors, listingData, setListingData)
-												}
-												style={tw(
-													'flex flex-col flex-1 w-full justify-center items-center'
-												)}
-											>
-												<Text style={tw('text-s-xl font-semibold')}>
-													Add Photos
+											<Text style={tw('text-s-xl font-semibold')}>
+												Add Photos
+											</Text>
+											{imageError !== '' && (
+												<Text style={tw('text-red-400 text-s-md p-2')}>
+													{imageError}
 												</Text>
-												{imageError !== '' && (
-													<Text style={tw('text-red-400 text-s-md p-2')}>
-														{imageError}
-													</Text>
-												)}
-											</TouchableOpacity>
-										</View>
-									</>
+											)}
+										</TouchableOpacity>
+									</View>
 								)}
 
 								<View style={tw('mx-4 my-2')}>

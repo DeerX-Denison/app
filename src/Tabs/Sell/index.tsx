@@ -1,11 +1,14 @@
 import { DENISON_RED_RGBA } from '@Constants';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { RouteProp } from '@react-navigation/native';
 import {
 	createNativeStackNavigator,
 	NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
+import tw from '@tw';
 import React, { FC } from 'react';
-import { Button, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { SellStackParamList, TabsParamList } from 'types';
 import Plus from '../../static/plus.svg';
 import { Create, Edit, MyListings } from './Stacks';
@@ -30,7 +33,7 @@ const Sell: FC<Props> = () => {
 				options={({ navigation }) => ({
 					headerRight: () => (
 						<TouchableOpacity onPress={() => navigation.navigate('Create')}>
-							<Plus height={24} width={24} />
+							<Plus height={28} width={28} />
 						</TouchableOpacity>
 					),
 					headerTitle: 'MY LISTINGS',
@@ -45,7 +48,11 @@ const Sell: FC<Props> = () => {
 				options={{
 					headerRight: () => (
 						<TouchableOpacity onPress={() => null}>
-							<Plus height={24} width={24} />
+							<FontAwesomeIcon
+								icon={faCheck}
+								size={24}
+								style={tw('text-denison-red')}
+							/>
 						</TouchableOpacity>
 					),
 					headerTitle: 'CREATE LISTING',
@@ -59,12 +66,13 @@ const Sell: FC<Props> = () => {
 				name="Edit"
 				options={{
 					headerRight: () => (
-						<Button
-							title="save"
-							onPress={() => {
-								// do nothing
-							}}
-						/>
+						<TouchableOpacity onPress={() => null}>
+							<FontAwesomeIcon
+								icon={faCheck}
+								size={24}
+								style={tw('text-denison-red')}
+							/>
+						</TouchableOpacity>
 					),
 					headerTitle: 'EDIT LISTING',
 					headerBackTitle: '',

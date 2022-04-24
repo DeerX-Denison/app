@@ -55,6 +55,8 @@ const useListingError: UseListingErrorFn = (listingData) => {
 		if (listingData) {
 			if (listingData.images.length <= 0 && hasEditImage) {
 				setImageError('Please add an image');
+			} else if (listingData.images.length > 5 && hasEditImage) {
+				setImageError('You can add maximum 5 images');
 			} else {
 				setImageError('');
 			}
@@ -71,8 +73,8 @@ const useListingError: UseListingErrorFn = (listingData) => {
 				setPriceError('Please enter valid price');
 			} else if (!isFinite(parseFloat(listingData.price)) && hasEditPrice) {
 				setPriceError('Please enter valid price');
-			} else if (listingData.price.length > 7 && hasEditPrice) {
-				setPriceError('Price exceed 7 characters');
+			} else if (listingData.price.length > 5 && hasEditPrice) {
+				setPriceError('Price exceed 5 characters');
 			} else {
 				setPriceError('');
 			}

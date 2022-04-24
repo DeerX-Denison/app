@@ -35,6 +35,7 @@ const useNewListingData = () => {
 				status: 'saved',
 			});
 	}, [userInfo]);
+
 	return { listingData, setListingData };
 };
 

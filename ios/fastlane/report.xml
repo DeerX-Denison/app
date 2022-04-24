@@ -5,37 +5,34 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000313">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000246">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: app_store_connect_api_key" time="0.00222">
+      <testcase classname="fastlane.lanes" name="1: app_store_connect_api_key" time="0.003945">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: match" time="1.844438">
+      <testcase classname="fastlane.lanes" name="2: match" time="1.80744">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: increment_build_number" time="0.59417">
+      <testcase classname="fastlane.lanes" name="3: increment_build_number" time="0.847592">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: increment_version_number" time="0.388223">
+      <testcase classname="fastlane.lanes" name="4: build_app" time="334.219618">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: build_app" time="243.282138">
+      <testcase classname="fastlane.lanes" name="5: upload_to_testflight" time="44.302553">
         
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="6: upload_to_testflight" time="78.551198">
+          <failure message="/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/actions/actions_helper.rb:67:in `execute_action'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:255:in `block in execute_action'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:229:in `chdir'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:229:in `execute_action'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:59:in `block (2 levels) in parsing_binding'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/lane_manager.rb:47:in `cruise_lane'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/commands_generator.rb:109:in `block (2 levels) in run'&#10;/Library/Ruby/Gems/2.6.0/gems/commander-4.6.0/lib/commander/command.rb:187:in `call'&#10;/Library/Ruby/Gems/2.6.0/gems/commander-4.6.0/lib/commander/command.rb:157:in `run'&#10;/Library/Ruby/Gems/2.6.0/gems/commander-4.6.0/lib/commander/runner.rb:444:in `run_active_command'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:124:in `run!'&#10;/Library/Ruby/Gems/2.6.0/gems/commander-4.6.0/lib/commander/delegates.rb:18:in `run!'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/commands_generator.rb:353:in `run'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/fastlane/lib/fastlane/cli_tools_distributor.rb:122:in `take_off'&#10;/Library/Ruby/Gems/2.6.0/gems/fastlane-2.204.2/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:23:in `load'&#10;/usr/local/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli/exec.rb:74:in `load'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli/exec.rb:74:in `kernel_load'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli/exec.rb:28:in `run'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli.rb:463:in `exec'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/vendor/thor/lib/thor/command.rb:27:in `run'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/vendor/thor/lib/thor/invocation.rb:126:in `invoke_command'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/vendor/thor/lib/thor.rb:387:in `dispatch'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli.rb:27:in `dispatch'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/vendor/thor/lib/thor/base.rb:466:in `start'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/cli.rb:18:in `start'&#10;/Library/Ruby/Gems/2.6.0/gems/bundler-1.17.2/exe/bundle:30:in `block in &lt;top (required)&gt;'&#10;/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0/bundler/friendly_errors.rb:124:in `with_friendly_errors'&#10;/Library/Ruby/Gems/2.6.0/gems/bundler-1.17.2/exe/bundle:22:in `&lt;top (required)&gt;'&#10;/usr/bin/bundle:23:in `load'&#10;/usr/bin/bundle:23:in `&lt;main&gt;'&#10;&#10;Error uploading ipa file: &#10; [Transporter Error Output]: ERROR ITMS-90186: Invalid Pre-Release Train. The train version '1.0.2' is closed for new build submissions&#10;[Transporter Error Output]: ERROR ITMS-90062: This bundle is invalid. The value for key CFBundleShortVersionString [1.0.2] in the Info.plist file must contain a higher version than that of the previously approved version [1.0.2]. Please find more information about CFBundleShortVersionString at https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring&#10;[Transporter Error Output]: Return status of iTunes Transporter was 1: ERROR ITMS-90186: Invalid Pre-Release Train. The train version '1.0.2' is closed for new build submissions\nERROR ITMS-90062: This bundle is invalid. The value for key CFBundleShortVersionString [1.0.2] in the Info.plist file must contain a higher version than that of the previously approved version [1.0.2]. Please find more information about CFBundleShortVersionString at https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring&#10;[Transporter Error Output]: The call to the iTMSTransporter completed with a non-zero exit status: 1. This indicates a failure." />
         
       </testcase>
     

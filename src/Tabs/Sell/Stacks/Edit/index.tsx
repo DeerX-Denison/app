@@ -4,6 +4,7 @@ import * as Inputs from '@Components/Inputs';
 import {
 	CONDITIONS,
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
+	PINK_RGBA,
 } from '@Constants';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -94,6 +95,12 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		setHasEditDesc,
 	} = listingErrors;
 
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		setUpdating(true);
+	// 		setDeleting(false);
+	// 	}, 1000);
+	// }, []);
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category
@@ -106,9 +113,8 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				{listingData ? (
 					// Listing data is fetched, render form with the data as placeholder
-
 					<KeyboardAwareScrollView
-						contentContainerStyle={tw('flex flex-col')}
+						contentContainerStyle={tw('flex flex-col flex-1')}
 						viewIsInsideTabBar={true}
 						keyboardShouldPersistTaps={'handled'}
 						extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
@@ -117,53 +123,45 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 					>
 						{updating && !deleting && !hasEditImage && progress === 0 && (
 							// user just clicked save button, updating listingData in db
-							<>
-								<View
-									testID="updating"
-									style={{
-										...tw('flex flex-col flex-1 justify-center items-center'),
-									}}
-								>
-									<Bar width={200} indeterminate={true} />
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										Updating your items...
-									</Text>
-								</View>
-							</>
+							<View
+								testID="updating"
+								style={tw('flex flex-col flex-1 justify-center items-center')}
+							>
+								<Bar width={200} indeterminate={true} color={PINK_RGBA} />
+								<Text style={tw('text-s-md font-semibold p-4')}>
+									Updating your items...
+								</Text>
+							</View>
 						)}
 						{!updating && deleting && progress === 0 && (
 							// user clicked delete button, deleting listingData in db
-							<>
-								<View
-									testID="deleting"
-									style={{
-										...tw('flex flex-col flex-1 justify-center items-center'),
-									}}
-								>
-									<Bar width={200} indeterminate={true} />
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										Deleting your items...
-									</Text>
-								</View>
-							</>
+							<View
+								testID="deleting"
+								style={{
+									...tw('flex flex-col flex-1 justify-center items-center'),
+								}}
+							>
+								<Bar width={200} indeterminate={true} color={PINK_RGBA} />
+								<Text style={tw('text-s-md font-semibold p-4')}>
+									Deleting your items...
+								</Text>
+							</View>
 						)}
 						{updating && !deleting && progress !== 0 && (
 							// user is uploading images
-							<>
-								<View
-									testID="uploading"
-									style={{
-										...tw('flex flex-col flex-1 justify-center items-center'),
-									}}
-								>
-									<Bar width={200} progress={progress} />
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										{progress < 1
-											? 'Uploading your beautiful images...'
-											: 'Saving your items...'}
-									</Text>
-								</View>
-							</>
+							<View
+								testID="uploading"
+								style={{
+									...tw('flex flex-col flex-1 justify-center items-center'),
+								}}
+							>
+								<Bar width={200} progress={progress} color={PINK_RGBA} />
+								<Text style={tw('text-s-md font-semibold p-4')}>
+									{progress < 1
+										? 'Uploading your beautiful images...'
+										: 'Saving your items...'}
+								</Text>
+							</View>
 						)}
 						{!updating && !deleting && progress === 0 && (
 							// user is editting, render form with prefilled data

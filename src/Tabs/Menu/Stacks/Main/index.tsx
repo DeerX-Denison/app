@@ -1,5 +1,5 @@
 import * as Buttons from '@Components/Buttons';
-import { DENISON_RED_RGBA } from '@Constants';
+import { DENISON_RED_RGBA, GRAY_RGBA, PINK_RGBA } from '@Constants';
 import { JustSignOut, UserContext } from '@Contexts';
 import { auth } from '@firebase.config';
 import { RouteProp } from '@react-navigation/native';
@@ -9,6 +9,7 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import { Linking, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import { MenuStackParamList, UserProfile } from 'types';
 interface Props {
 	route: RouteProp<MenuStackParamList, 'MainMenu'>;
@@ -54,27 +55,84 @@ const Main: FC<Props> = ({ route, navigation }) => {
 							shadowRadius: 4,
 						}}
 					>
-						<FastImage
-							source={{
-								uri: displayUserProfile?.photoURL
-									? displayUserProfile.photoURL
-									: undefined,
-							}}
-							style={tw('h-20 w-20 rounded-full my-4 mr-4')}
-						/>
+						{displayUserProfile?.photoURL ? (
+							<FastImage
+								source={{
+									uri: displayUserProfile.photoURL,
+								}}
+								style={tw('h-20 w-20 rounded-full my-4 mr-4')}
+							/>
+						) : (
+							<SkeletonPlaceholder
+								speed={1000}
+								backgroundColor={PINK_RGBA}
+								highlightColor={GRAY_RGBA}
+							>
+								<SkeletonPlaceholder.Item
+									width={80}
+									height={80}
+									marginVertical={16}
+									marginRight={16}
+									borderRadius={100}
+								/>
+							</SkeletonPlaceholder>
+						)}
 					</View>
 					<View style={tw('flex flex-col flex-1 justify-evenly')}>
 						<View style={tw('flex flex-row items-end')}>
-							<Text style={tw('text-s-lg font-bold')}>
-								{displayUserProfile?.displayName}
-							</Text>
-							<Text style={tw('text-s-md font-light pl-2')}>
-								{displayUserProfile?.pronouns?.join('/').toLowerCase()}
-							</Text>
+							{displayUserProfile?.displayName ? (
+								<Text style={tw('text-s-lg font-bold')}>
+									{displayUserProfile.displayName}
+								</Text>
+							) : (
+								<SkeletonPlaceholder
+									speed={1000}
+									backgroundColor={PINK_RGBA}
+									highlightColor={GRAY_RGBA}
+								>
+									<SkeletonPlaceholder.Item
+										width={120}
+										height={24}
+										borderRadius={12}
+									/>
+								</SkeletonPlaceholder>
+							)}
+							{displayUserProfile ? (
+								<Text style={tw('text-s-md font-light pl-2')}>
+									{displayUserProfile.pronouns?.join('/').toLowerCase()}
+								</Text>
+							) : (
+								<SkeletonPlaceholder
+									backgroundColor={PINK_RGBA}
+									highlightColor={GRAY_RGBA}
+									speed={1000}
+								>
+									<SkeletonPlaceholder.Item
+										width={60}
+										height={24}
+										marginLeft={8}
+										borderRadius={12}
+									/>
+								</SkeletonPlaceholder>
+							)}
 						</View>
-						<Text style={tw('text-s-md font-semibold')}>
-							{displayUserProfile?.email}
-						</Text>
+						{displayUserProfile?.email ? (
+							<Text style={tw('text-s-md font-semibold')}>
+								{displayUserProfile?.email}
+							</Text>
+						) : (
+							<SkeletonPlaceholder
+								backgroundColor={PINK_RGBA}
+								highlightColor={GRAY_RGBA}
+								speed={1000}
+							>
+								<SkeletonPlaceholder.Item
+									width={240}
+									height={24}
+									borderRadius={12}
+								/>
+							</SkeletonPlaceholder>
+						)}
 					</View>
 				</View>
 				{displayUserProfile?.bio && (

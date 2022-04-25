@@ -1,5 +1,7 @@
 import { ListingCategory, ListingCondition, UserPronoun } from 'types';
 export const DENISON_RED_RGBA = 'rgba(199, 32, 47, 1)';
+export const PINK_RGBA = 'rgba(241, 141, 158, 1)';
+export const GRAY_RGBA = 'rgba(245, 245, 249, 1)';
 export const LISTING_PER_PAGE = 20;
 export const TIME_TO_RESEND_SIGNIN_EMAIL = 30;
 export const TIME_TO_RECREATE_USER = 3000; // ms

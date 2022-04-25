@@ -6,6 +6,7 @@ import { UserProfile } from 'types';
 
 export type UseProfile = (uid: string | undefined) => {
 	profile: UserProfile | undefined;
+	setProfile: React.Dispatch<React.SetStateAction<UserProfile | undefined>>;
 };
 
 const useProfile: UseProfile = (uid) => {
@@ -35,7 +36,7 @@ const useProfile: UseProfile = (uid) => {
 		};
 	}, [uid]);
 
-	return { profile };
+	return { profile, setProfile };
 };
 
 export default useProfile;

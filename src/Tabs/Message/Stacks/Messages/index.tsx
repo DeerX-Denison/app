@@ -279,11 +279,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 							showsVerticalScrollIndicator={false}
 							showsHorizontalScrollIndicator={false}
 							ref={scrollViewRef as any}
-							onScroll={(e) => {
+							onMomentumScrollEnd={(e) => {
 								// if user scroll to bottom
 								if (
-									Math.ceil(e.nativeEvent.contentOffset.y) ===
-									Math.ceil(e.nativeEvent.contentSize.height - boxHeight)
+									Math.abs(
+										e.nativeEvent.contentOffset.y -
+											(e.nativeEvent.contentSize.height - boxHeight)
+									) < 30
 								) {
 									readLatestMessage(threadData, userInfo);
 								}
@@ -295,9 +297,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										? boxHeight - contentHeight - 15
 										: 55,
 							}}
-							// contentContainerStyle={tw(
-							// 	'flex justify-center items-center pt-12'
-							// )}
 						>
 							<View
 								onLayout={(event) => {

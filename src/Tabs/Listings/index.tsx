@@ -1,12 +1,13 @@
 import { DENISON_RED_RGBA } from '@Constants';
-import { fn } from '@firebase.config';
 import { useDebounce } from '@Hooks';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { FC, useRef } from 'react';
 import { Button } from 'react-native';
-import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
+import { ListingsStackParamList } from 'types';
 import { Messages } from '../Message/Stacks';
 import { Edit } from '../Sell/Stacks';
+import addWishlistToDb from './addWishlistToDb';
+import removeWishlistFromDb from './removeWishlistFromDb';
 import { Item, Listings as ListingsScreen, Profile } from './Stacks';
 interface Props {}
 /**
@@ -14,16 +15,10 @@ interface Props {}
  */
 const Listings: FC<Props> = () => {
 	const Stack = createNativeStackNavigator<ListingsStackParamList>();
-	const addWishlistToDb = async (wishlistData: WishlistDataCL) => {
-		await fn.httpsCallable('createWishlist')(wishlistData);
-	};
-	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
-	const removeWishlistFromDb = async (listingData: ListingData) => {
-		await fn.httpsCallable('deleteWishlist')(listingData.id);
-	};
 	const debouncedRemoveWishlistFromDb = useRef(
 		useDebounce(removeWishlistFromDb, 1000)
 	);
+	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
 
 	return (
 		<Stack.Navigator initialRouteName="Listings">

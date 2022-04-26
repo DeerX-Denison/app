@@ -180,7 +180,6 @@ export type ListingCondition =
 export type ListingDescription = string;
 export type LikedBy = string[];
 export type ListingStatus = 'posted' | 'saved';
-
 export type ListingData = {
 	id: ListingId;
 	images: ListingImageURL[];

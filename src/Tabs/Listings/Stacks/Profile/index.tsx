@@ -19,15 +19,7 @@ interface Props {
 
 const Profile: FC<Props> = ({ route, navigation }) => {
 	const { userInfo } = useContext(UserContext);
-	const { profile: displayUserProfile, setProfile: setDisplayUserInfo } =
-		useProfile(route.params.uid);
-
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		setDisplayUserInfo(undefined);
-	// 	}, 1000);
-	// }, []);
-
+	const { profile: displayUserProfile } = useProfile(route.params.uid);
 	return (
 		<View style={tw('flex flex-1')}>
 			<View style={tw('flex flex-col border-b')}>

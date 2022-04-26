@@ -1,3 +1,4 @@
+import _analytics from '@react-native-firebase/analytics';
 import '@react-native-firebase/app';
 import authentication from '@react-native-firebase/auth';
 import crashlytics from '@react-native-firebase/crashlytics';
@@ -27,4 +28,17 @@ const storage = cloudStorage();
 const msg = messaging();
 const crash = crashlytics();
 const dynamicLinks = _dynamicLinks();
-export { db, fn, auth, msg, crash, storage, svTime, localTime, dynamicLinks };
+
+const analytics = _analytics();
+export {
+	db,
+	fn,
+	auth,
+	msg,
+	crash,
+	analytics,
+	storage,
+	svTime,
+	localTime,
+	dynamicLinks,
+};

@@ -1,14 +1,30 @@
-import { crash } from '@firebase.config';
-import { useEffect } from 'react';
+import { analytics, crash } from '@firebase.config';
+import { useEffect, useState } from 'react';
 import { UserInfo } from 'types';
 
-const useAnalytics = (userinfo: UserInfo | null | undefined) => {
+const useAnalytics = (userInfo: UserInfo | null | undefined) => {
+	const [userId, setUserId] = useState<string | undefined>(undefined);
+	const [mounted, setMounted] = useState<boolean>(false);
+
 	useEffect(() => {
-		crash.log('App mounted');
-		if (userinfo) {
-			crash.log('User logged in');
-			crash.setUserId(userinfo.uid);
+		setMounted(true);
+		if (userInfo) {
+			setUserId(userInfo.uid);
 		}
-	}, [userinfo]);
+	}, [userInfo]);
+
+	useEffect(() => {
+		analytics.logAppOpen();
+		crash.log('App mounted');
+	}, [mounted]);
+
+	useEffect(() => {
+		if (userId) {
+			crash.log('User logged in');
+			crash.setUserId(userId);
+			analytics.setUserId(userId);
+			analytics.logLogin({ method: 'sign in email' });
+		}
+	}, [userId]);
 };
 export default useAnalytics;

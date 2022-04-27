@@ -147,6 +147,30 @@ const Profile: FC<Props> = ({ route, navigation }) => {
 					size={'lg'}
 				/>
 			</View>
+			
+			<View style={tw('m-4','mt-1')}>
+			<Buttons.Primary
+					title="Report"
+					onPress={() => {
+						if (displayUserProfile && userInfo) {
+							navigation.navigate('Report', {
+								uid: displayUserProfile.uid
+							});
+
+						} else {
+							logger.error(
+								`userInfo or otherUserInfo is null: ${displayUserProfile?.uid} | ${userInfo?.uid}`
+							);
+							Toast.show({
+								type: 'error',
+								text1: 'Unexpected Error Occured',
+								text2: 'Please Try Again Other Times',
+							});
+						}
+					}}
+					size={'lg'}
+				/>
+				</View>
 		</View>
 	);
 };

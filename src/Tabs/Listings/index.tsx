@@ -8,7 +8,7 @@ import { Messages } from '../Message/Stacks';
 import { Edit } from '../Sell/Stacks';
 import addWishlistToDb from './addWishlistToDb';
 import removeWishlistFromDb from './removeWishlistFromDb';
-import { Item, Listings as ListingsScreen, Profile } from './Stacks';
+import { Item, Listings as ListingsScreen, Profile, Report } from './Stacks';
 interface Props {}
 /**
  * Listing components, part of the 4 tabs of the app
@@ -87,6 +87,17 @@ const Listings: FC<Props> = () => {
 				}}
 			>
 				{(props) => <Edit {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Report"
+				options={{
+					headerTitle: 'REPORT',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
+				}}
+				initialParams={{ uid: undefined }}
+			>
+				{(props) => <Report {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -5,6 +5,7 @@ import * as Inputs from '@Components/Inputs';
 import {
 	CONDITIONS,
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
+	PINK_RGBA,
 } from '@Constants';
 import { UserContext } from '@Contexts';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -384,7 +385,7 @@ const Create: FC<Props> = ({ navigation }) => {
 										...tw('flex flex-col flex-1 justify-center items-center'),
 									}}
 								>
-									<Bar width={200} progress={progress} />
+									<Bar width={200} progress={progress} color={PINK_RGBA} />
 									<Text style={tw('text-s-md font-semibold p-4')}>
 										{progress < 1
 											? 'Uploading your beautiful images...'

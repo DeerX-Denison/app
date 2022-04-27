@@ -178,16 +178,24 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 												? 'No item in listing right now'
 												: 'No item in selected category'}
 										</Text>
-										<Buttons.Primary
-											size="md"
-											title="Sell Something"
-											onPress={() => {
-												const parentNavigation = navigation.getParent();
-												if (parentNavigation) {
-													parentNavigation.navigate('Sell');
-												}
-											}}
-										/>
+										{categoryFilter.length === 0 ? (
+											<Buttons.Primary
+												size="md"
+												title="Sell Something"
+												onPress={() => {
+													const parentNavigation = navigation.getParent();
+													if (parentNavigation) {
+														parentNavigation.navigate('Sell');
+													}
+												}}
+											/>
+										) : (
+											<Buttons.Primary
+												size="md"
+												title="Clear Search Category"
+												onPress={() => setCategoryFilter([])}
+											/>
+										)}
 									</View>
 								</>
 							)}

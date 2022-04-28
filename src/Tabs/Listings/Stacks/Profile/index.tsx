@@ -147,16 +147,15 @@ const Profile: FC<Props> = ({ route, navigation }) => {
 					size={'lg'}
 				/>
 			</View>
-			
-			<View style={tw('m-4','mt-1')}>
-			<Buttons.Primary
+
+			<View style={tw('m-4', 'mt-1')}>
+				<Buttons.Primary
 					title="Report"
 					onPress={() => {
 						if (displayUserProfile && userInfo) {
 							navigation.navigate('Report', {
-								uid: displayUserProfile.uid
+								uid: displayUserProfile.uid,
 							});
-
 						} else {
 							logger.error(
 								`userInfo or otherUserInfo is null: ${displayUserProfile?.uid} | ${userInfo?.uid}`
@@ -170,7 +169,7 @@ const Profile: FC<Props> = ({ route, navigation }) => {
 					}}
 					size={'lg'}
 				/>
-				</View>
+			</View>
 		</View>
 	);
 };

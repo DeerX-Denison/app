@@ -98,7 +98,7 @@ export type ListingsStackParamList = {
 	Messages: { members: UserInfo[] };
 	Profile: { uid: string | undefined };
 	Edit: { listingId: ListingId };
-	Report: {uid: string | undefined}
+	Report: { uid: string | undefined };
 };
 
 export type SellStackParamList = {

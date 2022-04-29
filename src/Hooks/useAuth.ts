@@ -62,7 +62,7 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 						}
 					}
 				} catch (error) {
-					logger.log(error);
+					logger.error(error);
 					setUserStatus('error');
 				}
 			})();
@@ -94,6 +94,7 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 						}
 					}
 				} catch (error) {
+					logger.error(error);
 					setUserStatus('error');
 				}
 			}, TIME_TO_RECREATE_USER);

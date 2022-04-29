@@ -88,7 +88,7 @@ const createListing: CreateListingFn = async (
 		};
 		await fn.httpsCallable('createListing')(newListingData);
 	} catch (error) {
-		logger.log(error);
+		logger.error(error);
 	} finally {
 		navigation.goBack();
 	}

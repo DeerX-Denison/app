@@ -25,7 +25,6 @@ import {
 	View,
 } from 'react-native';
 import 'react-native-get-random-values';
-import Toast from 'react-native-toast-message';
 import { InputTextRef, MessageData, MessageStackParamList } from 'types';
 import { v4 as uuidv4 } from 'uuid';
 import SendActive from '../../../../static/send-active.svg';
@@ -132,7 +131,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					try {
 						await fn.httpsCallable('createThread')(threadPreviewData);
 					} catch (error) {
-						return logger.log(error);
+						return logger.error(error);
 					}
 					setIsNewThread(false);
 				}
@@ -143,12 +142,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						message: newMessage,
 					});
 				} catch (error) {
-					logger.log(error);
-					return Toast.show({
-						type: 'error',
-						text1: 'An unexpected error has occured',
-						text2: 'Please try again later',
-					});
+					logger.error(error);
 				}
 			}
 		} else {

@@ -5,11 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import tw from '@tw';
 import React, { FC, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { Text, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Bar, CircleSnail } from 'react-native-progress';
-import Toast from 'react-native-toast-message';
 import config from '../config.json';
 import Message from './Message';
 import useEmailLinkEffect from './useEmailLinkEffect';
@@ -122,23 +120,7 @@ const SignIn: FC = () => {
 						setEmailSent(true);
 					} catch (error) {
 						logger.log(error);
-						if (error instanceof Error) {
-							if (error.message.includes('[auth/invalid-email]')) {
-								Toast.show({
-									type: 'error',
-									text1: 'Invalid Email Address',
-									text2:
-										'Please make sure to type in your Bid Red ID correctly',
-								});
-							} else {
-								Toast.show({ type: 'error', text1: error.message });
-							}
-						} else {
-							Toast.show({
-								type: 'error',
-								text1: 'An unexpected error occured. Please try again later',
-							});
-						}
+						logger.error(error);
 					} finally {
 						setSending(false);
 					}
@@ -152,13 +134,7 @@ const SignIn: FC = () => {
 			await auth.signInWithEmailAndPassword(testerEmail, testerPw);
 		} catch (error) {
 			if (error) {
-				if (error instanceof Error) {
-					setTesterEmailError(error.message);
-				} else {
-					setTesterEmailError(
-						'internal error. please try again or contact developer'
-					);
-				}
+				logger.error(error);
 			}
 		}
 	};
@@ -206,7 +182,7 @@ const SignIn: FC = () => {
 											setTesterEmailError('');
 											setTesterEmail(testerEmail.trim());
 										}}
-										autoCompleteType="email"
+										autoComplete="email"
 										value={testerEmail}
 										onEndEditing={isValidTesterEmail}
 										autoCapitalize="none"
@@ -227,7 +203,7 @@ const SignIn: FC = () => {
 										onChangeText={setTesterPw}
 										value={testerPw}
 										secureTextEntry={!isViewingPw}
-										autoCompleteType="password"
+										autoComplete="password"
 										style={tw(
 											'font-medium text-s-md p-2 border w-7/12 rounded-md m-1'
 										)}

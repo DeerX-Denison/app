@@ -24,7 +24,6 @@ const readLatestMessage: ReadLatestMessage = async (threadData, userInfo) => {
 			});
 		} catch (error) {
 			logger.error(error);
-			// Toast.show({ type: 'error', text1: 'Error while reading messages' });
 		}
 	}
 };

@@ -55,8 +55,8 @@ const useEmailLinkEffect: () => {
 					/* You can now navigate to your initial authenticated screen
 			  You can also parse the `link.url` and use the `continueurl` param to go to another screen
 			  The `continueurl` would be the `url` passed to the action code settings */
-				} catch (e: unknown) {
-					isSubscribed && setError(e as Error);
+				} catch (error) {
+					isSubscribed && setError(error as Error);
 				} finally {
 					isSubscribed && setLoading(false);
 				}

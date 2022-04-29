@@ -49,11 +49,13 @@ const MockItem: FC = () => (
 			<Stack.Screen name="Item">
 				{(props) => (
 					<Item
+						debouncedAddWishlistToDb={undefined}
+						debouncedRemoveWishlistFromDb={undefined}
 						{...props}
 						route={{
 							// eslint-disable-next-line react/prop-types
 							...props.route,
-							params: { listingId: 'Mock Listing Id', reset: false },
+							params: { listingId: 'Mock Listing Id' },
 						}}
 					/>
 				)}

@@ -96,11 +96,7 @@ const Item: FC<Props> = ({
 					await debouncedRemoveWishlistFromDb.current(listingData);
 			} catch (error) {
 				setIsInWishlist(true);
-				logger.log(error);
-				Toast.show({
-					type: 'error',
-					text1: 'Error fetching listing data, please try again later',
-				});
+				logger.error(error);
 			}
 		}
 	};
@@ -127,11 +123,7 @@ const Item: FC<Props> = ({
 					await debouncedAddWishlistToDb.current(wishlistData);
 			} catch (error) {
 				setIsInWishlist(false);
-				logger.log(error);
-				Toast.show({
-					type: 'error',
-					text1: 'Error fetching listing data, please try again later',
-				});
+				logger.error(error);
 			}
 		}
 	};

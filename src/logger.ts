@@ -1,5 +1,5 @@
 import { crash } from '@firebase.config';
-import toast from 'react-native-toast-message';
+import Toast from 'react-native-toast-message';
 
 interface ILogger {
 	log: (x: unknown) => void;
@@ -16,12 +16,12 @@ class Logger implements ILogger {
 	error(x: unknown) {
 		console.error(x);
 
-		if (typeof x === 'string') {
-			toast.show({ type: 'error', text1: x });
-		}
-
 		if (x instanceof Error) {
+			Toast.show({ type: 'error', text1: x.message });
 			crash.recordError(x);
+		} else {
+			Toast.show({ type: 'error', text1: 'Unexpected error occured' });
+			crash.recordError(new Error(JSON.stringify(x)));
 		}
 	}
 

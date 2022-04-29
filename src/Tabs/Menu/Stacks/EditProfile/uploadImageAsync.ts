@@ -55,7 +55,7 @@ const uploadImageAsync = async (
 		});
 		return publicUrl;
 	} catch (error) {
-		logger.log(error);
+		logger.error(error);
 		throw new Error('Cannot upload image');
 	}
 };

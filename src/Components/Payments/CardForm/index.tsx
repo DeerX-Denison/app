@@ -17,7 +17,7 @@ const CardForm: FC<Props> = () => {
 				const res = await fn.httpsCallable('getStripePubKey')();
 				setPubKey(res.data as string);
 			} catch (error) {
-				logger.log(error);
+				logger.error(error);
 			}
 		})();
 	}, []);
@@ -34,7 +34,7 @@ const CardForm: FC<Props> = () => {
 					setLoading(true);
 				}
 			} catch (error) {
-				logger.log(error);
+				logger.error(error);
 			}
 		})();
 	}, []);

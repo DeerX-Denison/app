@@ -2,7 +2,7 @@ import * as Badges from '@Components/Badges';
 import { CATEGORIES } from '@Constants';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useSlideAnimation } from '@Hooks';
+import { useCategorySlide } from '@Hooks';
 import tw from '@tw';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
@@ -39,7 +39,7 @@ const Category: FC<Props> = ({
 	>();
 	const inputTextRef = useRef<TextInput | undefined>();
 
-	const { translation } = useSlideAnimation(categorizing, inputTextRef);
+	const { translation } = useCategorySlide(categorizing, inputTextRef);
 
 	useEffect(() => {
 		if (categories) {

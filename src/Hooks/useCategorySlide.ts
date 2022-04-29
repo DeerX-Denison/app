@@ -6,7 +6,7 @@ import {
 	useWindowDimensions,
 } from 'react-native';
 
-export type UseSlideAnimationFn = (
+export type UseCategorySlide = (
 	categorizing: boolean,
 	inputTextRef: React.MutableRefObject<TextInput | undefined>
 ) => {
@@ -16,7 +16,7 @@ export type UseSlideAnimationFn = (
 /**
  * effect to animate sliding number
  */
-const useSlideAnimation: UseSlideAnimationFn = (categorizing, inputTextRef) => {
+const useCategorySlide: UseCategorySlide = (categorizing, inputTextRef) => {
 	const { height } = useWindowDimensions();
 	const translate = useRef(new Animated.Value(height)).current;
 
@@ -40,4 +40,4 @@ const useSlideAnimation: UseSlideAnimationFn = (categorizing, inputTextRef) => {
 	return { translation: translate };
 };
 
-export default useSlideAnimation;
+export default useCategorySlide;

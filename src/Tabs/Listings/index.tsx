@@ -95,7 +95,7 @@ const Listings: FC<Props> = () => {
 					headerBackTitle: '',
 					headerTintColor: DENISON_RED_RGBA,
 				}}
-				initialParams={{ uid: undefined }}
+				initialParams={{ type: undefined, id: undefined }}
 			>
 				{(props) => <Report {...props} />}
 			</Stack.Screen>

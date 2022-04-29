@@ -10,7 +10,7 @@ import {
 	TabsParamList,
 	WishlistDataCL,
 } from 'types';
-import { Item, Profile } from '../Listings/Stacks';
+import { Item, Profile, Report } from '../Listings/Stacks';
 import { Messages, Threads } from './Stacks';
 interface Props {
 	route: RouteProp<TabsParamList, 'Inbox'>;
@@ -80,6 +80,17 @@ const Message: FC<Props> = () => {
 						{...props}
 					/>
 				)}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Report"
+				options={{
+					headerTitle: 'REPORT',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
+				}}
+				initialParams={{ type: undefined, id: undefined }}
+			>
+				{(props) => <Report {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

@@ -21,6 +21,7 @@ import {
 	Text,
 	TextInput,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 	View,
 } from 'react-native';
 import 'react-native-get-random-values';
@@ -38,6 +39,7 @@ import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
 import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
+
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
@@ -54,6 +56,11 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 	const [disableSend, setDisableSend] = useState<boolean>(false);
+
+	// state for showing menu. undefined means no menu. defined store string of
+	// menu for the message id. Now suffix indicates instant render
+	const [showingMenu, setShowingMenu] = useState<string | undefined>();
+	const [showingMenuNow, setShowingMenuNow] = useState<string | undefined>();
 
 	const { didShow } = useKeyboard();
 
@@ -298,44 +305,59 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										: 55,
 							}}
 						>
-							<View
-								onLayout={(event) => {
-									const { height } = event.nativeEvent.layout;
-									setContentHeight(height);
+							<TouchableWithoutFeedback
+								onPress={() => {
+									setShowingMenuNow(undefined);
+									setTimeout(() => {
+										setShowingMenu(undefined);
+									}, 500);
 								}}
 							>
-								{!parsedMessages && <Text>Loading...</Text>}
-								{parsedMessages && parsedMessages.length === 0 && (
-									<View
-										style={tw('flex flex-1 justify-center items-center p-4')}
-									>
-										<Text style={tw('text-s-lg font-semibold')}>
-											{DEFAULT_LATEST_MESSAGE}
-										</Text>
-									</View>
-								)}
-								{parsedMessages &&
-									parsedMessages.length === 1 &&
-									isNewThread === true && (
-										<View style={tw('flex flex-1 justify-center items-center')}>
-											<Text style={tw('text-s-lg')}>
-												Sending your first message...
+								<View
+									onLayout={(event) => {
+										const { height } = event.nativeEvent.layout;
+										setContentHeight(height);
+									}}
+								>
+									{!parsedMessages && <Text>Loading...</Text>}
+									{parsedMessages && parsedMessages.length === 0 && (
+										<View
+											style={tw('flex flex-1 justify-center items-center p-4')}
+										>
+											<Text style={tw('text-s-lg font-semibold')}>
+												{DEFAULT_LATEST_MESSAGE}
 											</Text>
 										</View>
 									)}
-								{parsedMessages &&
-									parsedMessages.length > 0 &&
-									parsedMessages.map((message) => (
-										<Message
-											navigation={navigation}
-											route={route}
-											key={message.id}
-											message={message}
-											members={threadData?.members}
-											latestSeenMsgId={latestSeenMsgId}
-										/>
-									))}
-							</View>
+									{parsedMessages &&
+										parsedMessages.length === 1 &&
+										isNewThread === true && (
+											<View
+												style={tw('flex flex-1 justify-center items-center')}
+											>
+												<Text style={tw('text-s-lg')}>
+													Sending your first message...
+												</Text>
+											</View>
+										)}
+									{parsedMessages &&
+										parsedMessages.length > 0 &&
+										parsedMessages.map((message) => (
+											<Message
+												navigation={navigation}
+												route={route}
+												key={message.id}
+												message={message}
+												members={threadData?.members}
+												latestSeenMsgId={latestSeenMsgId}
+												showingMenu={showingMenu}
+												setShowingMenu={setShowingMenu}
+												showingMenuNow={showingMenuNow}
+												setShowingMenuNow={setShowingMenuNow}
+											/>
+										))}
+								</View>
+							</TouchableWithoutFeedback>
 						</ScrollView>
 					</View>
 				</ScrollView>

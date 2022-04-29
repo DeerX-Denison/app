@@ -90,7 +90,10 @@ export type TabsParamList = {
 	Menu: undefined;
 	Sell: SellTab | undefined;
 };
-
+export type ReportNavData = {
+	type: ReportType | undefined;
+	id: string | undefined;
+};
 export type ItemScreenParamList = { listingId: ListingId };
 export type ListingsStackParamList = {
 	Listings: { reset: boolean };
@@ -98,7 +101,7 @@ export type ListingsStackParamList = {
 	Messages: { members: UserInfo[] };
 	Profile: { uid: string | undefined };
 	Edit: { listingId: ListingId };
-	Report: { uid: string | undefined };
+	Report: ReportNavData;
 };
 
 export type SellStackParamList = {
@@ -112,6 +115,7 @@ export type MessageStackParamList = {
 	Item: ItemScreenParamList;
 	Messages: { members: UserInfo[] };
 	Profile: { uid: string | undefined };
+	Report: ReportNavData;
 };
 
 export type NewThreadUserInfo = {
@@ -198,6 +202,12 @@ export type ListingData = {
 
 export type MyListingData = ListingData;
 
+export type ReportType = 'listing' | 'message';
+export type ReportData = {
+	type: ReportType;
+	detail: string;
+	id: string;
+};
 // app types
 export type Selection = {
 	id: string;

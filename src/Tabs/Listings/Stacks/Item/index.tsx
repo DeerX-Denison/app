@@ -2,6 +2,8 @@ import * as Badges from '@Components/Badges';
 import Carousel from '@Components/Carousel';
 import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { UserContext } from '@Contexts';
+import { faFlag } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
 	useCurrentTime,
 	useIsInWishlist,
@@ -145,14 +147,14 @@ const Item: FC<Props> = ({
 				// listing data fetched, render scroll view with data
 				<>
 					<ScrollView>
-						<View style={tw('mx-4 my-2')}>
+						<View style={tw('mx-4 my-2 flex-row')}>
 							<TouchableOpacity
 								onPress={() =>
 									navigation.navigate('Profile', {
 										uid: listingData.seller.uid,
 									})
 								}
-								style={tw('flex flex-row justify-start items-center')}
+								style={tw('flex flex-row justify-start items-center flex-1')}
 							>
 								<FastImage
 									source={{
@@ -168,6 +170,21 @@ const Item: FC<Props> = ({
 										? listingData.seller.displayName
 										: DEFAULT_USER_DISPLAY_NAME}
 								</Text>
+							</TouchableOpacity>
+							<TouchableOpacity
+								style={tw('flex justify-center items-center')}
+								onPress={() =>
+									navigation.navigate('Report', {
+										type: 'listing',
+										id: listingData.id,
+									})
+								}
+							>
+								<FontAwesomeIcon
+									icon={faFlag}
+									size={20}
+									style={tw('text-denison-red')}
+								/>
 							</TouchableOpacity>
 						</View>
 						<Carousel

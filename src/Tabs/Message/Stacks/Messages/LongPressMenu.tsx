@@ -8,6 +8,7 @@ import { TouchableOpacity, View } from 'react-native';
 import { MessageStackParamList } from 'types';
 
 interface Props {
+	threadId: string;
 	messageId: string;
 	setShowingMenu: React.Dispatch<React.SetStateAction<string | undefined>>;
 	setShowingMenuNow: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const MessageMenu: FC<Props> = ({
+	threadId,
 	messageId,
 	setShowingMenu,
 	setShowingMenuNow,
@@ -32,7 +34,10 @@ const MessageMenu: FC<Props> = ({
 					setTimeout(() => {
 						setShowingMenu(undefined);
 					}, MESSAGE_MENU_ANIM_TIME);
-					navigation.navigate('Report', { type: 'message', id: messageId });
+					navigation.navigate('Report', {
+						type: 'message',
+						id: `${threadId}/${messageId}`,
+					});
 				}}
 			>
 				<FontAwesomeIcon

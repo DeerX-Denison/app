@@ -196,6 +196,14 @@ const Message: FC<Props> = ({
 																style={tw('h-4 w-4 text-red-500')}
 															/>
 														)}
+													{content.seenAt[userInfo.uid] !== null &&
+														content.seenAt[nonSelfUid] !== null &&
+														content.id === latestSeenMsgId && (
+															<FastImage
+																source={{ uri: nonSelfIcon }}
+																style={tw('h-4 w-4 rounded-full')}
+															/>
+														)}
 												</View>
 											</View>
 										))}

@@ -8,6 +8,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useState } from 'react';
 import { Text, TextInput, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { ListingsStackParamList, ReportData } from 'types';
 interface Props {
 	route: RouteProp<ListingsStackParamList, 'Report'>;
@@ -37,11 +38,16 @@ const Report: FC<Props> = ({ navigation, route }) => {
 		};
 		try {
 			await fn.httpsCallable('createReport')(reportData);
-			navigation.goBack();
 		} catch (error) {
 			setDisabled(false);
 			logger.log(error);
+			if (error instanceof Error) {
+				Toast.show({ type: 'error', text1: error.message });
+			} else {
+				Toast.show({ type: 'error', text1: 'Unexepcted Error Occured' });
+			}
 		}
+		navigation.goBack();
 	};
 
 	return (

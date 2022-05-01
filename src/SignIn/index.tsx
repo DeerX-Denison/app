@@ -305,9 +305,11 @@ const SignIn: FC = () => {
 					)}
 				</>
 			)}
-			<View style={tw('items-center p-8')}>
-				<Text>{config.firebase_env} version</Text>
-			</View>
+			{config.firebase_env !== 'production' && (
+				<View style={tw('items-center p-8')}>
+					<Text>Staging Version</Text>
+				</View>
+			)}
 		</>
 	);
 };

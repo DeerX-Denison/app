@@ -25,7 +25,12 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import 'react-native-get-random-values';
-import { MessageBlockData, MessageStackParamList, UserInfo } from 'types';
+import {
+	MessageBlockData,
+	MessageStackParamList,
+	ThreadId,
+	UserInfo,
+} from 'types';
 import MessageMenu from './LongPressMenu';
 import TextContent from './TextContent';
 
@@ -33,7 +38,8 @@ interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
 	route: RouteProp<MessageStackParamList, 'Messages'>;
 	message: MessageBlockData;
-	members: UserInfo[] | undefined;
+	threadId: ThreadId;
+	members: UserInfo[];
 	latestSeenMsgId: string | undefined;
 	showingMenu: string | undefined;
 	setShowingMenu: React.Dispatch<React.SetStateAction<string | undefined>>;
@@ -47,6 +53,7 @@ interface Props {
 const Message: FC<Props> = ({
 	navigation,
 	message,
+	threadId,
 	members,
 	latestSeenMsgId,
 	showingMenu,
@@ -258,6 +265,7 @@ const Message: FC<Props> = ({
 																	}}
 																>
 																	<MessageMenu
+																		threadId={threadId}
 																		messageId={content.id}
 																		setShowingMenu={setShowingMenu}
 																		setShowingMenuNow={setShowingMenuNow}

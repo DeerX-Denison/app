@@ -335,6 +335,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 											</View>
 										)}
 									{parsedMessages &&
+										threadData &&
 										parsedMessages.length > 0 &&
 										parsedMessages.map((message) => (
 											<Message
@@ -342,7 +343,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 												route={route}
 												key={message.id}
 												message={message}
-												members={threadData?.members}
+												threadId={threadData.id}
+												members={threadData.members}
 												latestSeenMsgId={latestSeenMsgId}
 												showingMenu={showingMenu}
 												setShowingMenu={setShowingMenu}

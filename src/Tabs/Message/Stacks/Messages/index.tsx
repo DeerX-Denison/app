@@ -1,4 +1,7 @@
-import { DEFAULT_LATEST_MESSAGE } from '@Constants';
+import {
+	DEFAULT_LATEST_MESSAGE,
+	MESSAGE_TEXT_INPUT_PLACEHOLDER,
+} from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn, localTime } from '@firebase.config';
 import {
@@ -182,7 +185,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 						>
 							<TextInput
 								ref={textInputRef as any}
-								placeholder="Enter a message"
+								placeholder={MESSAGE_TEXT_INPUT_PLACEHOLDER}
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}

@@ -114,7 +114,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 				{listingData ? (
 					// Listing data is fetched, render form with the data as placeholder
 					<KeyboardAwareScrollView
-						contentContainerStyle={tw('flex flex-col flex-1')}
+						contentContainerStyle={tw('flex flex-col')}
 						viewIsInsideTabBar={true}
 						keyboardShouldPersistTaps={'handled'}
 						extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}

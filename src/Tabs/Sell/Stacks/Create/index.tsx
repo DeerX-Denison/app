@@ -378,39 +378,35 @@ const Create: FC<Props> = ({ navigation }) => {
 						)}
 						{progress !== 0 && (
 							// else, user is uploading, render progress bar
-							<>
-								<View
-									testID="posting"
-									style={{
-										...tw('flex flex-col flex-1 justify-center items-center'),
-									}}
-								>
-									<Bar width={200} progress={progress} color={PINK_RGBA} />
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										{progress < 1
-											? 'Uploading your beautiful images...'
-											: 'Putting your item on sale...'}
-									</Text>
-								</View>
-							</>
+							<View
+								testID="posting"
+								style={{
+									...tw('flex flex-col flex-1 justify-center items-center'),
+								}}
+							>
+								<Bar width={200} progress={progress} color={PINK_RGBA} />
+								<Text style={tw('text-s-md font-semibold p-4')}>
+									{progress < 1
+										? 'Uploading your beautiful images...'
+										: 'Putting your item on sale...'}
+								</Text>
+							</View>
 						)}
 					</>
 				) : (
 					// else, data is not defined, render progress bar
-					<>
-						<View
-							testID="loading"
-							style={tw(
-								'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
-							)}
-						>
-							<CircleSnail
-								size={80}
-								indeterminate={true}
-								color={['red', 'green', 'blue']}
-							/>
-						</View>
-					</>
+					<View
+						testID="loading"
+						style={tw(
+							'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
+						)}
+					>
+						<CircleSnail
+							size={80}
+							indeterminate={true}
+							color={['red', 'green', 'blue']}
+						/>
+					</View>
 				)}
 			</Animated.View>
 		</View>

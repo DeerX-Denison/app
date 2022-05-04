@@ -94,13 +94,6 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		setHasEditCondition,
 		setHasEditDesc,
 	} = listingErrors;
-
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		setUpdating(true);
-	// 		setDeleting(false);
-	// 	}, 1000);
-	// }, []);
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category
@@ -113,14 +106,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				{listingData ? (
 					// Listing data is fetched, render form with the data as placeholder
-					<KeyboardAwareScrollView
-						contentContainerStyle={tw('flex flex-col')}
-						viewIsInsideTabBar={true}
-						keyboardShouldPersistTaps={'handled'}
-						extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
-						enableResetScrollToCoords={false}
-						keyboardOpeningTime={0}
-					>
+					<>
 						{updating && !deleting && !hasEditImage && progress === 0 && (
 							// user just clicked save button, updating listingData in db
 							<View
@@ -137,9 +123,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 							// user clicked delete button, deleting listingData in db
 							<View
 								testID="deleting"
-								style={{
-									...tw('flex flex-col flex-1 justify-center items-center'),
-								}}
+								style={tw('flex flex-col flex-1 justify-center items-center')}
 							>
 								<Bar width={200} indeterminate={true} color={PINK_RGBA} />
 								<Text style={tw('text-s-md font-semibold p-4')}>
@@ -151,9 +135,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 							// user is uploading images
 							<View
 								testID="uploading"
-								style={{
-									...tw('flex flex-col flex-1 justify-center items-center'),
-								}}
+								style={tw('flex flex-col flex-1 justify-center items-center')}
 							>
 								<Bar width={200} progress={progress} color={PINK_RGBA} />
 								<Text style={tw('text-s-md font-semibold p-4')}>
@@ -165,7 +147,14 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 						)}
 						{!updating && !deleting && progress === 0 && (
 							// user is editting, render form with prefilled data
-							<>
+							<KeyboardAwareScrollView
+								contentContainerStyle={tw('flex flex-col')}
+								viewIsInsideTabBar={true}
+								keyboardShouldPersistTaps={'handled'}
+								extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
+								enableResetScrollToCoords={false}
+								keyboardOpeningTime={0}
+							>
 								{listingData.images.length > 0 ? (
 									// if images.length > 0, render carousel
 									<>
@@ -414,25 +403,23 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 									/>
 									<Text style={tw('text-s-md p-2')}>Public</Text>
 								</View>
-							</>
+							</KeyboardAwareScrollView>
 						)}
-					</KeyboardAwareScrollView>
+					</>
 				) : (
 					// Listing data is not fetched, render loading
-					<>
-						<View
-							testID="loading"
-							style={tw(
-								'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
-							)}
-						>
-							<CircleSnail
-								size={80}
-								indeterminate={true}
-								color={['red', 'green', 'blue']}
-							/>
-						</View>
-					</>
+					<View
+						testID="loading"
+						style={tw(
+							'absolute left-0 right-0 top-0 bottom-0 flex items-center justify-center -z-10'
+						)}
+					>
+						<CircleSnail
+							size={80}
+							indeterminate={true}
+							color={['red', 'green', 'blue']}
+						/>
+					</View>
 				)}
 			</Animated.View>
 		</View>

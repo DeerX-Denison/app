@@ -19,7 +19,6 @@ import React, { FC, useContext, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
-import Toast from 'react-native-toast-message';
 import { ListingData, ListingsStackParamList, WishlistDataCL } from 'types';
 import ChatActive from '../../../../static/chat-outline-active.svg';
 import Edit from '../../../../static/edit.svg';
@@ -35,6 +34,7 @@ interface Props {
 	debouncedRemoveWishlistFromDb: React.MutableRefObject<
 		(args: ListingData) => Promise<Promise<void>>
 	>;
+	nullListingDataHandler: () => void;
 }
 
 /**
@@ -45,6 +45,7 @@ const Item: FC<Props> = ({
 	navigation,
 	debouncedAddWishlistToDb,
 	debouncedRemoveWishlistFromDb,
+	nullListingDataHandler,
 }) => {
 	const { userInfo } = useContext(UserContext);
 	const listingId = route.params.listingId;
@@ -62,11 +63,7 @@ const Item: FC<Props> = ({
 	 */
 	useEffect(() => {
 		if (listingData === null) {
-			Toast.show({
-				type: 'info',
-				text1: 'Item was deleted',
-			});
-			navigation.navigate('Listings', { reset: true });
+			nullListingDataHandler();
 		}
 	}, [listingData]);
 

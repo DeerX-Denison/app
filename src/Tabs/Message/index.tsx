@@ -2,8 +2,12 @@ import { DENISON_RED_RGBA } from '@Constants';
 import { fn } from '@firebase.config';
 import { useDebounce } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+	createNativeStackNavigator,
+	NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import React, { FC, useRef } from 'react';
+import Toast from 'react-native-toast-message';
 import {
 	ListingData,
 	MessageStackParamList,
@@ -31,6 +35,18 @@ const Message: FC<Props> = () => {
 	const debouncedRemoveWishlistFromDb = useRef(
 		useDebounce(removeWishlistFromDb, 1000)
 	);
+
+	const nullListingDataHandler = (
+		navigation: NativeStackNavigationProp<MessageStackParamList, 'Item'>
+	) => {
+		return () => {
+			Toast.show({
+				type: 'info',
+				text1: 'Item was deleted',
+			});
+			navigation.goBack();
+		};
+	};
 
 	return (
 		<Stack.Navigator initialRouteName="Threads">
@@ -75,6 +91,8 @@ const Message: FC<Props> = () => {
 			>
 				{(props) => (
 					<Item
+						// eslint-disable-next-line react/prop-types
+						nullListingDataHandler={nullListingDataHandler(props.navigation)}
 						debouncedAddWishlistToDb={debouncedAddWishlistToDb}
 						debouncedRemoveWishlistFromDb={debouncedRemoveWishlistFromDb}
 						{...props}

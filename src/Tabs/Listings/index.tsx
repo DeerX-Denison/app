@@ -1,8 +1,12 @@
 import { DENISON_RED_RGBA } from '@Constants';
 import { useDebounce } from '@Hooks';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+	createNativeStackNavigator,
+	NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import React, { FC, useRef } from 'react';
 import { Button } from 'react-native';
+import Toast from 'react-native-toast-message';
 import { ListingsStackParamList } from 'types';
 import { Messages } from '../Message/Stacks';
 import { Edit } from '../Sell/Stacks';
@@ -19,6 +23,17 @@ const Listings: FC<Props> = () => {
 		useDebounce(removeWishlistFromDb, 1000)
 	);
 	const debouncedAddWishlistToDb = useRef(useDebounce(addWishlistToDb, 1000));
+	const nullListingDataHandler = (
+		navigation: NativeStackNavigationProp<ListingsStackParamList, 'Item'>
+	) => {
+		return () => {
+			Toast.show({
+				type: 'info',
+				text1: 'Item was deleted',
+			});
+			navigation.navigate('Listings', { reset: true });
+		};
+	};
 
 	return (
 		<Stack.Navigator initialRouteName="Listings">
@@ -45,6 +60,8 @@ const Listings: FC<Props> = () => {
 					<Item
 						debouncedAddWishlistToDb={debouncedAddWishlistToDb}
 						debouncedRemoveWishlistFromDb={debouncedRemoveWishlistFromDb}
+						// eslint-disable-next-line react/prop-types
+						nullListingDataHandler={nullListingDataHandler(props.navigation)}
 						{...props}
 					/>
 				)}

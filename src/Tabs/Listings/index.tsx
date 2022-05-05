@@ -73,6 +73,11 @@ const Listings: FC<Props> = () => {
 					headerBackTitle: '',
 					headerTintColor: DENISON_RED_RGBA,
 				}}
+				initialParams={{
+					members: undefined,
+					initRefs: undefined,
+					initText: undefined,
+				}}
 			>
 				{(props) => <Messages {...props} />}
 			</Stack.Screen>

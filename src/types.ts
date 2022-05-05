@@ -98,7 +98,11 @@ export type ItemScreenParamList = { listingId: ListingId };
 export type ListingsStackParamList = {
 	Listings: { reset: boolean };
 	Item: ItemScreenParamList;
-	Messages: { members: UserInfo[] };
+	Messages: {
+		members: UserInfo[];
+		initText: string | undefined;
+		initRefs: InputTextRef[] | undefined;
+	};
 	Profile: { uid: string | undefined };
 	Edit: { listingId: ListingId };
 	Report: ReportNavData;
@@ -113,7 +117,11 @@ export type SellStackParamList = {
 export type MessageStackParamList = {
 	Threads: undefined;
 	Item: ItemScreenParamList;
-	Messages: { members: UserInfo[] };
+	Messages: {
+		members: UserInfo[];
+		initText: string | undefined;
+		initRefs: InputTextRef[] | undefined;
+	};
 	Profile: { uid: string | undefined };
 	Report: ReportNavData;
 };

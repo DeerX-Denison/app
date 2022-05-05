@@ -37,8 +37,11 @@ const useSuggestionQuery: UseSuggestionQuery = (inputText, textSelection) => {
 				}
 			}
 			if (curQueries && curQueries.length > 0) {
-				const newQuery = curQueries[count - 1].substring(1);
-				isSubscribed && setQuery(newQuery);
+				const lastQuery = curQueries[count - 1];
+				if (lastQuery) {
+					const newQuery = lastQuery.substring(1);
+					isSubscribed && setQuery(newQuery);
+				}
 			}
 		})();
 		return () => {

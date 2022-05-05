@@ -39,6 +39,8 @@ import onChangeTextHandler from './onChangeTextHandler';
 import onSelectionChange from './onSelectionChange';
 import readLatestMessage from './readLatestMessage';
 import renderHeader from './renderHeader';
+import useInitRef from './useInitRefs';
+import useInitText from './useInitText';
 import useLatestSeenMsgId from './useLatestSeenMsgId';
 import useScrollToEndOnKeyboard from './useScrollToEndOnKeyboard';
 
@@ -109,8 +111,10 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 
 	// state storing cursor selection's ref selection
 	const [withinWhichRef, setWithinWhichRef] = useState<InputTextRef[]>([]);
-
+	useInitText(route.params.initText, setInputText);
+	useInitRef(route.params.initRefs, setRefs);
 	const sendHandler = async () => {
+		// setInputText is async, wont affect if inputText !== "" below
 		setInputText('');
 		setDisableSend(true);
 		if (threadData && userInfo && message) {
@@ -189,7 +193,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 								style={tw('flex-1 mx-4 text-s-lg py-2 max-h-32')}
 								multiline={true}
 								scrollEnabled={true}
-								onChangeText={(text) =>
+								onChangeText={(text) => {
 									onChangeTextHandler(
 										text,
 										refs,
@@ -203,13 +207,13 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										prevSelector,
 										textSelection,
 										withinWhichRef
-									)
-								}
+									);
+								}}
 								selectTextOnFocus={true}
 								// intentionally left out cuz onFocus => open keyboard => scroll to end => readLatestMessage
 								// onFocus={() => readLatestMessage(threadData, userInfo)}
 								autoCorrect={false}
-								onSelectionChange={(e) =>
+								onSelectionChange={(e) => {
 									onSelectionChange(
 										e,
 										prevSelector,
@@ -219,8 +223,8 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										refs,
 										setWithinWhichRef,
 										setExtendingSelection
-									)
-								}
+									);
+								}}
 								onKeyPress={(e) => {
 									setKeyPressed(e.nativeEvent.key);
 								}}

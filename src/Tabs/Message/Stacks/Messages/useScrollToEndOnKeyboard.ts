@@ -13,7 +13,9 @@ const useScrollToEndOnKeyboard: UseScrollToEndOnKeyboard = (
 ) => {
 	useEffect(() => {
 		if (didShow) {
-			scrollViewRef.current?.scrollToEnd();
+			setTimeout(() => {
+				scrollViewRef.current?.scrollToEnd({ animated: true });
+			}, 250);
 		}
 	}, [didShow]);
 };

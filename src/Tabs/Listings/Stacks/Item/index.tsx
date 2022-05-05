@@ -1,6 +1,10 @@
 import * as Badges from '@Components/Badges';
 import Carousel from '@Components/Carousel';
-import { DEFAULT_USER_DISPLAY_NAME, DEFAULT_USER_PHOTO_URL } from '@Constants';
+import {
+	DEFAULT_USER_DISPLAY_NAME,
+	DEFAULT_USER_PHOTO_URL,
+	MESSAGE_DIRECT_FROM_LISTING,
+} from '@Constants';
 import { UserContext } from '@Contexts';
 import { faFlag } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -72,8 +76,23 @@ const Item: FC<Props> = ({
 	 */
 	const messageHandler = () => {
 		if (listingData && userInfo) {
+			const initText = `${MESSAGE_DIRECT_FROM_LISTING} @${listingData.name}`;
 			navigation.navigate('Messages', {
 				members: [userInfo, listingData.seller],
+				initRefs: [
+					{
+						begin: initText.lastIndexOf('@'),
+						end: initText.lastIndexOf('@') + listingData.name.length,
+						data: {
+							id: listingData.id,
+							name: listingData.name,
+							price: listingData.price,
+							seller: userInfo,
+							thumbnail: listingData.images[0],
+						},
+					},
+				],
+				initText,
 			});
 		}
 	};

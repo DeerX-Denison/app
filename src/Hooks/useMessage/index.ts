@@ -77,7 +77,7 @@ const useMessage: UseMessageFn = (threadData, setDisableSend) => {
 				seenAt,
 			});
 		}
-	}, [inputText, userInfo, threadData]);
+	}, [inputText, refs, contentType, userInfo, threadData]);
 
 	return {
 		message,

@@ -357,7 +357,6 @@ const SignIn: FC = () => {
 									</View>
 								</View>
 							)}
-							<GuestInfo displayingGuestInfo={displayingGuestInfo} />
 						</KeyboardAwareScrollView>
 					)}
 					{!isTester && !isGuest && (

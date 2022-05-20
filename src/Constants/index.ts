@@ -26,7 +26,10 @@ export const MESSAGE_TEXT_INPUT_PLACEHOLDER = '@ To Reference An Item';
 export const MESSAGE_DIRECT_FROM_LISTING = 'Hi, I would like to buy';
 
 // make sure this match BE
-export const PLACEHOLDER_GUEST_EMAIL = 'guest-user-email';
+export const DEFAULT_GUEST_EMAIL = 'guest-user-email';
+
+// make sure this match BE
+export const DEFAULT_GUEST_DISPLAY_NAME = 'Guest User';
 
 export const CONDITIONS: Exclude<ListingCondition, undefined>[] = [
 	'BRAND NEW',

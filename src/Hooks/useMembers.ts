@@ -1,6 +1,7 @@
-import { db } from '@firebase.config';
+import { fn } from '@firebase.config';
+import logger from '@logger';
 import { useEffect, useState } from 'react';
-import { UserInfo } from 'types';
+import { UserInfo, UserProfile } from 'types';
 
 /**
  * custom hook to fetch up to date user of the thread for useThreadData
@@ -12,27 +13,35 @@ const useMembers = (initMembers: UserInfo[]) => {
 		let isSubscribed = true;
 
 		(async () => {
-			const members = await Promise.all(
-				initMembers.map(async (member) => {
-					const docSnap = await db.collection('users').doc(member.uid).get();
-					if (!docSnap.exists) {
-						throw `One of the user is not signed up yet: ${member.uid}`;
-					}
-					const data = docSnap.data();
-					if (!data) {
-						throw 'Member data is undefined';
-					}
-
-					const userInfo: UserInfo = {
-						uid: data.uid,
-						displayName: data.displayName,
-						photoURL: data.photoURL,
-						email: data.email,
-					};
-
-					return userInfo;
-				})
-			);
+			let members: UserInfo[];
+			try {
+				members = await Promise.all(
+					initMembers.map(async (member) => {
+						const res = await fn.httpsCallable('getUserProfile')(member.uid);
+						const profile = res.data as UserProfile;
+						if (
+							'uid' in profile &&
+							'displayName' in profile &&
+							'photoURL' in profile &&
+							'email' in profile
+						) {
+							const { uid, displayName, photoURL, email } = profile;
+							const userInfo: UserInfo = {
+								uid,
+								displayName,
+								photoURL,
+								email,
+							};
+							return userInfo;
+						} else {
+							throw `Invalid user profile: ${JSON.stringify(profile)}`;
+						}
+					})
+				);
+			} catch (error) {
+				logger.error(error);
+				members = [];
+			}
 			isSubscribed && setMembers(members);
 		})();
 

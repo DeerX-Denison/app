@@ -1,4 +1,4 @@
-import { NEW_THREAD_SUGGESTIONS, PLACEHOLDER_GUEST_EMAIL } from '@Constants';
+import { DEFAULT_GUEST_EMAIL, NEW_THREAD_SUGGESTIONS } from '@Constants';
 import { db } from '@firebase.config';
 import logger from '@logger';
 import { useEffect, useRef, useState } from 'react';
@@ -43,7 +43,7 @@ const useAutoComplete = () => {
 			(async () => {
 				let userSuggestions = await debouncedQueryAutoComplete.current(query);
 				userSuggestions = userSuggestions.filter(
-					(x) => x.email !== PLACEHOLDER_GUEST_EMAIL
+					(x) => x.email !== DEFAULT_GUEST_EMAIL
 				);
 				isSubscribed && setSuggestions(userSuggestions);
 			})();

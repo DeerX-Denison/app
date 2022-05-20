@@ -1,5 +1,7 @@
 import * as Buttons from '@Components/Buttons';
+import { DEFAULT_GUEST_DISPLAY_NAME, DEFAULT_GUEST_EMAIL } from '@Constants';
 import { UserContext } from '@Contexts';
+import { fn } from '@firebase.config';
 import { useThreads } from '@Hooks';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -50,6 +52,7 @@ const derenderBackButton = (navigation: Props['navigation']) => {
 const Threads: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
+
 	const { threads, fetchThreads, resetThreads } = useThreads();
 
 	const [searching, setSearching] = useState<boolean>(false);
@@ -212,17 +215,42 @@ const Threads: FC<Props> = ({ navigation }) => {
 										'flex flex-1 items-center justify-center items-center'
 									)}
 								>
-									<Text style={tw('text-s-md font-semibold p-4')}>
-										It's lonely here.
-									</Text>
-									<Buttons.Primary
-										size="md"
-										title="Find friends"
-										onPress={() => {
-											setSearching(true);
-											textInputRef.current?.focus();
-										}}
-									/>
+									{userInfo?.displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+									userInfo.email === DEFAULT_GUEST_EMAIL ? (
+										<>
+											<Text style={tw('text-s-md font-semibold p-2')}>
+												Guests Can Only Message
+											</Text>
+											<Text style={tw('text-s-md font-semibold pt-2 pb-4')}>
+												Core Team Members
+											</Text>
+											<Buttons.Primary
+												size="md"
+												title="Message Core Team Members"
+												onPress={async () => {
+													try {
+														await fn.httpsCallable('messageCoreTeam')();
+													} catch (error) {
+														logger.error(error);
+													}
+												}}
+											/>
+										</>
+									) : (
+										<>
+											<Text style={tw('text-s-md font-semibold p-4')}>
+												It's lonely here.
+											</Text>
+											<Buttons.Primary
+												size="md"
+												title="Find friends"
+												onPress={() => {
+													setSearching(true);
+													textInputRef.current?.focus();
+												}}
+											/>
+										</>
+									)}
 								</View>
 							)}
 						</>

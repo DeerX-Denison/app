@@ -1,4 +1,8 @@
-import { LISTING_PER_PAGE } from '@Constants';
+import {
+	DEFAULT_GUEST_DISPLAY_NAME,
+	DEFAULT_GUEST_EMAIL,
+	LISTING_PER_PAGE,
+} from '@Constants';
 import { JustSignOut, UserContext } from '@Contexts';
 import { db, localTime } from '@firebase.config';
 import logger from '@logger';
@@ -38,13 +42,19 @@ const useNewListings: UseNewListingsFn = (
 		ListingData[] | null | undefined
 	>();
 	const { justSignOut } = useContext(JustSignOut);
-
 	useEffect(
 		() => {
 			if (!userInfo) return;
-			if (categoryFilter.length == 0) {
+
+			const collection =
+				userInfo.displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+				userInfo.email === DEFAULT_GUEST_EMAIL
+					? 'guest_listings'
+					: 'listings';
+
+			if (categoryFilter.length === 0) {
 				const unsubscribe = db
-					.collection('listings')
+					.collection(collection)
 					.where('status', '==', 'posted')
 					.orderBy('createdAt', 'desc')
 					.limit(LISTING_PER_PAGE)
@@ -75,7 +85,7 @@ const useNewListings: UseNewListingsFn = (
 				return () => unsubscribe();
 			} else {
 				const unsubscribe = db
-					.collection('listings')
+					.collection(collection)
 					.where('status', '==', 'posted')
 					.where('category', 'array-contains-any', categoryFilter)
 					.orderBy('createdAt', 'desc')

@@ -1,7 +1,14 @@
 import * as Buttons from '@Components/Buttons';
-import { DENISON_RED_RGBA, GRAY_RGBA, PINK_RGBA } from '@Constants';
+import {
+	DEFAULT_GUEST_DISPLAY_NAME,
+	DEFAULT_GUEST_EMAIL,
+	DENISON_RED_RGBA,
+	GRAY_RGBA,
+	PINK_RGBA,
+} from '@Constants';
 import { JustSignOut, UserContext } from '@Contexts';
-import { auth } from '@firebase.config';
+import { auth, fn } from '@firebase.config';
+import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
@@ -168,8 +175,25 @@ const Main: FC<Props> = ({ route, navigation }) => {
 				<Buttons.White
 					title="Sign Out"
 					onPress={async () => {
-						await auth.signOut();
-						setJustSignOut && setJustSignOut(true);
+						if (userProfile) {
+							const { displayName, email, uid } = userProfile;
+							try {
+								await auth.signOut();
+							} catch (error) {
+								return logger.error(error);
+							}
+							setJustSignOut && setJustSignOut(true);
+							if (
+								displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+								email === DEFAULT_GUEST_EMAIL
+							) {
+								try {
+									await fn.httpsCallable('deleteAnonymousUser')({ uid });
+								} catch (error) {
+									return logger.error(error);
+								}
+							}
+						}
 					}}
 					size="md"
 				/>

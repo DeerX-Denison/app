@@ -1,7 +1,8 @@
+import { DEFAULT_GUEST_DISPLAY_NAME, DEFAULT_GUEST_EMAIL } from '@Constants';
+import { UserContext } from '@Contexts';
 import { db } from '@firebase.config';
 import logger from '@logger';
-import { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
+import { useContext, useEffect, useState } from 'react';
 import { ListingData, ListingId } from 'types';
 
 export type UseListingData = (listingId: ListingId) => {
@@ -15,32 +16,35 @@ export type UseListingData = (listingId: ListingId) => {
  * custom hook to fetch listing data with provided listingId from database. if listingData is undefined, it is not fetched. If listingData is null, it does not exist. If listingData is fetchedm it is ListingData type
  */
 const useListingData: UseListingData = (listingId) => {
+	const { userInfo } = useContext(UserContext);
 	const [listingData, setListingData] = useState<
 		ListingData | null | undefined
 	>(undefined);
-
 	useEffect(() => {
-		const unsubscribed = db
-			.collection('listings')
-			.doc(listingId)
-			.onSnapshot(
-				(docSnap) => {
-					if (docSnap.exists) {
-						const listingData = docSnap.data() as ListingData;
-						setListingData(listingData);
-					} else {
-						setListingData(null);
+		if (userInfo) {
+			const collection =
+				userInfo.displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+				userInfo.email === DEFAULT_GUEST_EMAIL
+					? 'guest_listings'
+					: 'listings';
+			const unsubscribed = db
+				.collection(collection)
+				.doc(listingId)
+				.onSnapshot(
+					(docSnap) => {
+						if (docSnap.exists) {
+							const listingData = docSnap.data() as ListingData;
+							setListingData(listingData);
+						} else {
+							setListingData(null);
+						}
+					},
+					(error) => {
+						logger.error(error);
 					}
-				},
-				(error) => {
-					logger.log(error);
-					Toast.show({
-						type: 'error',
-						text1: 'Error fetching listing data, please try again later',
-					});
-				}
-			);
-		return () => unsubscribed();
+				);
+			return () => unsubscribed();
+		}
 	}, []);
 
 	return { listingData, setListingData };

@@ -119,25 +119,6 @@ const useAuth = () => {
 	>();
 
 	useEffect(() => {
-		if (
-			user &&
-			'email' in user &&
-			'displayName' in user &&
-			'photoURL' in user &&
-			'uid' in user
-		) {
-			setUserInfo({
-				email: user.email,
-				displayName: user.displayName,
-				photoURL: user.photoURL,
-				uid: user.uid,
-			});
-		} else {
-			setUserInfo(user);
-		}
-	}, [user]);
-
-	useEffect(() => {
 		if (user) {
 			const unsubscribe = db
 				.collection('users')
@@ -155,14 +136,21 @@ const useAuth = () => {
 								if ('pronouns' in userData) {
 									pronouns = userData.pronouns;
 								}
-								setUserProfile({
-									email: userData.email,
-									displayName: userData.displayName,
-									photoURL: userData.photoURL,
-									uid: user.uid,
-									bio,
-									pronouns,
-								});
+								if (
+									'email' in userData &&
+									'displayName' in userData &&
+									'photoURL' in userData &&
+									'uid' in userData
+								) {
+									setUserProfile({
+										email: userData.email,
+										displayName: userData.displayName,
+										photoURL: userData.photoURL,
+										uid: userData.uid,
+										bio,
+										pronouns,
+									});
+								}
 							}
 						} else {
 							setUserProfile(null);
@@ -174,8 +162,23 @@ const useAuth = () => {
 					}
 				);
 			return () => unsubscribe();
+		} else {
+			setUserProfile(null);
 		}
 	}, [user]);
+
+	useEffect(() => {
+		if (userProfile) {
+			setUserInfo({
+				email: userProfile.email,
+				displayName: userProfile.displayName,
+				photoURL: userProfile.photoURL,
+				uid: userProfile.uid,
+			});
+		} else {
+			setUserInfo(null);
+		}
+	}, [userProfile]);
 	useSaveUser(user);
 
 	return { user, userInfo, userProfile };

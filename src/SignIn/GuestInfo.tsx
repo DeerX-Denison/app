@@ -23,7 +23,7 @@ const GuestInfo: FC<Props> = ({ displayingGuestInfo }) => {
 					<Text>For non-Denison guests trying out the application</Text>
 					<View style={tw('flex flex-row items-start pl-3 pt-3')}>
 						<FontAwesomeIcon icon={faCircle} size={8} style={tw('mr-2 mt-1')} />
-						<Text>Can view items being sold (refered to as "listings")</Text>
+						<Text>Can view listings (items being sold) of other guests</Text>
 					</View>
 					<View style={tw('flex flex-row items-start pl-3 pt-3')}>
 						<FontAwesomeIcon icon={faCircle} size={8} style={tw('mr-2 mt-1')} />
@@ -43,7 +43,7 @@ const GuestInfo: FC<Props> = ({ displayingGuestInfo }) => {
 					</View>
 					<View style={tw('flex flex-row items-start pl-3 pt-3')}>
 						<FontAwesomeIcon icon={faCircle} size={8} style={tw('mr-2 mt-1')} />
-						<Text>Account will be deleted after 1 month</Text>
+						<Text>Account will be deleted when sign out</Text>
 					</View>
 				</View>
 			)}

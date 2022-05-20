@@ -1,4 +1,8 @@
-import { MY_LISTINGS_PER_PAGE } from '@Constants';
+import {
+	DEFAULT_GUEST_DISPLAY_NAME,
+	DEFAULT_GUEST_EMAIL,
+	MY_LISTINGS_PER_PAGE,
+} from '@Constants';
 import { UserContext } from '@Contexts';
 import { db } from '@firebase.config';
 import logger from '@logger';
@@ -35,9 +39,14 @@ const useNewMyListings: useNewMyListings = (trigger, lastDoc, setLastDoc) => {
 					isSubscribed = false;
 				};
 			}
+			const collection =
+				userInfo.displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+				userInfo.email === DEFAULT_GUEST_EMAIL
+					? 'guest_listings'
+					: 'listings';
 			const unsubscribe = db
-				.collection('listings')
-				.where('seller.uid', '==', userInfo?.uid)
+				.collection(collection)
+				.where('seller.uid', '==', userInfo.uid)
 				.limit(MY_LISTINGS_PER_PAGE)
 				.onSnapshot(
 					(querySnapshot) => {

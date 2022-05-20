@@ -40,7 +40,7 @@ const useName = (members: UserInfo[]) => {
 					name[member.uid] = DEFAULT_MESSAGE_NAME;
 				});
 				setName(name);
-				logger.error('A thread somehow has gotten more than 2 members');
+				logger.error('A thread somehow does not has 2 members');
 			}
 		} else {
 			throw 'User unauthenticated';

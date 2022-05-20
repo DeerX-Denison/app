@@ -24,8 +24,10 @@ const useAuthState = () => {
 		if (user) {
 			(async () => {
 				const docSnap = await db.collection('users').doc(user.uid).get();
-				const { displayName, photoURL } = docSnap.data() as UserInfo;
-				await user.updateProfile({ photoURL, displayName });
+				if (docSnap.exists) {
+					const { displayName, photoURL } = docSnap.data() as UserInfo;
+					await user.updateProfile({ photoURL, displayName });
+				}
 			})();
 		}
 	}, [user]);
@@ -142,24 +144,28 @@ const useAuth = () => {
 				.doc(user.uid)
 				.onSnapshot(
 					(docSnap) => {
-						const userData = docSnap.data() as UserProfile;
-						if (userData) {
-							let bio: string | null = null;
-							if ('bio' in userData) {
-								bio = userData.bio;
+						if (docSnap.exists) {
+							const userData = docSnap.data() as UserProfile;
+							if (userData) {
+								let bio: string | null = null;
+								if ('bio' in userData) {
+									bio = userData.bio;
+								}
+								let pronouns: UserPronoun[] | undefined | null = null;
+								if ('pronouns' in userData) {
+									pronouns = userData.pronouns;
+								}
+								setUserProfile({
+									email: userData.email,
+									displayName: userData.displayName,
+									photoURL: userData.photoURL,
+									uid: user.uid,
+									bio,
+									pronouns,
+								});
 							}
-							let pronouns: UserPronoun[] | undefined | null = null;
-							if ('pronouns' in userData) {
-								pronouns = userData.pronouns;
-							}
-							setUserProfile({
-								email: user.email,
-								displayName: user.displayName,
-								photoURL: user.photoURL,
-								uid: user.uid,
-								bio,
-								pronouns,
-							});
+						} else {
+							setUserProfile(null);
 						}
 					},
 					(error) => {

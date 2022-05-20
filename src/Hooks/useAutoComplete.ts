@@ -1,5 +1,6 @@
-import { NEW_THREAD_SUGGESTIONS } from '@Constants';
+import { NEW_THREAD_SUGGESTIONS, PLACEHOLDER_GUEST_EMAIL } from '@Constants';
 import { db } from '@firebase.config';
+import logger from '@logger';
 import { useEffect, useRef, useState } from 'react';
 import { UserInfo } from 'types';
 import useDebounce from './useDebounce';
@@ -10,12 +11,17 @@ import useDebounce from './useDebounce';
 const queryAutoComplete: (query: string) => Promise<UserInfo[]> = async (
 	query
 ) => {
-	const querySnap = await db
-		.collection('users')
-		.where('searchableKeyword', 'array-contains', query.trim().toLowerCase())
-		.limit(NEW_THREAD_SUGGESTIONS)
-		.get();
-	return querySnap.docs.map((docSnap) => docSnap.data() as UserInfo);
+	try {
+		const querySnap = await db
+			.collection('users')
+			.where('searchableKeyword', 'array-contains', query.trim().toLowerCase())
+			.limit(NEW_THREAD_SUGGESTIONS)
+			.get();
+		return querySnap.docs.map((docSnap) => docSnap.data() as UserInfo);
+	} catch (error) {
+		logger.error(error);
+		return [];
+	}
 };
 
 /**
@@ -35,7 +41,10 @@ const useAutoComplete = () => {
 		if (query.length >= 1) {
 			isSubscribed && setSuggestions(null);
 			(async () => {
-				const userSuggestions = await debouncedQueryAutoComplete.current(query);
+				let userSuggestions = await debouncedQueryAutoComplete.current(query);
+				userSuggestions = userSuggestions.filter(
+					(x) => x.email !== PLACEHOLDER_GUEST_EMAIL
+				);
 				isSubscribed && setSuggestions(userSuggestions);
 			})();
 		} else {

@@ -6,7 +6,7 @@ import logger from '@logger';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -20,6 +20,11 @@ interface Props {
 const Profile: FC<Props> = ({ route, navigation }) => {
 	const { userInfo } = useContext(UserContext);
 	const { profile: displayUserProfile } = useProfile(route.params.uid);
+	useEffect(() => {
+		if (displayUserProfile === null) {
+			navigation.goBack();
+		}
+	}, [displayUserProfile]);
 	return (
 		<View style={tw('flex flex-1')}>
 			<View style={tw('flex flex-col border-b')}>
@@ -132,6 +137,8 @@ const Profile: FC<Props> = ({ route, navigation }) => {
 									},
 									userInfo,
 								],
+								initRefs: undefined,
+								initText: undefined,
 							});
 						} else {
 							logger.error(

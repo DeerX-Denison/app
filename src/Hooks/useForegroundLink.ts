@@ -34,6 +34,8 @@ const useForegroundLink: UseForegroundLink = (navigationRef) => {
 											screen: 'Messages',
 											params: {
 												members: threadPreviewData.members,
+												initRefs: undefined,
+												initText: undefined,
 											},
 											initial: false,
 										});

@@ -1,10 +1,9 @@
 import { LISTING_PER_PAGE } from '@Constants';
-import { UserContext } from '@Contexts';
+import { JustSignOut, UserContext } from '@Contexts';
 import { db, localTime } from '@firebase.config';
 import logger from '@logger';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import React, { useContext, useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
 import { ListingCategory, ListingData } from 'types';
 
 export type UseNewListingsFn = (
@@ -38,6 +37,7 @@ const useNewListings: UseNewListingsFn = (
 	const [newListings, setNewListings] = useState<
 		ListingData[] | null | undefined
 	>();
+	const { justSignOut } = useContext(JustSignOut);
 
 	useEffect(
 		() => {
@@ -69,8 +69,7 @@ const useNewListings: UseNewListingsFn = (
 							setNewListings(newListings);
 						},
 						(error) => {
-							logger.log(error);
-							return Toast.show({ type: 'error', text1: error.message });
+							!justSignOut && logger.error(error);
 						}
 					);
 				return () => unsubscribe();
@@ -95,8 +94,7 @@ const useNewListings: UseNewListingsFn = (
 							setNewListings(newListings);
 						},
 						(error) => {
-							logger.log(error);
-							return Toast.show({ type: 'error', text1: error.message });
+							!justSignOut && logger.error(error);
 						}
 					);
 				return () => unsubscribe();

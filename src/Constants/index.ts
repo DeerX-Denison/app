@@ -24,6 +24,10 @@ export const MY_LISTINGS_PER_PAGE = 10;
 export const MESSAGE_MENU_ANIM_TIME = 250;
 export const MESSAGE_TEXT_INPUT_PLACEHOLDER = '@ To Reference An Item';
 export const MESSAGE_DIRECT_FROM_LISTING = 'Hi, I would like to buy';
+
+// make sure this match BE
+export const PLACEHOLDER_GUEST_EMAIL = 'guest-user-email';
+
 export const CONDITIONS: Exclude<ListingCondition, undefined>[] = [
 	'BRAND NEW',
 	'LIKE NEW',

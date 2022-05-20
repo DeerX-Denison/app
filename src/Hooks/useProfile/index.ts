@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import { UserProfile } from 'types';
 
 export type UseProfile = (uid: string | undefined) => {
-	profile: UserProfile | undefined;
-	setProfile: React.Dispatch<React.SetStateAction<UserProfile | undefined>>;
+	profile: UserProfile | null | undefined;
+	setProfile: React.Dispatch<
+		React.SetStateAction<UserProfile | null | undefined>
+	>;
 };
 
 const useProfile: UseProfile = (uid) => {
-	const [profile, setProfile] = useState<UserProfile | undefined>();
+	const [profile, setProfile] = useState<UserProfile | null | undefined>();
 
 	useEffect(() => {
 		if (!uid) return;
@@ -21,6 +23,7 @@ const useProfile: UseProfile = (uid) => {
 				const profile = res.data as UserProfile;
 				isSubscribed && setProfile(profile);
 			} catch (error) {
+				isSubscribed && setProfile(null);
 				logger.error(error);
 			}
 		})();

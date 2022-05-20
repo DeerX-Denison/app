@@ -15,8 +15,13 @@ class Logger implements ILogger {
 
 	error(x: unknown) {
 		console.error(x);
-
 		if (x instanceof Error) {
+			if (x.message.includes('firestore/permission-denied')) {
+				return Toast.show({
+					type: 'error',
+					text1: 'The user does not have permission',
+				});
+			}
 			Toast.show({ type: 'error', text1: x.message });
 			crash.recordError(x);
 		} else {

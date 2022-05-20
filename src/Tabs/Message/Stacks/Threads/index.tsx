@@ -73,6 +73,8 @@ const Threads: FC<Props> = ({ navigation }) => {
 						photoURL: suggestion.photoURL,
 					},
 				],
+				initRefs: undefined,
+				initText: undefined,
 			});
 		}
 	};

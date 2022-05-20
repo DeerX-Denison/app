@@ -2,7 +2,6 @@ import { MILLIES_TO_SPLIT_MESSAGES } from '@Constants';
 import { useEffect, useState } from 'react';
 import 'react-native-get-random-values';
 import { MessageBlockData, MessageData } from 'types';
-import { v4 as uuidv4 } from 'uuid';
 
 const validConditionToSplitMessages: (
 	curMsg: MessageData,
@@ -30,11 +29,12 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 
 	useEffect(() => {
 		if (messages && messages.length > 0) {
-			const parsedMessages: MessageBlockData[] = [];
+			const _parsedMessages: MessageBlockData[] = [];
 
 			// init parsedMessage as the first message
 			let parsedMessage: MessageBlockData = {
-				id: uuidv4(),
+				// id: uuidv4(),
+				id: messages[0].id,
 				sender: messages[0].sender,
 				time: messages[0].time,
 				contents: [
@@ -51,13 +51,14 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 			for (let i = 0; i < messages.length; i++) {
 				// if i at last index, push whatever is in parsedMessage
 				if (i === messages.length - 1) {
-					parsedMessages.push(parsedMessage);
+					_parsedMessages.push(parsedMessage);
 				} // else attempt to split messages
 				else if (validConditionToSplitMessages(messages[i], messages[i + 1])) {
-					parsedMessages.push(parsedMessage);
+					_parsedMessages.push(parsedMessage);
 					// re-init parsedMessage as the next message
 					parsedMessage = {
-						id: uuidv4(),
+						// id: uuidv4(),
+						id: messages[i + 1].id,
 						sender: messages[i + 1].sender,
 						time: messages[i + 1].time,
 						contents: [
@@ -90,7 +91,7 @@ const useParseMessage = (messages: MessageData[] | undefined) => {
 				}
 			}
 
-			setParsedMessages(parsedMessages);
+			setParsedMessages(_parsedMessages);
 		} else if (messages && messages.length === 0) {
 			setParsedMessages([]);
 		}

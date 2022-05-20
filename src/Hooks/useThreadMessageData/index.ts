@@ -78,6 +78,7 @@ const useThreadMessagesData = (
 							)
 						);
 					});
+					// console.log(filteredNewMsg[filteredNewMsg.length - 1]);
 					setThreadMessagesData(filteredNewMsg);
 				}
 			} else {

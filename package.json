@@ -14,11 +14,14 @@
 		"test:watch": "jest --watch-all --detectOpenHandles",
 		"lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",
 		"format": "yarn prettier --write \"src/**/*.tsx\" \"src/**/*.ts\"",
+		"setup:dev": "./bin/setup_dev.sh",
+		"setup:stage": "./bin/setup_stage.sh",
+		"setup:prod": "./bin/setup_prod.sh",
 		"clean:ios": "cd ios && bundle exec fastlane clean",
-		"build:ios": "./bin/setup_stage.sh && cd ios && bundle exec fastlane build",
-		"patch:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane patch",
-		"minor:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane minor",
-		"major:ios": "./bin/setup_prod.sh && cd ios && bundle exec fastlane major"
+		"build:ios": "cd ios && bundle exec fastlane build",
+		"patch:ios": "cd ios && bundle exec fastlane patch",
+		"minor:ios": "cd ios && bundle exec fastlane minor",
+		"major:ios": "cd ios && bundle exec fastlane major"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^6.1.1",

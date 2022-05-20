@@ -59,6 +59,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		useThreadData(route.params.members);
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
+
 	const [disableSend, setDisableSend] = useState<boolean>(false);
 
 	// state for showing menu. undefined means no menu. defined store string of
@@ -127,9 +128,12 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 					id: uuidv4(),
 				};
 				setNewMsgs([newMessage]);
+
 				setTimeout(() => {
 					scrollViewRef.current?.scrollToEnd({ animated: true });
 				}, 0);
+				// scrollViewRef.current?.scrollToEnd({ animated: true });
+
 				setRefs([]);
 				setDisableSend(false);
 				// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -155,9 +159,6 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 		} else {
 			// error handling
 		}
-		setTimeout(() => {
-			scrollViewRef.current?.scrollToEnd({ animated: true });
-		}, 0);
 	};
 
 	// state for refresh control thread preview scroll view

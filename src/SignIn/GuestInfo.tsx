@@ -19,7 +19,7 @@ const GuestInfo: FC<Props> = ({ displayingGuestInfo }) => {
 			)}
 		>
 			{displayingGuestInfo && (
-				<View style={tw('border border-denison-red rounded-2xl p-3')}>
+				<View style={tw('border border-denison-red rounded-2xl p-3 w-11/12')}>
 					<Text>For non-Denison guests trying out the application</Text>
 					<View style={tw('flex flex-row items-start pl-3 pt-3')}>
 						<FontAwesomeIcon icon={faCircle} size={8} style={tw('mr-2 mt-1')} />
@@ -43,7 +43,7 @@ const GuestInfo: FC<Props> = ({ displayingGuestInfo }) => {
 					</View>
 					<View style={tw('flex flex-row items-start pl-3 pt-3')}>
 						<FontAwesomeIcon icon={faCircle} size={8} style={tw('mr-2 mt-1')} />
-						<Text>Account will be deleted when sign out</Text>
+						<Text>Account deleted when sign out or inactive for 7 days</Text>
 					</View>
 				</View>
 			)}

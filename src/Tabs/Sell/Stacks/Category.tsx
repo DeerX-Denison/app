@@ -126,8 +126,14 @@ const Category: FC<Props> = ({
 							) : (
 								// suggestions is empty
 								<>
-									<View>
-										<Text>No category found</Text>
+									<View
+										style={tw(
+											'flex justify-center items-center p-4 border border-denison-red m-2 rounded-full'
+										)}
+									>
+										<Text style={tw('text-s-lg text-denison-red')}>
+											No category found
+										</Text>
 									</View>
 								</>
 							)}

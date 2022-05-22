@@ -192,7 +192,7 @@ export type ListingCondition =
 	| 'BARELY FUNCTIONAL';
 export type ListingDescription = string;
 export type LikedBy = string[];
-export type ListingStatus = 'posted' | 'saved';
+export type ListingStatus = 'posted' | 'saved' | 'sold';
 export type ListingData = {
 	id: ListingId;
 	images: ListingImageURL[];
@@ -206,6 +206,7 @@ export type ListingData = {
 	updatedAt: FirebaseFirestoreTypes.Timestamp | undefined;
 	likedBy: LikedBy;
 	status: ListingStatus;
+	soldTo?: UserInfo;
 };
 
 export type MyListingData = ListingData;

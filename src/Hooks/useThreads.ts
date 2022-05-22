@@ -1,5 +1,5 @@
 import { THREADS_PER_PAGE } from '@Constants';
-import { UserContext } from '@Contexts';
+import { ThreadsContext, UserContext } from '@Contexts';
 import { db, localTime } from '@firebase.config';
 import logger from '@logger';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
@@ -39,10 +39,19 @@ const mergeThreads = (
  * custom hook to fetches the user's threads from db in general
  */
 const useThreads = () => {
+	const { setThreadsContext } = useContext(ThreadsContext);
 	// final threads data to be return from this custom hook and render
 	// sorted in order such that .latestTime closest to current time starts at 0
 	// last updated Jan 13, 2022
 	const [threads, setThreads] = useState<ThreadPreviewData[] | undefined>();
+	useEffect(() => {
+		if (threads && setThreadsContext) {
+			console.log('_____');
+			console.log(threads);
+			console.log('_____');
+			setThreadsContext(threads);
+		}
+	}, [threads]);
 
 	// states for newly fetched listing data
 	const [updThrs, setUpdThrs] = useState<ThreadPreviewData[] | undefined>();

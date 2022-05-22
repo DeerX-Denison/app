@@ -154,6 +154,7 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 								extraScrollHeight={CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12}
 								enableResetScrollToCoords={false}
 								keyboardOpeningTime={0}
+								showsVerticalScrollIndicator={false}
 							>
 								{listingData.images.length > 0 ? (
 									// if images.length > 0, render carousel
@@ -384,24 +385,28 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 										</Text>
 									)}
 								</View>
-								<View
-									style={tw(
-										'my-2 w-full flex flex-row justify-center items-center'
-									)}
-								>
-									<Text style={tw('text-s-md p-2')}>Private</Text>
-									<Switch
-										onValueChange={() => {
-											setHasEditStatus(true);
-											setListingData({
-												...listingData,
-												status:
-													listingData.status === 'posted' ? 'saved' : 'posted',
-											});
-										}}
-										value={listingData?.status === 'posted'}
-									/>
-									<Text style={tw('text-s-md p-2')}>Public</Text>
+								<View style={tw('mx-4 my-2')}>
+									<View
+										style={tw(
+											'w-full flex flex-row justify-center items-center'
+										)}
+									>
+										<Text style={tw('text-s-md p-2')}>Private</Text>
+										<Switch
+											onValueChange={() => {
+												setHasEditStatus(true);
+												setListingData({
+													...listingData,
+													status:
+														listingData.status === 'posted'
+															? 'saved'
+															: 'posted',
+												});
+											}}
+											value={listingData?.status === 'posted'}
+										/>
+										<Text style={tw('text-s-md p-2')}>Public</Text>
+									</View>
 								</View>
 							</KeyboardAwareScrollView>
 						)}

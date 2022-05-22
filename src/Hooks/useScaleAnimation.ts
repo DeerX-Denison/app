@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { Animated } from 'react-native';
 
-export type UseScaleAnimationFn = (categorizing: boolean) => {
+export type UseScaleAnimationFn = (opening: boolean) => {
 	scale: Animated.Value;
 };
 
 /**
  * effect to animate scaling number
  */
-const useScaleAnimation: UseScaleAnimationFn = (categorizing) => {
+const useScaleAnimation: UseScaleAnimationFn = (opening) => {
 	const scale = useRef(new Animated.Value(1)).current;
 
 	useEffect(() => {
-		if (categorizing) {
+		if (opening) {
 			Animated.timing(scale, {
 				toValue: 0.95,
 				useNativeDriver: true,
@@ -25,7 +25,8 @@ const useScaleAnimation: UseScaleAnimationFn = (categorizing) => {
 				duration: 250,
 			}).start();
 		}
-	}, [categorizing]);
+	}, [opening]);
+
 	return { scale };
 };
 

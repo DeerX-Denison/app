@@ -1,9 +1,15 @@
 import { DENISON_RED_RGBA } from '@Constants';
-import { useMyListings } from '@Hooks';
+import { fn } from '@firebase.config';
+import { faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { useMyListings, useScaleAnimation } from '@Hooks';
+import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC } from 'react';
 import {
+	Animated,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
 	RefreshControl,
@@ -16,7 +22,10 @@ import {
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { ListingId, SellStackParamList } from 'types';
-import EditIcon from '../../../../static/edit.svg';
+import MyListingMenu from './MyListingMenu';
+import SoldToSearch from './SoldToSearch';
+import useShowingMenu from './useShowingMenu';
+import useSoldToSearch from './useSoldToSearch';
 interface Props {
 	navigation: NativeStackNavigationProp<SellStackParamList, 'MyListing'>;
 }
@@ -31,6 +40,24 @@ const MyListings: FC<Props> = ({ navigation }) => {
 		navigation.navigate('Edit', { listingId });
 	};
 
+	const markAsSoldHandler = async (listingId: ListingId, soldToUid: string) => {
+		try {
+			await fn.httpsCallable('markListingAsSold')({ listingId, soldToUid });
+		} catch (error) {
+			logger.error(error);
+		}
+	};
+
+	const {
+		showingSearch,
+		setShowingSearch,
+		selectedListingId,
+		setSelectedListingId,
+	} = useSoldToSearch();
+
+	const { showingMenu, toggleMenu, turnOffAllMenu } =
+		useShowingMenu(myListings);
+	const { scale } = useScaleAnimation(showingSearch);
 	// state for refresh control thread preview scroll view
 	const [refreshing, setRefreshing] = React.useState(false);
 	const onRefresh = async () => {
@@ -46,12 +73,21 @@ const MyListings: FC<Props> = ({ navigation }) => {
 			fetchMyListings();
 		}
 	};
+	const onScrollBeginDrag = () => {
+		turnOffAllMenu();
+	};
 
 	return (
 		<View style={tw('flex flex-1')}>
+			<SoldToSearch
+				showingSearch={showingSearch}
+				setShowingSearch={setShowingSearch}
+				selectedListingId={selectedListingId}
+				markAsSoldHandler={markAsSoldHandler}
+			/>
 			{myListings ? (
 				// myListings is fetched, render scroll view
-				<>
+				<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 					{myListings.length > 0 ? (
 						// myListings fetched is not empty, render scroll view
 						<>
@@ -64,6 +100,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									/>
 								}
 								onScrollEndDrag={onScrollEndDrag}
+								onScrollBeginDrag={onScrollBeginDrag}
 								showsVerticalScrollIndicator={false}
 								showsHorizontalScrollIndicator={false}
 								contentContainerStyle={tw(
@@ -71,44 +108,67 @@ const MyListings: FC<Props> = ({ navigation }) => {
 								)}
 							>
 								{myListings.map((listing, index) => (
-									<TouchableWithoutFeedback
+									<View
 										key={listing.id}
-										style={tw('w-full mx-1')}
-										onPress={() => editHandler(listing.id)}
+										style={{
+											...tw('w-full mx-1'),
+											zIndex: -index,
+										}}
 									>
-										<View
-											style={tw(
-												`flex-row justify-between items-center px-2 py-2 bg-white ${
-													index !== 0 ? 'border-t border-red-700' : ''
-												}`
-											)}
+										<TouchableWithoutFeedback
+											onPress={() => editHandler(listing.id)}
 										>
 											<View
-												style={{
-													shadowColor: DENISON_RED_RGBA,
-													shadowOffset: { width: 2, height: 4 },
-													shadowOpacity: 0.25,
-													shadowRadius: 4,
-												}}
+												style={tw(
+													`flex-row justify-between items-center px-2 py-2 bg-white ${
+														index !== 0 ? 'border-t border-red-700' : ''
+													}`
+												)}
 											>
-												<FastImage
-													source={{ uri: listing.images[0] }}
-													style={tw('w-16 h-16 rounded-lg')}
-												/>
+												<View
+													style={{
+														shadowColor: DENISON_RED_RGBA,
+														shadowOffset: { width: 2, height: 4 },
+														shadowOpacity: 0.25,
+														shadowRadius: 4,
+													}}
+												>
+													<FastImage
+														source={{ uri: listing.images[0] }}
+														style={tw('w-16 h-16 rounded-lg')}
+													/>
+												</View>
+												<View style={tw('flex flex-1 break-words pl-4')}>
+													<Text style={tw('text-lg font-bold')}>
+														{listing.name}
+													</Text>
+												</View>
+												<TouchableOpacity
+													onPress={() => toggleMenu(listing.id)}
+													style={tw('flex p-4 justify-center items-center')}
+												>
+													<FontAwesomeIcon
+														icon={
+															showingMenu[listing.id]
+																? faXmarkCircle
+																: faEllipsisV
+														}
+														size={24}
+														style={tw('text-denison-red')}
+													/>
+												</TouchableOpacity>
 											</View>
-											<View style={tw('flex flex-1 break-words pl-4')}>
-												<Text style={tw('text-lg font-bold')}>
-													{listing.name}
-												</Text>
-											</View>
-											<TouchableOpacity
-												onPress={() => editHandler(listing.id)}
-												style={tw('pr-2')}
-											>
-												<EditIcon height={32} width={32} />
-											</TouchableOpacity>
-										</View>
-									</TouchableWithoutFeedback>
+										</TouchableWithoutFeedback>
+										<MyListingMenu
+											showing={showingMenu[listing.id]}
+											listingId={listing.id}
+											editHandler={editHandler}
+											showingSearch={showingSearch}
+											setShowingSearch={setShowingSearch}
+											toggleMenu={toggleMenu}
+											setSelectedListingId={setSelectedListingId}
+										/>
+									</View>
 								))}
 							</ScrollView>
 						</>
@@ -127,7 +187,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 							</View>
 						</>
 					)}
-				</>
+				</Animated.View>
 			) : (
 				// myListings not fetched, render loading
 				<>

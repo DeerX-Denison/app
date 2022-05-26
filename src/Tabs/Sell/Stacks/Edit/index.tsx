@@ -4,7 +4,10 @@ import * as Inputs from '@Components/Inputs';
 import {
 	CONDITIONS,
 	CREATE_EDIT_SCROLLVIEW_EXTRA_HEIGHT_IP12,
+	DEFAULT_USER_DISPLAY_NAME,
+	DEFAULT_USER_PHOTO_URL,
 	PINK_RGBA,
+	STATUSES,
 } from '@Constants';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -12,35 +15,44 @@ import { useListingData, useListingError, useScaleAnimation } from '@Hooks';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	Animated,
 	ScrollView,
-	Switch,
 	Text,
 	TouchableOpacity,
 	View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Item } from 'react-native-picker-select';
 import { Bar, CircleSnail } from 'react-native-progress';
-import { ListingCondition, ListingData, SellStackParamList } from 'types';
+import {
+	ListingCondition,
+	ListingData,
+	ListingStatus,
+	SellStackParamList,
+} from 'types';
+import EditIcon from '../../../../static/edit.svg';
 import Magnify from '../../../../static/magnify.svg';
 import Plus from '../../../../static/plus.svg';
 import XIcon from '../../../../static/x.svg';
 import addImage from '../addImage';
 import Category from '../Category';
+import useSoldToSearch from '../MyListings/useSoldToSearch';
 import removeCategory from '../removeCategory';
+import SoldToSearch from '../SoldToSearch';
 import useUploadProgress from '../useUploadProgress';
 import renderDeleteSaveButton from './renderDeleteSaveButton';
 import saveListing from './saveListing';
+import useShowingSoldToView from './useShowingSoldToView';
 
 export interface Props {
 	route: RouteProp<SellStackParamList, 'Edit'>;
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>;
 }
 
-const conditions: Item[] = CONDITIONS.map((x) => {
+const capitalize = (x: string) => {
 	const xLower = x.toLowerCase();
 	const arr = xLower.split(' ');
 
@@ -48,11 +60,29 @@ const conditions: Item[] = CONDITIONS.map((x) => {
 		arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
 	}
 	const xCapitalized = arr.join(' ');
-	return {
-		label: xCapitalized,
-		value: x.toUpperCase(),
-	};
-});
+	return xCapitalized;
+};
+
+const conditions: Item[] = CONDITIONS.map((x) => ({
+	label: capitalize(x),
+	value: x.toUpperCase(),
+}));
+
+const statuses: Item[] = STATUSES.map((x) => ({
+	label: (() => {
+		switch (x) {
+			case 'posted':
+				return 'Public';
+			case 'saved':
+				return 'Private';
+			case 'sold':
+				return 'Sold';
+			default:
+				return '';
+		}
+	})(),
+	value: x.toLowerCase(),
+}));
 
 /**
  * Edit components, when user want to edit an item that has already been put on sale
@@ -67,7 +97,61 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		useUploadProgress();
 	const [updating, setUpdating] = useState<boolean>(false);
 	const [deleting, setDeleting] = useState<boolean>(false);
-	const [hasEditStatus, setHasEditStatus] = useState<boolean>(false);
+	const { showingSearch, setShowingSearch, setSelectedSoldTo, selectedSoldTo } =
+		useSoldToSearch();
+
+	/**
+	 * effect to run set state listing data when user has selected
+	 * a user to sell the item to
+	 **/
+	useEffect(() => {
+		if (listingData && selectedSoldTo) {
+			setListingData({ ...listingData, soldTo: selectedSoldTo });
+		}
+	}, [selectedSoldTo]);
+
+	const { showingSoldTo } = useShowingSoldToView(listingData);
+	// temporary status to save when user scroll status selection but does not press done
+	const [tmpListingStatus, setTmpListingStatus] = useState<
+		ListingStatus | null | undefined
+	>();
+	useEffect(() => {
+		if (listingData) {
+			setTmpListingStatus(listingData.status);
+		}
+	}, [listingData]);
+
+	const {
+		hasEditImage,
+		hasEditStatus,
+		imageError,
+		nameError,
+		priceError,
+		categoryError,
+		conditionError,
+		descError,
+		statusError,
+		setHasEditName,
+		setHasEditPrice,
+		setHasEditCondition,
+		setHasEditDesc,
+		setHasEditStatus,
+	} = listingErrors;
+
+	/**
+	 * effect to run set selectedSoldTo state when user chooses
+	 * another status other than "sold"
+	 */
+	useEffect(() => {
+		if (listingData) {
+			if (listingData.status === 'sold' && hasEditStatus) {
+				setShowingSearch(true);
+			} else {
+				setSelectedSoldTo(undefined);
+			}
+		}
+	}, [listingData?.status]);
+
 	renderDeleteSaveButton(
 		navigation,
 		saveListing,
@@ -77,23 +161,17 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 		subProgressArray,
 		setSubProgressArray,
 		setUpdating,
-		setDeleting,
-		hasEditStatus
+		setDeleting
 	);
 
-	const {
-		hasEditImage,
-		imageError,
-		nameError,
-		priceError,
-		categoryError,
-		conditionError,
-		descError,
-		setHasEditName,
-		setHasEditPrice,
-		setHasEditCondition,
-		setHasEditDesc,
-	} = listingErrors;
+	const selectedStatusHandler = () => {
+		setListingData({
+			...listingData,
+			status: tmpListingStatus,
+		} as ListingData);
+		setHasEditStatus(true);
+	};
+
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category
@@ -102,6 +180,12 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 				setListingData={setListingData}
 				categorizing={categorizing}
 				setCategorizing={setCategorizing}
+			/>
+			<SoldToSearch
+				showingSearch={showingSearch}
+				setShowingSearch={setShowingSearch}
+				setSelectedSoldTo={setSelectedSoldTo}
+				setHasEditStatus={setHasEditStatus}
 			/>
 			<Animated.View style={{ ...tw('flex flex-1'), transform: [{ scale }] }}>
 				{listingData ? (
@@ -386,27 +470,108 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 									)}
 								</View>
 								<View style={tw('mx-4 my-2')}>
-									<View
-										style={tw(
-											'w-full flex flex-row justify-center items-center'
-										)}
-									>
-										<Text style={tw('text-s-md p-2')}>Private</Text>
-										<Switch
-											onValueChange={() => {
-												setHasEditStatus(true);
-												setListingData({
-													...listingData,
-													status:
-														listingData.status === 'posted'
-															? 'saved'
-															: 'posted',
-												});
+									<View style={tw('flex flex-row justify-center h-14')}>
+										<Inputs.Select
+											style={{
+												viewContainer: tw(
+													`border flex ${
+														showingSoldTo ? '' : 'flex-1'
+													} flex-row items-center px-2 rounded-lg ${
+														showingSoldTo ? 'mr-2' : ''
+													}`
+												),
+												iconContainer: tw('h-full flex justify-center'),
+												inputIOSContainer: tw('flex flex-1 flex-row'),
+												inputIOS: tw(
+													`text-s-xl font-semibold ${
+														showingSoldTo ? 'pr-7' : 'w-full'
+													}`
+												),
 											}}
-											value={listingData?.status === 'posted'}
+											items={statuses}
+											value={tmpListingStatus}
+											onValueChange={(status: ListingStatus) => {
+												setTmpListingStatus(status);
+											}}
+											onDonePress={selectedStatusHandler}
+											Icon={() => (
+												<FontAwesomeIcon
+													icon={faChevronDown}
+													size={20}
+													style={tw('text-denison-red')}
+												/>
+											)}
+											placeholder={
+												{
+													label: 'Item Status...',
+													value: undefined,
+												} as Item
+											}
 										/>
-										<Text style={tw('text-s-md p-2')}>Public</Text>
+										{showingSoldTo && (
+											<View style={tw('flex justify-center px-2')}>
+												<Text style={tw('text-s-lg font-semibold')}>to</Text>
+											</View>
+										)}
+										{showingSoldTo && (
+											<View
+												style={tw('flex flex-1 ml-2 border rounded-lg px-2')}
+											>
+												{'soldTo' in listingData && listingData.soldTo ? (
+													<View style={tw('flex flex-1 flex-row')}>
+														<View
+															style={tw(
+																'flex justify-center items-center pr-2'
+															)}
+														>
+															<FastImage
+																source={{
+																	uri: listingData.soldTo.photoURL
+																		? listingData.soldTo.photoURL
+																		: DEFAULT_USER_PHOTO_URL,
+																}}
+																style={tw(
+																	'h-10 w-10 rounded-full border border-denison-red'
+																)}
+															/>
+														</View>
+														<View
+															style={tw('flex flex-1 flex-row justify-between')}
+														>
+															<View
+																style={tw(
+																	'flex flex-1 justify-center items-start'
+																)}
+															>
+																<Text
+																	style={tw('text-s-md font-semibold')}
+																	numberOfLines={1}
+																	ellipsizeMode="tail"
+																>
+																	{listingData.soldTo.displayName
+																		? listingData.soldTo.displayName
+																		: DEFAULT_USER_DISPLAY_NAME}
+																</Text>
+															</View>
+															<TouchableOpacity
+																onPress={() => setShowingSearch(true)}
+																style={tw('p-2')}
+															>
+																<EditIcon height={32} width={32} />
+															</TouchableOpacity>
+														</View>
+													</View>
+												) : (
+													<View></View>
+												)}
+											</View>
+										)}
 									</View>
+									{statusError !== '' && (
+										<Text style={tw('text-red-400 text-s-md p-2')}>
+											{statusError}
+										</Text>
+									)}
 								</View>
 							</KeyboardAwareScrollView>
 						)}

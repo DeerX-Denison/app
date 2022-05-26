@@ -20,8 +20,7 @@ export type RenderDeleteSaveButton = (
 	subProgressArray: number[],
 	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
 	setUpdating: React.Dispatch<React.SetStateAction<boolean>>,
-	setDeleting: React.Dispatch<React.SetStateAction<boolean>>,
-	hasEditStatus: boolean
+	setDeleting: React.Dispatch<React.SetStateAction<boolean>>
 ) => void;
 
 /**
@@ -36,8 +35,7 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 	subProgressArray,
 	setSubProgressArray,
 	setUpdating,
-	setDeleting,
-	hasEditStatus
+	setDeleting
 ) => {
 	const { userInfo } = useContext(UserContext);
 	const [disabledSaved, setDisabledSave] = useState<boolean>(false);
@@ -78,7 +76,6 @@ const renderDeleteSaveButton: RenderDeleteSaveButton = (
 											listingErrors,
 											subProgressArray,
 											setSubProgressArray,
-											hasEditStatus,
 											navigation
 										);
 										setUpdating(false);

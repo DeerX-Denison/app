@@ -46,9 +46,6 @@ const useThreads = () => {
 	const [threads, setThreads] = useState<ThreadPreviewData[] | undefined>();
 	useEffect(() => {
 		if (threads && setThreadsContext) {
-			console.log('_____');
-			console.log(threads);
-			console.log('_____');
 			setThreadsContext(threads);
 		}
 	}, [threads]);

@@ -1,4 +1,9 @@
-import { ListingCategory, ListingCondition, UserPronoun } from 'types';
+import {
+	ListingCategory,
+	ListingCondition,
+	ListingStatus,
+	UserPronoun,
+} from 'types';
 export const DENISON_RED_RGBA = 'rgba(199, 32, 47, 1)';
 export const PINK_RGBA = 'rgba(241, 141, 158, 1)';
 export const GRAY_RGBA = 'rgba(245, 245, 249, 1)';
@@ -31,6 +36,7 @@ export const DEFAULT_GUEST_EMAIL = 'guest-user-email';
 // make sure this match BE
 export const DEFAULT_GUEST_DISPLAY_NAME = 'Guest User';
 
+// make sure this match BE
 export const CONDITIONS: Exclude<ListingCondition, undefined>[] = [
 	'BRAND NEW',
 	'LIKE NEW',
@@ -38,6 +44,8 @@ export const CONDITIONS: Exclude<ListingCondition, undefined>[] = [
 	'USEABLE',
 	'BARELY FUNCTIONAL',
 ];
+
+// make sure this match BE
 export const CATEGORIES: Exclude<ListingCategory, undefined>[] = [
 	'BOOKS',
 	'DORM GOODS',
@@ -49,6 +57,10 @@ export const CATEGORIES: Exclude<ListingCategory, undefined>[] = [
 	'SEASONAL',
 ];
 
+// make sure this match BE
+export const STATUSES: ListingStatus[] = ['posted', 'saved', 'sold'];
+
+// make sure this match BE
 export const PRONOUNS: Exclude<UserPronoun, undefined>[] = [
 	'CO',
 	'COS',

@@ -3,11 +3,11 @@ import { fn } from '@firebase.config';
 import { faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { useMyListings, useScaleAnimation } from '@Hooks';
+import { useListingError, useMyListings, useScaleAnimation } from '@Hooks';
 import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
 	Animated,
 	NativeScrollEvent,
@@ -21,9 +21,9 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
-import { ListingId, SellStackParamList } from 'types';
+import { ListingData, ListingId, SellStackParamList } from 'types';
+import SoldToSearch from '../SoldToSearch';
 import MyListingMenu from './MyListingMenu';
-import SoldToSearch from './SoldToSearch';
 import useShowingMenu from './useShowingMenu';
 import useSoldToSearch from './useSoldToSearch';
 interface Props {
@@ -40,26 +40,45 @@ const MyListings: FC<Props> = ({ navigation }) => {
 		navigation.navigate('Edit', { listingId });
 	};
 
-	const markAsSoldHandler = async (listingId: ListingId, soldToUid: string) => {
-		try {
-			await fn.httpsCallable('markListingAsSold')({ listingId, soldToUid });
-		} catch (error) {
-			logger.error(error);
-		}
-	};
-
 	const {
 		showingSearch,
 		setShowingSearch,
-		selectedListingId,
-		setSelectedListingId,
+		selectedListingData,
+		setSelectedListingData,
+		selectedSoldTo,
+		setSelectedSoldTo,
 	} = useSoldToSearch();
+
+	const { setHasEditStatus } = useListingError(selectedListingData);
+
+	/**
+	 * effect to run update listing data when user has selected an item
+	 * to mark as sold and a user to sell the item to
+	 **/
+	useEffect(() => {
+		if (selectedListingData && selectedSoldTo) {
+			const newListingData: ListingData = {
+				...selectedListingData,
+				status: 'sold',
+				soldTo: selectedSoldTo,
+			};
+			try {
+				(async () => {
+					await fn.httpsCallable('updateListing')(newListingData);
+					setSelectedListingData(undefined);
+					setSelectedSoldTo(undefined);
+				})();
+			} catch (error) {
+				logger.error(error);
+			}
+		}
+	}, [selectedListingData, selectedSoldTo]);
 
 	const { showingMenu, toggleMenu, turnOffAllMenu } =
 		useShowingMenu(myListings);
 	const { scale } = useScaleAnimation(showingSearch);
 	// state for refresh control thread preview scroll view
-	const [refreshing, setRefreshing] = React.useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 	const onRefresh = async () => {
 		setRefreshing(true);
 		await resetMyListings();
@@ -73,6 +92,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 			fetchMyListings();
 		}
 	};
+
 	const onScrollBeginDrag = () => {
 		turnOffAllMenu();
 	};
@@ -82,8 +102,8 @@ const MyListings: FC<Props> = ({ navigation }) => {
 			<SoldToSearch
 				showingSearch={showingSearch}
 				setShowingSearch={setShowingSearch}
-				selectedListingId={selectedListingId}
-				markAsSoldHandler={markAsSoldHandler}
+				setSelectedSoldTo={setSelectedSoldTo}
+				setHasEditStatus={setHasEditStatus}
 			/>
 			{myListings ? (
 				// myListings is fetched, render scroll view
@@ -139,9 +159,40 @@ const MyListings: FC<Props> = ({ navigation }) => {
 													/>
 												</View>
 												<View style={tw('flex flex-1 break-words pl-4')}>
-													<Text style={tw('text-lg font-bold')}>
-														{listing.name}
-													</Text>
+													<View style={tw('flex flex-col justify-between')}>
+														<Text
+															style={tw('text-lg font-bold')}
+															ellipsizeMode="tail"
+															numberOfLines={1}
+														>
+															{listing.name}
+														</Text>
+														<Text
+															style={tw('text-sm font-thin')}
+															ellipsizeMode="tail"
+															numberOfLines={1}
+														>
+															{(() => {
+																switch (listing.status) {
+																	case 'posted':
+																		return 'public';
+																	case 'saved':
+																		return 'private';
+																	case 'sold':
+																		if (
+																			'soldTo' in listing &&
+																			listing.soldTo &&
+																			listing.soldTo.displayName
+																		) {
+																			return `sold to ${listing.soldTo.displayName}`;
+																		}
+																		break;
+																	default:
+																		return '';
+																}
+															})()}
+														</Text>
+													</View>
 												</View>
 												<TouchableOpacity
 													onPress={() => toggleMenu(listing.id)}
@@ -161,12 +212,12 @@ const MyListings: FC<Props> = ({ navigation }) => {
 										</TouchableWithoutFeedback>
 										<MyListingMenu
 											showing={showingMenu[listing.id]}
-											listingId={listing.id}
+											listingData={listing}
 											editHandler={editHandler}
 											showingSearch={showingSearch}
 											setShowingSearch={setShowingSearch}
 											toggleMenu={toggleMenu}
-											setSelectedListingId={setSelectedListingId}
+											setSelectedListingData={setSelectedListingData}
 										/>
 									</View>
 								))}

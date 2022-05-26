@@ -13,7 +13,6 @@ export type SaveListingFn = (
 	listingErrors: ListingErrors,
 	subProgressArray: number[],
 	setSubProgressArray: React.Dispatch<React.SetStateAction<number[]>>,
-	hasEditStatus: boolean,
 	navigation: NativeStackNavigationProp<SellStackParamList, 'Edit'>
 ) => Promise<void>;
 
@@ -33,7 +32,6 @@ const saveListing: SaveListingFn = async (
 	listingErrors,
 	subProgressArray,
 	setSubProgressArray,
-	hasEditStatus,
 	navigation
 ) => {
 	const {
@@ -49,6 +47,8 @@ const saveListing: SaveListingFn = async (
 		setHasEditCondition,
 		hasEditDesc,
 		setHasEditDesc,
+		hasEditStatus,
+		setHasEditStatus,
 		setJustPosted,
 	} = listingErrors;
 
@@ -66,6 +66,7 @@ const saveListing: SaveListingFn = async (
 		setHasEditCategory(true);
 		setHasEditCondition(true);
 		setHasEditDesc(true);
+		setHasEditStatus(true);
 		setJustPosted(true);
 		return Toast.show({
 			type: 'error',

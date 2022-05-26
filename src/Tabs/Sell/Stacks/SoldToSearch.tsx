@@ -13,32 +13,33 @@ import {
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
-import { ListingId } from 'types';
-import useSoldToSearchSlide from './useSoldToSearchSlide';
-import useSoldToSearchSuggestion from './useSoldToSearchSuggestion';
+import { UserInfo } from 'types';
+import useSoldToSearchSlide from './MyListings/useSoldToSearchSlide';
+import useSoldToSearchSuggestion from './MyListings/useSoldToSearchSuggestion';
 interface Props {
 	showingSearch: boolean;
 	setShowingSearch: React.Dispatch<React.SetStateAction<boolean>>;
-	selectedListingId: string | undefined;
-	markAsSoldHandler: (listingId: ListingId, soldToUid: string) => void;
+	setSelectedSoldTo: React.Dispatch<
+		React.SetStateAction<UserInfo | null | undefined>
+	>;
+	setHasEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SoldToSearch: FC<Props> = ({
 	showingSearch,
 	setShowingSearch,
-	selectedListingId,
-	markAsSoldHandler,
+	setSelectedSoldTo,
+	setHasEditStatus,
 }) => {
 	const [query, setQuery] = useState('');
 	const { suggestions } = useSoldToSearchSuggestion(query);
 	const inputTextRef = useRef<TextInput | undefined>();
 	const { translation } = useSoldToSearchSlide(showingSearch, inputTextRef);
 
-	const selectSuggestionHandler = (soldToUid: string) => {
-		if (selectedListingId) {
-			markAsSoldHandler(selectedListingId, soldToUid);
-			setShowingSearch(false);
-		}
+	const selectSuggestionHandler = (soldTo: UserInfo) => {
+		setSelectedSoldTo(soldTo);
+		setShowingSearch(false);
+		setHasEditStatus(true);
 	};
 
 	return (
@@ -55,7 +56,7 @@ const SoldToSearch: FC<Props> = ({
 					style={tw(
 						'py-3 pl-12 pr-6 border border-denison-red rounded-full m-2 text-s-lg bg-white'
 					)}
-					placeholder="Search categories"
+					placeholder="Search Users"
 					onChangeText={setQuery}
 				/>
 				<TouchableOpacity
@@ -86,7 +87,7 @@ const SoldToSearch: FC<Props> = ({
 										index !== suggestions.length - 1 ? 'border-b' : ''
 									}`
 								)}
-								onPress={() => selectSuggestionHandler(suggestion.uid)}
+								onPress={() => selectSuggestionHandler(suggestion)}
 							>
 								<FastImage
 									source={{

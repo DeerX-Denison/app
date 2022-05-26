@@ -27,6 +27,7 @@ module.exports = {
 		'@typescript-eslint/no-empty-interface': 0,
 		'@typescript-eslint/no-explicit-any': 0,
 		'@typescript-eslint/explicit-module-boundary-types': 0,
+		'no-mixed-spaces-and-tabs': 0,
 		'react/no-unescaped-entities': 0,
 	},
 };

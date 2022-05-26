@@ -22,6 +22,9 @@ const validListingData: (listingData: ListingData) => boolean = (
 	if (listingData.description === '') return false;
 	if (listingData.description.length > 250) return false;
 
+	if (!listingData.status) return false;
+	if (listingData.status === 'sold' && !('soldTo' in listingData)) return false;
+
 	return true;
 };
 

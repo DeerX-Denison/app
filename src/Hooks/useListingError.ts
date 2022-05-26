@@ -14,6 +14,8 @@ export type ListingErrors = {
 	setHasEditCondition: React.Dispatch<React.SetStateAction<boolean>>;
 	hasEditDesc: boolean;
 	setHasEditDesc: React.Dispatch<React.SetStateAction<boolean>>;
+	hasEditStatus: boolean;
+	setHasEditStatus: React.Dispatch<React.SetStateAction<boolean>>;
 	imageError: string;
 	setImageError: React.Dispatch<React.SetStateAction<string>>;
 	nameError: string;
@@ -26,6 +28,8 @@ export type ListingErrors = {
 	setConditionError: React.Dispatch<React.SetStateAction<string>>;
 	descError: string;
 	setDescError: React.Dispatch<React.SetStateAction<string>>;
+	statusError: string;
+	setStatusError: React.Dispatch<React.SetStateAction<string>>;
 	setJustPosted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -42,12 +46,14 @@ const useListingError: UseListingErrorFn = (listingData) => {
 	const [categoryError, setCategoryError] = useState<string>('');
 	const [conditionError, setConditionError] = useState<string>('');
 	const [descError, setDescError] = useState<string>('');
+	const [statusError, setStatusError] = useState<string>('');
 	const [hasEditImage, setHasEditImage] = useState<boolean>(false);
 	const [hasEditName, setHasEditName] = useState<boolean>(false);
 	const [hasEditPrice, setHasEditPrice] = useState<boolean>(false);
 	const [hasEditCategory, setHasEditCategory] = useState<boolean>(false);
 	const [hasEditCondition, setHasEditCondition] = useState<boolean>(false);
 	const [hasEditDesc, setHasEditDesc] = useState<boolean>(false);
+	const [hasEditStatus, setHasEditStatus] = useState<boolean>(false);
 	const [justPosted, setJustPosted] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -98,6 +104,16 @@ const useListingError: UseListingErrorFn = (listingData) => {
 			} else {
 				setDescError('');
 			}
+
+			if (!listingData.status && hasEditStatus) {
+				setStatusError('Please select a status');
+			} else if (listingData.status === 'sold' && !('soldTo' in listingData)) {
+				setTimeout(() => {
+					setStatusError('Please select the user sold to');
+				}, 250);
+			} else {
+				setStatusError('');
+			}
 		}
 	}, [listingData, justPosted]);
 
@@ -114,6 +130,8 @@ const useListingError: UseListingErrorFn = (listingData) => {
 		setHasEditCondition,
 		hasEditDesc,
 		setHasEditDesc,
+		hasEditStatus,
+		setHasEditStatus,
 		imageError,
 		setImageError,
 		nameError,
@@ -126,6 +144,8 @@ const useListingError: UseListingErrorFn = (listingData) => {
 		setConditionError,
 		descError,
 		setDescError,
+		statusError,
+		setStatusError,
 		setJustPosted,
 	};
 	return listingErrors;

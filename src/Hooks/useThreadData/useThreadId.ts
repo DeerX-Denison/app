@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
+import { UserInfo } from 'types';
+import genThreadId from './genThreadId';
 
 /**
  * custom hook to set threadId for useThreadData
  */
-const useThreadId = (membersUid: string[] | undefined) => {
+const useThreadId = (members: UserInfo[]) => {
 	const [threadId, setThreadId] = useState<string | undefined>();
 	useEffect(() => {
-		if (membersUid && membersUid.length > 0) {
-			setThreadId(membersUid.sort().reduce((a, b) => `${a}${b}`));
-		}
-	}, [membersUid]);
+		const threadId = genThreadId(members);
+		setThreadId(threadId);
+	}, [members]);
 	return { threadId };
 };
 

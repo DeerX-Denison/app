@@ -30,6 +30,10 @@ export const MESSAGE_MENU_ANIM_TIME = 250;
 export const MESSAGE_TEXT_INPUT_PLACEHOLDER = '@ To Reference An Item';
 export const MESSAGE_DIRECT_FROM_LISTING = 'Hi, I would like to buy';
 
+export const ERROR_MESSAGE = {
+	unexpected: 'Unexpected Error Occured',
+};
+
 // make sure this match BE
 export const DEFAULT_GUEST_EMAIL = 'guest-user-email';
 

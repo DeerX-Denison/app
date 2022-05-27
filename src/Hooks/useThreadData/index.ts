@@ -1,15 +1,14 @@
 import { localTime } from '@firebase.config';
 import { useEffect, useState } from 'react';
 import { ThreadData, UserInfo } from 'types';
-import useIsNewThread from './useIsNewThread';
-import useMembers from './useMembers';
-import useMembersUid from './useMembersUid';
+import useIsNewThread from '../useIsNewThread';
+import useMembers from '../useMembers';
+import useMembersUid from '../useMembersUid';
+import useThreadMessagesData from '../useThreadMessageData';
+import useThreadPreviewData from '../useThreadPreviewData';
 import useName from './useName';
 import useThreadId from './useThreadId';
-import useThreadMessagesData from './useThreadMessageData';
-import useThreadPreviewData from './useThreadPreviewData';
 import useThumbnail from './useThumbnail';
-
 /**
  * query threadData from input initMembers
  */
@@ -19,9 +18,10 @@ const useThreadData = (initMembers: UserInfo[]) => {
 	const { membersUid } = useMembersUid(members);
 	const { thumbnail } = useThumbnail(members);
 	const { name } = useName(members);
-	const { threadId } = useThreadId(membersUid);
+	const { threadId } = useThreadId(members);
 	const { isNewThread, setIsNewThread } = useIsNewThread(threadId);
 	const { threadPreviewData } = useThreadPreviewData(isNewThread, threadId);
+
 	const {
 		threadMessagesData,
 		setNewMsgs,
@@ -79,4 +79,5 @@ const useThreadData = (initMembers: UserInfo[]) => {
 		fetchedAll,
 	};
 };
+
 export default useThreadData;

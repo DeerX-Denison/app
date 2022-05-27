@@ -57,6 +57,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const scrollViewRef = useRef<ScrollView | undefined>();
 	const { threadData, setNewMsgs, isNewThread, setIsNewThread, fetchMessages } =
 		useThreadData(route.params.members);
+
 	renderHeader(navigation, threadData);
 	const { parsedMessages } = useParseMessage(threadData?.messages);
 
@@ -114,6 +115,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 	const [withinWhichRef, setWithinWhichRef] = useState<InputTextRef[]>([]);
 	useInitText(route.params.initText, setInputText);
 	useInitRef(route.params.initRefs, setRefs);
+
 	const sendHandler = async () => {
 		// setInputText is async, wont affect if inputText !== "" below
 		setInputText('');
@@ -344,6 +346,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 										)}
 									{parsedMessages &&
 										threadData &&
+										// threadData.members.length === 2 &&
 										parsedMessages.length > 0 &&
 										parsedMessages.map((message) => (
 											<Message

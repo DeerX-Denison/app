@@ -1,11 +1,19 @@
-import { THREADS_PER_PAGE } from '@Constants';
+import {
+	DEFAULT_GUEST_DISPLAY_NAME,
+	DEFAULT_GUEST_EMAIL,
+	DEFAULT_LATEST_MESSAGE,
+	THREADS_PER_PAGE,
+} from '@Constants';
 import { ThreadsContext, UserContext } from '@Contexts';
-import { db, localTime } from '@firebase.config';
+import { db, fn, localTime } from '@firebase.config';
 import logger from '@logger';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 import { useContext, useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
-import { ThreadPreviewData } from 'types';
+import { ThreadPreviewData, UserInfo } from 'types';
+import genName from './useThreadData/genName';
+import genThreadId from './useThreadData/genThreadId';
+import genThumbnail from './useThreadData/genThumbnail';
 
 /**
  * merge current threads with updated threads from onShapshot. Return new threads as a result of the merged threads. The new threads is sorted by latestTime, closest to current time starts at index 0.
@@ -51,7 +59,9 @@ const useThreads = () => {
 	}, [threads]);
 
 	// states for newly fetched listing data
-	const [updThrs, setUpdThrs] = useState<ThreadPreviewData[] | undefined>();
+	const [newThreads, setNewThreads] = useState<
+		ThreadPreviewData[] | undefined
+	>();
 
 	// current last document of query, used for extra query after initial query
 	const [lastDoc, setLastDoc] = useState<
@@ -71,6 +81,43 @@ const useThreads = () => {
 	 */
 	useEffect(() => {
 		if (userInfo) {
+			let isSubscribed = true;
+			if (
+				userInfo.displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+				userInfo.email === DEFAULT_GUEST_EMAIL
+			) {
+				try {
+					(async () => {
+						const res = await fn.httpsCallable('fetchCoreTeamInfos')();
+						const coreTeamInfos: UserInfo[] = res.data;
+						const newThreadsMembersInfos = [...coreTeamInfos, userInfo];
+						const threadsMembers: UserInfo[][] = newThreadsMembersInfos.map(
+							(coreTeamInfo) => {
+								return [userInfo, coreTeamInfo];
+							}
+						);
+						const threadPreviews: ThreadPreviewData[] = threadsMembers.map(
+							(threadMembers) => {
+								const threadPreviewData: ThreadPreviewData = {
+									id: genThreadId(threadMembers),
+									members: threadMembers,
+									membersUid: threadMembers.map((x) => x.uid),
+									thumbnail: genThumbnail(userInfo, threadMembers),
+									name: genName(userInfo, threadMembers),
+									latestMessage: DEFAULT_LATEST_MESSAGE,
+									latestTime: undefined,
+									latestSeenAt: {},
+									latestSenderUid: undefined,
+								};
+								return threadPreviewData;
+							}
+						);
+						isSubscribed && setNewThreads(threadPreviews);
+					})();
+				} catch (error) {
+					logger.error(error);
+				}
+			}
 			const unsubscribe = db
 				.collection('threads')
 				.where('membersUid', 'array-contains', userInfo.uid)
@@ -92,14 +139,17 @@ const useThreads = () => {
 								return thr;
 							}
 						);
-						setUpdThrs(updThrs);
+						setNewThreads(updThrs);
 					},
 					(error) => {
 						logger.log(error);
 						return Toast.show({ type: 'error', text1: error.message });
 					}
 				);
-			return () => unsubscribe();
+			return () => {
+				isSubscribed = false;
+				return unsubscribe();
+			};
 		}
 	}, [userInfo, trigger]);
 
@@ -108,21 +158,21 @@ const useThreads = () => {
 	 */
 	useEffect(() => {
 		let isSubscribed = true;
-		if (updThrs && updThrs.length > 0) {
+		if (newThreads && newThreads.length > 0) {
 			if (threads && threads.length > 0) {
 				const curThrs = threads;
-				const newThrs = mergeThreads(curThrs, updThrs);
+				const newThrs = mergeThreads(curThrs, newThreads);
 				isSubscribed && setThreads(newThrs);
 			} else {
-				isSubscribed && setThreads(updThrs);
+				isSubscribed && setThreads(newThreads);
 			}
-		} else if (updThrs && updThrs.length === 0) {
-			isSubscribed && setThreads(updThrs);
+		} else if (newThreads && newThreads.length === 0) {
+			isSubscribed && setThreads(newThreads);
 		}
 		return () => {
 			isSubscribed = false;
 		};
-	}, [updThrs]);
+	}, [newThreads]);
 
 	/**
 	 * query more threads and append to threads
@@ -162,6 +212,6 @@ const useThreads = () => {
 		}
 	};
 
-	return { threads, fetchThreads, resetThreads, fetchedAll };
+	return { threads, fetchThreads, resetThreads, fetchedAll, setNewThreads };
 };
 export default useThreads;

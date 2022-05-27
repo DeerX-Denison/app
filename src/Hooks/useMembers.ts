@@ -40,7 +40,7 @@ const useMembers = (initMembers: UserInfo[]) => {
 				);
 			} catch (error) {
 				logger.error(error);
-				members = [];
+				members = initMembers;
 			}
 			isSubscribed && setMembers(members);
 		})();

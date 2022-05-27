@@ -33,7 +33,11 @@ const ThreadPreview: FC<Prop> = ({ threadPreviewData, navigation }) => {
 		throw 'User unauthenticated';
 	}
 	const viewThreadHandler = () => {
-		navigation.navigate('Messages', { members: threadPreviewData.members });
+		navigation.navigate('Messages', {
+			members: threadPreviewData.members,
+			initRefs: undefined,
+			initText: undefined,
+		});
 	};
 	const { curTime } = useCurrentTime();
 

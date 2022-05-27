@@ -1,5 +1,9 @@
 import * as Buttons from '@Components/Buttons';
-import { DEFAULT_GUEST_DISPLAY_NAME, DEFAULT_GUEST_EMAIL } from '@Constants';
+import {
+	DEFAULT_GUEST_DISPLAY_NAME,
+	DEFAULT_GUEST_EMAIL,
+	DEFAULT_LATEST_MESSAGE,
+} from '@Constants';
 import { UserContext } from '@Contexts';
 import { fn } from '@firebase.config';
 import { useThreads } from '@Hooks';
@@ -19,8 +23,11 @@ import {
 } from 'react-native';
 import { CircleSnail } from 'react-native-progress';
 import Toast from 'react-native-toast-message';
-import { MessageStackParamList, UserInfo } from 'types';
+import { MessageStackParamList, ThreadPreviewData, UserInfo } from 'types';
+import genThreadId from '../../../..//Hooks/useThreadData/genThreadId';
+import genThumbnail from '../../../..//Hooks/useThreadData/genThumbnail';
 import useAutoComplete from '../../../../Hooks/useAutoComplete';
+import genName from '../../../../Hooks/useThreadData/genName';
 import ThreadPreview from './ThreadPreview';
 interface Props {
 	navigation: NativeStackNavigationProp<MessageStackParamList>;
@@ -53,7 +60,10 @@ const Threads: FC<Props> = ({ navigation }) => {
 	derenderBackButton(navigation);
 	const { userInfo } = useContext(UserContext);
 
-	const { threads, fetchThreads, resetThreads } = useThreads();
+	const { threads, fetchThreads, resetThreads, setNewThreads } = useThreads();
+	useEffect(() => {
+		console.log(threads?.map((x) => x.name));
+	}, [threads]);
 
 	const [searching, setSearching] = useState<boolean>(false);
 	const { query, setQuery, suggestions } = useAutoComplete();
@@ -90,11 +100,46 @@ const Threads: FC<Props> = ({ navigation }) => {
 	};
 
 	// state for refresh control thread preview scroll view
-	const [refreshing, setRefreshing] = React.useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 	const onRefresh = async () => {
 		setRefreshing(true);
 		await resetThreads();
 		setRefreshing(false);
+	};
+
+	const messageCoreTeamHandler = async () => {
+		if (userInfo) {
+			try {
+				const res = await fn.httpsCallable('fetchCoreTeamInfos')();
+				const coreTeamInfos: UserInfo[] = res.data;
+				const newThreadsMembersInfos = [...coreTeamInfos, userInfo];
+				const threadsMembers: UserInfo[][] = newThreadsMembersInfos.map(
+					(coreTeamInfo) => {
+						return [userInfo, coreTeamInfo];
+					}
+				);
+				const threadPreviews: ThreadPreviewData[] = threadsMembers.map(
+					(threadMembers) => {
+						const threadPreviewData: ThreadPreviewData = {
+							id: genThreadId(threadMembers),
+							members: threadMembers,
+							membersUid: threadMembers.map((x) => x.uid),
+							thumbnail: genThumbnail(userInfo, threadMembers),
+							name: genName(userInfo, threadMembers),
+							latestMessage: DEFAULT_LATEST_MESSAGE,
+							latestTime: undefined,
+							latestSeenAt: {},
+							latestSenderUid: undefined,
+						};
+						return threadPreviewData;
+					}
+				);
+				setNewThreads(threadPreviews);
+			} catch (error) {
+				logger.error(error);
+				navigation.goBack();
+			}
+		}
 	};
 
 	return (
@@ -227,13 +272,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 											<Buttons.Primary
 												size="md"
 												title="Message Core Team Members"
-												onPress={async () => {
-													try {
-														await fn.httpsCallable('messageCoreTeam')();
-													} catch (error) {
-														logger.error(error);
-													}
-												}}
+												onPress={messageCoreTeamHandler}
 											/>
 										</>
 									) : (

@@ -145,7 +145,6 @@ const MyListings: FC<Props> = ({ navigation }) => {
 								contentContainerStyle={tw(
 									'flex-col my-2 mx-2 justify-center items-center'
 								)}
-								
 							>
 								{myListings.map((listing, index) => (
 									<View

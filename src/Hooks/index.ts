@@ -30,6 +30,7 @@ export { default as useParseMessage } from './useParseMessage';
 export { default as useProfile } from './useProfile';
 export { default as useScaleAnimation } from './useScaleAnimation';
 export { default as useSeenIcons } from './useSeenIcons';
+export { default as useSoldToSearchSuggestion } from './useSoldToSearchSuggestion';
 export { default as useThreadData } from './useThreadData';
 export { default as useThreadPreviewDisplayMessage } from './useThreadPreviewDisplayMessage';
 export { default as useThreadPreviewDisplayTime } from './useThreadPreviewDisplayTime';

@@ -57,7 +57,8 @@ const App: FC<Props> = () => {
 						<UserContext.Provider value={{ user, userInfo, userProfile }}>
 							<JustSignOut.Provider value={{ justSignOut, setJustSignOut }}>
 								<ThreadsContext.Provider
-									value={{ threadsContext, setThreadsContext }}
+									// TODO: remove this implementation. for now its tempory
+									value={{ threadsContext: [], setThreadsContext: undefined }}
 								>
 									<NavigationContainer ref={navigationRef}>
 										<Tab.Navigator

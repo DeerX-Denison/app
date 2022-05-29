@@ -11,6 +11,7 @@ import React, { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { SellStackParamList, TabsParamList } from 'types';
 import Plus from '../../static/plus.svg';
+import { Profile } from '../Listings/Stacks';
 import { Create, Edit, MyListings } from './Stacks';
 interface Props {
 	route: RouteProp<TabsParamList, 'Sell'>;
@@ -80,6 +81,17 @@ const Sell: FC<Props> = () => {
 				}}
 			>
 				{(props) => <Edit {...props} />}
+			</Stack.Screen>
+			<Stack.Screen
+				name="Profile"
+				options={{
+					headerTitle: 'PROFILE',
+					headerBackTitle: '',
+					headerTintColor: DENISON_RED_RGBA,
+				}}
+				initialParams={{ uid: undefined }}
+			>
+				{(props) => <Profile {...props} />}
 			</Stack.Screen>
 		</Stack.Navigator>
 	);

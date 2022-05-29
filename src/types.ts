@@ -95,6 +95,7 @@ export type ReportNavData = {
 	id: string | undefined;
 };
 export type ItemScreenParamList = { listingId: ListingId };
+export type ProfileScreenParamList = { uid: string | undefined };
 export type ListingsStackParamList = {
 	Listings: { reset: boolean };
 	Item: ItemScreenParamList;
@@ -103,7 +104,7 @@ export type ListingsStackParamList = {
 		initText: string | undefined;
 		initRefs: InputTextRef[] | undefined;
 	};
-	Profile: { uid: string | undefined };
+	Profile: ProfileScreenParamList;
 	Edit: { listingId: ListingId };
 	Report: ReportNavData;
 };
@@ -111,6 +112,7 @@ export type ListingsStackParamList = {
 export type SellStackParamList = {
 	Create: undefined;
 	Edit: { listingId: ListingId };
+	Profile: ProfileScreenParamList;
 	MyListing: undefined;
 };
 
@@ -122,7 +124,7 @@ export type MessageStackParamList = {
 		initText: string | undefined;
 		initRefs: InputTextRef[] | undefined;
 	};
-	Profile: { uid: string | undefined };
+	Profile: ProfileScreenParamList;
 	Report: ReportNavData;
 };
 
@@ -135,7 +137,7 @@ export type NewThreadUserInfo = {
 export type WishlistStackParamList = {
 	Wishlist: { reset: boolean };
 	Item: ItemScreenParamList;
-	Profile: { uid: string | undefined };
+	Profile: ProfileScreenParamList;
 	Messages: { members: UserInfo[] };
 };
 

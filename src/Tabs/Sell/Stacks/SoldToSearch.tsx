@@ -1,10 +1,14 @@
 import { DEFAULT_USER_PHOTO_URL } from '@Constants';
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { useSoldToSearchSuggestion } from '@Hooks';
 import tw from '@tw';
 import React, { FC, useRef, useState } from 'react';
 import {
 	Animated,
+	NativeScrollEvent,
+	NativeSyntheticEvent,
+	RefreshControl,
 	ScrollView,
 	Text,
 	TextInput,
@@ -15,7 +19,6 @@ import FastImage from 'react-native-fast-image';
 import { CircleSnail } from 'react-native-progress';
 import { UserInfo } from 'types';
 import useSoldToSearchSlide from './MyListings/useSoldToSearchSlide';
-import useSoldToSearchSuggestion from './MyListings/useSoldToSearchSuggestion';
 interface Props {
 	showingSearch: boolean;
 	setShowingSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +35,8 @@ const SoldToSearch: FC<Props> = ({
 	setHasEditStatus,
 }) => {
 	const [query, setQuery] = useState('');
-	const { suggestions } = useSoldToSearchSuggestion(query);
+	const { suggestions, fetchSuggestion, resetSuggestion } =
+		useSoldToSearchSuggestion(query);
 	const inputTextRef = useRef<TextInput | undefined>();
 	const { translation } = useSoldToSearchSlide(showingSearch, inputTextRef);
 
@@ -40,6 +44,22 @@ const SoldToSearch: FC<Props> = ({
 		setSelectedSoldTo(soldTo);
 		setShowingSearch(false);
 		setHasEditStatus(true);
+	};
+
+	// when user scroll down to bottom
+	const onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+		const offsetY = e.nativeEvent.contentOffset.y;
+		if (offsetY > 50) {
+			fetchSuggestion();
+		}
+	};
+
+	// state for refresh control thread preview scroll view
+	const [refreshing, setRefreshing] = useState(false);
+	const onRefresh = async () => {
+		setRefreshing(true);
+		await resetSuggestion();
+		setRefreshing(false);
 	};
 
 	return (
@@ -73,6 +93,14 @@ const SoldToSearch: FC<Props> = ({
 			<ScrollView
 				keyboardDismissMode="on-drag"
 				keyboardShouldPersistTaps="always"
+				onScrollEndDrag={onScrollEndDrag}
+				refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+						size={24}
+					/>
+				}
 				style={tw('flex flex-col flex-1')}
 			>
 				{suggestions && suggestions.length > 0 && (

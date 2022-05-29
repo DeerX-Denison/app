@@ -97,6 +97,25 @@ const MyListings: FC<Props> = ({ navigation }) => {
 		turnOffAllMenu();
 	};
 
+	const pressStatusHandler = (listingData: ListingData) => {
+		switch (listingData.status) {
+			case 'posted':
+				navigation.navigate('Edit', { listingId: listingData.id });
+				break;
+
+			case 'saved':
+				navigation.navigate('Edit', { listingId: listingData.id });
+				break;
+
+			case 'sold':
+				navigation.navigate('Profile', { uid: listingData.soldTo?.uid });
+				break;
+
+			default:
+				break;
+		}
+	};
+
 	return (
 		<View style={tw('flex flex-1')}>
 			<SoldToSearch
@@ -126,6 +145,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 								contentContainerStyle={tw(
 									'flex-col my-2 mx-2 justify-center items-center'
 								)}
+								
 							>
 								{myListings.map((listing, index) => (
 									<View
@@ -167,31 +187,39 @@ const MyListings: FC<Props> = ({ navigation }) => {
 														>
 															{listing.name}
 														</Text>
-														<Text
-															style={tw('text-sm font-thin')}
-															ellipsizeMode="tail"
-															numberOfLines={1}
+														<TouchableOpacity
+															onPress={() => pressStatusHandler(listing)}
 														>
-															{(() => {
-																switch (listing.status) {
-																	case 'posted':
-																		return 'public';
-																	case 'saved':
-																		return 'private';
-																	case 'sold':
-																		if (
-																			'soldTo' in listing &&
-																			listing.soldTo &&
-																			listing.soldTo.displayName
-																		) {
-																			return `sold to ${listing.soldTo.displayName}`;
-																		}
-																		break;
-																	default:
-																		return '';
-																}
-															})()}
-														</Text>
+															<Text
+																style={tw(
+																	`text-sm font-thin ${
+																		listing.status === 'sold' ? 'underline' : ''
+																	}`
+																)}
+																ellipsizeMode="tail"
+																numberOfLines={1}
+															>
+																{(() => {
+																	switch (listing.status) {
+																		case 'posted':
+																			return 'public';
+																		case 'saved':
+																			return 'private';
+																		case 'sold':
+																			if (
+																				'soldTo' in listing &&
+																				listing.soldTo &&
+																				listing.soldTo.displayName
+																			) {
+																				return `sold to ${listing.soldTo.displayName}`;
+																			}
+																			break;
+																		default:
+																			return '';
+																	}
+																})()}
+															</Text>
+														</TouchableOpacity>
 													</View>
 												</View>
 												<TouchableOpacity

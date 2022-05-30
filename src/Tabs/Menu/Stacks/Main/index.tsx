@@ -13,7 +13,7 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { Linking, Text, View } from 'react-native';
+import { Alert, Linking, Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { ScrollView } from 'react-native-gesture-handler';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -43,6 +43,65 @@ const Main: FC<Props> = ({ route, navigation }) => {
 			setDisplayUserInfo(userProfile);
 		}
 	}, [userProfile]);
+
+	const editProfileHandler = () => {
+		navigation.navigate('EditProfile', {
+			selectedPronouns: null,
+			displayUserProfile: displayUserProfile,
+		});
+	};
+
+	const signOutHandler = async () => {
+		if (userProfile) {
+			const { displayName, email } = userProfile;
+			if (
+				displayName === DEFAULT_GUEST_DISPLAY_NAME &&
+				email === DEFAULT_GUEST_EMAIL
+			) {
+				try {
+					await fn.httpsCallable('deleteAnonymousUser')();
+				} catch (error) {
+					return logger.error(error);
+				}
+			}
+			try {
+				await auth.signOut();
+			} catch (error) {
+				return logger.error(error);
+			}
+			setJustSignOut && setJustSignOut(true);
+		}
+	};
+
+	const confirmDeleteAccountHandler = async () => {
+		try {
+			await fn.httpsCallable('deleteUser')();
+		} catch (error) {
+			return logger.error(error);
+		}
+		try {
+			await auth.signOut();
+		} catch (error) {
+			return logger.error(error);
+		}
+		setJustSignOut && setJustSignOut(true);
+	};
+	const deleteAccountHandler = async () => {
+		if (userProfile) {
+			Alert.alert(
+				'Confirm Delete',
+				'All account information will be lost\nThis action cannot be undone',
+				[
+					{ text: 'Cancel', style: 'cancel' },
+					{
+						text: 'Delete',
+						style: 'destructive',
+						onPress: confirmDeleteAccountHandler,
+					},
+				]
+			);
+		}
+	};
 
 	return (
 		<View style={tw('flex flex-1')}>
@@ -151,12 +210,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 			<ScrollView contentContainerStyle={tw('flex flex-col flex-1 p-4')}>
 				<Buttons.Primary
 					title="Edit Profile"
-					onPress={() =>
-						navigation.navigate('EditProfile', {
-							selectedPronouns: null,
-							displayUserProfile: displayUserProfile,
-						})
-					}
+					onPress={editProfileHandler}
 					size="md"
 				/>
 				<View style={tw('pt-4')} />
@@ -172,29 +226,11 @@ const Main: FC<Props> = ({ route, navigation }) => {
 					size="md"
 				/>
 				<View style={tw('pt-4')} />
-				<Buttons.White
-					title="Sign Out"
-					onPress={async () => {
-						if (userProfile) {
-							const { displayName, email, uid } = userProfile;
-							try {
-								await auth.signOut();
-							} catch (error) {
-								return logger.error(error);
-							}
-							setJustSignOut && setJustSignOut(true);
-							if (
-								displayName === DEFAULT_GUEST_DISPLAY_NAME &&
-								email === DEFAULT_GUEST_EMAIL
-							) {
-								try {
-									await fn.httpsCallable('deleteAnonymousUser')({ uid });
-								} catch (error) {
-									return logger.error(error);
-								}
-							}
-						}
-					}}
+				<Buttons.White title="Sign Out" onPress={signOutHandler} size="md" />
+				<View style={tw('pt-4')} />
+				<Buttons.Primary
+					title="Delete Account"
+					onPress={deleteAccountHandler}
 					size="md"
 				/>
 			</ScrollView>

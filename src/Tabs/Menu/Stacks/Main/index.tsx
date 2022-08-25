@@ -64,13 +64,13 @@ const Main: FC<Props> = ({ route, navigation }) => {
 					return logger.error(error);
 				}
 			}
-			try {
-				await auth.signOut();
-			} catch (error) {
-				return logger.error(error);
-			}
-			setJustSignOut && setJustSignOut(true);
 		}
+		try {
+			await auth.signOut();
+		} catch (error) {
+			return logger.error(error);
+		}
+		setJustSignOut && setJustSignOut(true);
 	};
 
 	const confirmDeleteAccountHandler = async () => {

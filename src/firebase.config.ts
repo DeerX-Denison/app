@@ -14,7 +14,7 @@ console.log(`Launching ${config.firebase_env.toUpperCase()} version`);
 if (config.firebase_env === 'development') {
 	firestore().useEmulator('localhost', 8080);
 	cloudStorage().useEmulator('localhost', 9199);
-	// authentication().useEmulator(`http://localhost:9099`);
+	authentication().useEmulator(`http://localhost:9099`);
 	functions().useFunctionsEmulator(`http://localhost:5001`);
 }
 

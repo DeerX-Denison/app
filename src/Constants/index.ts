@@ -35,7 +35,7 @@ export const ERROR_MESSAGE = {
 };
 
 // make sure this match BE
-export const DEFAULT_GUEST_EMAIL = 'guest-user-email';
+export const DEFAULT_GUEST_EMAIL = 'guest-user-email@deerx.web.app';
 
 // make sure this match BE
 export const DEFAULT_GUEST_DISPLAY_NAME = 'Guest User';

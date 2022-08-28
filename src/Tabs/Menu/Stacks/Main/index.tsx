@@ -61,7 +61,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 				try {
 					await fn.httpsCallable('deleteAnonymousUser')();
 				} catch (error) {
-					return logger.error(error);
+					logger.error(error);
 				}
 			}
 		}

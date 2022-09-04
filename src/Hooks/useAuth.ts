@@ -51,7 +51,7 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 		if (user) {
 			(async () => {
 				try {
-					const res = await fn.httpsCallable('createUserIfNotExist')();
+					const res = await fn.httpsCallable('syncUser')();
 					if (isSubscribe) {
 						if (res.data === 'created') {
 							setUserStatus('created');
@@ -83,7 +83,7 @@ const useSaveUser = (user: FirebaseAuthTypes.User | null | undefined) => {
 		if (user && userStatus === 'error') {
 			interval = setInterval(async () => {
 				try {
-					const res = await fn.httpsCallable('createUserIfNotExist')();
+					const res = await fn.httpsCallable('syncUser')();
 					if (isSubscribe) {
 						if (res.data === 'created') {
 							setUserStatus('created');

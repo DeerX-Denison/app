@@ -61,16 +61,16 @@ const Main: FC<Props> = ({ route, navigation }) => {
 				try {
 					await fn.httpsCallable('deleteAnonymousUser')();
 				} catch (error) {
-					return logger.error(error);
+					logger.error(error);
 				}
 			}
-			try {
-				await auth.signOut();
-			} catch (error) {
-				return logger.error(error);
-			}
-			setJustSignOut && setJustSignOut(true);
 		}
+		try {
+			await auth.signOut();
+		} catch (error) {
+			return logger.error(error);
+		}
+		setJustSignOut && setJustSignOut(true);
 	};
 
 	const confirmDeleteAccountHandler = async () => {

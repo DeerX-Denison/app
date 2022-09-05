@@ -3,11 +3,13 @@ import { useEffect } from 'react';
 
 export const useHealth = () => {
 	useEffect(() => {
-		try {
-			fn.httpsCallable('health')();
-			console.log('ok');
-		} catch (error) {
-			console.error(error);
-		}
+		(async () => {
+			try {
+				await fn.httpsCallable('health')();
+				console.log('ok');
+			} catch (error) {
+				console.error(error);
+			}
+		})();
 	}, []);
 };

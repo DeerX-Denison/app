@@ -86,3 +86,12 @@ yarn patch:ios // increment patching version number
 yarn minor:ios // increment minor version number
 yarn major:ios // increment major version number
 ```
+
+# Common Error
+
+1. Could not connect to backend
+   - It could by that backend is not running in the correctly environment. Try
+
+```
+firebase use default
+```

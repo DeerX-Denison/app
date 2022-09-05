@@ -16,6 +16,7 @@ if (config.firebase_env === 'development') {
 	cloudStorage().useEmulator('localhost', 9199);
 	authentication().useEmulator(`http://localhost:9099`);
 	functions().useFunctionsEmulator(`http://localhost:5001`);
+	console.log('connected to dev environment');
 }
 
 const svTime = firestore.FieldValue.serverTimestamp;

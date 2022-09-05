@@ -5,6 +5,7 @@ import {
 	useBackgroundLink,
 	useFCMToken,
 	useForegroundLink,
+	useHealth,
 	useNotification,
 } from '@Hooks';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -36,6 +37,7 @@ const App: FC<Props> = () => {
 	const { initialRoute, initialParams } = useNotification(navigationRef);
 	const { user, userInfo, userProfile } = useAuth();
 	const Tab = createBottomTabNavigator<TabsParamList>();
+	useHealth();
 	useFCMToken(userInfo);
 	useAnalytics(userInfo);
 	useBackgroundLink(navigationRef);

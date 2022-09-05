@@ -95,3 +95,6 @@ output.json
 #NDK
 obj/
 .externalNativeBuild
+
+# reports
+report.*

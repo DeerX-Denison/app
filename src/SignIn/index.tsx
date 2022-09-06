@@ -94,8 +94,10 @@ const SignIn: FC = () => {
 	 * utiltiy function to validate tester input email
 	 */
 	const isValidTesterEmail = () => {
+		console.log(testerEmail.trim().toLowerCase());
+
 		if (
-			testerEmail.trim().toLowerCase() !== 'deerx.test@gmail.com' ||
+			testerEmail.trim().toLowerCase() !== 'deerx.test@gmail.com' &&
 			testerEmail.trim().toLowerCase() !== 'deerx.dev@gmail.com'
 		) {
 			setTesterEmailError('Invalid tester email');

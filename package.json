@@ -11,6 +11,7 @@
 		"prod:ios:ip12": "./bin/setup_prod.sh && react-native run-ios --scheme app --simulator \"iPhone 12\"",
 		"prod:ios:ipSE": "./bin/setup_prod.sh && react-native run-ios --scheme app --simulator \"iPhone SE (3rd generation)\"",
 		"dev:android": "./bin/setup_dev.sh && react-native run-android",
+		"debug:android": "export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` && ./bin/setup_dev.sh && react-native run-android",
 		"test": "jest --detectOpenHandles",
 		"test:watch": "jest --watch-all --detectOpenHandles",
 		"lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",

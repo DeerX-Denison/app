@@ -31,12 +31,13 @@ const useThreadPreviewDisplayTime = (
 					: `0${oldTime.getMinutes()}`
 			} ${oldTime.getHours() < 12 ? 'am' : 'pm'}`;
 
-			const month_date = `${months[curTime.getMonth()]} ${curTime.getDate()}`;
+			const month_date = `${months[oldTime.getMonth()]} ${oldTime.getDate()}`;
 
 			const month_date_year = `${
-				months[curTime.getMonth()]
-			} ${curTime.getDate()}, ${curTime.getFullYear()}`;
-			if (curTime.getFullYear() === curTime.getFullYear()) {
+				months[oldTime.getMonth()]
+			} ${oldTime.getDate()}, ${oldTime.getFullYear()}`;
+			
+			if (curTime.getFullYear() === oldTime.getFullYear()) {
 				if (curTime.getMonth() === oldTime.getMonth()) {
 					if (curTime.getDate() === oldTime.getDate()) {
 						if (curTime.getHours() === oldTime.getHours()) {

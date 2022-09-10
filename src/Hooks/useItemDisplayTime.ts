@@ -33,14 +33,14 @@ const useItemDisplayTime = (oldTime: Date | undefined, curTime: Date) => {
 			}, ${hour_minute_ampm}`;
 
 			const month_date_hour_minute_ampm = `${
-				months[curTime.getMonth()]
-			} ${curTime.getDate()}, ${hour_minute_ampm}`;
+				months[oldTime.getMonth()]
+			} ${oldTime.getDate()}, ${hour_minute_ampm}`;
 
 			const month_date_year_hour_minute_ampm = `${
-				months[curTime.getMonth()]
-			} ${curTime.getDate()} ${curTime.getFullYear()}, ${hour_minute_ampm}`;
+				months[oldTime.getMonth()]
+			} ${oldTime.getDate()} ${oldTime.getFullYear()}, ${hour_minute_ampm}`;
 
-			if (curTime.getFullYear() === curTime.getFullYear()) {
+			if (curTime.getFullYear() === oldTime.getFullYear()) {
 				if (curTime.getMonth() === oldTime.getMonth()) {
 					if (curTime.getDate() === oldTime.getDate()) {
 						if (curTime.getHours() === oldTime.getHours()) {

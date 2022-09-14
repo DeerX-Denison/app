@@ -33,7 +33,7 @@ const useMessageDisplayTime = (oldTime: Date | undefined, curTime: Date) => {
 			const day_hour_minute_ampm = `${
 				days[oldTime.getDay()]
 			}, ${hour_minute_ampm}`;
-			
+
 			// Get current month, date, am-pm time
 			const month_date_hour_minute_ampm = `${
 				months[oldTime.getMonth()]

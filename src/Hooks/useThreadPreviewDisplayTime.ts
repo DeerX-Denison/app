@@ -36,7 +36,7 @@ const useThreadPreviewDisplayTime = (
 			const month_date_year = `${
 				months[oldTime.getMonth()]
 			} ${oldTime.getDate()}, ${oldTime.getFullYear()}`;
-			
+
 			if (curTime.getFullYear() === oldTime.getFullYear()) {
 				if (curTime.getMonth() === oldTime.getMonth()) {
 					if (curTime.getDate() === oldTime.getDate()) {

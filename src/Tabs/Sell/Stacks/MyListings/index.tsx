@@ -135,7 +135,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									<RefreshControl
 										refreshing={refreshing}
 										onRefresh={onRefresh}
-										size={24}
+										// size={24}
 									/>
 								}
 								onScrollEndDrag={onScrollEndDrag}

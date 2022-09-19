@@ -98,7 +98,7 @@ const SoldToSearch: FC<Props> = ({
 					<RefreshControl
 						refreshing={refreshing}
 						onRefresh={onRefresh}
-						size={24}
+						// size={24}
 					/>
 				}
 				style={tw('flex flex-col flex-1')}

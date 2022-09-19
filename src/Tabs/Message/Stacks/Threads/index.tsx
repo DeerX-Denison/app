@@ -226,7 +226,7 @@ const Threads: FC<Props> = ({ navigation }) => {
 						<RefreshControl
 							refreshing={refreshing}
 							onRefresh={onRefresh}
-							size={24}
+							// size={24}
 						/>
 					}
 					showsVerticalScrollIndicator={false}

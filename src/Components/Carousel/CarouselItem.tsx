@@ -7,12 +7,15 @@ import {
 	requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker';
 import React, { FC, useState } from 'react';
-import { Platform, Text, useWindowDimensions, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {
+	Platform,
+	Text,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+	useWindowDimensions,
+	View,
+} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import ImageView from 'react-native-image-viewing';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import { ListingErrors } from 'src/Hooks/useListingError';

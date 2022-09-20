@@ -1,8 +1,7 @@
 import tw from '@tw';
 import React, { FC } from 'react';
-import { Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import 'react-native-get-random-values';
 import { CircleSnail } from 'react-native-progress';
 import { InputTextRef, TextSelection, WishlistDataCL } from 'types';

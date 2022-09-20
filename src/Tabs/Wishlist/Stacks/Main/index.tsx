@@ -77,7 +77,7 @@ const Main: FC<Props> = ({ route, navigation }) => {
 									<RefreshControl
 										refreshing={refreshing}
 										onRefresh={onRefresh}
-										size={24}
+										// size={24}
 									/>
 								}
 								data={wishlist}

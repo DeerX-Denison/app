@@ -284,7 +284,7 @@ const Messages: FC<Props> = ({ route, navigation }) => {
 									progressViewOffset={
 										contentHeight < boxHeight ? boxHeight - contentHeight : 55
 									}
-									size={24}
+									// size={24}
 								/>
 							}
 							showsVerticalScrollIndicator={false}

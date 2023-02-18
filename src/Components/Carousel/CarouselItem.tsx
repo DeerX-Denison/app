@@ -73,6 +73,7 @@ const CarouselItem: FC<Props> = ({
 			listingErrors.setHasEditImage(true);
 		}
 	};
+
 	// TODO: change this effect to only prompt permission if user is uploading picture from their device. Currently, when you press to Item, it automatically asks for permission without user wanting to upload anything from their device
 	// useEffect(() => {
 	// 	(async () => {
@@ -84,62 +85,67 @@ const CarouselItem: FC<Props> = ({
 	// 		}
 	// 	})();
 	// }, []);
+
 	return (
 		<>
 			<TouchableWithoutFeedback onPress={() => setIsViewing(true)}>
-				<View key={index} style={{ width, height: width }}>
-					<View
-						style={tw(
-							'absolute flex flex-row justify-between items-end z-10 top-0 w-full'
-						)}
-					>
-						{editMode && (
-							<TouchableOpacity
-								onPress={removeHandler}
-								style={tw('rounded-full m-2 bg-white')}
-							>
-								<FontAwesomeIcon
-									icon={faCircleXmark}
-									size={36}
-									style={tw('text-gray-800')}
-								/>
-							</TouchableOpacity>
-						)}
-						{editMode && (
-							<TouchableOpacity
-								onPress={addHandler}
-								style={tw('rounded-full m-2 bg-white')}
-							>
-								<FontAwesomeIcon
-									icon={faCirclePlus}
-									size={36}
-									style={tw('text-gray-800')}
-								/>
-							</TouchableOpacity>
-						)}
+				<>
+					<View key={index} style={{ width, height: width }}>
+						<View
+							style={tw(
+								'absolute flex flex-row justify-between items-end z-10 top-0 w-full'
+							)}
+						>
+							{editMode && (
+								<TouchableOpacity
+									onPress={removeHandler}
+									style={tw('rounded-full m-2 bg-white')}
+								>
+									<FontAwesomeIcon
+										icon={faCircleXmark}
+										size={36}
+										style={tw('text-gray-800')}
+									/>
+								</TouchableOpacity>
+							)}
+							{editMode && (
+								<TouchableOpacity
+									onPress={addHandler}
+									style={tw('rounded-full m-2 bg-white')}
+								>
+									<FontAwesomeIcon
+										icon={faCirclePlus}
+										size={36}
+										style={tw('text-gray-800')}
+									/>
+								</TouchableOpacity>
+							)}
+						</View>
+
+						<FastImage source={{ uri: item }} style={tw('w-full h-full')} />
 					</View>
 
-					<FastImage source={{ uri: item }} style={tw('w-full h-full')} />
-				</View>
-
-				{listingData && (
-					<ImageView
-						images={listingData.images.map((x) => ({ uri: x }))}
-						animationType="slide"
-						imageIndex={index}
-						visible={isViewing}
-						onRequestClose={() => setIsViewing(false)}
-						swipeToCloseEnabled={true}
-						onImageIndexChange={(index) => setZoomedIndex(index)}
-						FooterComponent={() => (
-							<View style={tw('flex flex-1 justify-center items-center mb-24')}>
-								<Text style={tw('text-white text-s-lg font-bold')}>
-									{zoomedIndex + 1}/{listingData.images.length}
-								</Text>
-							</View>
-						)}
-					/>
-				)}
+					{listingData && (
+						<ImageView
+							images={listingData.images.map((x) => ({ uri: x }))}
+							animationType="slide"
+							imageIndex={index}
+							visible={isViewing}
+							onRequestClose={() => setIsViewing(false)}
+							swipeToCloseEnabled={true}
+							onImageIndexChange={(index) => setZoomedIndex(index)}
+							FooterComponent={() => (
+								<View
+									style={tw('flex flex-1 justify-center items-center mb-24')}
+								>
+									<Text style={tw('text-white text-s-lg font-bold')}>
+										{zoomedIndex + 1}/{listingData.images.length}
+									</Text>
+								</View>
+							)}
+						/>
+					)}
+				</>
 			</TouchableWithoutFeedback>
 		</>
 	);

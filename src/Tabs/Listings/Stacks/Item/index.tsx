@@ -97,9 +97,6 @@ const Item: FC<Props> = ({
 		}
 	};
 
-	// removed wishlist from db handler
-	// ===========================================================================
-
 	const removeWishlistHandler = async () => {
 		if (userInfo && listingData && isInWishlist) {
 			try {
@@ -116,10 +113,7 @@ const Item: FC<Props> = ({
 			}
 		}
 	};
-	// ===========================================================================
 
-	// add wishlist to db handler
-	// ===========================================================================
 	const addWishlistHandler = async () => {
 		if (userInfo && listingData && !isInWishlist) {
 			try {
@@ -143,7 +137,6 @@ const Item: FC<Props> = ({
 			}
 		}
 	};
-	// ===========================================================================
 
 	const editHandler = () => {
 		navigation.navigate('Edit', { listingId });

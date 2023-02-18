@@ -5,15 +5,6 @@
 		"name": "DeerX",
 		"slug": "DeerX",
 		"version": "1.0.0",
-		"assetBundlePatterns": ["**/*"],
-		"plugins": [
-			[
-				"@stripe/stripe-react-native",
-				{
-					"merchantIdentifier": "tbd",
-					"enableGooglePay": "tbd"
-				}
-			]
-		]
+		"assetBundlePatterns": ["**/*"]
 	}
 }

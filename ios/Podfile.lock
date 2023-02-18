@@ -967,23 +967,6 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Stripe (21.12.0):
-    - Stripe/Stripe3DS2 (= 21.12.0)
-    - StripeApplePay (= 21.12.0)
-    - StripeCore (= 21.12.0)
-    - StripeUICore (= 21.12.0)
-  - stripe-react-native (0.3.0):
-    - React-Core
-    - Stripe (~> 21.12.0)
-  - Stripe/Stripe3DS2 (21.12.0):
-    - StripeApplePay (= 21.12.0)
-    - StripeCore (= 21.12.0)
-    - StripeUICore (= 21.12.0)
-  - StripeApplePay (21.12.0):
-    - StripeCore (= 21.12.0)
-  - StripeCore (21.12.0)
-  - StripeUICore (21.12.0):
-    - StripeCore (= 21.12.0)
   - UMAppLoader (2.2.0)
   - UMCore (7.1.2)
   - UMReactNativeAdapter (6.3.9):
@@ -1064,7 +1047,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "stripe-react-native (from `../node_modules/@stripe/stripe-react-native`)"
   - UMAppLoader (from `../node_modules/unimodules-app-loader/ios`)
   - "UMCore (from `../node_modules/@unimodules/core/ios`)"
   - "UMReactNativeAdapter (from `../node_modules/@unimodules/react-native-adapter/ios`)"
@@ -1102,10 +1084,6 @@ SPEC REPOS:
     - PromisesObjC
     - SDWebImage
     - SDWebImageWebPCoder
-    - Stripe
-    - StripeApplePay
-    - StripeCore
-    - StripeUICore
 
 EXTERNAL SOURCES:
   boost:
@@ -1238,8 +1216,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  stripe-react-native:
-    :path: "../node_modules/@stripe/stripe-react-native"
   UMAppLoader:
     :path: "../node_modules/unimodules-app-loader/ios"
   UMCore:
@@ -1346,11 +1322,6 @@ SPEC CHECKSUMS:
   RNSVG: ecd661f380a07ba690c9c5929c475a44f432d674
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Stripe: c3692f360abcdfeef9751e3c240e7efbc68b921f
-  stripe-react-native: a8e376386d39d8668c399eec23ca9fee3f23f97f
-  StripeApplePay: 14db90fdf89abb2809ce41fc68bc6b1a86221408
-  StripeCore: 5e38cdea3dc176a32d8797ef312fe1ab41571272
-  StripeUICore: c28e371b385f968388ae38bedb93a2723c078442
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
   UMCore: ce3a4faa010239063b8343895b29a6d97b01069d
   UMReactNativeAdapter: d03cefd0e4e4179ab8c490408589f1c8a6c8b785

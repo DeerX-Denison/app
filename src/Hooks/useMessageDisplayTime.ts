@@ -22,25 +22,29 @@ const useMessageDisplayTime = (oldTime: Date | undefined, curTime: Date) => {
 			'Dec',
 		];
 		if (oldTime) {
+			// Convert old time to am-pm time
 			const hour_minute_ampm = `${oldTime.getHours() % 12}:${
 				oldTime.getMinutes() >= 10
 					? oldTime.getMinutes()
 					: `0${oldTime.getMinutes()}`
 			} ${oldTime.getHours() < 12 ? 'am' : 'pm'}`;
 
+			// Get old day and am-pm time
 			const day_hour_minute_ampm = `${
 				days[oldTime.getDay()]
 			}, ${hour_minute_ampm}`;
 
+			// Get current month, date, am-pm time
 			const month_date_hour_minute_ampm = `${
-				months[curTime.getMonth()]
-			} ${curTime.getDate()}, ${hour_minute_ampm}`;
+				months[oldTime.getMonth()]
+			} ${oldTime.getDate()}, ${hour_minute_ampm}`;
 
+			// Get curent month, date, year, time
 			const month_date_year_hour_minute_ampm = `${
-				months[curTime.getMonth()]
-			} ${curTime.getDate()} ${curTime.getFullYear()}, ${hour_minute_ampm}`;
+				months[oldTime.getMonth()]
+			} ${oldTime.getDate()} ${oldTime.getFullYear()}, ${hour_minute_ampm}`;
 
-			if (curTime.getFullYear() === curTime.getFullYear()) {
+			if (curTime.getFullYear() === oldTime.getFullYear()) {
 				if (curTime.getMonth() === oldTime.getMonth()) {
 					if (curTime.getDate() === oldTime.getDate()) {
 						if (curTime.getHours() === oldTime.getHours()) {

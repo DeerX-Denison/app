@@ -4,13 +4,14 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { FC, useContext, useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {
 	ScrollView,
+	Text,
 	TextInput,
 	TouchableOpacity,
-} from 'react-native-gesture-handler';
+	View,
+} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import { Bar, CircleSnail } from 'react-native-progress';
 import { MenuStackParamList, UserProfile } from 'types';
 import addImage from './addImage';

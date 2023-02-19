@@ -63,6 +63,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 			resetListings();
 		}
 	}, [route]);
+
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category
@@ -147,7 +148,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 										<RefreshControl
 											refreshing={refreshing}
 											onRefresh={onRefresh}
-											size={24}
+											// size={24}
 										/>
 									}
 									onScrollEndDrag={onScrollEndDrag}

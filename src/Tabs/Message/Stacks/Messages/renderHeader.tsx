@@ -3,8 +3,7 @@ import logger from '@logger';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import tw from '@tw';
 import React, { useContext, useLayoutEffect } from 'react';
-import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Text, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { MessageStackParamList, ThreadData } from 'types';
 export type RenderMessageHeaderFn = (

@@ -7,13 +7,16 @@
 arch -x86_64 [package_script]
 
 # Run development ios (conenct to emulators backend)
-yarn dev:ios
+yarn dev:ios:ip12
+yarn dev:ios:ipSE
 
 # Run staging ios (connect to staging cloud backend)
-yarn stage:ios
+yarn stage:ios:ip12
+yarn stage:ios:ipSE
 
 # Run production ios (connect to production cloud backend)
-yarn prod:ios
+yarn prod:ios:ip12
+yarn prod:ios:ipSE
 
 # Run test once
 yarn test
@@ -42,10 +45,6 @@ yarn major:ios
 yarn release:ios
 ```
 
-# CI/CD
-
-On push to branch "staging", build and distribute ios apps to testflight
-
 # Setup Environment Variables
 
 fastlane environemnt variables:
@@ -71,4 +70,28 @@ yarn install
 
 # Run development suites
 yarn dev:ios
+```
+
+# Deployments
+
+```
+# Setup app to connect to appropriate environment
+yarn setup:dev
+yarn setup:stage
+yarn setup:prod
+
+# Build app and upload with approperiate version
+yarn build:ios // increment current build number
+yarn patch:ios // increment patching version number
+yarn minor:ios // increment minor version number
+yarn major:ios // increment major version number
+```
+
+# Common Error
+
+1. Could not connect to backend
+   - It could by that backend is not running in the correctly environment. Try
+
+```
+firebase use default
 ```

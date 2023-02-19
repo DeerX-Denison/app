@@ -107,7 +107,6 @@ const useListings: UseListingsFn = (categoryFilter) => {
 			const extraLsts = querySnapshot.docs.map(
 				(docSnap) => docSnap.data() as ListingData
 			);
-
 			const uniqueExtraLsts = extraLsts.filter(
 				(lst) => !oldLstIds.includes(lst.id)
 			);

@@ -135,7 +135,7 @@ const MyListings: FC<Props> = ({ navigation }) => {
 									<RefreshControl
 										refreshing={refreshing}
 										onRefresh={onRefresh}
-										size={24}
+										// size={24}
 									/>
 								}
 								onScrollEndDrag={onScrollEndDrag}
@@ -211,10 +211,9 @@ const MyListings: FC<Props> = ({ navigation }) => {
 																				listing.soldTo.displayName
 																			) {
 																				return `sold to ${listing.soldTo.displayName}`;
+																			} else {
+																				return 'sold';
 																			}
-																			break;
-																		default:
-																			return '';
 																	}
 																})()}
 															</Text>

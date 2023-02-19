@@ -144,7 +144,11 @@ const Edit: FC<Props> = ({ route, navigation }) => {
 	 */
 	useEffect(() => {
 		if (listingData) {
-			if (listingData.status === 'sold' && hasEditStatus) {
+			if (
+				listingData.status === 'sold' &&
+				!listingData.soldTo &&
+				hasEditStatus
+			) {
 				setShowingSearch(true);
 			} else {
 				setSelectedSoldTo(undefined);

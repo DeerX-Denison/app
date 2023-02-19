@@ -1,20 +1,14 @@
 import * as Buttons from '@Components/Buttons';
 import { auth, fn } from '@firebase.config';
-import {
-	faQuestionCircle,
-	faXmarkCircle,
-} from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import logger from '@logger';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import tw from '@tw';
 import React, { FC, useEffect, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Bar, CircleSnail } from 'react-native-progress';
 import config from '../config.json';
-import GuestInfo from './GuestInfo';
 import Message from './Message';
 import useEmailLinkEffect from './useEmailLinkEffect';
 
@@ -65,10 +59,6 @@ const SignIn: FC = () => {
 	const [emailError, setEmailError] = useState('');
 	const [sending, setSending] = useState<boolean>(false);
 	const [isTester, setIsTester] = useState<boolean>(false);
-	const [displayingGuestInfo, setDisplayingGuestInfo] =
-		useState<boolean>(false);
-	const [isGuest, setIsGuest] = useState<boolean>(false);
-	const [guestError, setGuestError] = useState<string>('');
 	const [isViewingPw, setIsViewingPw] = useState<boolean>(false);
 	const { loading } = useEmailLinkEffect();
 
@@ -102,6 +92,16 @@ const SignIn: FC = () => {
 			return false;
 		} else {
 			return true;
+		}
+	};
+
+	const signInAsTesterHandler = async () => {
+		try {
+			await auth.signInWithEmailAndPassword(testerEmail, testerPw);
+		} catch (error) {
+			if (error) {
+				logger.error(error);
+			}
 		}
 	};
 
@@ -141,27 +141,6 @@ const SignIn: FC = () => {
 		}
 	};
 
-	const signInAsTesterHandler = async () => {
-		try {
-			await auth.signInWithEmailAndPassword(testerEmail, testerPw);
-		} catch (error) {
-			if (error) {
-				logger.error(error);
-			}
-		}
-	};
-
-	const signInAsGuestsHandler = async () => {
-		try {
-			await auth.signInAnonymously();
-		} catch (error) {
-			if (error instanceof Error) {
-				logger.error(error);
-				setGuestError(error.message);
-			}
-		}
-	};
-
 	return (
 		<>
 			{loading ? (
@@ -176,7 +155,7 @@ const SignIn: FC = () => {
 				</>
 			) : (
 				<>
-					{isTester && !isGuest && (
+					{isTester && (
 						// render tester login
 						<KeyboardAwareScrollView
 							testID="tester-login"
@@ -255,114 +234,8 @@ const SignIn: FC = () => {
 							</View>
 						</KeyboardAwareScrollView>
 					)}
-					{!isTester && isGuest && (
-						// render guest login
-						<KeyboardAwareScrollView
-							testID="guest-login"
-							contentContainerStyle={tw(
-								'flex-1 flex-col justify-start items-center'
-							)}
-							scrollEnabled={false}
-						>
-							<Text
-								style={tw(
-									'mb-3 mt-60 text-center text-3xl font-extrabold text-denison-red'
-								)}
-							>
-								SIGN IN AS GUEST
-							</Text>
-
-							{emailError !== '' && (
-								<Text style={tw('text-red-400')}>{emailError}</Text>
-							)}
-							{!isGuest && (
-								<View style={tw('my-3')}>
-									{sending ? (
-										<CircleSnail
-											size={40}
-											indeterminate={true}
-											color={['red', 'green', 'blue']}
-										/>
-									) : (
-										<Buttons.Primary
-											size="md"
-											onPress={signInHandler}
-											title="Sign In"
-											disabled={emailSent}
-										/>
-									)}
-								</View>
-							)}
-							{emailSent && <Message setEmailSent={setEmailSent} />}
-							{isGuest ? (
-								<View style={tw('flex flex-col')}>
-									<View
-										style={tw(
-											'my-2 mx-10 p-4 border rounded-2xl border-denison-red'
-										)}
-									>
-										<Text>
-											If you are from Denison, we highly recommend logging in
-											via the main screen
-										</Text>
-									</View>
-									<View style={tw('flex flex-row justify-center mt-2 px-4')}>
-										<View style={tw('pr-2')}>
-											<Buttons.Primary
-												size="md"
-												onPress={() => setIsGuest(false)}
-												title="Main Screen"
-											/>
-										</View>
-										<View style={tw('pl-2')}>
-											<Buttons.Primary
-												size="md"
-												onPress={signInAsGuestsHandler}
-												title="Sign In As Guests"
-											/>
-										</View>
-									</View>
-									{guestError !== '' && (
-										<View style={tw('my-2 mx-10 p-4')}>
-											<Text style={tw('text-denison-red text-s-md')}>
-												{guestError}
-											</Text>
-										</View>
-									)}
-								</View>
-							) : (
-								<View style={tw('flex flex-col')}>
-									<View style={tw('mt-2 flex justify-center mx-auto pb-2')}>
-										<Text style={tw('text-denison-red text-s-md')}>
-											Not from Denison?
-										</Text>
-									</View>
-									<View style={tw('flex flex-row')}>
-										<Buttons.Primary
-											size="md"
-											onPress={() => setIsGuest(true)}
-											title="Sign In As Guest"
-										/>
-										<TouchableOpacity
-											onPress={() =>
-												setDisplayingGuestInfo(!displayingGuestInfo)
-											}
-											style={tw('absolute top-0 -right-10 p-1.5')}
-										>
-											<FontAwesomeIcon
-												icon={
-													displayingGuestInfo ? faXmarkCircle : faQuestionCircle
-												}
-												size={24}
-												style={tw('text-denison-red')}
-											/>
-										</TouchableOpacity>
-									</View>
-								</View>
-							)}
-						</KeyboardAwareScrollView>
-					)}
-					{!isTester && !isGuest && (
+					{!isTester && (
+						// render normal user login
 						<KeyboardAwareScrollView
 							testID="user-login"
 							contentContainerStyle={tw(
@@ -428,33 +301,6 @@ const SignIn: FC = () => {
 								)}
 							</View>
 							{emailSent && <Message setEmailSent={setEmailSent} />}
-							<View style={tw('flex flex-col')}>
-								<View style={tw('mt-2 flex justify-center mx-auto pb-2')}>
-									<Text style={tw('text-denison-red text-s-md')}>
-										Not from Denison?
-									</Text>
-								</View>
-								<View style={tw('flex flex-row')}>
-									<Buttons.Primary
-										size="md"
-										onPress={() => setIsGuest(true)}
-										title="Sign In As Guest"
-									/>
-									<TouchableOpacity
-										onPress={() => setDisplayingGuestInfo(!displayingGuestInfo)}
-										style={tw('absolute top-0 -right-10 p-1.5')}
-									>
-										<FontAwesomeIcon
-											icon={
-												displayingGuestInfo ? faXmarkCircle : faQuestionCircle
-											}
-											size={24}
-											style={tw('text-denison-red')}
-										/>
-									</TouchableOpacity>
-								</View>
-							</View>
-							<GuestInfo displayingGuestInfo={displayingGuestInfo} />
 						</KeyboardAwareScrollView>
 					)}
 				</>

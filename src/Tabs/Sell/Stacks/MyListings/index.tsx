@@ -211,10 +211,9 @@ const MyListings: FC<Props> = ({ navigation }) => {
 																				listing.soldTo.displayName
 																			) {
 																				return `sold to ${listing.soldTo.displayName}`;
+																			} else {
+																				return 'sold';
 																			}
-																			break;
-																		default:
-																			return '';
 																	}
 																})()}
 															</Text>

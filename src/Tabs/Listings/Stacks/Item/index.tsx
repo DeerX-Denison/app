@@ -250,6 +250,17 @@ const Item: FC<Props> = ({
 							</View>
 							<View style={tw('mx-4 my-2')}>
 								<View style={tw('flex flex-row flex-wrap')}>
+									{listingData.status === 'sold' && (
+										<Badges.Light>
+											<Text
+												style={tw(
+													'capitalize text-s-md font-semibold px-2 py-0.5 text-white'
+												)}
+											>
+												{listingData.status}
+											</Text>
+										</Badges.Light>
+									)}
 									<Badges.Light>
 										<Text
 											style={tw(

@@ -63,6 +63,7 @@ const Listings: FC<Props> = ({ route, navigation }) => {
 			resetListings();
 		}
 	}, [route]);
+
 	return (
 		<View style={tw('flex flex-1')}>
 			<Category

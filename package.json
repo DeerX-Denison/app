@@ -22,7 +22,8 @@
 		"build:android": "cd android && ./gradlew bundleRelease",
 		"patch:ios": "cd ios && bundle exec fastlane patch",
 		"minor:ios": "cd ios && bundle exec fastlane minor",
-		"major:ios": "cd ios && bundle exec fastlane major"
+		"major:ios": "cd ios && bundle exec fastlane major",
+		"packager:android": "./node_modules/react-native/scripts/launchPackager.command"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "6.2.0",

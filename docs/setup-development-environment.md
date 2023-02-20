@@ -1,141 +1,144 @@
 # Setup Development Environment
 
-Current system: Apple M1
+# Table Of Contents
 
-Git version 2.37.1
+- [Setup Development Environment](#setup-development-environment)
+- [Table Of Contents](#table-of-contents)
+- [Clone Repository](#clone-repository)
+- [Install homebrew](#install-homebrew)
+- [Install ruby](#install-ruby)
+- [Install cocoapods](#install-cocoapods)
+- [Install nvm](#install-nvm)
+- [Install yarn](#install-yarn)
+- [Install Project Dependencies](#install-project-dependencies)
+- [Setup Android Development](#setup-android-development)
+	- [Download Android Studio](#download-android-studio)
+	- [Setup Shell Environment Variables](#setup-shell-environment-variables)
+	- [Launch Packager](#launch-packager)
+	- [Launch App On Android Simulator](#launch-app-on-android-simulator)
+- [Setup iOS Development](#setup-ios-development)
+	- [Install Extra Pod Packages](#install-extra-pod-packages)
+	- [Launch App On iOS Simulator](#launch-app-on-ios-simulator)
+- [Happy Coding](#happy-coding)
 
-Xcode 14.2
+# Clone Repository
 
-Clone repo:
-
+```bash
+git clone https://github.com/DeerX-Denison/app
 ```
-Git clone https://github.com/DeerX-Denison/app
-```
 
-Install Homebrew if you haven’t already:
+# Install homebrew
 
-```
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Install Curl if you haven’t already:
-https://curl.se/download.html
-Download the latest version of Curl that ends in .tar.gz file
-Unzip the folder.
-Move the folder to your preferred location, make a note of it cause you will need it.
+# Install ruby
 
-```
-# Cd to where the unzip folder is
-make
-make install
-# Close and reopen terminal
-# Confirm installation
-curl —version
-```
-
-Install Ruby
-
-```
+```bash
 brew install ruby
 ```
 
-Install Cocoapods
+# Install cocoapods
 
-```
+```bash
 brew install cocoapods
 ```
 
-Install nvm
+# Install nvm
 
-```
-curl -o- ` | bash
+```bash
+# Run the following command to download nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
 # Close and reopen your terminal
+
 # Confirm installation
 nvm -v
 ```
 
-Install yarn
+# Install yarn
 
 ```
 npm install —location=global yarn
 ```
 
-Install all project dependencies
+# Install Project Dependencies
 
 ```
 yarn install
 ```
 
-For Android development
+# Setup Android Development
 
-Download Android Studio
-https://developer.android.com/studio
-Open the .dmg file and drag Android Studio into Application folder
-Press “Do not import settings”, if you haven’t already have your own settings.
-Choose standard installation
-The verification screen should have these following. The numbers and versions might be different. As long as there is all the standard type, you’re good to go.
+## Download Android Studio
 
-```
-Setup Type: Standard
-SDK Folder: /Users/test/Library/Android/sdk
-JDK Location: /Applications/Android Studio.app/Contents/jbr/Contents/Home
-Total Download Size: 386 MB
-SDK Components to Download:
+Follow the official documentation on how to install Android Studio: [developer.android.com/studio](https://developer.android.com/studio). The default standard instllation works fine if you haven't already installed Android Studio since it contains the following extra package:
 
-Android Emulator
-  
-253 MB
+- Android Emulator
+- Android SDK Build-Tools
+- Android SDK Platform
+- Android SDK Platform-Tools
 
-Android SDK Build-Tools 33.0.2
-  
-57.2 MB
-
-Android SDK Platform 33
-  
-64.4 MB
-
-Android SDK Platform-Tools
-  
-10.7 MB
-```
-
-Accept the terms and condition after you have read all of it, then press finish to install all the extra packages.
+Accept the terms and condition after you have read all of it, then press finish to install all the extra packages. You still need to create a device in Android Emulator.
 
 Choose “More Actions” > “Virtual Device Manager” to create a virtual device of your liking. Press any phone. If this is your first time with Android Studio, it will ask you to install a system image. As far as i know, any common image will work. Read and accept the terms and condition and install the system image.
 
-￼
-
 Once installed, start the virtual device from the Device Manager window. You can get here by looking for the “Virtual Device Manager” button.
 
-Add the following to your shell profile. We need this 2 environment variables.
-export ANDROID_SDK_ROOT=~/Library/Android/sdk  
+## Setup Shell Environment Variables
+
+If you don't know which Shell are you using, you can run this command to check:
+
+```bash
+echo $0
+```
+
+Add the following to your shell profile. Assuming you are using `bash`, then your Shell profile could be `~/.bashrc` or `~/bash_profile`.
+
+```bash
+export ANDROID_SDK_ROOT=~/Library/Android/sdk
 export ANDROID_HOME=~/Library/Android/sdk
+```
+
+## Launch Packager
 
 In a separate terminal, run:
 
-```
+```bash
 yarn packager:android
 ```
 
+## Launch App On Android Simulator
+
 In the original terminal
 
-```
+```bash
 yarn stage:android
 ```
 
-For iOS development
-Install extra packages
+[Happy coding!](#happy-coding)
 
-```
+# Setup iOS Development
+
+## Install Extra Pod Packages
+
+```bash
 cd ios
 bundle install
 pod install
 ```
 
-Setup iOS provisioning profile
+## Launch App On iOS Simulator
 
-Run iOS app
+Assuming you have setup your XCode with your provisioning profile correctly, you can start the simulator and begin coding with a simple command:
 
-```
+```bash
 yarn stage:ios
 ```
+
+[Happy coding!](#happy-coding)
+
+# Happy Coding
+
+Refer to our [code guidelines](code-guidelines.md) to ensure that your code matches our coding guidelines.

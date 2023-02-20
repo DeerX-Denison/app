@@ -1,6 +1,7 @@
 {
 	"main": "index.js",
 	"name": "deerx",
+	"license": "MIT",
 	"scripts": {
 		"dev:ios": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator",
 		"stage:ios": "./bin/setup_stage.sh && react-native run-ios --scheme app --simulator",

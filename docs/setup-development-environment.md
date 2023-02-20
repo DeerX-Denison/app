@@ -11,6 +11,7 @@
 - [Install nvm](#install-nvm)
 - [Install yarn](#install-yarn)
 - [Install Project Dependencies](#install-project-dependencies)
+- [Project Configurations](#project-configurations)
 - [Setup Android Development](#setup-android-development)
 	- [Download Android Studio](#download-android-studio)
 	- [Setup Shell Environment Variables](#setup-shell-environment-variables)
@@ -68,6 +69,10 @@ npm install —location=global yarn
 ```
 yarn install
 ```
+
+# Project Configurations
+
+At the root of the project, there are 3 configurations files for 3 develoment environemnts: `config.dev.json`, `config.stage.json`, and `config.prod.json`.
 
 # Setup Android Development
 

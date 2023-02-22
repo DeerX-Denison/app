@@ -8,5 +8,5 @@ This repository contains the source code the DeerX mobile application. This wiki
 - [Setup Development Environment](setup-development-environment.md)
 - [Folder Structure](folder-structure.md)
 - [Code Guidelines](code-guidelines.md)
-- [Contribute Guidelines](contribution-guidelines.md)
-- [Code Of Conduct](code-of-conduct.md)
+- [Contribute Guidelines](../CONTRIBUTING.md)
+- [Code Of Conduct](../CODE_OF_CONDUCT.md)

@@ -3,13 +3,13 @@
 	"name": "deerx",
 	"license": "MIT",
 	"scripts": {
+		"?": "cat docs/package-scripts.md",
 		"dev:ios": "./bin/setup_dev.sh && react-native run-ios --scheme app --simulator",
 		"stage:ios": "./bin/setup_stage.sh && react-native run-ios --scheme app --simulator",
 		"prod:ios": "./bin/setup_prod.sh && react-native run-ios --scheme app --simulator",
 		"dev:android": "./bin/setup_dev.sh && react-native run-android",
 		"stage:android": "./bin/setup_stage.sh && react-native run-android",
 		"prod:android": "./bin/setup_prod.sh && react-native run-android --variant=release",
-		"debug:android": "export JAVA_HOME=`/usr/libexec/java_home -v 11.0.10` && ./bin/setup_dev.sh && react-native run-android",
 		"test": "jest --detectOpenHandles",
 		"test:watch": "jest --watch-all --detectOpenHandles",
 		"lint": "eslint \"src/**/*.tsx\" \"src/**/*.ts\"",
@@ -24,7 +24,7 @@
 		"patch:ios": "cd ios && bundle exec fastlane patch",
 		"minor:ios": "cd ios && bundle exec fastlane minor",
 		"major:ios": "cd ios && bundle exec fastlane major",
-		"packager:android": "./node_modules/react-native/scripts/launchPackager.command"
+		"packager": "./node_modules/react-native/scripts/launchPackager.command"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "6.2.0",

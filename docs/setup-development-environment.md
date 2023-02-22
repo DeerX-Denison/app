@@ -13,13 +13,13 @@
 - [Install Project Dependencies](#install-project-dependencies)
 - [Project Configurations](#project-configurations)
 - [Setup Android Development](#setup-android-development)
-	- [Download Android Studio](#download-android-studio)
-	- [Setup Shell Environment Variables](#setup-shell-environment-variables)
-	- [Launch Packager](#launch-packager)
-	- [Launch App On Android Simulator](#launch-app-on-android-simulator)
+  - [Download Android Studio](#download-android-studio)
+  - [Setup Shell Environment Variables](#setup-shell-environment-variables)
+  - [Launch Packager](#launch-packager)
+  - [Launch App On Android Simulator](#launch-app-on-android-simulator)
 - [Setup iOS Development](#setup-ios-development)
-	- [Install Extra Pod Packages](#install-extra-pod-packages)
-	- [Launch App On iOS Simulator](#launch-app-on-ios-simulator)
+  - [Install Extra Pod Packages](#install-extra-pod-packages)
+  - [Launch App On iOS Simulator](#launch-app-on-ios-simulator)
 - [Happy Coding](#happy-coding)
 
 # Clone Repository
@@ -147,3 +147,7 @@ yarn stage:ios
 # Happy Coding
 
 Refer to our [code guidelines](code-guidelines.md) to ensure that your code matches our coding guidelines.
+
+Refer to our [package scripts](package-scripts.md) for more details on what command is available for development use.
+
+Refer to our [folder structure](folder-structure.md) for more details on what each folder in this project does.

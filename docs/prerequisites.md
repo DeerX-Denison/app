@@ -6,6 +6,8 @@ All the topics in this article is a subset of the Frontend Engineer roadmap, ava
 
 # Table of content
 
+- [Programming Language and Technology Hierachy](#programming-language-and-technology-hierachy)
+- [Table of content](#table-of-content)
 - [Git](#git)
 - [HTML, CSS, JS](#html-css-js)
 - [Terminal / Shell](#terminal--shell)
